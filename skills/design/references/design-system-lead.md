@@ -299,3 +299,129 @@ When reviewing any design output:
 - [ ] Breakpoints use the defined set (not random px values)
 - [ ] Component naming is consistent with existing patterns
 - [ ] No one-off styles that should be tokens
+
+---
+
+## Creating Design Systems in Figma
+
+When building a design system directly inside Figma (using the Desktop Bridge), create formal Figma styles and components — not just visual swatches.
+
+### Creating Figma Paint Styles
+
+Paint Styles are Figma's equivalent of CSS color tokens. They appear in the Styles sidebar and can be applied to any node.
+
+```javascript
+// Helper — always define this first
+function hexToRgb(hex) {
+  const r = parseInt(hex.slice(1, 3), 16) / 255;
+  const g = parseInt(hex.slice(3, 5), 16) / 255;
+  const b = parseInt(hex.slice(5, 7), 16) / 255;
+  return { r, g, b };
+}
+
+// Create a Paint Style
+const style = figma.createPaintStyle();
+style.name = 'Brand/Primary';  // Slash-separated for sidebar grouping
+style.paints = [{ type: 'SOLID', color: hexToRgb('#1B3A5C') }];
+```
+
+**Naming convention**: Use slash-separated names for automatic sidebar grouping:
+- `Brand/Primary`, `Brand/Secondary`, `Brand/Accent`
+- `Neutral/Background`, `Neutral/Surface`, `Neutral/Border`
+- `Feedback/Success`, `Feedback/Warning`, `Feedback/Error`
+
+### Creating Figma Text Styles
+
+Text Styles define reusable typography. **Critical: load fonts before creating text styles.**
+
+```javascript
+// Load the font FIRST
+await figma.loadFontAsync({ family: 'Inter', style: 'Bold' });
+
+// Create the Text Style
+const textStyle = figma.createTextStyle();
+textStyle.name = 'Heading/Large';
+textStyle.fontName = { family: 'Inter', style: 'Bold' };
+textStyle.fontSize = 32;
+textStyle.lineHeight = { value: 40, unit: 'PIXELS' };
+textStyle.letterSpacing = { value: -0.5, unit: 'PIXELS' };
+```
+
+**Typical type scale:**
+
+| Style name | Font | Size | Weight | Line height |
+|-----------|------|------|--------|-------------|
+| Heading/Large | Inter | 32px | Bold | 40px |
+| Heading/Small | Inter | 20px | SemiBold | 28px |
+| Body | Inter | 16px | Regular | 24px |
+| Caption | Inter | 12px | Regular | 16px |
+
+### Creating Component Sets with Variants
+
+Component Sets (`COMPONENT_SET`) are Figma's variant system. Each variant is a `COMPONENT` with a name following `Property=Value` format.
+
+```javascript
+// Create individual variants as COMPONENTs
+const primary = figma.createComponent();
+primary.name = 'Type=Primary';
+primary.resize(120, 40);
+primary.fills = [{ type: 'SOLID', color: hexToRgb('#1B3A5C') }];
+primary.cornerRadius = 8;
+
+const secondary = figma.createComponent();
+secondary.name = 'Type=Secondary';
+secondary.resize(120, 40);
+secondary.fills = [{ type: 'SOLID', color: { r: 1, g: 1, b: 1 } }];
+secondary.strokes = [{ type: 'SOLID', color: hexToRgb('#1B3A5C') }];
+secondary.strokeWeight = 1;
+secondary.cornerRadius = 8;
+
+// Combine into a COMPONENT_SET
+const buttonSet = figma.combineAsVariants([primary, secondary], targetFrame);
+buttonSet.name = 'Button';
+```
+
+**Key rules for component sets:**
+- Variant names MUST use `Property=Value` format
+- Multiple properties: `Type=Primary, Size=Large`
+- All variants must have the same property keys
+- After combining, the set appears as a single purple-dashed container in Figma
+
+### Batch Variable/Token Creation
+
+For large token systems, use the batch tools instead of individual calls:
+
+```
+figma_setup_design_tokens:
+  collectionName: "Brand Tokens"
+  modes: ["Light", "Dark"]
+  tokens:
+    - name: "color/primary"
+      resolvedType: COLOR
+      values: { Light: "#1B3A5C", Dark: "#5B9BD5" }
+    - name: "color/background"
+      resolvedType: COLOR
+      values: { Light: "#FFFFFF", Dark: "#1A1A2E" }
+    - name: "spacing/md"
+      resolvedType: FLOAT
+      values: { Light: 16, Dark: 16 }
+```
+
+This creates the collection, modes, and all variables in a single operation — 10–50x faster than individual calls.
+
+### Cleaning Up Old Styles
+
+When replacing styles, remove the old ones to avoid confusion:
+
+```javascript
+// Remove all styles with a prefix
+const oldStyles = (await figma.getLocalPaintStylesAsync())
+  .filter(s => s.name.startsWith('OldPrefix/'));
+for (const s of oldStyles) {
+  s.remove();
+}
+```
+
+### Detailed Reference
+
+See `figma-creation.md` for the complete API patterns, auto-layout configuration, and common pitfalls.

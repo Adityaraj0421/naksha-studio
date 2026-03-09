@@ -1,9 +1,9 @@
 {
   "name": "design-studio",
   "version": "1.0.0",
-  "description": "A virtual design studio that assembles specialist roles (Product Designer, UX Designer, UI Designer, UX Researcher, Content Designer, Design System Lead, Motion Designer) for any design task. Includes /design for full workflows, /design-review for audits, /design-system for tokens, and /figma for design-to-code.",
+  "description": "A virtual design studio that assembles specialist roles for any design task. Creates production UI (HTML/CSS/JS), designs directly in Figma (pages, components, styles, wireframes), audits design compliance, and converts Figma-to-code. Commands: /design, /design-review, /design-system, /figma, /figma-create, /ux-audit",
   "author": {
     "name": "adityaraj0421"
   },
-  "keywords": ["design", "ui", "ux", "frontend", "figma", "accessibility", "design-system", "responsive"]
+  "keywords": ["design", "ui", "ux", "frontend", "figma", "figma-create", "accessibility", "design-system", "responsive", "wireframe", "audit"]
 }

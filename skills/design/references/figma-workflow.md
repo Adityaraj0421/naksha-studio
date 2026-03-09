@@ -186,3 +186,61 @@ Figma designs often leave things implied:
 - **Overflow**: Decide truncation strategy (line-clamp, ellipsis, scroll)
 
 Always clarify with the user if the design intent is ambiguous rather than guessing wrong.
+
+---
+
+## Figma-Native Design Creation
+
+The workflows above cover **extracting designs from Figma → code**. This section covers the reverse: **creating designs directly inside Figma** using the figma-console MCP Desktop Bridge.
+
+### When to Use Figma Creation
+
+- UX design challenges that require Figma deliverables (wireframes, component sets, style sheets)
+- Setting up design systems natively in Figma (Paint Styles, Text Styles, Variables)
+- Building wireframes or prototypes that stay in Figma for designer collaboration
+- Creating component libraries with variants directly in the Figma file
+- Any task where the output is a Figma file, not code
+
+### figma-console MCP Tools
+
+The Desktop Bridge provides write access to Figma via WebSocket. Key tool categories:
+
+| Category | Tools | Purpose |
+|----------|-------|---------|
+| **Connection** | `figma_get_status`, `figma_reconnect` | Verify/establish Bridge connection |
+| **Execution** | `figma_execute` | Run arbitrary JS in Figma plugin context |
+| **Nodes** | `figma_create_child`, `figma_move_node`, `figma_resize_node`, `figma_delete_node`, `figma_rename_node`, `figma_clone_node` | Manipulate Figma nodes |
+| **Fills/Strokes** | `figma_set_fills`, `figma_set_strokes` | Apply colors and borders |
+| **Text** | `figma_set_text` | Set text content on text nodes |
+| **Components** | `figma_search_components`, `figma_instantiate_component`, `figma_set_instance_properties` | Work with components |
+| **Variables** | `figma_setup_design_tokens`, `figma_batch_create_variables`, `figma_batch_update_variables` | Create design tokens |
+| **Validation** | `figma_capture_screenshot`, `figma_take_screenshot` | Visual validation |
+| **File structure** | `figma_get_file_data`, `figma_get_selection` | Read file/selection state |
+
+### Connection Workflow
+
+1. User opens their Figma file in **Figma Desktop** (not browser)
+2. Right-click canvas → Plugins → Development → **Figma Desktop Bridge**
+3. Bridge connects via WebSocket (typically port 9223+)
+4. Verify: `figma_get_status` → should show `"transport": "websocket"`
+
+### Creating vs Extracting
+
+| Aspect | Extraction (existing) | Creation (new) |
+|--------|----------------------|----------------|
+| **Direction** | Figma → Code | Code → Figma |
+| **Primary tools** | `get_design_context`, `get_screenshot` | `figma_execute`, `figma_create_child` |
+| **MCP server** | Figma (URL-based or desktop) | figma-console (Desktop Bridge) |
+| **Connection** | REST API (works with just a URL) | WebSocket (requires Desktop Bridge running) |
+| **Output** | HTML/CSS/JS files | Figma nodes, styles, components |
+
+### Detailed Reference
+
+See `figma-creation.md` for the complete API reference covering:
+- Async API requirements (dynamic-page access)
+- Auto-layout frame creation and configuration
+- Component set creation with variants
+- Paint Style and Text Style creation
+- Variable/token creation
+- Wireframe and annotation patterns
+- Common pitfalls and helper functions

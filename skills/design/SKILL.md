@@ -25,6 +25,8 @@ This skill is part of the **design-studio** plugin. For focused workflows, use t
 | `/design-review <file>` | Audit an existing design for quality |
 | `/design-system` | Generate or extract design tokens |
 | `/figma <URL>` | Convert a Figma design to production code |
+| `/figma-create <task>` | Create designs directly in Figma (pages, components, styles) |
+| `/ux-audit <brief>` | Audit a Figma file against a design brief |
 
 ---
 
@@ -54,6 +56,7 @@ This skill is part of the **design-studio** plugin. For focused workflows, use t
 | Resource | Purpose | Reference |
 |----------|---------|-----------|
 | **Figma Workflow** | Design-to-code, Figma MCP tools, Code Connect | `references/figma-workflow.md` |
+| **Figma Creator** | Create designs in Figma — pages, components, styles, wireframes | `references/figma-creation.md` |
 | **Deployment** | Preview server, Firebase Hosting, optimization | `references/deployment.md` |
 
 ---
@@ -99,6 +102,10 @@ Based on the task, activate only the roles needed. Read their reference files fo
 | "Add dark mode to the app" | Design System Lead, UI Designer |
 | "Fix the confusing checkout flow" | UX Researcher, UX Designer, Content Designer |
 | "Build a component library" | Design System Lead, UI Designer, Motion Designer |
+| "Create a Figma design system" | Design System Lead + Figma Creator reference |
+| "Wireframe 3 screens in Figma" | UX Designer + Figma Creator reference |
+| "Audit my Figma file against this brief" | UX Researcher + `/ux-audit` command |
+| "Build hi-fi mockups in Figma" | UI Designer, Design System Lead + Figma Creator reference |
 
 **Rules:**
 - Simple visual tasks (icon, color tweak) → 1–2 roles, no overhead
@@ -126,6 +133,11 @@ Creative Phase
   ├─ UI Designer: visual design, layout, typography, color, components
   ├─ Content Designer: copy, microcopy, labels, error messages, CTAs
   └─ Design System Lead: tokens, theming, component patterns
+
+Figma Creation Phase (if output is a Figma file)
+  ├─ Figma Creator: pages, frames, auto-layout, components, styles
+  ├─ Design System Lead: Paint Styles, Text Styles, Variables
+  └─ Validation: screenshot each created element, iterate up to 3x
 
 Polish Phase
   ├─ Motion Designer: animations, transitions, micro-interactions
@@ -208,6 +220,9 @@ Unless the user specifies otherwise:
 | Presentation | HTML slides with animations | Preview server |
 | Design tokens | JSON / CSS custom properties | File write |
 | Figma implementation | Code from Figma context | Figma MCP → code |
+| Figma design | Pages, frames, components, styles in Figma | figma-console MCP (Desktop Bridge) |
+| Figma audit report | Compliance check against a design brief | `/ux-audit` command |
 | Deployed site | Firebase Hosting | Firebase MCP |
 | Wireframe | Low-fidelity HTML or description | Preview server |
+| Figma wireframe | Mid-fidelity gray layouts in Figma | figma-console MCP (Desktop Bridge) |
 | Component library | HTML + CSS with documented variants | Preview server |
