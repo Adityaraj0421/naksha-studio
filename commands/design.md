@@ -46,11 +46,6 @@ Read ONLY the reference files for roles this task needs (cap at ~4 for standard 
 | Content Designer | `${CLAUDE_PLUGIN_ROOT}/skills/design/references/content-designer.md` | Microcopy, labels, error messages, CTAs |
 | Design System Lead | `${CLAUDE_PLUGIN_ROOT}/skills/design/references/design-system-lead.md` | Tokens, theming, consistency, dark mode |
 | Motion Designer | `${CLAUDE_PLUGIN_ROOT}/skills/design/references/motion-designer.md` | Animations, transitions, micro-interactions |
-| Social Media Designer | `${CLAUDE_PLUGIN_ROOT}/skills/design/references/social-media-designer.md` | Social platform visuals, Stories/Reels, carousels, ad creatives |
-| Social Media Strategist | `${CLAUDE_PLUGIN_ROOT}/skills/design/references/social-media-strategist.md` | Campaign planning, content calendars, platform strategy |
-| Social Media Copywriter | `${CLAUDE_PLUGIN_ROOT}/skills/design/references/social-media-copywriter.md` | Captions, hooks, CTAs, hashtags, platform voice |
-| Growth/Analytics Specialist | `${CLAUDE_PLUGIN_ROOT}/skills/design/references/growth-analytics-specialist.md` | Social KPIs, dashboards, A/B testing, conversion funnels |
-
 ### 4. Execute the Workflow
 
 Follow this sequence, skipping phases that don't apply:
@@ -59,7 +54,6 @@ Follow this sequence, skipping phases that don't apply:
 Research    → UX Researcher: user insights, heuristics, accessibility
 Strategy    → Product Designer: scope · UX Designer: flows, IA, wireframes
 Creative    → UI Designer: visual · Content Designer: copy · Design System Lead: tokens
-Social      → Social Media Designer: platform visuals · Copywriter: captions · Strategist: calendar
 Polish      → Motion Designer: animations · Design System Lead: consistency review
 Delivery    → Build implementation · Preview to verify · Deploy if requested
 ```
@@ -110,5 +104,3 @@ After completing a design, suggest relevant follow-up commands:
 - `/design-system` — extract tokens from the design for reuse
 - `/figma-create` — recreate the design in Figma for the design team
 - `/design-present` — build a presentation to share with stakeholders
-- `/social-content` — create social media visual content from the design
-- `/social-campaign` — plan a full social media campaign

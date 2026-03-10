@@ -1,9 +1,9 @@
 {
   "name": "design-studio",
   "version": "2.1.1",
-  "description": "A virtual design studio that assembles specialist roles for any design task. 19 slash commands covering full design workflows, Figma-native creation, design-to-code, brand kits, A/B variants, design sprints, prototyping, responsive variants, component docs, developer handoff, UX audits, design presentations, site-to-Figma capture, design linting, design-code sync, social media content, campaign planning, and social analytics. Commands: /design, /design-review, /design-system, /figma, /figma-create, /ux-audit, /design-handoff, /figma-responsive, /figma-sync, /design-present, /brand-kit, /component-docs, /figma-prototype, /site-to-figma, /ab-variants, /design-sprint, /social-content, /social-campaign, /social-analytics",
+  "description": "A virtual design studio that assembles specialist roles for any design task. 16 slash commands covering full design workflows, Figma-native creation, design-to-code, brand kits, A/B variants, design sprints, prototyping, responsive variants, component docs, developer handoff, UX audits, design presentations, site-to-Figma capture, design linting, and design-code sync. Commands: /design, /design-review, /design-system, /figma, /figma-create, /ux-audit, /design-handoff, /figma-responsive, /figma-sync, /design-present, /brand-kit, /component-docs, /figma-prototype, /site-to-figma, /ab-variants, /design-sprint",
   "author": {
     "name": "adityaraj0421"
   },
-  "keywords": ["design", "ui", "ux", "frontend", "figma", "figma-create", "accessibility", "design-system", "responsive", "wireframe", "audit", "handoff", "critique", "heuristics", "brand-kit", "prototype", "a-b-testing", "design-sprint", "lint", "sync", "presentation", "component-docs", "social-media", "social-content", "social-campaign", "social-analytics", "instagram", "tiktok", "linkedin", "youtube", "campaign", "content-calendar", "analytics-dashboard"]
+  "keywords": ["design", "ui", "ux", "frontend", "figma", "figma-create", "accessibility", "design-system", "responsive", "wireframe", "audit", "handoff", "critique", "heuristics", "brand-kit", "prototype", "a-b-testing", "design-sprint", "lint", "sync", "presentation", "component-docs"]
 }
