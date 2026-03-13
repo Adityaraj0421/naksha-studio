@@ -1,14 +1,17 @@
 ---
 name: design
 description: >
-  Assembles a virtual design team to produce production-quality UI, UX, and visual output.
+  Assembles a virtual design team to produce production-quality UI, UX, visual, and social media output.
   A Design Manager staffs the right specialists (Product Designer, UX Designer, UI Designer, UX Researcher,
-  Content Designer, Design System Lead, Motion Designer, Creative Director) based on the task scope.
+  Content Designer, Design System Lead, Motion Designer, Creative Director, Social Media Designer,
+  Social Media Strategist, Social Media Copywriter, Growth/Analytics Specialist) based on the task scope.
   Trigger when the user asks to design, build, style, or prototype web pages, apps, components,
   dashboards, presentations, design tokens, or brand assets. Also trigger for Figma-to-code workflows,
   design system creation, responsive layouts, dark mode theming, accessibility audits, UX flows,
-  wireframes, content strategy, animations, or deployment. Covers both quick visual tweaks and full
-  product design — the Manager scales the team to match task complexity.
+  wireframes, content strategy, animations, deployment, social media content, campaigns, Instagram,
+  TikTok, LinkedIn, Twitter, YouTube, carousels, stories, reels, content calendars, hashtags, captions,
+  or social analytics. Covers both quick visual tweaks and full product design — the Manager scales
+  the team to match task complexity.
 
   <example>
   user: "Build me a landing page for a SaaS product"
@@ -25,6 +28,15 @@ description: >
   assistant: Routes to /figma-create with UX Designer + Figma Creator
   </example>
 
+  <example>
+  user: "Create Instagram posts for our product launch"
+  assistant: Activates Social Media Designer, Social Media Copywriter, UI Designer
+  </example>
+
+  <example>
+  user: "Plan a social media campaign for Q2"
+  assistant: Routes to /social-campaign with Social Media Strategist + Copywriter + Analytics
+  </example>
 ---
 
 # Design Team Skill
@@ -53,6 +65,9 @@ This skill is part of the **design-studio** plugin. For focused workflows, use t
 | `/site-to-figma` | Capture a live website and recreate in Figma |
 | `/ab-variants` | Generate A/B test design variants from a Figma screen |
 | `/design-sprint` | Guided 5-phase design sprint methodology |
+| `/social-content <task>` | Design social media visual content (posts, stories, reels, carousels) |
+| `/social-campaign <brief>` | Plan a social media campaign with strategy, calendar, and captions |
+| `/social-analytics <type>` | Build social analytics dashboards, reports, or A/B test frameworks |
 
 ---
 
@@ -76,6 +91,15 @@ This skill is part of the **design-studio** plugin. For focused workflows, use t
 | **Content Designer** | Interface text, microcopy, UX writing, tone of voice, content hierarchy | Any UI with text — labels, error messages, empty states, CTAs, onboarding | `references/content-designer.md` |
 | **Design System Lead** | Tokens, components, theming, dark mode, consistency across outputs | Multi-component work, brand consistency, theming, reusable patterns | `references/design-system-lead.md` |
 | **Motion Designer** | Animations, transitions, micro-interactions, visual storytelling | Interactive UIs, presentations, onboarding, state changes, delight moments | `references/motion-designer.md` |
+
+### Social Media Specialists
+
+| Role | Expertise | When to activate | Reference |
+|------|-----------|-----------------|-----------|
+| **Social Media Designer** | Platform visuals, Stories/Reels/Posts, carousels, ad creatives, safe zones | Visual content for social platforms, ad creative design | `references/social-media-designer.md` |
+| **Social Media Strategist** | Campaigns, content calendars, audience targeting, platform strategy | Campaign planning, content strategy, posting cadence | `references/social-media-strategist.md` |
+| **Social Media Copywriter** | Captions, hooks, CTAs, hashtags, bio optimization, platform voice | Social copy, caption writing, thread creation | `references/social-media-copywriter.md` |
+| **Growth/Analytics Specialist** | KPIs, dashboards, A/B testing, funnels, conversion tracking | Social analytics, performance tracking, experiment design | `references/growth-analytics-specialist.md` |
 
 ### Cross-Cutting Tools
 
@@ -166,6 +190,14 @@ Based on the task, activate only the roles needed. Read their reference files fo
 | "Create A/B test variants" | UX Researcher, UI Designer + `/ab-variants` command |
 | "Run a design sprint for signup" | Product Designer, UX Designer, UX Researcher + `/design-sprint` command |
 | "Lint my Figma file for issues" | Design System Lead + Design Lint agent |
+| "Design Instagram posts for a product launch" | Social Media Designer, Social Media Copywriter, UI Designer |
+| "Plan a social media campaign for Q2" | Social Media Strategist, Social Media Copywriter, Social Media Designer, Growth/Analytics Specialist |
+| "Create TikTok/Reels content templates" | Social Media Designer, Motion Designer |
+| "Build a social media analytics dashboard" | Growth/Analytics Specialist, UI Designer, Design System Lead |
+| "Write social media captions for our carousel" | Social Media Copywriter, Social Media Designer |
+| "Set up A/B testing for our social ads" | Growth/Analytics Specialist, Social Media Designer + `/ab-variants` command |
+| "Create a content calendar for LinkedIn" | Social Media Strategist, Social Media Copywriter |
+
 **Rules:**
 - Simple visual tasks (icon, color tweak) → 1–2 roles, no overhead
 - Standard tasks (page, component) → 2–4 roles (default cap: 4 roles to keep context focused)
@@ -174,6 +206,10 @@ Based on the task, activate only the roles needed. Read their reference files fo
 - The **Design System Lead** joins whenever consistency matters (multi-component work)
 - The **Content Designer** joins whenever there's user-facing text
 - When in doubt, start lean (fewer roles) — you can always pull in additional specialists mid-task if needed
+- **Social Media** roles activate when the task mentions: "social", "Instagram", "TikTok", "LinkedIn post", "Twitter", "carousel" (for social), "stories", "reel", "campaign", "content calendar", "hashtag", "caption", or "social analytics"
+- The **Social Media Designer** joins any visual social content task
+- The **Social Media Strategist** joins campaign planning and content calendar tasks
+- The **Growth/Analytics Specialist** joins when measurement, dashboards, or A/B testing is needed for social
 
 ### Step 4 — Execute the Workflow
 
@@ -192,6 +228,12 @@ Creative Phase
   ├─ UI Designer: visual design, layout, typography, color, components
   ├─ Content Designer: copy, microcopy, labels, error messages, CTAs
   └─ Design System Lead: tokens, theming, component patterns
+
+Social Media Phase (if output is social content)
+  ├─ Social Media Strategist: campaign framework, content calendar, platform selection
+  ├─ Social Media Copywriter: captions, hooks, CTAs, hashtag sets
+  ├─ Social Media Designer: platform-specific visual assets, safe zones, dimensions
+  └─ Growth/Analytics Specialist: KPIs, UTM tracking, A/B test framework
 
 Figma Creation Phase (if output is a Figma file)
   ├─ Figma Creator: pages, frames, auto-layout, components, styles
@@ -297,3 +339,6 @@ Unless the user specifies otherwise:
 | Design sprint | Problem→Solution→Prototype→Test plan | `/design-sprint` command |
 | Figma from site | Editable Figma recreation of a live URL | `/site-to-figma` command |
 | Lint report | Design quality issues with severity and fixes | Design Lint agent |
+| Social media content | Platform-sized HTML visuals or Figma frames | `/social-content` command |
+| Social campaign plan | Campaign brief with calendar, captions, and KPIs | `/social-campaign` command |
+| Social analytics dashboard | HTML dashboard with Chart.js + KPI cards | `/social-analytics` command |

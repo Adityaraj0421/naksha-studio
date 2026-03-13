@@ -7,7 +7,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Claude Code](https://img.shields.io/badge/Claude_Code-Plugin-blueviolet)](https://claude.ai/claude-code)
 [![Roles](https://img.shields.io/badge/Specialist_Roles-9-orange)]()
-[![Commands](https://img.shields.io/badge/Slash_Commands-16-green)]()
+[![Commands](https://img.shields.io/badge/Slash_Commands-19-green)]()
 [![Design Knowledge](https://img.shields.io/badge/Design_Knowledge-8500%2B_lines-ff69b4)]()
 
 **Instead of generic AI design help, Design Studio loads specialized design knowledge for each task — the right expertise activates based on what you're building.**
@@ -121,7 +121,35 @@ Tokens
 Animation
 
 </td>
-<td align="center" colspan="5">
+<td align="center">
+
+**Social Media Designer**
+
+Social Visuals
+
+</td>
+<td align="center">
+
+**Social Media Strategist**
+
+Campaigns
+
+</td>
+<td align="center">
+
+**Social Media Copywriter**
+
+Captions
+
+</td>
+<td align="center">
+
+**Growth/Analytics Specialist**
+
+Metrics
+
+</td>
+<td align="center">
 
 _The skill loads only the references your task actually needs_
 
@@ -151,6 +179,9 @@ _The skill loads only the references your task actually needs_
 | `/site-to-figma <URL>` | Capture website → editable Figma design |
 | `/ab-variants` | A/B test design variants |
 | `/design-sprint` | Guided 5-phase design sprint |
+| `/social-content <task>` | Social media visuals (posts, stories, reels, carousels) |
+| `/social-campaign <brief>` | Campaign planning with strategy, calendar, and captions |
+| `/social-analytics <type>` | Social analytics dashboards and performance reports |
 
 <details>
 <summary><b>📖 Command details & examples</b></summary>
@@ -328,6 +359,38 @@ Guided 5-phase design sprint methodology:
 
 Phases: Understand (problem mapping) → Diverge (8 solution ideas) → Decide (weighted matrix) → Prototype (build testable solution) → Validate (test script + success metrics).
 
+### `/social-content <task>` — Social Media Visuals
+
+Create platform-optimized social media visuals at exact dimensions with safe zones:
+
+```
+/social-content Instagram carousel for a product launch — 5 slides
+/social-content TikTok story announcing a new feature
+/social-content LinkedIn post about our Series A funding
+```
+
+### `/social-campaign <brief>` — Campaign Planning
+
+Plan a social media campaign with strategy, content calendar, caption drafts, and KPI targets:
+
+```
+/social-campaign Awareness campaign for fitness app targeting Gen Z on Instagram and TikTok
+/social-campaign Product launch for SaaS tool — LinkedIn + Twitter — 2 weeks
+/social-campaign Engagement campaign for local restaurant on Instagram
+```
+
+Outputs: campaign strategy, 2-week content calendar, first-week caption drafts with hooks and CTAs, KPI targets. Visual assets created separately via `/social-content`.
+
+### `/social-analytics <type>` — Social Analytics
+
+Build analytics dashboards, performance reports, or A/B test frameworks:
+
+```
+/social-analytics dashboard for Instagram + TikTok — last 30 days
+/social-analytics weekly report for LinkedIn company page
+/social-analytics ab-test Compare carousel vs. single-image posts on Instagram
+```
+
 </details>
 
 ---
@@ -344,6 +407,8 @@ Commands chain together. Each command suggests relevant next steps:
 | Brand setup | `/brand-kit` → `/figma-create` → `/design-handoff` |
 | Stakeholder review | `/figma-create` → `/design-present` → `/ab-variants` |
 | Full product sprint | `/design-sprint` → `/figma-create` → `/figma-prototype` → `/design-present` |
+| Social media launch | `/social-campaign` → `/social-content` → `/social-analytics` |
+| Social content creation | `/brand-kit` → `/social-content` → `/ab-variants` |
 
 ---
 
@@ -454,7 +519,7 @@ design-studio/
 │       ├── figma-workflow.md           # Figma MCP tools, design-to-code + creation
 │       ├── figma-creation.md           # Figma API patterns via Desktop Bridge
 │       └── deployment.md              # Preview server, Firebase Hosting
-├── commands/                           # 16 slash commands
+├── commands/                           # 19 slash commands
 ├── agents/                             # 5 specialist agents
 ├── hooks/hooks.json                    # SessionStart + PreToolUse + Stop hooks
 ├── scripts/

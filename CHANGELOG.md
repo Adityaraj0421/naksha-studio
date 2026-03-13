@@ -2,6 +2,25 @@
 
 All notable changes to Design Studio are documented here.
 
+## [2.2.0] — 2026-03-13
+
+Social media wing expansion — adds 3 commands, 4 specialist roles, and 3 eval cases.
+
+### Added
+
+- **3 new commands**: `/social-content`, `/social-campaign`, `/social-analytics`
+- **4 new specialist roles**: Social Media Designer, Social Media Strategist, Social Media Copywriter, Growth/Analytics Specialist
+- **3 new eval cases** (ids 17-19): `social-content-instagram-carousel`, `social-campaign-saas-launch`, `social-analytics-dashboard`
+- **Social team assembly** in SKILL.md: trigger rules for "social", "Instagram", "TikTok", "LinkedIn post", "campaign", "content calendar", "hashtag", "carousel", "social analytics"
+
+### Changed
+
+- plugin.json version bumped to 2.2.0, description updated to 19 commands
+- Stop hook updated to suggest all 19 commands (grouped: Core, Figma, Social)
+- README expanded with social media team table and command descriptions
+
+---
+
 ## [2.1.1] — 2026-03-10
 
 Bug fixes, documentation, and quality improvements based on public review feedback.
