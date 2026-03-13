@@ -1,17 +1,19 @@
 ---
 name: design
 description: >
-  Assembles a virtual design team to produce production-quality UI, UX, visual, and social media output.
+  Assembles a virtual design team to produce production-quality UI, UX, visual, social media, and email output.
   A Design Manager staffs the right specialists (Product Designer, UX Designer, UI Designer, UX Researcher,
   Content Designer, Design System Lead, Motion Designer, Creative Director, Social Media Designer,
-  Social Media Strategist, Social Media Copywriter, Growth/Analytics Specialist) based on the task scope.
+  Social Media Strategist, Social Media Copywriter, Growth/Analytics Specialist, Email Designer,
+  Email Copywriter) based on the task scope.
   Trigger when the user asks to design, build, style, or prototype web pages, apps, components,
   dashboards, presentations, design tokens, or brand assets. Also trigger for Figma-to-code workflows,
   design system creation, responsive layouts, dark mode theming, accessibility audits, UX flows,
   wireframes, content strategy, animations, deployment, social media content, campaigns, Instagram,
   TikTok, LinkedIn, Twitter, YouTube, carousels, stories, reels, content calendars, hashtags, captions,
-  or social analytics. Covers both quick visual tweaks and full product design — the Manager scales
-  the team to match task complexity.
+  social analytics, email templates, email campaigns, newsletters, email sequences, welcome emails,
+  drip campaigns, email copywriting, HTML email, or deliverability. Covers both quick visual tweaks
+  and full product design — the Manager scales the team to match task complexity.
 
   <example>
   user: "Build me a landing page for a SaaS product"
@@ -36,6 +38,16 @@ description: >
   <example>
   user: "Plan a social media campaign for Q2"
   assistant: Routes to /social-campaign with Social Media Strategist + Copywriter + Analytics
+  </example>
+
+  <example>
+  user: "Create a welcome email sequence for new signups"
+  assistant: Routes to /email-campaign with Email Designer + Email Copywriter
+  </example>
+
+  <example>
+  user: "Build an HTML email template for our product launch"
+  assistant: Routes to /email-template with Email Designer + Email Copywriter
   </example>
 ---
 
@@ -69,6 +81,8 @@ This skill is part of the **design-studio** plugin. For focused workflows, use t
 | `/social-campaign <brief>` | Plan a social media campaign with strategy, calendar, and captions |
 | `/social-analytics <type>` | Build social analytics dashboards, reports, or A/B test frameworks |
 | `/design-framework <fw> [file]` | Convert HTML design output to React, Vue, Svelte, Next.js, or Astro components |
+| `/email-template <type> for <brand>` | Generate a production-ready HTML email template (inline styles, table layout, responsive) |
+| `/email-campaign <type> for <product>` | Plan and build a complete multi-email campaign sequence |
 
 ---
 
@@ -102,6 +116,13 @@ This skill is part of the **design-studio** plugin. For focused workflows, use t
 | **Social Media Strategist** | Campaigns, content calendars, audience targeting, platform strategy | Campaign planning, content strategy, posting cadence | `references/social-media-strategist.md` |
 | **Social Media Copywriter** | Captions, hooks, CTAs, hashtags, bio optimization, platform voice | Social copy, caption writing, thread creation | `references/social-media-copywriter.md` |
 | **Growth/Analytics Specialist** | KPIs, dashboards, A/B testing, funnels, conversion tracking | Social analytics, performance tracking, experiment design | `references/growth-analytics-specialist.md` |
+
+### Email Specialists
+
+| Role | Expertise | When to activate | Reference |
+|------|-----------|-----------------|-----------|
+| **Email Designer** | HTML email (inline styles, table layout, VML buttons), responsive, dark mode, cross-client rendering | Any HTML email template, email visual design, deliverability | `references/email-designer.md` |
+| **Email Copywriter** | Subject lines, preview text, body copy, CTAs, sequences, A/B test strategy, CAN-SPAM compliance | Email copy, subject lines, campaign sequences, welcome flows | `references/email-copywriter.md` |
 
 ### Cross-Cutting Tools
 
@@ -199,6 +220,12 @@ Based on the task, activate only the roles needed. Read their reference files fo
 | "Write social media captions for our carousel" | Social Media Copywriter, Social Media Designer |
 | "Set up A/B testing for our social ads" | Growth/Analytics Specialist, Social Media Designer + `/ab-variants` command |
 | "Create a content calendar for LinkedIn" | Social Media Strategist, Social Media Copywriter |
+| "Build a welcome email for new signups" | Email Designer, Email Copywriter |
+| "Create an HTML email template" | Email Designer, Email Copywriter |
+| "Write a 5-email onboarding sequence" | Email Copywriter, Email Designer |
+| "Design a promotional email for Black Friday" | Email Designer, Email Copywriter |
+| "Build a re-engagement email campaign" | Email Copywriter, Email Designer |
+| "Generate a newsletter template" | Email Designer, Email Copywriter |
 
 **Rules:**
 - Simple visual tasks (icon, color tweak) → 1–2 roles, no overhead
@@ -213,6 +240,9 @@ Based on the task, activate only the roles needed. Read their reference files fo
 - The **Social Media Designer** joins any visual social content task
 - The **Social Media Strategist** joins campaign planning and content calendar tasks
 - The **Growth/Analytics Specialist** joins when measurement, dashboards, or A/B testing is needed for social
+- **Email** roles activate when the task mentions: "email", "newsletter", "email template", "HTML email", "welcome email", "drip campaign", "email sequence", "onboarding email", "subject line", "preheader", "CAN-SPAM", "Mailchimp", "SendGrid", "Klaviyo", "ESP", "transactional email", or "email campaign"
+- The **Email Designer** joins any HTML email template or visual email design task
+- The **Email Copywriter** joins when email copy, subject lines, or email sequences are needed
 
 ### Step 4 — Execute the Workflow
 
@@ -237,6 +267,10 @@ Social Media Phase (if output is social content)
   ├─ Social Media Copywriter: captions, hooks, CTAs, hashtag sets
   ├─ Social Media Designer: platform-specific visual assets, safe zones, dimensions
   └─ Growth/Analytics Specialist: KPIs, UTM tracking, A/B test framework
+
+Email Phase (if output is an email template or campaign)
+  ├─ Email Copywriter: subject lines, preview text, body copy, CTA text, sequence strategy
+  └─ Email Designer: HTML template (table layout, inline styles, bulletproof buttons, responsive)
 
 Figma Creation Phase (if output is a Figma file)
   ├─ Figma Creator: pages, frames, auto-layout, components, styles

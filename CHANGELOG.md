@@ -2,6 +2,26 @@
 
 All notable changes to Design Studio are documented here.
 
+## [2.4.0] — 2026-03-13
+
+Email Design Wing — adds `/email-template`, `/email-campaign` commands and Email Designer + Email Copywriter roles.
+
+### Added
+
+- **`/email-template` command**: Generate production-ready HTML email templates — inline styles, table layout, VML bulletproof buttons, mobile-responsive, dark mode, deliverability-optimized. Supports welcome, transactional, newsletter, promotional, onboarding, re-engagement, and product-announcement types
+- **`/email-campaign` command**: Plan and generate complete multi-email campaign sequences — welcome series, onboarding, product launch, promotional, re-engagement, post-purchase. Outputs campaign brief, sequence map, all HTML templates, ESP setup notes
+- **`email-designer.md` reference** (~200 lines): HTML email constraints, document structure template, layout patterns (hero, two-column, feature row, footer), typography stack, color system, spacing, image best practices, deliverability checklist, ESP variable syntax, email types table, QA checklist
+- **`email-copywriter.md` reference** (~200 lines): Subject line formulas, preview text rules, AIDA body structure, CTA copy patterns, tone guides per email type, multi-email sequence strategy, A/B test priorities, personalization, compliance copy (CAN-SPAM, GDPR)
+
+### Changed
+
+- plugin.json version bumped to 2.4.0, 22 commands
+- SKILL.md: Email Designer + Email Copywriter added to team table with activation trigger rules; Email Phase added to workflow; 6 new team assembly examples
+- README: `/email-template` and `/email-campaign` in commands table and details section
+- Stop hook: includes `/email-template` and `/email-campaign` in suggestions
+
+---
+
 ## [2.3.0] — 2026-03-13
 
 Framework-specific code generation — adds `/design-framework` command and Framework Specialist role.

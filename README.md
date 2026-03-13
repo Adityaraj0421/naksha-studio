@@ -7,7 +7,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Claude Code](https://img.shields.io/badge/Claude_Code-Plugin-blueviolet)](https://claude.ai/claude-code)
 [![Roles](https://img.shields.io/badge/Specialist_Roles-9-orange)]()
-[![Commands](https://img.shields.io/badge/Slash_Commands-20-green)]()
+[![Commands](https://img.shields.io/badge/Slash_Commands-22-green)]()
 [![Design Knowledge](https://img.shields.io/badge/Design_Knowledge-8500%2B_lines-ff69b4)]()
 
 **Instead of generic AI design help, Design Studio loads specialized design knowledge for each task — the right expertise activates based on what you're building.**
@@ -151,6 +151,22 @@ Metrics
 </td>
 <td align="center">
 
+**Email Designer**
+
+HTML Email
+
+</td>
+</tr>
+<tr>
+<td align="center">
+
+**Email Copywriter**
+
+Subject Lines
+
+</td>
+<td align="center">
+
 _The skill loads only the references your task actually needs_
 
 </td>
@@ -183,6 +199,8 @@ _The skill loads only the references your task actually needs_
 | `/social-campaign <brief>` | Campaign planning with strategy, calendar, and captions |
 | `/social-analytics <type>` | Social analytics dashboards and performance reports |
 | `/design-framework <fw> [file]` | Convert HTML designs to React, Vue, Svelte, Next.js, or Astro |
+| `/email-template <type> for <brand>` | Production HTML email template (responsive, dark mode, cross-client) |
+| `/email-campaign <type> for <product>` | Complete multi-email campaign sequence with copy and HTML templates |
 
 <details>
 <summary><b>📖 Command details & examples</b></summary>
@@ -414,6 +432,32 @@ Build analytics dashboards, performance reports, or A/B test frameworks:
 /social-analytics ab-test Compare carousel vs. single-image posts on Instagram
 ```
 
+### `/email-template <type> for <brand>` — HTML Email Template
+
+Generate a production-ready HTML email template with inline styles, table layout, and bulletproof buttons:
+
+```
+/email-template welcome for Acme SaaS — new user signup
+/email-template promotional for ShopCo — Black Friday 30% off sale
+/email-template transactional for OrderCo — order confirmation with item table
+/email-template newsletter for TechBlog — weekly curated articles
+```
+
+Outputs: Full HTML with VML buttons (Outlook), mobile-responsive `@media` rules, dark mode, preheader, ESP template variables reference, and QA checklist.
+
+### `/email-campaign <type> for <product>` — Email Campaign Sequence
+
+Plan and generate a complete multi-email campaign with copy and HTML templates:
+
+```
+/email-campaign welcome-series for Figma-clone SaaS — new signups
+/email-campaign product-launch for Design Studio v3 — existing users
+/email-campaign re-engagement for fitness app — 60-day inactive users
+/email-campaign onboarding for project management tool — trial users
+```
+
+Outputs: Campaign brief, sequence map with timing, copy for all emails (subject lines, preview text, body, CTAs), full HTML for each email, ESP automation setup notes, A/B test plan.
+
 </details>
 
 ---
@@ -434,6 +478,8 @@ Commands chain together. Each command suggests relevant next steps:
 | Social content creation | `/brand-kit` → `/social-content` → `/ab-variants` |
 | Design-to-React | `/design` → `/design-framework react-tailwind` → `/design-review` |
 | Design-to-Next.js | `/design` → `/design-framework nextjs` → `/figma-sync` |
+| Email launch sequence | `/brand-kit` → `/email-template` → `/email-campaign` |
+| Email + social campaign | `/email-campaign` → `/social-campaign` → `/social-analytics` |
 
 ---
 
