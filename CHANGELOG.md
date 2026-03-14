@@ -1,6 +1,27 @@
 # Changelog
 
-All notable changes to Design Studio are documented here.
+All notable changes to naksha are documented here.
+
+## [3.3.0] — 2026-03-14
+
+Rebrand — design-studio becomes naksha.
+
+### Changed
+
+- Plugin renamed from `design-studio` to `naksha`
+- Visual identity updated to Naksha brand (`#E8633A`, `#1A1A2E`, Inter, 3×3 circle mark)
+- README header rewritten with Naksha logo mark, wordmark, and tagline
+- `assets/social-preview.svg` regenerated with Naksha dark/orange identity
+- `assets/social-preview.html` source updated with Naksha identity
+- `assets/demo.svg` updated with naksha name and v3.3.0 label
+- `skills/design/SKILL.md` prose reference updated
+- `CONTRIBUTING.md` install path updated
+- `.github/workflows/design-check.yml` PR comment URL updated
+- GitHub repository renamed: `design-studio` → `naksha-studio`
+
+No functional changes — all 27 commands, 13 roles, agents, hooks, and evals are unchanged.
+
+---
 
 ## [3.2.0] — 2026-03-14
 
