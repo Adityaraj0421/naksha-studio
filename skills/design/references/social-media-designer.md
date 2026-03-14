@@ -192,3 +192,188 @@ Meta (Facebook/Instagram) ads perform better with less than 20% text coverage on
 - **To UI Designer**: Social preview card designs (OpenGraph images), share sheet mockups
 - **To Content Designer**: Visual content hierarchy, text overlay constraints, CTA placement patterns
 - **To Design System Lead**: Social brand tokens (platform-specific color/font/spacing), reusable template component library
+
+---
+
+## Advanced Patterns
+
+### Platform-Specific Constraint Guide
+
+Design within these constraints or content gets cropped, overlaid, or rejected:
+
+**Instagram:**
+| Format | Dimensions | Safe zone | Notes |
+|----------------|---------------------|-------------------------------------------|----------------------------------|
+| Feed (square) | 1080×1080px | 50px all sides | Default format for feed posts |
+| Feed (portrait) | 1080×1350px (4:5) | 50px all sides | Best real estate in feed |
+| Feed (landscape) | 1080×566px (1.91:1) | 50px all sides | Least common, use for panoramic |
+| Story / Reel | 1080×1920px (9:16) | Top 250px: UI chrome. Bottom 250px: CTA buttons | Keep key content in middle 60% |
+| Carousel | Same as feed | 50px right side for peek | First slide must hook; last slide must CTA |
+
+**LinkedIn:**
+| Format | Dimensions | Notes |
+|----------------|---------------------|------------------------------------------------------|
+| Feed post (image) | 1200×627px or 1200×1200px | Square outperforms on LinkedIn |
+| Article cover | 1280×720px | 16:9; displayed smaller in feed |
+| Short video post | 1080×1920px | LinkedIn removed Stories (2021); use short video posts instead |
+
+**TikTok:**
+- 1080×1920px, 9:16
+- Safe zone: top 15% (logo + caption area), bottom 20% (CTA buttons, username)
+- Text placement: keep text in the band between the top 15% (UI chrome boundary) and top 50% of the frame — visible without entering the unsafe chrome zone at the top or the CTA button zone at the bottom
+
+**Twitter/X:**
+- In-stream image: 1600×900px (16:9), displayed as 1.91:1 in feed — keep key content in centre
+- Twitter Cards: 1200×628px
+
+---
+
+### Scroll-Stopping Visual Techniques
+
+The first 0.3 seconds determine whether someone stops scrolling:
+
+**1. Contrast first** — High contrast between foreground and background. Dark subject on light background or vice versa. Low-contrast posts disappear in feeds.
+
+**2. Motion hint** — On video thumbnails: use a blur, motion lines, or a "play" gesture to signal movement. The brain is wired to pay attention to motion.
+
+**3. Curiosity gap** — Cut off something visually interesting. An image that's slightly cropped makes the viewer want to see the rest. Works especially on carousels.
+
+**4. Text as visual** — Large, bold, single statement as the primary visual element. No image needed. Contrast and font weight do the work. Most effective on LinkedIn.
+
+**5. Human faces, direct eye contact** — Eye contact in photography consistently outperforms non-face imagery on social platforms. The brain prioritises faces in visual scanning.
+
+**6. Pattern interrupt** — Break the visual rhythm of the feed. If everyone's using photography, use flat illustration. If everyone's using dark backgrounds, use white. Contrast against context, not just within the frame.
+
+---
+
+### Brand Consistency Across Platform Constraints
+
+One brand identity, adapted for each platform's constraints:
+
+**Three-tier adaptation system:**
+
+| Tier | Elements | Rule |
+|------------|--------------------------|--------------------------------------------------------------|
+| **Fixed** | Logo, brand colours, typeface family | Never change. Applied in every format. |
+| **Flexible** | Layout, proportion, imagery style, text placement | Adapt to platform constraints. |
+| **Adaptive** | Aspect ratio, text length, CTA format, tone | Platform-native. Instagram ≠ LinkedIn ≠ TikTok. |
+
+**Cross-platform brief format:**
+```
+Campaign idea: [Core concept in one sentence]
+Fixed elements: [Logo placement, colour, font]
+Instagram feed: [What adaptation looks like]
+Instagram story: [What adaptation looks like]
+LinkedIn: [What adaptation looks like]
+TikTok: [What adaptation looks like]
+```
+
+**Common consistency mistakes:**
+- Shrinking a landscape LinkedIn graphic to fit a 4:5 Instagram post (crops awkwardly)
+- Using the same dense text on TikTok as on LinkedIn (unreadable on a phone)
+- Removing the logo on TikTok because "it looks corporate" (brand consistency matters even on native-feeling platforms)
+
+---
+
+### Template System Design
+
+Social templates need to be brand-safe, flexible, and foolproof for non-designers.
+
+**Three zones in every template:**
+1. **Locked zone** — brand logo, brand colour blocks, typeface. Locked in Figma (cannot be edited). Never moves.
+2. **Content zone** — headline, body copy, image placeholder. Fully editable.
+3. **Accent zone** — optional brand elements (divider, icon, pattern). Can be shown/hidden.
+
+**Layer naming for non-designers:**
+```
+[LOCKED] Brand
+   └── Logo
+   └── Background colour
+[CONTENT] Edit here
+   └── Headline — replace this text
+   └── Subheading — optional
+   └── Image — swap this image
+[ACCENTS] Show/hide
+   └── Divider
+   └── Pattern overlay
+```
+
+**How many templates:** Start with 5–8. More templates = more maintenance and more confusion for users. Build the minimum set that covers: announcement, quote, tip/insight, before/after, event. Add more only when a use case clearly doesn't fit existing templates.
+
+---
+
+## Full Coverage
+
+### Platform Format Reference
+
+Complete specs for every format:
+
+| Platform | Format | Dimensions | File limit | Text limit | Animation |
+|-----------|----------------|------------|------------|----------------|-----------|
+| Instagram | Feed square | 1080×1080px | 30MB | No official limit | No (static) |
+| Instagram | Feed portrait | 1080×1350px | 30MB | No official limit | No (static) |
+| Instagram | Feed landscape | 1080×566px | 30MB | No official limit | No (static) |
+| Instagram | Story | 1080×1920px | 30MB | No official limit | No (static) |
+| Instagram | Reel cover | 1080×1920px | — | — | No |
+| Instagram | Carousel | 1080×1080px (each) | 30MB per | No official limit | No |
+| LinkedIn | Feed image | 1200×627px | 5MB | 300 chars visible | No |
+| LinkedIn | Feed square | 1200×1200px | 5MB | 300 chars visible | No |
+| LinkedIn | Article cover | 1280×720px | 10MB | — | No |
+| TikTok | Video cover | 1080×1920px | — | 150 chars | — |
+| Twitter/X | In-stream | 1600×900px | 5MB | 280 chars (tweet) | GIF: 15MB |
+| Twitter/X | Card image | 1200×628px | 5MB | — | No |
+| Pinterest | Pin | 1000×1500px | 32MB | 100 char title | No |
+| YouTube | Thumbnail | 1280×720px | 2MB | — | No |
+
+---
+
+### Accessibility for Social
+
+**Alt text (screen readers):**
+- Describe the content and context, not just what's visible: "Bar chart showing 40% increase in user signups from Jan to Mar 2026" not "Chart"
+- Character limits: Instagram 2,200 chars (alt text field), Twitter/X 1,000 chars
+- On Instagram: Settings → Accessibility → Auto alt text (enable) + add manual alt text when posting
+- Don't start with "Image of..." — screen readers already announce it as an image
+
+**Captions (video):**
+- Accuracy: 99%+ accuracy target — auto-captions from TikTok/Instagram are ~80% — review and correct
+- Punctuation: use commas and periods to help timing
+- Speaker labels: "[INTERVIEWER]: Question text" for multi-speaker content
+- Burned-in vs. native captions: burned-in (added in editing) works everywhere; native captions (platform-uploaded SRT) allow user control
+
+**Colour contrast on mobile screens:**
+- Mobile screens in outdoor light require higher contrast than WCAG AA (4.5:1)
+- Aim for WCAG AAA (7:1) on social graphics — especially for text overlaid on images
+- Test on a real device in daylight, not just on a calibrated monitor
+
+---
+
+### Cross-Platform Campaign Coherence
+
+One campaign across multiple platforms — how to maintain coherence without copy-pasting:
+
+**Campaign brief structure:**
+```
+Campaign name:
+Core idea (one sentence — what's the story?):
+Visual signature (what makes every piece feel related?):
+Key message (one sentence, platform-agnostic):
+
+Platform adaptations:
+  Instagram: [format, visual approach, copy angle]
+  LinkedIn: [format, visual approach, copy angle]
+  TikTok: [format, visual approach, copy angle]
+
+What stays constant: [list of fixed elements]
+What adapts: [list of flexible elements]
+```
+
+**Visual consistency checklist for multi-platform launches:**
+- [ ] Same colour palette used across all formats
+- [ ] Same logo placement / treatment
+- [ ] Same campaign hashtag or URL
+- [ ] Typography from brand type system
+- [ ] Tone adapted per platform but core message identical
+- [ ] Launch timing: release within 24h across platforms (not weeks apart)
+
+---
