@@ -1,7 +1,7 @@
 {
-  "name": "design-studio",
-  "version": "3.2.0",
-  "description": "A virtual design studio that assembles specialist roles for any design task. 27 slash commands covering full design workflows, Figma-native creation, design-to-code, brand kits, A/B variants, design sprints, prototyping, responsive variants, component docs, developer handoff, UX audits, design presentations, site-to-Figma capture, design linting, design-code sync, social media content, campaign planning, social analytics, framework-specific component generation (React, Vue, Svelte, Next.js, Astro), HTML email templates and campaign sequences, a template gallery (landing page, dashboard, pricing, auth, blog, ecommerce, portfolio, docs, SaaS, onboarding), a data visualization wing (chart design with accessible palettes, dashboard layout with KPI cards and data tables), an interactive tutorial mode, and a Figma component library generator (atoms/molecules/organisms with variants). Commands: /design, /design-review, /design-system, /design-framework, /design-template, /figma, /figma-create, /ux-audit, /design-handoff, /figma-responsive, /figma-sync, /design-present, /brand-kit, /component-docs, /figma-prototype, /site-to-figma, /ab-variants, /design-sprint, /social-content, /social-campaign, /social-analytics, /email-template, /email-campaign, /chart-design, /dashboard-layout, /design-tutorial, /figma-component-library",
+  "name": "naksha",
+  "version": "3.3.0",
+  "description": "A virtual design team for Claude Code, powered by Naksha. Assembles specialist roles — UI designer, UX researcher, content designer, Figma expert, data viz, email, social, and more — for any design task. 13 roles, 27 commands, 9,500+ lines of expert design knowledge. Your agency's design brain, inside your terminal.",
   "author": {
     "name": "adityaraj0421"
   },
