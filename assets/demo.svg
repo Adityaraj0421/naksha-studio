@@ -32,8 +32,8 @@
     <rect width="820" height="5" fill="url(#accent)"/>
 
     <!-- Header -->
-    <text x="40" y="42" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="11" font-weight="600" fill="#6366f1" letter-spacing="4">DESIGN STUDIO</text>
-    <text x="780" y="42" text-anchor="end" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="11" fill="#475569">v2.1.1</text>
+    <text x="40" y="42" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="11" font-weight="600" fill="#6366f1" letter-spacing="4">NAKSHA</text>
+    <text x="780" y="42" text-anchor="end" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="11" fill="#475569">v3.3.0</text>
 
     <!-- Header divider -->
     <line x1="40" y1="56" x2="780" y2="56" stroke="#ffffff" stroke-opacity="0.08" stroke-width="1"/>
@@ -163,7 +163,7 @@
 
     <!-- ─── FOOTER ─────────────────────────────────────── -->
     <line x1="40" y1="540" x2="780" y2="540" stroke="#ffffff" stroke-opacity="0.06" stroke-width="1"/>
-    <text x="40" y="560" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="11" fill="#334155">github.com/Adityaraj0421/design-studio</text>
+    <text x="40" y="560" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="11" fill="#334155">github.com/Adityaraj0421/naksha</text>
     <text x="780" y="560" text-anchor="end" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="11" fill="#475569">MIT License</text>
 
   </g>
