@@ -189,3 +189,165 @@ Beyond first name, effective personalizations:
 
 - **To Email Designer**: Provide subject, preview text, headline, body copy, CTA text, footer copy as a content brief before HTML coding begins
 - **To Design Manager**: Flag if sequence requires triggered/behavioral automation logic (needs ESP workflow configuration)
+
+---
+
+## Advanced Patterns
+
+### Subject Line Formula Library
+
+5 deeper patterns with analysis (complements the formula quick-reference table above):
+
+**1. Specificity** (most reliable)
+> "Your invoice for $240 is ready"
+> "3 new comments on 'Homepage redesign'"
+> "Your trial ends in 3 days"
+Specificity signals relevance. Vague subjects get ignored; specific ones get opened.
+
+**2. Curiosity gap**
+> "The one thing we changed in v2.0"
+> "Why your LCP score is probably wrong"
+Create a knowledge gap, then close it inside the email. Don't be clickbait — the email must deliver on the subject.
+
+**3. Urgency + specificity**
+> "48 hours left: your export is waiting"
+> "Last chance: free migration help ends Friday"
+Urgency without specificity is spam. Urgency + specificity is useful.
+
+**4. Social proof**
+> "1,200 agencies signed up this month"
+> "How [Company] cut design review time by 60%"
+Works for nurture sequences. Avoid for transactional or onboarding emails.
+
+**5. Direct benefit**
+> "Your design system, now with dark mode support"
+> "Naksha now works in Figma — here's how"
+Best for product update emails. Lead with the user benefit, not the feature name.
+
+**Anti-patterns:** ALL CAPS, excessive punctuation (!!!!!), misleading teasers, "Re:" or "Fwd:" tricks, using the recipient's name if it adds no value.
+
+---
+
+### Preview Text Strategy
+
+Preview text is the second subject line — it appears in the inbox below/beside the subject.
+
+**Rules:**
+- Never repeat the subject line — extend the thought or add a secondary hook
+- 40–90 characters for full display across clients
+- Write it before you write the email body — it keeps you focused on the core message
+- If you don't set preview text, email clients pull the first line of body content (often ugly: "View in browser | Unsubscribe")
+
+**Examples:**
+| Subject | Preview text |
+|---|---|
+| "Your trial ends in 3 days" | "Here's what you'll lose access to — and how to keep it." |
+| "v3.0 is live" | "Dark mode, 12 new commands, and a complete Figma rewrite." |
+| "New comment from Sarah" | "She left a note on your homepage redesign wireframes." |
+
+---
+
+### CTA Copy Decision Guide
+
+**The formula:** Verb + Object (+ Context when helpful)
+- ✅ "Download your report"
+- ✅ "Start your free trial"
+- ✅ "View Sarah's comment"
+- ❌ "Click here"
+- ❌ "Learn more"
+- ❌ "Submit"
+
+**Single primary CTA per email.** If you have two goals, write two emails. Multiple CTAs reduce clicks on all of them.
+
+**Button vs. text link:**
+- Button: primary action, conversion-focused emails
+- Text link: supplementary links, transactional details ("view invoice", "update preferences")
+- Never use only text links for the primary CTA — they get missed
+
+**Placement:**
+- Primary CTA: above the fold (visible without scrolling) + repeated at the bottom of long emails
+- At the bottom: after you've made the case, when the reader is most persuaded
+
+---
+
+### Drip Sequence Psychology
+
+*This arc applies to SaaS products with a clear activation milestone. For content-first or newsletter products, see Welcome Sequence above.*
+
+**The sequence arc:**
+
+| Email | Timing | Goal | Tone |
+|---|---|---|---|
+| **Welcome** | Immediately | Deliver the promised value, orient the user | Warm, focused |
+| **Onboarding 1** | Day 2 | First meaningful product action | Helpful, instructional |
+| **Onboarding 2** | Day 4 | Second value milestone | Encouraging |
+| **Nurture** | Week 2+ | Teach something valuable (no pitch) | Educational, generous |
+| **Consideration** | Week 3–4 | Social proof, case study, objection handling | Confident |
+| **Conversion** | Week 4–5 | Clear offer with urgency | Direct, benefit-led |
+| **Re-engagement** | Day 30 of inactivity | Acknowledge the gap, give a reason to return | Low-pressure |
+| **Win-back** | Day 60 of inactivity | Last attempt before suppression | Honest, generous |
+
+**Frequency rule:** Users should receive no more than 2–3 marketing emails per week from you. More = unsubscribes.
+
+**Content arc:** Teach → show proof → make offer. Don't pitch before you've given value. The ratio should be roughly 3:1 (value emails to pitch emails).
+
+---
+
+## Full Coverage
+
+### Email Type Reference
+
+| Type | Goal | Sender | Subject approach | CTA | Length | Timing |
+|---|---|---|---|---|---|---|
+| **Welcome** | Orient + deliver first value | Founder or team | "Welcome to [Product]" or specific first action | Primary product action | Short | Immediately on signup |
+| **Onboarding** | Drive activation milestone | Team or product | Specific next step ("Connect your Figma account") | The specific action | Short | Days 2–5 |
+| **Educational/Newsletter** | Build trust, teach | Team | Topic or insight | Read more / try it | Medium | Weekly or biweekly |
+| **Promotional** | Convert to paid | Marketing | Benefit + urgency | Sign up / upgrade | Medium | Lifecycle trigger or campaign |
+| **Transactional** | Confirm action | Noreply or product | Exactly what happened ("Your receipt for $49") | Related action or none | Short | Immediately on trigger |
+| **Re-engagement** | Return inactive user | Founder | Acknowledge the gap | Low-friction action | Short | Day 30 inactive |
+| **Win-back** | Final re-engagement | Founder | Direct + generous | Easy return action | Short | Day 60 inactive |
+| **Milestone** | Celebrate user achievement | Product | What they achieved | Share or upgrade | Short | On trigger |
+| **Survey** | Collect feedback | Founder or team | Direct ask ("Can I ask you one question?") | Open survey | Short | After activation or churn |
+
+---
+
+### Segmentation Copy Adaptation
+
+The same email should read differently for different user segments:
+
+**New users vs. power users:**
+- New user: more context, more explanation, softer CTAs ("Get started")
+- Power user: less hand-holding, specific features, stronger CTAs ("Enable it now")
+- Use dynamic content blocks in your ESP to swap sections based on user attribute
+
+**When to send separate emails vs. personalize one:**
+- Separate emails: when the entire message changes (onboarding for free vs. paid is different enough to be a different email)
+- Personalize one: when the core message is the same but 1–2 details differ (name, plan, specific feature they use)
+
+**Tone adaptation by segment:**
+- Churned users: lower stakes, no pressure, generous offer
+- High-value users: acknowledge their status, give them early access or exclusive content
+- Users who haven't activated: patient, instructional, address common blockers
+
+---
+
+### A/B Testing Email Copy
+
+**Test in this order:**
+
+1. **Subject line** (biggest impact — affects open rate, which affects everything downstream)
+2. **CTA copy** (affects click rate directly)
+3. **Headline** (first thing read after open)
+4. **Send time** (test Tuesday 10am vs. Thursday 2pm for your audience)
+5. **Length** (short vs. long — audience dependent)
+
+**Writing variants that test one variable:** Change only the subject line in variant B — don't also change the preview text. One variable per test.
+
+**Minimum send volume per variant:** 1,000+ recipients per variant for statistical significance on open rate. 5,000+ for click rate significance (lower base rate = needs more volume).
+
+**How to read results:**
+- Subject line test → look at open rate (48–72h window)
+- CTA test → look at click-to-open rate (not raw click rate — controls for open rate variation)
+- Apply winner to the rest of the list once significance is reached (typically p < 0.05)
+
+---
