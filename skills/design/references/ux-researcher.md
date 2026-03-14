@@ -255,3 +255,147 @@ Use to validate information architecture and navigation structure.
 - [ ] Include 1–2 open-ended questions for qualitative signal
 - [ ] Pilot test with 3 people before sending to catch confusing wording
 - [ ] Response rate benchmark: 10–15% for cold email, 30–50% for existing users
+
+---
+
+## Advanced Patterns
+
+### Qual vs. Quant Decision Guide
+
+| Question type | Method | Why |
+|---|---|---|
+| "How many users do X?" | Quant (analytics, survey) | Scale matters — need statistical significance |
+| "How often does X happen?" | Quant (event tracking) | Frequency is a number |
+| "Why do users do X?" | Qual (interviews, observation) | Motivation doesn't show up in logs |
+| "How do users do X?" | Qual (usability testing) | Process and mental model aren't in the data |
+| "Which version performs better?" | Quant (A/B test) | Performance is measurable |
+| "What do users think of X?" | Qual (interviews) + Quant (survey) | Get depth from qual, validate scale with quant |
+
+**The danger of quant without qual:** You know what happened but not why. A 40% drop-off at step 3 is a quant finding. Why they drop off requires qual. Act on the combination, not one alone.
+
+**The danger of qual without quant:** 5 interview participants who all dislike a feature sounds alarming. But 5 is not 5,000 — validate the severity with quant before major redesigns.
+
+**Mixed methods:** Use qual to generate hypotheses, quant to test them at scale. Or: use quant to identify where the problem is, qual to understand what the problem is.
+
+---
+
+### Research Prioritisation Framework
+
+Not all research questions are worth answering. Prioritise by:
+
+**Impact:** How much would knowing this change the design? If the answer is "we'd build it either way," don't research it.
+
+**Confidence:** How much do we already know? If the team has strong evidence from past research or analytics, deprioritise further research on that question.
+
+**Cost:** How expensive is this to learn? A survey to 200 users is cheaper than 8 moderated interviews. Diary studies are expensive. Guerrilla testing is cheap.
+
+**Priority matrix:**
+- High impact + low confidence + low cost → do first
+- High impact + low confidence + high cost → find a cheaper proxy method
+- Low impact + high confidence → skip
+- Low impact + low confidence → only if it's genuinely cheap and fast
+
+---
+
+### Synthesis Techniques
+
+**Affinity mapping (bottom-up):**
+1. Write every observation on a separate card (digital or physical)
+2. Group cards by similarity — let groups emerge, don't start with predetermined categories
+3. Name the group after the pattern, not the topic ("Users give up when they don't see immediate results" not "Onboarding")
+4. Look for tensions between groups — that's where the insight lives
+
+**Common mistake:** Grouping by topic (pricing, navigation, errors) instead of by insight. Topic groups produce a report. Insight groups produce design direction.
+
+**Opportunity trees:**
+- Start with the user's overall goal
+- Branch into the jobs they do to achieve that goal
+- Branch further into the pain points within each job
+- Leaf nodes = design opportunities
+- Prioritise by: size of pain × number of users affected × current solution quality
+
+**Communicating findings that change decisions:**
+- Lead with the insight, not the method: "Users don't understand what the product does until step 3" not "In our usability study, participants..."
+- Implication first: "This means our current onboarding is creating a 48-hour delay to first value"
+- Recommendation: "We should add a 30-second interactive demo before sign-up"
+- Evidence: here's the quote/clip/data that proves it (for those who want to dig in)
+
+---
+
+### Communicating Research
+
+**The insight–implication–recommendation structure:**
+> **Insight:** What you observed (with evidence)
+> **Implication:** What it means for the product
+> **Recommendation:** What to do about it
+
+**Making findings actionable:**
+- Every finding should map to a decision the team can make now
+- If a finding maps to no decision → put it in a "future reference" section, not the main report
+- Findings without recommendations are observations, not research outputs
+
+**When findings are inconclusive:**
+- State clearly: "We don't have enough data to conclude X"
+- Recommend: what would resolve the ambiguity (and is it worth the cost?)
+- Don't force a conclusion from weak data — being honest about uncertainty is more useful than false confidence
+
+---
+
+## Full Coverage
+
+### Research Ops Checklist
+
+Before every research study:
+
+**Recruitment:**
+- [ ] Screener written and approved
+- [ ] Recruiting source identified (panel, customer list, guerrilla)
+- [ ] Incentive confirmed (amount, delivery method)
+- [ ] Minimum n confirmed (5 for qual, 100+ for quant)
+- [ ] Backup participants if no-shows are likely
+
+**Setup:**
+- [ ] Consent form ready (covers recording, data use, participant rights)
+- [ ] Recording method confirmed and tested
+- [ ] Note-taking template shared with observers
+- [ ] Observer briefing: watch, don't intervene, note behaviours not interpretations
+
+**Debrief:**
+- [ ] Immediate debrief within 24h of each session (memory decays fast)
+- [ ] Initial themes documented before synthesis
+- [ ] Findings stored in shared location with access for the full team
+
+---
+
+### Screener Template
+
+Use this structure for recruiting participants who match your target:
+
+```
+[Context — 1 sentence about the study, no details that bias responses]
+"We're conducting a short research session about [general topic]. It takes about [time] and pays $[amount]."
+
+[Qualifying questions — ask about behaviours, not demographics]
+1. "How often do you [target behaviour]?" → Must be: at least [X times per month]
+2. "Which of these tools do you use?" → Must include: [tool category]
+3. "In the last 3 months, have you [relevant action]?" → Must be: Yes
+
+[Disqualifying conditions]
+- Works at a competitor company → exclude
+- Has participated in a research session with us in the last 6 months → exclude
+- Works in UX research → exclude (they behave differently)
+
+[Contact / scheduling info]
+```
+
+---
+
+### Bias Identification Guide
+
+| Bias | What it is | How to mitigate |
+|---|---|---|
+| **Confirmation bias** | Designing research to confirm existing beliefs | Have someone outside the team review your discussion guide for leading questions |
+| **Acquiescence bias** | Participants agree with whatever you say to be polite | Ask about behaviour ("what did you do?") not opinions ("did you like it?"). Use task-based testing. |
+| **Social desirability bias** | Participants say what they think you want to hear | Frame questions as hypothetical or past-behaviour. "What did you do last time?" beats "What would you do?" |
+| **Recency bias** | In synthesis, recent sessions feel more important | Take notes immediately after every session. Review all sessions before synthesising. |
+| **Observer effect** | Users behave differently when watched | Use unmoderated testing where possible. Warm up participants. Give them time to forget you're watching. |
