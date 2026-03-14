@@ -237,3 +237,163 @@ Apply these as a mental checklist:
 - **To Content Designer**: Content hierarchy, placeholder text to replace, tone guidance
 - **To Motion Designer**: State transitions, interactive behaviors, animation triggers
 - **To Product Designer**: Flow feasibility, complexity estimates, alternative approaches
+
+---
+
+## Advanced Patterns
+
+### Progressive Disclosure Framework
+
+Show only what's needed at each step — reveal complexity on demand.
+
+**Three levels:**
+1. **Always visible** — critical information, primary action, current state
+2. **On demand** — secondary detail, accessed by user action (expand, click, hover)
+3. **Contextual** — appears only when relevant (error state, conditional field, tooltip)
+
+**When to show vs. hide:**
+- Show: required for the primary task, used by >50% of users
+- Hide: used occasionally, advanced/expert only, would create anxiety if shown upfront
+- Never hide: destructive actions, irreversible consequences, pricing, data you're collecting
+
+**Pattern guide:**
+| Too much info? | Use |
+|---|---|
+| Long form | Accordion, multi-step wizard, progressive form |
+| Many options | Secondary panel, "more" toggle, search-first |
+| Complex settings | Defaults for most + "Advanced" section |
+| Supplemental context | Tooltip, help text, info popover |
+
+---
+
+### Cognitive Load Reduction
+
+**Chunking:** Group related items, max 7±2 items per group. Break long forms into sections. Use whitespace as a grouper, not just decoration.
+
+**Defaults that serve most users:** Pre-fill with the most common choice. Don't make users configure what they'd leave as-is anyway. A good default is invisible — users only notice bad defaults.
+
+**Recognition over recall:** Show options rather than requiring users to remember them. Autocomplete > blank input. Dropdown > free text when options are known. Recent/frequent items surfaced first.
+
+**Skeleton screens vs. spinners:**
+- Use skeletons when: layout is known, content will appear within ~1–3s
+- Use spinners when: duration is unknown or brief (<500ms), layout isn't predictable
+- Never show both simultaneously
+
+**Optimistic UI:** Update the UI immediately, sync in the background. Roll back if it fails. Use for: likes, follows, saves, reorders. Don't use for: purchases, sends, destructive actions.
+
+---
+
+### Modal vs. Page vs. Drawer Decision Guide
+
+| Container | Use when | Don't use when |
+|---|---|---|
+| **Modal** | Action requires full focus, user must respond before continuing, content is brief (1–3 fields) | Multi-step processes, needs back navigation, contains a lot of content |
+| **Full page** | Complex task requiring focus over time, multi-step flow, user needs to navigate away and return | Quick actions, confirmations, auxiliary tasks |
+| **Drawer / Side panel** | User needs context from the page behind it, action is auxiliary to main task, browsing a list of items | Confirmations, focus-critical tasks, complex multi-step flows |
+| **Inline expand** | Quick preview, additional detail on the same record, non-blocking | Editing, complex interactions, adding new items |
+
+**Rule of thumb:** If the user needs to see what's behind it → drawer. If they need full focus → modal or page. If it's a multi-step flow → page.
+
+---
+
+### Fitts's Law Applied
+
+**Core rule:** Target acquisition time = distance ÷ size. Bigger + closer = faster.
+
+**Minimum touch target sizes:**
+- Mobile (finger): 44×44px minimum, 48×48px recommended
+- Desktop (mouse): 32×32px minimum, 44×44px for primary actions
+- Spacing between targets: 8px minimum on mobile to prevent mis-taps
+
+**Application:**
+- Primary CTA: largest button, above the fold, near where the user's eye lands
+- Destructive actions: smaller, lower contrast, physically separated from primary — make them harder to hit accidentally
+- Frequently used actions: in the thumb zone on mobile (bottom 40% of screen)
+- Rarely used actions: can be smaller, in corners, behind "..." menus
+
+---
+
+### Error Prevention > Error Recovery
+
+Design to prevent errors before they happen:
+
+**Constraint design:** Disable invalid options rather than showing errors. Date pickers disable unavailable dates. Quantity inputs prevent negative numbers. Form submits disabled until required fields filled.
+
+**Confirmation patterns:**
+- Use confirmation dialogs for: irreversible actions, affecting other people's data, deleting more than 1 item
+- Don't use for: actions that can be undone, low-stakes operations (adding a tag, changing a setting)
+- Confirmation copy: restate the action + consequence ("Delete 3 files? This can't be undone.")
+
+---
+
+### Undo vs. Confirm Patterns
+
+When to use each:
+
+| Situation | Pattern |
+|---|---|
+| Reversible, affects own data | Undo (toast with undo action, 5–10s) |
+| Irreversible, affects own data | Confirm dialog |
+| Affects other people's data | Confirm dialog, regardless of reversibility |
+| Bulk operation | Confirm + show count ("Delete 47 items?") |
+
+---
+
+## Full Coverage
+
+### Empty State Design — 4 Types
+
+Every container that can be empty needs all 4 types designed:
+
+**1. First-use (no data yet)**
+- What to show: Illustration or icon + headline ("No projects yet") + explanation (1 line) + primary CTA ("Create your first project")
+- Goal: Orient and motivate — user isn't lost, they know what to do next
+- Tone: Encouraging, not clinical
+
+**2. No results (search/filter)**
+- What to show: Search icon + "No results for '[query]'" + suggestion ("Try a different search" or "Clear filters")
+- Always show what they searched for — confirms the system understood the input
+- Offer an escape: clear filters, broaden search
+
+**3. Error (something failed)**
+- What to show: Error icon + plain-language message + retry action
+- Never show technical errors to end users — translate to "Something went wrong. Try again."
+- If retrying won't help, explain why and what to do instead
+
+**4. Offline / disconnected**
+- What to show: Offline icon + "You're offline" + what's still available (if anything) + retry when back
+- Distinguish from error — offline is environmental, not a product failure
+
+---
+
+### Micro-interaction Patterns
+
+| Type | Purpose | Example |
+|---|---|---|
+| **Feedback** | Confirm an action happened | Button color change on click, checkmark on save |
+| **Affordance** | Show what's interactive | Hover state reveals drag handle, underline on hover for links |
+| **Status** | Show system state | Progress bar, loading skeleton, sync indicator |
+| **Spatial transition** | Communicate relationship between states | Slide-in from right = going deeper, slide-out = going back |
+
+**When animation adds value:** When it communicates relationship, sequence, or state change that text can't. When it reduces surprise (element appearing from its trigger). Under 300ms for responses to direct manipulation, under 500ms for transitions.
+
+**When animation is noise:** Decorative animation with no semantic meaning. Animating every element. Anything that delays the user from completing a task. Always respect `prefers-reduced-motion`.
+
+---
+
+### Edge Case Mapping — 8 Required Cases
+
+For every flow, document what happens in each of these 8 scenarios before handoff:
+
+| Case | Question to answer |
+|---|---|
+| **Empty** | What does the screen look like with zero data? |
+| **One item** | Does the UI still work with a single list item, row, or option? |
+| **Maximum (many items)** | How does the layout handle 100+ items, very long text, many columns? |
+| **Long content** | What happens when a name is 80 characters? A description is 2000 words? |
+| **Error** | What if the API call fails? What if one item in a list fails but others succeed? |
+| **Loading** | What does every async state look like? How long before a skeleton shows? |
+| **Offline** | Is the feature available offline? What's the degraded experience? |
+| **Permission-denied** | What does a user without access see? Empty? Locked? Hidden entirely? |
+
+**Handoff standard:** A flow is not ready for development until all 8 edge cases are documented for every screen in the flow.
