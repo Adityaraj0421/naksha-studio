@@ -78,7 +78,7 @@ This skill provides **structured design knowledge organized by specialty**. Inst
 
 ## Plugin Commands
 
-This skill is part of the **design-studio** plugin. For focused workflows, use these commands:
+This skill is part of the **naksha** plugin. For focused workflows, use these commands:
 
 | Command | Use when |
 |---------|----------|
