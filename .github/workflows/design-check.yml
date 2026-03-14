@@ -90,7 +90,7 @@ jobs:
             body += `- ⚠️ **${warnings}** warnings\n`;
             body += `- ❌ **${failed}** errors\n`;
             body += `\n*Run locally: \`node scripts/design-lint.js\`*\n</details>\n`;
-            body += `\n> Powered by [Design Studio](https://github.com/Adityaraj0421/design-studio) · [Configure](.design-lint.json)`;
+            body += `\n> Powered by [Naksha](https://github.com/Adityaraj0421/naksha-studio) · [Configure](.design-lint.json)`;
 
             // Find existing bot comment to update rather than creating duplicates
             const { data: comments } = await github.rest.issues.listComments({
