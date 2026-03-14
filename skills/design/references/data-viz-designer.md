@@ -235,3 +235,162 @@ Charts need thoughtful empty and loading states.
 - **To Dashboard Architect**: Provide chart type, data schema, and color palette before layout work begins
 - **To UI Designer**: Chart components should use design system color tokens, not hardcoded hex values
 - **To Content Designer**: Axis labels, tooltips, and chart titles need review for clarity and plain language
+
+---
+
+## Advanced Patterns
+
+### Chart Type Decision Tree
+
+The four data relationships and which chart serves each:
+
+**Comparison** (how things rank against each other)
+- Few categories, same time period → **Bar chart** (horizontal if labels are long)
+- Many time periods → **Line chart**
+- Two variables per item → **Scatter plot**
+- When to use grouped vs. stacked bar: grouped = compare individual values, stacked = compare totals + composition
+
+**Distribution** (how values spread)
+- Single variable, many data points → **Histogram**
+- Comparing distributions across groups → **Box plot** (shows median, quartiles, outliers)
+- Avoid pie charts for distribution — they're for composition only
+
+**Composition** (parts of a whole)
+- Few categories (≤5), static → **Pie or donut** (donut if you need a centre number)
+- Many categories or time-based → **Stacked bar** (avoid stacked area for >3 series)
+- **When pie is actually fine:** 2–3 segments, values are meaningfully different (not 48% vs 52%), audience expects it
+
+**Relationship** (correlation between variables)
+- Two variables → **Scatter plot**
+- Three variables → **Bubble chart** (third variable = bubble size)
+- Many variables → **Heatmap** or **Parallel coordinates**
+
+**Breaking the rules intentionally:** A bar chart for composition is fine if your audience needs to compare individual values more than understand the whole. Always serve the reader's question, not the purist's taxonomy.
+
+---
+
+### Color-Blind Safe Strategies
+
+8% of men and 0.5% of women have some form of colour blindness. Design for it:
+
+**Beyond palette swaps:**
+- **Shape + color redundancy**: Don't use color as the only differentiator — use shape, pattern, or direct labels too
+- **The safe pairs**: Blue/orange and blue/red are reliably distinguishable across all colorblindness types. Avoid red/green as the primary distinction
+- **Pattern fills for print/export**: Hatching, dots, diagonal lines as secondary encoding
+
+**The 3 types and what fails:**
+| Type | What fails | Prevalence |
+|---|---|---|
+| Deuteranopia (red-green) | Red vs. green | Most common (~6% of men) |
+| Protanopia (red-green) | Red vs. green, red appears dark | ~2% of men |
+| Tritanopia (blue-yellow) | Blue vs. yellow | Rare (<1%) |
+
+**Testing tools:** Coblis (browser), Color Oracle (desktop), Figma's built-in vision simulator (View → Vision Simulation).
+
+**The real rule:** If your chart would be unclear in greyscale, it's not color-blind safe.
+
+---
+
+### Annotation Decision Guide
+
+Annotations are for context the chart can't provide on its own. Use them sparingly.
+
+**Annotate when:**
+- An outlier needs explanation ("Product launch" explaining a spike)
+- A reference line needs context ("Industry average: 42%")
+- Causation should be explicit (not just correlation)
+- A data gap exists ("No data collected Aug 1–7")
+
+**Don't annotate when:**
+- The trend is obvious from the data
+- You'd need more than 3–4 annotations (chart is too complex, simplify instead)
+- The annotation repeats what's already in a label or axis
+
+**Placement rules:**
+- Annotate near the relevant data point, not in a legend or caption
+- Use leader lines sparingly — they add visual complexity
+- Contrast: annotation text must not compete with data points for attention
+
+---
+
+### Small Multiples Pattern
+
+Small multiples = the same chart repeated for multiple categories, using a shared scale.
+
+**Use instead of one complex chart when:**
+- You have 4+ series that would create a spaghetti line chart
+- You want to compare patterns across categories, not exact values
+- Your audience needs to scan and compare, not read precise numbers
+
+**Layout rules:**
+- **Consistent scale across all multiples** — this is the entire point; inconsistent scales destroy comparability
+- **Aligned axes**: same x and y axis ranges, same tick marks
+- **Minimal chrome**: strip axes from every cell except the leftmost/bottom; the shared scale is implied
+- **Consistent dimensions**: all cells same width and height
+
+**How many is too many:** 12–16 is usually the max before the pattern breaks down. If you have more, add interaction (search/filter) or subset.
+
+**Interaction patterns for large sets:** Filter by group, highlight on hover (all instances of a category), sort by metric.
+
+---
+
+## Full Coverage
+
+### Chart Type Reference
+
+For every major type: best for, avoid when, common mistakes, accessibility notes.
+
+| Chart | Best for | Avoid when | Common mistake | Accessibility |
+|---|---|---|---|---|
+| **Bar (vertical)** | Comparing 3–12 categories | >15 categories, time series | Starting y-axis at non-zero | Label every bar if ≤7 bars |
+| **Bar (horizontal)** | Long category labels, ranking | Time series | Inconsistent bar ordering | Same |
+| **Grouped bar** | Comparing sub-groups | >3 groups per cluster | Too many groups = illegible | Use distinct colors + patterns |
+| **Stacked bar** | Part-to-whole + comparison | >5 segments, precise reading needed | Comparing middle segments (impossible) | Direct labels on segments |
+| **Line** | Trends over time | Categorical x-axis, <3 data points | Too many series (>5) | Annotate key points |
+| **Area** | Cumulative totals, single series | Multiple overlapping series | Filled area implies volume (misleading if not intentional) | Provide data table |
+| **Scatter** | Correlation, distribution | Showing trends to non-technical audiences | Overplotting (too many points) | Add LOESS line for pattern |
+| **Bubble** | 3-variable relationship | Precise value reading | Size encoding is hard to read precisely | Show value on hover |
+| **Pie** | Simple composition (2–3 parts) | >5 segments, comparison of similar values | Too many slices | Use donut + center value |
+| **Heatmap** | Density, pattern in 2D data | Precise value reading | Poor color scale choice | Include numerical values |
+| **Histogram** | Distribution of a single variable | Categorical data | Wrong bin width (hides or exaggerates shape) | Annotate mean/median |
+| **Box plot** | Comparing distributions | Lay audiences unfamiliar with quartiles | Forgetting to explain the whiskers | Add reference annotations |
+
+---
+
+### Responsive Chart Adaptations
+
+At mobile width (<480px), charts need adaptation — most desktop charts don't work on a 375px screen.
+
+| Adaptation | When to use |
+|---|---|
+| **Simplify** (fewer data points, fewer series) | Chart has >5 series or >10 x-axis labels |
+| **Reorient** (vertical bar → horizontal bar) | Long category labels that would overlap on vertical axis |
+| **Truncate + scroll** (horizontal scroll within chart container) | Time series where the pattern over time is the point |
+| **Summarise** (full chart → single KPI card) | Chart's purpose is a single number — show just that number on mobile |
+| **Progressive reveal** (show top 5, "show more" for rest) | Ranked lists, leaderboards |
+
+**Never:** Scale down a complex chart so it's unreadable. A simplified version always beats a tiny unreadable one.
+
+---
+
+### Real-Time Data Patterns
+
+**Live update vs. user-triggered refresh:**
+- Live update (auto-refresh): use for operational dashboards where stale data = bad decisions (monitoring, live sales boards)
+- User-triggered: use for analytical dashboards where users need to compare before/after states
+- Never auto-refresh while a user is actively reading or has a popover open
+
+**Timestamp display:**
+- Always show when data was last updated: "Updated 2 minutes ago" (relative) or "As of 14:32" (absolute)
+- For live data, show a live indicator (green dot with pulse animation)
+
+**Delta indicators:**
+- Up/down arrows + color for direction (green/red) — but always include the number too (color-blind)
+- Show both absolute change AND percentage change when both are meaningful
+
+**Streaming data (auto-scroll vs. pause):**
+- Auto-scroll: default for logs, live feeds where latest = most important
+- Pause on hover: essential — user must be able to read a line without it scrolling away
+- "New items available — click to reload" pattern: better than auto-scroll for most dashboards
+
+---
