@@ -1,12 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 580" width="820" height="580">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="820" y2="580" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#0f172a"/>
-      <stop offset="100%" stop-color="#1e293b"/>
+      <stop offset="0%" stop-color="#1A1A2E"/>
+      <stop offset="100%" stop-color="#16213E"/>
     </linearGradient>
     <linearGradient id="accent" x1="0" y1="0" x2="820" y2="0" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#6366f1"/>
-      <stop offset="100%" stop-color="#0D9668"/>
+      <stop offset="0%" stop-color="#E8633A"/>
+      <stop offset="100%" stop-color="#C4502A"/>
     </linearGradient>
     <clipPath id="card-clip">
       <rect x="0" y="0" width="820" height="580" rx="12"/>
@@ -32,21 +32,21 @@
     <rect width="820" height="5" fill="url(#accent)"/>
 
     <!-- Header -->
-    <text x="40" y="42" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="11" font-weight="600" fill="#6366f1" letter-spacing="4">NAKSHA</text>
-    <text x="780" y="42" text-anchor="end" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="11" fill="#475569">v3.3.0</text>
+    <text x="40" y="42" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="11" font-weight="600" fill="#E8633A" letter-spacing="4">NAKSHA</text>
+    <text x="780" y="42" text-anchor="end" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="11" fill="#475569">v3.5.0</text>
 
     <!-- Header divider -->
     <line x1="40" y1="56" x2="780" y2="56" stroke="#ffffff" stroke-opacity="0.08" stroke-width="1"/>
 
     <!-- Prompt line -->
-    <text x="40" y="88" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="13" fill="#6366f1">$</text>
+    <text x="40" y="88" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="13" fill="#E8633A">$</text>
     <text x="58" y="88" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="13" fill="#f8fafc">/design Build a pricing page with monthly/annual toggle</text>
 
 
     <!-- ─── LEFT COLUMN ───────────────────────────────────── -->
 
     <!-- TASK ANALYSIS -->
-    <text x="40" y="122" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="11" font-weight="600" fill="#6366f1" letter-spacing="2">TASK ANALYSIS</text>
+    <text x="40" y="122" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="11" font-weight="600" fill="#E8633A" letter-spacing="2">TASK ANALYSIS</text>
 
     <text x="40" y="148" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="12" fill="#64748b">Building</text>
     <text x="130" y="148" font-family="-apple-system, 'Segoe UI', sans-serif" font-size="12.5" fill="#94a3b8">Responsive pricing component</text>
@@ -61,7 +61,7 @@
     <line x1="40" y1="212" x2="390" y2="212" stroke="#ffffff" stroke-opacity="0.06" stroke-width="1"/>
 
     <!-- REFERENCES LOADED -->
-    <text x="40" y="236" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="11" font-weight="600" fill="#0D9668" letter-spacing="2">REFERENCES LOADED</text>
+    <text x="40" y="236" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="11" font-weight="600" fill="#E8633A" letter-spacing="2">REFERENCES LOADED</text>
 
     <text x="40" y="262" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="12" fill="#22c55e">&#10003;</text>
     <text x="60" y="262" font-family="-apple-system, 'Segoe UI', sans-serif" font-size="12.5" font-weight="600" fill="#f8fafc">UI Designer</text>
@@ -83,7 +83,7 @@
     <line x1="40" y1="348" x2="390" y2="348" stroke="#ffffff" stroke-opacity="0.06" stroke-width="1"/>
 
     <!-- CREATIVE DIRECTION -->
-    <text x="40" y="372" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="11" font-weight="600" fill="#6366f1" letter-spacing="2">CREATIVE DIRECTION</text>
+    <text x="40" y="372" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="11" font-weight="600" fill="#E8633A" letter-spacing="2">CREATIVE DIRECTION</text>
 
     <text x="40" y="398" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="12" fill="#64748b">Mood   </text>
     <text x="130" y="398" font-family="-apple-system, 'Segoe UI', sans-serif" font-size="12.5" fill="#94a3b8">Professional, modern, trustworthy</text>
@@ -96,28 +96,28 @@
 
     <!-- Commands list -->
     <line x1="40" y1="480" x2="390" y2="480" stroke="#ffffff" stroke-opacity="0.06" stroke-width="1"/>
-    <text x="40" y="504" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="12" fill="#0D9668">/design</text>
+    <text x="40" y="504" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="12" fill="#E8633A">/design</text>
     <text x="112" y="504" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="12" fill="#334155">&#183;</text>
-    <text x="126" y="504" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="12" fill="#0D9668">/brand-kit</text>
+    <text x="126" y="504" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="12" fill="#E8633A">/brand-kit</text>
     <text x="216" y="504" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="12" fill="#334155">&#183;</text>
-    <text x="230" y="504" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="12" fill="#0D9668">/design-review</text>
-    <text x="358" y="504" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="12" fill="#475569">+ 13 more</text>
+    <text x="230" y="504" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="12" fill="#E8633A">/design-review</text>
+    <text x="358" y="504" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="12" fill="#475569">+ 29 more</text>
 
 
     <!-- ─── RIGHT COLUMN: Terminal Card ──────────────────── -->
 
     <!-- Card background -->
-    <rect x="420" y="108" width="360" height="420" rx="12" fill="#0f172a" stroke="#ffffff" stroke-opacity="0.08" stroke-width="1"/>
+    <rect x="420" y="108" width="360" height="420" rx="12" fill="#0D0D1E" stroke="#ffffff" stroke-opacity="0.08" stroke-width="1"/>
     <!-- Header strip (rounded top, flat bottom) -->
-    <rect x="420" y="108" width="360" height="40" rx="12" fill="#1e293b"/>
-    <rect x="420" y="128" width="360" height="20" fill="#1e293b"/>
+    <rect x="420" y="108" width="360" height="40" rx="12" fill="#16213E"/>
+    <rect x="420" y="128" width="360" height="20" fill="#16213E"/>
     <!-- Traffic lights -->
     <circle cx="448" cy="128" r="6" fill="#ef4444" fill-opacity="0.7"/>
     <circle cx="468" cy="128" r="6" fill="#f59e0b" fill-opacity="0.7"/>
     <circle cx="488" cy="128" r="6" fill="#22c55e" fill-opacity="0.7"/>
 
     <!-- DELIVERED -->
-    <text x="444" y="172" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="11" font-weight="600" fill="#0D9668" letter-spacing="2">DELIVERED</text>
+    <text x="444" y="172" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="11" font-weight="600" fill="#E8633A" letter-spacing="2">DELIVERED</text>
 
     <text x="444" y="196" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="12" fill="#22c55e">&#10003;</text>
     <text x="464" y="196" font-family="-apple-system, 'Segoe UI', sans-serif" font-size="12" fill="#94a3b8">3-tier pricing cards with feature lists</text>
@@ -132,12 +132,12 @@
     <text x="464" y="262" font-family="-apple-system, 'Segoe UI', sans-serif" font-size="12" fill="#94a3b8">Dark mode + token-compliant</text>
 
     <!-- Section separator -->
-    <line x1="444" y1="282" x2="756" y2="282" stroke="#1e293b" stroke-width="1.5"/>
+    <line x1="444" y1="282" x2="756" y2="282" stroke="#16213E" stroke-width="1.5"/>
 
     <!-- Quality Review frosted card -->
     <rect x="444" y="298" width="312" height="206" rx="8" fill="#ffffff" fill-opacity="0.03" stroke="#ffffff" stroke-opacity="0.08" stroke-width="1"/>
 
-    <text x="464" y="322" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="11" font-weight="600" fill="#0D9668" letter-spacing="2">QUALITY REVIEW</text>
+    <text x="464" y="322" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="11" font-weight="600" fill="#E8633A" letter-spacing="2">QUALITY REVIEW</text>
     <line x1="464" y1="334" x2="744" y2="334" stroke="#ffffff" stroke-opacity="0.06" stroke-width="1"/>
 
     <text x="464" y="358" font-family="-apple-system, 'Segoe UI', sans-serif" font-size="12" fill="#64748b">Accessibility</text>
@@ -155,10 +155,10 @@
     <text x="464" y="446" font-family="-apple-system, 'Segoe UI', sans-serif" font-size="12" fill="#64748b">INP</text>
     <text x="752" y="446" text-anchor="end" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="12" fill="#22c55e">&lt;200ms &#10003;</text>
 
-    <text x="464" y="484" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="11" font-weight="600" fill="#0D9668" letter-spacing="2">PASSED</text>
+    <text x="464" y="484" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="11" font-weight="600" fill="#E8633A" letter-spacing="2">PASSED</text>
 
     <!-- Cursor blink -->
-    <rect x="444" y="510" width="8" height="12" rx="1" fill="#6366f1" fill-opacity="0.8"/>
+    <rect x="444" y="510" width="8" height="12" rx="1" fill="#E8633A" fill-opacity="0.9"/>
 
 
     <!-- ─── FOOTER ─────────────────────────────────────── -->

@@ -34,6 +34,8 @@
 git clone https://github.com/Adityaraj0421/naksha-studio.git ~/.claude/plugins/naksha
 ```
 
+> **Important:** The folder must be named `naksha` — not `design-studio` or anything else. Claude Code uses the folder name as the plugin identifier.
+
 Then try:
 ```
 /design Build a landing page for a SaaS analytics product

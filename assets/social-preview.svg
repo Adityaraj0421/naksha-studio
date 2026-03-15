@@ -36,38 +36,46 @@
   <!-- Divider -->
   <line x1="580" y1="426" x2="700" y2="426" stroke="rgba(232,99,58,0.28)" stroke-width="1"/>
 
-  <!-- Stats — 4 items centred around x=640 -->
-  <!-- Items at x: 420, 572, 736, 880 | Dividers at 490, 648, 790 -->
+  <!-- Stats — 5 items centred around x=640 — v3.5.0 -->
+  <!-- Items at x: 240, 440, 640, 840, 1040 | Dividers at 340, 540, 740, 940 -->
 
-  <text x="420" y="470" text-anchor="middle"
-    font-family="Inter, system-ui, sans-serif" font-size="30" font-weight="700" fill="#E8633A">13</text>
-  <text x="420" y="493" text-anchor="middle"
+  <text x="240" y="470" text-anchor="middle"
+    font-family="Inter, system-ui, sans-serif" font-size="28" font-weight="700" fill="#E8633A">18</text>
+  <text x="240" y="493" text-anchor="middle"
     font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="600"
     fill="rgba(255,255,255,0.3)" letter-spacing="2">ROLES</text>
 
-  <line x1="490" y1="450" x2="490" y2="497" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+  <line x1="340" y1="450" x2="340" y2="497" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
 
-  <text x="572" y="470" text-anchor="middle"
-    font-family="Inter, system-ui, sans-serif" font-size="30" font-weight="700" fill="#E8633A">27</text>
-  <text x="572" y="493" text-anchor="middle"
+  <text x="440" y="470" text-anchor="middle"
+    font-family="Inter, system-ui, sans-serif" font-size="28" font-weight="700" fill="#E8633A">32</text>
+  <text x="440" y="493" text-anchor="middle"
     font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="600"
     fill="rgba(255,255,255,0.3)" letter-spacing="2">COMMANDS</text>
 
-  <line x1="648" y1="450" x2="648" y2="497" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+  <line x1="540" y1="450" x2="540" y2="497" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
 
-  <text x="736" y="470" text-anchor="middle"
-    font-family="Inter, system-ui, sans-serif" font-size="30" font-weight="700" fill="#E8633A">9,500+</text>
-  <text x="736" y="493" text-anchor="middle"
+  <text x="640" y="470" text-anchor="middle"
+    font-family="Inter, system-ui, sans-serif" font-size="28" font-weight="700" fill="#E8633A">11,000+</text>
+  <text x="640" y="493" text-anchor="middle"
     font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="600"
     fill="rgba(255,255,255,0.3)" letter-spacing="2">LINES</text>
 
-  <line x1="820" y1="450" x2="820" y2="497" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+  <line x1="740" y1="450" x2="740" y2="497" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
 
-  <text x="880" y="470" text-anchor="middle"
-    font-family="Inter, system-ui, sans-serif" font-size="30" font-weight="700" fill="#E8633A">5</text>
-  <text x="880" y="493" text-anchor="middle"
+  <text x="840" y="470" text-anchor="middle"
+    font-family="Inter, system-ui, sans-serif" font-size="28" font-weight="700" fill="#E8633A">5</text>
+  <text x="840" y="493" text-anchor="middle"
     font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="600"
     fill="rgba(255,255,255,0.3)" letter-spacing="2">AGENTS</text>
+
+  <line x1="940" y1="450" x2="940" y2="497" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+
+  <text x="1040" y="470" text-anchor="middle"
+    font-family="Inter, system-ui, sans-serif" font-size="28" font-weight="700" fill="#E8633A">5</text>
+  <text x="1040" y="493" text-anchor="middle"
+    font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="600"
+    fill="rgba(255,255,255,0.3)" letter-spacing="2">PLATFORMS</text>
 
   <!-- Footer -->
   <text x="60" y="612"
