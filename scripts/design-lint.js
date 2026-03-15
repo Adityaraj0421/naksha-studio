@@ -30,6 +30,10 @@ const DEFAULT_CONFIG = {
   ignorePatterns: [],     // glob patterns to ignore
 };
 
+// NOTE: checkContrast is declared in config but has no corresponding check in CHECKS.
+// Passing checkContrast: false is a deliberate no-op. To implement contrast checking,
+// add a check with configKey: 'checkContrast' to the CHECKS array.
+
 function loadConfig() {
   const configPath = path.join(process.cwd(), '.design-lint.json');
   if (fs.existsSync(configPath)) {
@@ -85,6 +89,7 @@ const CHECKS = [];
 // Accessibility checks (HTML only)
 CHECKS.push({
   name: 'html-lang',
+  configKey: 'checkSemantic',
   label: 'HTML lang attribute',
   type: 'html',
   severity: 'error',
@@ -98,6 +103,7 @@ CHECKS.push({
 
 CHECKS.push({
   name: 'img-alt',
+  configKey: 'checkSemantic',
   label: 'Image alt text',
   type: 'html',
   severity: 'error',
@@ -112,6 +118,7 @@ CHECKS.push({
 
 CHECKS.push({
   name: 'semantic-html',
+  configKey: 'checkSemantic',
   label: 'Semantic HTML',
   type: 'html',
   severity: 'warning',
@@ -127,6 +134,7 @@ CHECKS.push({
 
 CHECKS.push({
   name: 'button-vs-div',
+  configKey: 'checkSemantic',
   label: 'Button elements',
   type: 'html',
   severity: 'error',
@@ -141,6 +149,7 @@ CHECKS.push({
 
 CHECKS.push({
   name: 'viewport-meta',
+  configKey: 'checkResponsive',
   label: 'Viewport meta tag',
   type: 'html',
   severity: 'error',
@@ -154,6 +163,7 @@ CHECKS.push({
 
 CHECKS.push({
   name: 'input-label',
+  configKey: 'checkSemantic',
   label: 'Form input labels',
   type: 'html',
   severity: 'warning',
@@ -170,6 +180,7 @@ CHECKS.push({
 // Token compliance checks (CSS/HTML)
 CHECKS.push({
   name: 'hardcoded-hex',
+  configKey: 'warnOnTokens',
   label: 'CSS token compliance (colors)',
   type: 'css',
   severity: 'warning',
@@ -187,6 +198,7 @@ CHECKS.push({
 
 CHECKS.push({
   name: 'fixed-width',
+  configKey: 'checkResponsive',
   label: 'Responsive widths',
   type: 'css',
   severity: 'warning',
@@ -202,6 +214,7 @@ CHECKS.push({
 
 CHECKS.push({
   name: 'inline-styles',
+  configKey: 'warnOnTokens',
   label: 'Inline style attributes',
   type: 'html',
   severity: 'warning',
@@ -217,6 +230,7 @@ CHECKS.push({
 // Responsive checks
 CHECKS.push({
   name: 'media-queries',
+  configKey: 'checkResponsive',
   label: 'Responsive breakpoints',
   type: 'css',
   severity: 'warning',
@@ -243,6 +257,11 @@ function runChecks(file, content, type, config) {
   let passed = 0;
 
   for (const check of CHECKS) {
+    // Gate on config flag — skip check if explicitly disabled
+    if (check.configKey && config[check.configKey] === false) {
+      passed++;
+      continue;
+    }
     // Match check to file type ('html' checks run on HTML, 'css' checks run on CSS and HTML)
     if (check.type === 'css' && type === 'html' && !content.includes('<style')) {
       // HTML files without <style> blocks skip CSS checks
