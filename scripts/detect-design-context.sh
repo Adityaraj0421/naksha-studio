@@ -1,5 +1,5 @@
 #!/bin/bash
-# Detect project design context for the design-studio plugin
+# Detect project design context for the naksha plugin
 # Runs at SessionStart to provide the design skill with project awareness
 
 PROJECT_DIR="${PWD}"
@@ -107,7 +107,7 @@ fi
 
 # --- Output ---
 if [ -n "$CONTEXT" ]; then
-  RESULT=$(printf '{"continue": true, "systemMessage": "Design Studio detected project context:\\n%s\\nAdapt design recommendations to match these project conventions."}' "$CONTEXT")
+  RESULT=$(printf '{"continue": true, "systemMessage": "Naksha detected project context:\\n%s\\nAdapt design recommendations to match these project conventions."}' "$CONTEXT")
   echo "$RESULT"
 else
   echo '{"continue": true}'
