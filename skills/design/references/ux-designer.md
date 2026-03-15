@@ -400,8 +400,6 @@ For every flow, document what happens in each of these 8 scenarios before handof
 
 ---
 
----
-
 ## Reference-Sourced Insights
 
 ### UX Mapping — Four Methods and When to Use Each
@@ -464,30 +462,9 @@ Every research method sits on three axes. Understanding where a method falls tel
 
 ### Cognitive Walkthroughs — Evaluating Learnability Without Users
 
-From **Nielsen Norman Group** (nngroup.com/articles/cognitive-walkthroughs):
+See `ux-researcher.md` for the full cognitive walkthrough protocol (4-question framework, workshop roles, when to use vs. heuristic evaluation).
 
-A cognitive walkthrough evaluates how learnable an interface is for new users — without recruiting any users. It's a team-based inspection method, best for complex or novel interaction patterns where users won't have prior mental models to fall back on.
-
-**The 4 questions to answer at every step in the flow:**
-1. Will users try to achieve the right result? (Do they understand this step is needed?)
-2. Will users notice the correct action is available? (Is the control visible and findable?)
-3. Will users associate the correct action with the result they want? (Will the label/icon make sense?)
-4. After the action, will users see that progress was made? (Is feedback clear?)
-
-If any question is answered "No" → the step is marked **Fail**. Address all fail points before moving to user testing.
-
-**When to use cognitive walkthroughs vs. heuristic evaluation:**
-
-| | Heuristic Evaluation | Cognitive Walkthrough |
-|---|---|---|
-| Perspective | Analyst | New user |
-| Target | General usability | Learnability |
-| Scope | Comprehensive (whole product) | Targeted (specific task flows) |
-| Method | Rate against guidelines | Walk step-by-step through user reactions |
-
-Use heuristic evaluation to audit the full product. Use cognitive walkthroughs specifically when introducing new, complex, or unfamiliar workflows where users arrive with no prior mental model.
-
-**Do NOT use cognitive walkthroughs for:** Standard patterns (e-commerce checkout, basic forms) where users already have strong mental models from other products. The evaluation would be overkill.
+**UX Designer's application note:** Use cognitive walkthroughs during interaction design review — before handing off to development — specifically for novel or complex flows where users arrive with no prior mental model. Standard patterns (checkout, basic forms) don't warrant this evaluation.
 
 ---
 

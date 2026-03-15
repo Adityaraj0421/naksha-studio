@@ -300,8 +300,6 @@ Shipping is not the end of the design process.
 
 ---
 
----
-
 ## Reference-Sourced Insights
 
 ### Designer Levels and Problem Abstraction

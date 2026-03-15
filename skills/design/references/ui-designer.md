@@ -434,8 +434,6 @@ Shadows communicate z-axis position — they're a communication tool, not decora
 
 ---
 
----
-
 ## Reference-Sourced Insights
 
 ### Laws of UX — Applied to Visual Design Decisions

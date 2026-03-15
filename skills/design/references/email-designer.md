@@ -398,7 +398,7 @@ Caveat: Outlook renders no rounded corners and slightly shrinks borders.
 
 - Up to **40% of email recipients never enable images at all**
 - Gmail, Outlook 2007+, Outlook.com, and Yahoo Mail block images by default
-- Apple Mail shows a question mark icon (not alt text) when images are blocked
+- Apple Mail (post-iOS 15 / macOS Monterey): Mail Privacy Protection pre-fetches and caches remote images, so image blocking is rare in practice. When images are manually disabled, Apple Mail renders alt text — not a placeholder icon. The "?" placeholder icon behavior is associated with older Outlook versions, not Apple Mail
 - Yahoo Mail does not show alt text at all when images are blocked
 - Gmail shows alt text only if short enough
 
@@ -426,7 +426,6 @@ Caveat: Outlook renders no rounded corners and slightly shrinks borders.
 ### Video and Rich Media Rules (From Campaign Monitor)
 
 - **JavaScript is unsupported** in all major email clients (security risk, spam signal)
-- **Flash is dead in email** — even fallback images often don't render
 - **HTML5 video:** Works in Apple Mail and some mobile clients, but blocked in Gmail, Outlook, and most clients
 - **Animated GIFs:** Solid support across all clients, but Outlook (Windows) renders only the **first frame** — design first frame to stand alone as a static image
 - **Video best practice:** Use a video thumbnail image with a play button overlay, linked to the video on your website. One extra click, guaranteed to work everywhere

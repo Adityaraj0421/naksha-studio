@@ -465,7 +465,7 @@ Edward Tufte's data-ink ratio principle, applied to dashboards: every pixel that
 - Redundant axis labels when the chart title already states the unit
 - Borders between cards if whitespace provides sufficient separation
 
-**The novelty trap:** Colorful backgrounds and quirky illustrations grab attention the first time, but the novelty wears off in 2–3 viewings and then they permanently get in the way. Dashboards are viewed dozens or hundreds of times — optimize for the 100th view, not the first.
+**The novelty trap:** Colorful backgrounds and quirky illustrations grab attention the first time, but the novelty wears off quickly and then permanently gets in the way. Dashboards are viewed dozens or hundreds of times — optimize for the 100th view, not the first.
 
 **Practical test:** If you removed an element, would the viewer lose any data or context? If no, remove it.
 
@@ -479,7 +479,8 @@ Edward Tufte's data-ink ratio principle, applied to dashboards: every pixel that
 - Revenue/currency at scale: round to nearest $K or $M ("$84K", not "$84,231")
 - Percentages: 1 decimal place maximum for operational dashboards; round to whole numbers for executive dashboards
 - Counts: whole numbers always — "1,247 users", never "1,246.8 users"
-- Ratios (e.g., NPS, rating): 1 decimal place
+- NPS: whole numbers always (NPS convention per Bain / Reichheld methodology — "NPS: 42", never "NPS: 42.3")
+- Star ratings and other average-of-scale metrics: 1 decimal place
 
 **Exception:** Transactional or financial dashboards where the exact cent matters (billing, reconciliation) — use full precision with clear formatting.
 

@@ -496,13 +496,12 @@ Every React/Vue/Svelte/Next.js/Astro project should start with this modern CSS r
 /* 1. Intuitive box-sizing — must-have */
 *, *::before, *::after { box-sizing: border-box; }
 
-/* 2. Remove default margin (but preserve dialog centering) */
-*:not(dialog) { margin: 0; }
+/* 2. Remove default margin */
+* { margin: 0; }
 
 /* 3. Enable keyword animations for height: auto transitions */
-@media (prefers-reduced-motion: no-preference) {
-  html { interpolate-size: allow-keywords; }
-}
+/* Not animation-related — a sizing hint; does not belong inside prefers-reduced-motion */
+html { interpolate-size: allow-keywords; }
 
 body {
   /* 4. WCAG requires line-height ≥ 1.5 for body text */
@@ -531,7 +530,7 @@ h1, h2, h3, h4, h5, h6 { text-wrap: balance; }
 #root, #__next { isolation: isolate; }
 ```
 
-**Key insight:** `interpolate-size: allow-keywords` (rule 3) enables `height: 0px` to `height: auto` CSS transitions without JavaScript. Currently Chrome/Edge only (March 2025) — wrap in `prefers-reduced-motion` to prevent issues on unsupported browsers. Fallback (no animation) is acceptable.
+**Key insight:** `interpolate-size: allow-keywords` (rule 3) enables `height: 0px` to `height: auto` CSS transitions without JavaScript. It is a **sizing hint, not an animation** — do not wrap it in `prefers-reduced-motion`. Browser support has expanded significantly since early 2025; check caniuse.com before relying on it, and place reduced-motion guards on the actual `transition` or `animation` declarations that use it, not on this rule. Fallback (no animation) is acceptable where unsupported.
 
 **Why `box-sizing: border-box` is non-negotiable:** Without it, a `width: 100%` element with padding overflows its container. This is so universally correct that `*` selector application has zero performance impact.
 
@@ -564,7 +563,7 @@ Tailwind CSS v4.0 (January 2025) is a breaking change from v3. Key differences w
 
 **Check user's Tailwind version before generating config:** If `package.json` shows `"tailwindcss": "^4.x"`, use CSS-based config. If `"^3.x"`, use the JS config pattern from the existing reference.
 
-**Tailwind Plus (formerly Tailwind UI):** All UI blocks in Tailwind Plus are now available in plain HTML (not just React/Vue), with vanilla JavaScript for interactive components (dialogs, dropdowns, etc.) — as of July 2025.
+**Tailwind Plus (formerly Tailwind UI):** All UI blocks in Tailwind Plus are now available in plain HTML (not just React/Vue), with vanilla JavaScript for interactive components (dialogs, dropdowns, etc.) — as of July 2025. Note: Tailwind Plus is a **paid subscription product** — verify the user has an active license before recommending its component library.
 
 ---
 

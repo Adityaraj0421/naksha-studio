@@ -402,8 +402,6 @@ Use this structure for recruiting participants who match your target:
 
 ---
 
----
-
 ## Reference-Sourced Insights
 
 ### Usability Testing — Precise Protocols and Numbers
@@ -455,7 +453,7 @@ From **Nielsen Norman Group** (nngroup.com/articles/card-sorting-definition):
 
 **Labeling sequence matters:** Always have participants *first* sort cards into groups, *then* label the groups. If you ask for labels while sorting, participants constrain their groupings to fit labels they've already committed to.
 
-**Analysis rule:** Items sorted together >70% of the time belong in the same category. Items appearing together 30–70% of the time need further investigation or user interviews to understand why sorting is inconsistent.
+**Analysis rule:** Items sorted together >70% of the time belong in the same category (a common IA practice heuristic, used as the default threshold in card-sort analysis tools like OptimalSort — not a statistically derived NNGroup standard). Items appearing together 30–70% of the time need further investigation or user interviews to understand why sorting is inconsistent.
 
 **Card sorting vs. tree testing:** Card sorting builds IA. Tree testing validates IA. Always run card sorting first, build/revise the IA, then tree test to confirm users can navigate it before building.
 

@@ -402,7 +402,7 @@ The same email should read differently for different user segments:
 
 **The one-to-five word rule:** Litmus data shows CTA copy exceeding 5 words performs worse. The rarity of a long CTA makes it stand out, but as a default, keep it short and action-specific.
 
-**First-person phrasing:** "Get MY report" outperforms "Get your report" in click-rate tests by ~14–17% (consistent finding across multiple CRO studies). Use first-person when the CTA is about something the user owns or receives:
+**First-person phrasing:** "Get MY report" outperforms "Get your report" in click-rate tests by ~14–17% (from Michael Aagaard / ContentVerve CRO testing, 2012 — frequently cited but a single study; results vary by audience and context). Use first-person when the CTA is about something the user owns or receives:
 - ✓ "Download my template"
 - ✓ "Start my free trial"
 - ✓ "See my dashboard"
@@ -429,7 +429,7 @@ The same email should read differently for different user segments:
 ### Transactional Email Rules (From CAN-SPAM compliance)
 
 Transactional emails (receipts, password resets, shipping confirmations) are **exempt from CAN-SPAM marketing rules** but must follow these constraints:
-- Cannot contain more than 50% promotional content (or they lose transactional status)
+- Transactional status is determined by "primary purpose": if a reasonable recipient would interpret the primary reason for the email as commercial promotion, it loses the exemption. There is no FTC-specified percentage threshold — the standard is qualitative, not quantitative. A practical guideline: promotional content should be clearly secondary and subordinate to the transactional information
 - Must clearly identify the transaction in the subject line
 - Still require physical address
 - Must not add users to marketing lists without explicit opt-in at the time of signup

@@ -405,9 +405,9 @@ The purpose of a competitive perceptual map is not to show that you're different
 - Axis 2 must create real separation from the competitor cluster — if all competitors are in the same quadrant, re-examine axis choice
 - After mapping, the "whitespace" position must pass the credibility test: can you actually deliver what that position promises? Uncredible positioning is worse than crowded positioning
 
-### Brand as System: The "Perceptual Patterns" Framework (From Alla Kholmatova via UX Collective)
+### Brand as System: The "Perceptual Patterns" Framework (Adapted from Alla Kholmatova's *Design Systems*, 2017)
 
-A brand's visual identity is an "alphabet" — but an alphabet alone doesn't make language. The brand system requires both alphabet AND grammar:
+Originally framed for digital product design systems; applied here to brand identity systems by analogy. A brand's visual identity is an "alphabet" — but an alphabet alone doesn't make language. The brand system requires both alphabet AND grammar:
 - **Alphabet** (perceptual patterns): Colors, fonts, shapes, icons, illustrations, photography, animation, voice/tone, sounds
 - **Grammar** (usage rules): Which combinations are allowed, which create the brand's "distinctive sentences," which violate the system
 

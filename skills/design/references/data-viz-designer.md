@@ -474,7 +474,7 @@ D3 annotation best practices (applicable to any charting library):
 
 **Inline labels beat legends:** When you have 2–5 series, label each line/bar directly at the end point. The reader's eye doesn't have to travel to a legend and back. For > 5 series, a legend is unavoidable but position it close to the relevant data.
 
-**Voronoi-based labeling:** For dense scatter plots where labels overlap, use Voronoi regions to position labels in the nearest empty space. D3's `d3-voronoi` enables this; for simpler cases, nudge labels manually with `transform`.
+**Voronoi-based labeling:** For dense scatter plots where labels overlap, use Voronoi regions to position labels in the nearest empty space. D3's `d3-delaunay` (which replaced the legacy `d3-voronoi` module in D3 v6+) enables this; for simpler cases, nudge labels manually with `transform`.
 
 **Color legends as annotation:** When color is used for categories, put the color swatch inside the annotation near the data rather than in a separate legend box. This is the "annotate the chart" approach popularized by the NYT graphics desk.
 

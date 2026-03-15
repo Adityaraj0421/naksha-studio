@@ -291,7 +291,7 @@ ACTIONS FOR NEXT WEEK:
 
 ### Growth Loops vs. Funnels: The Fundamental Framework Shift (From Reforge / Brian Balfour)
 
-- **Funnels** (AARRR) are a useful micro-view of individual steps but fail at the company level because: (1) they create strategic silos between product, acquisition, and monetization; (2) they create functional silos between teams that optimize at each other's expense; (3) they operate in one direction — no compounding effect, just more input required to maintain the same output.
+- **Funnels** (AARRR — Pirate Metrics, coined by Dave McClure, 2007) are a useful micro-view of individual steps but fail at the company level because: (1) they create strategic silos between product, acquisition, and monetization; (2) they create functional silos between teams that optimize at each other's expense; (3) they operate in one direction — no compounding effect, just more input required to maintain the same output.
 - **Growth Loops** are closed systems: the output of one cycle is reinvested as input for the next cycle, creating compounding growth. A loop answers the question "How does one cohort of users lead to another cohort of users?" — funnels cannot.
 - Pinterest's core growth loop: User signs up → Pinterest activates them with relevant content → User saves/repins content → Pinterest distributes quality content to search engines → New users find content via search → Sign up or return. Each cycle produces users who produce content that generates more users — compound, not linear.
 - The fastest-growing products are typically powered by **1-2 major loops** that transition over time. Multiple low-powered loops are a symptom of unfocused growth strategy, not a sign of sophistication.
