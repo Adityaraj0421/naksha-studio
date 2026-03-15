@@ -1433,6 +1433,35 @@
           "description": "Gives at least one visual identity direction (color mood, typography style, or logo style) consistent with the positioning"
         }
       ]
+    },
+    {
+      "id": 45,
+      "name": "depth-illustration-icon-system",
+      "prompt": "/illustration-system Design an icon system for a project management SaaS. Should work at 16px and 24px.",
+      "expected_output": "Specific grid system with keyline shapes, stroke weight recommendations per size, and at least one optical adjustment rule — not just style preference.",
+      "files": [],
+      "assertions": [
+        {
+          "name": "specifies-grid-system",
+          "description": "Defines a specific grid (e.g., 16px or 24px artboard with padding zone)"
+        },
+        {
+          "name": "addresses-stroke-weight-by-size",
+          "description": "Gives different stroke weights for 16px vs 24px (not one-size-fits-all)"
+        },
+        {
+          "name": "includes-optical-adjustment",
+          "description": "Mentions at least one optical adjustment (circles appear smaller, diagonals appear thinner, etc.)"
+        },
+        {
+          "name": "provides-naming-convention",
+          "description": "Gives a naming structure or category system for icons"
+        },
+        {
+          "name": "covers-state-variants",
+          "description": "Addresses at least one state variant (hover, active, disabled, or selected)"
+        }
+      ]
     }
   ]
 }
