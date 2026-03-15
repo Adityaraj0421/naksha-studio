@@ -127,4 +127,4 @@ Every command has a fallback mode. Here's what changes without each server:
 | **Desktop Bridge** | No Figma creation. `/figma-create` outputs a text specification. `/figma-responsive` outputs an adaptation plan. `/ab-variants` outputs a variant spec table. |
 | **Claude Preview** | No live preview or screenshots. HTML files are written to disk — open them manually in your browser. |
 | **Playwright** | No website capture. `/site-to-figma` asks you for a screenshot and manually extracted styles instead. |
-| **All of them** | Design Studio still works for HTML/CSS design, token generation, brand kits, design reviews (static audit), and design sprints. You get files on disk instead of live integrations. |
+| **All of them** | Naksha still works for HTML/CSS design, token generation, brand kits, design reviews (static audit), and design sprints. You get files on disk instead of live integrations. |
