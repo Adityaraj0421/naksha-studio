@@ -399,3 +399,119 @@ For every flow, document what happens in each of these 8 scenarios before handof
 **Handoff standard:** A flow is not ready for development until all 8 edge cases are documented for every screen in the flow.
 
 ---
+
+---
+
+## Reference-Sourced Insights
+
+### UX Mapping — Four Methods and When to Use Each
+
+From **Nielsen Norman Group** (nngroup.com/articles/ux-mapping-cheat-sheet):
+
+The four mapping tools solve different problems. Using the wrong one produces irrelevant output.
+
+| Map type | Perspective | Tied to product? | Primary use |
+|---|---|---|---|
+| **Empathy map** | User mindset (Says / Thinks / Feels / Does) | No | Align team on a user type; summarize interview findings |
+| **Customer journey map** | User perspective through your product | Yes — specific product | Find pain points and delight moments in your product's flow |
+| **Experience map** | General human behavior | No — product agnostic | Understand a domain before designing; baseline before CJM |
+| **Service blueprint** | Organization + employees + backstage processes | Yes — specific service | Find internal weaknesses; bridge cross-department work |
+
+**Sequence of use:**
+1. Experience map → understand general behavior first (hypothesis or research)
+2. Customer journey map → understand how users experience your specific product
+3. Service blueprint → after journey mapping, before making process or org changes
+
+**Three decisions before any mapping effort:**
+1. **Current (as-is) vs. future (to-be):** Current maps diagnose problems. Future maps set design direction. Never conflate them in one map.
+2. **Hypothesis vs. research-based:** Start hypothesis (to align the team and reveal knowledge gaps), validate with research, then update the map. Maps should be iterated, not created once.
+3. **Low-fidelity vs. high-fidelity:** Low-fi (sticky notes) is for working sessions where the map will change. High-fi (polished document) is for sharing across the organization. Don't invest in high-fi until the content is validated.
+
+**The dual benefit of all maps:** (1) The process of creating the map forces shared understanding and surfaces conflicting mental models. (2) The artifact itself becomes a communication and decision-making tool. Both benefits are required — a map made by one person alone captures neither.
+
+---
+
+### UX Research Method Selection — The 3D Framework
+
+From **Nielsen Norman Group** (nngroup.com/articles/which-ux-research-methods):
+
+Every research method sits on three axes. Understanding where a method falls tells you what questions it can and can't answer.
+
+**Axis 1 — Attitudinal vs. Behavioral:**
+- Attitudinal = "what people say" (surveys, interviews, card sorting)
+- Behavioral = "what people do" (A/B testing, eyetracking, analytics, field studies)
+- These are often different. Behavioral evidence is stronger for usability claims. Attitudinal is useful for mental models and preferences.
+
+**Axis 2 — Qualitative vs. Quantitative:**
+- Qualitative = directly observe/hear behavior → answers "why" and "how to fix"
+- Quantitative = instrument measures behavior indirectly → answers "how many" and "how much"
+- Never use quant alone to justify a redesign; never scale a qual insight to a population without quant validation.
+
+**Axis 3 — Context of use:**
+- Natural use (field studies, analytics): high external validity, low control
+- Scripted use (usability testing, benchmarking): high control, lower ecological validity
+- Limited/abstracted (card sorting, concept testing, participatory design): studies a specific aspect without full product
+- Not using the product (brand studies, desirability studies): examines broader perception
+
+**Research goals by product development phase:**
+- **Strategize (early):** generative methods — field studies, diary studies, interviews, concept testing
+- **Design (mid):** formative methods — card sorting, tree testing, usability testing (moderated)
+- **Launch & assess (post-ship):** summative methods — benchmarking, A/B testing, analytics, unmoderated testing
+
+**The most important distinction:** Attitudinal research tells you what users believe. Behavioral research tells you what they actually do. For usability decisions, always weight behavior over stated preference. "First rule of usability: don't listen to users" — what they say they do and what they actually do are frequently different.
+
+---
+
+### Cognitive Walkthroughs — Evaluating Learnability Without Users
+
+From **Nielsen Norman Group** (nngroup.com/articles/cognitive-walkthroughs):
+
+A cognitive walkthrough evaluates how learnable an interface is for new users — without recruiting any users. It's a team-based inspection method, best for complex or novel interaction patterns where users won't have prior mental models to fall back on.
+
+**The 4 questions to answer at every step in the flow:**
+1. Will users try to achieve the right result? (Do they understand this step is needed?)
+2. Will users notice the correct action is available? (Is the control visible and findable?)
+3. Will users associate the correct action with the result they want? (Will the label/icon make sense?)
+4. After the action, will users see that progress was made? (Is feedback clear?)
+
+If any question is answered "No" → the step is marked **Fail**. Address all fail points before moving to user testing.
+
+**When to use cognitive walkthroughs vs. heuristic evaluation:**
+
+| | Heuristic Evaluation | Cognitive Walkthrough |
+|---|---|---|
+| Perspective | Analyst | New user |
+| Target | General usability | Learnability |
+| Scope | Comprehensive (whole product) | Targeted (specific task flows) |
+| Method | Rate against guidelines | Walk step-by-step through user reactions |
+
+Use heuristic evaluation to audit the full product. Use cognitive walkthroughs specifically when introducing new, complex, or unfamiliar workflows where users arrive with no prior mental model.
+
+**Do NOT use cognitive walkthroughs for:** Standard patterns (e-commerce checkout, basic forms) where users already have strong mental models from other products. The evaluation would be overkill.
+
+---
+
+### Interaction Design Patterns — Specific Decision Rules
+
+From **UX Collective — UX Design Methods & Deliverables**:
+
+**Service blueprint as a UX tool (not just org design):** A service blueprint reveals what happens backstage when users take actions. Use it to catch UX problems caused by system or process failures, not UI failures. If users experience a problem that appears to be a UI issue but actually stems from an internal process (e.g., slow API, manual review step), a service blueprint is the only tool that surfaces it.
+
+**Personas are a research synthesis tool, not a demographic tool:** A useful persona captures behaviors, needs, and motivations — not demographics. Two users can share the same demographic profile but behave completely differently in your product. Personas should be built from observed behavior patterns, not assumed demographics. The test of a useful persona: does it change what you would build? If not, it's decorative.
+
+**Consumer journey maps vs. funnels:** Funnels show where users drop off (quantitative). Journey maps explain why they drop off (qualitative). A funnel shows "40% drop at step 3." A journey map shows "users don't understand what step 3 is asking them to do and feel uncertain proceeding." Use both; act on the combination.
+
+---
+
+### Fitts's Law Extended — Touch Target Rules
+
+From **Nielsen Norman Group** and **Laws of UX**:
+
+Minimum touch targets (mobile, finger interaction):
+- Apple HIG: 44×44pt minimum
+- Google Material: 48×48dp minimum
+- Spacing between adjacent targets: 8px minimum to prevent mis-taps
+
+Primary CTA on mobile: should be in the thumb zone — bottom 40% of the screen for right-handed one-handed use. Never put the primary action in the top half of the screen on mobile-first flows.
+
+Deliberately hard-to-hit targets: destructive actions (Delete, Remove, Cancel subscription) should be smaller, lower contrast, and physically separated from the primary action. Making them harder to hit is not bad UX — it's error prevention by design.

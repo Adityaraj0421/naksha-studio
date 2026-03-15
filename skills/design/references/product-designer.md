@@ -299,3 +299,98 @@ Shipping is not the end of the design process.
 | **Month 3** | Iterate or kill decision. Is the feature hitting its success metric? If not, what's the theory for why, and is it worth one more iteration? Or is the problem statement wrong? |
 
 ---
+
+---
+
+## Reference-Sourced Insights
+
+### Designer Levels and Problem Abstraction
+
+From **Julie Zhuo, VP Product Design at Facebook** (medium.com/the-year-of-the-looking-glass):
+
+The scope of problem a designer should own increases with seniority. Assigning senior designers to junior-scoped problems is the most common source of design morale problems.
+
+| Level | Problem type | Example |
+|---|---|---|
+| Lvl 1 | Scoped, solution pre-assumed | "Design a form that lets people edit their profile" |
+| Lvl 2 | Interface-level, solution open | "Design the best interface for profile editing" (form, WYSIWYG, modal — your call) |
+| Lvl 3 (broad) | System-level | "Design an editing system across profiles, posts, and settings" |
+| Lvl 3 (deep) | Outcome-driven | "Design a way to get users to want to update their profiles" |
+| Lvl 4 | Strategy-level | "Design a solution to increase user authenticity in the app" |
+| Lvl 5 | Vision-driving | "Identify the biggest product problem and design a solution" |
+
+**Implication for product designers:** If you're a product designer (not a specialist UI or UX designer), you operate at Lvl 3–4. You own the problem framing, not just the execution. When given a Lvl 1 brief ("design a form"), push back to the Lvl 3 question ("why do users need to edit this, and is a form the right vehicle?").
+
+**If a senior designer disagrees with the product strategy, they will not do their best work on the execution.** Alignment on vision and direction is a prerequisite for high-quality output from senior designers. Getting that alignment is a product manager and product designer responsibility, not just a design critique issue.
+
+---
+
+### Speaking the Language of Business — Translation Rules
+
+From **Julie Zhuo, The Year of the Looking Glass**:
+
+When working with engineers and PMs, translate business metrics into user outcomes before communicating design decisions. Design rationale framed in user outcomes is more persuasive and harder to dismiss.
+
+| Business framing | User framing |
+|---|---|
+| "Increase click-through rate on this button" | "Help users discover this feature and make it easy to use" |
+| "Optimize conversion rate on the sign-up flow" | "Remove the barriers that make it hard for users to sign up" |
+| "Don't tank metrics with this change" | "Don't make it harder for users to do what they want to do" |
+| "Pump up the viral coefficient" | "Encourage users who love this feature to share it with friends" |
+
+Designers think in user mindset. Translating business language into user language before communicating upward is a core product designer skill — not a compromise, a communication strategy.
+
+---
+
+### Design Discipline Specializations — Matching Strengths to Problems
+
+From **Julie Zhuo, The Year of the Looking Glass**:
+
+Three distinct specializations exist within "design." A product designer must understand which problem domain they're working in at any given moment:
+
+1. **Visual design** — typography, contrast, hierarchy, polish, system cohesion. Does it look right? Are the details crisp?
+2. **Interaction design** — ease of use, navigation, transitions, animations. Is it easy to do X?
+3. **Product design** — problem validity, solution fit, clarity of vision, value delivered. Does this solve a real problem?
+
+**The generalist rule:** If you can only have one designer, a generalist is better than a specialist — weak generalists still cover all three domains. Specialists excel in their domain but leave adjacent domains exposed.
+
+**Quality compounds slowly, erodes quickly:** UI clutter is a one-way ratchet. Adding one element rarely causes immediate harm. Over time, these additions accumulate until users perceive the product as cluttered — at which point a competitor with a fresh, simple approach will feel like relief. Design quality is about the long-term trajectory, not any single screen.
+
+---
+
+### Designing for AI Features — New Patterns and Constraints
+
+From **Intercom Product Design Team** (Emmet Connolly, Molly Mahar, Gustavs Cirulis):
+
+AI-powered features introduce a new class of design problems that don't exist in deterministic CRUD applications.
+
+**The core difference:** Traditional UIs have binary states — something works or it doesn't. AI features have probabilistic outputs — they're right *most* of the time, with unpredictable failure modes. Design must account for this uncertainty.
+
+**Design patterns emerging for AI UIs:**
+- **Confidence-gated approval:** Show AI suggestion → require human review/approval → allow sending. Tune the gate threshold to the confidence level. High confidence (90%+) → auto-send. Low confidence → require approval. Design the approval interaction, not just the suggestion.
+- **Predefined prompt surfaces:** Rather than open-ended text input, offer constrained AI actions: "Summarize," "Rephrase," "Make friendlier," "Expand." Constrained prompts reduce hallucination risk, improve discoverability, and set clearer expectations.
+- **Progressive automation levels:** Start with augmentation (AI suggests, human approves), move to assisted automation (AI acts with logging and rollback), then full automation (AI acts autonomously). Design each level as a distinct UX mode, not a single on/off switch. This parallels autonomous vehicle levels of self-driving.
+- **Dark launch / shadow mode:** Let admins observe what the AI would do without activating it for end users. This builds trust before exposure and catches issues before users encounter them.
+
+**What AI is good at now (calibrate use cases):** Summarization, rephrasing, editing, classification, content generation from templates. Design around these strengths first.
+
+**What AI is not yet reliable for:** Factually accurate, grounded answers without a verified knowledge base. Do not design flows that require AI to be factually correct unless you've constrained its knowledge domain or added a verification step.
+
+**Design for failure cases more thoroughly than success:** In AI features, failure cases are more numerous, harder to predict, and often more damaging to trust. Document: what the feature does when it produces a wrong answer, a nonsensical answer, an incomplete answer, or refuses to respond.
+
+**Discoverability of AI capabilities:** Users don't know what they can ask an AI to do. Design explicit affordances (visible example prompts, constrained action menus) rather than open-ended text boxes, especially for new features.
+
+---
+
+### The Clutter Problem — Long-Term Quality
+
+From **Julie Zhuo, The Year of the Looking Glass**:
+
+Design quality is not measurable by any single metric. It compounds and erodes gradually, like ocean tides on a cliff.
+
+**Why clutter can't be detected by A/B test:**
+Adding one extra UI element rarely tanks a metric immediately. But over time, these additions accumulate — and one day users perceive the product as cluttered. At that point, a competitor with a clean approach feels like relief. By the time you notice the problem in the data, it's already late.
+
+**Practical rule:** Every time a new element is proposed for a screen, ask: "What is this replacing or removing?" If the answer is "nothing," the element needs a stronger justification. Net additions to a UI require higher evidence bars than replacements.
+
+**Consistency as a user experience property (not just aesthetics):** Users don't just use one feature — they use the whole product. If uploading photos and uploading videos work differently, users struggle with both. Every inconsistency creates a separate thing to learn. Inconsistency is cognitive tax paid at every interaction, invisible per-instance but compounding across the full product experience.

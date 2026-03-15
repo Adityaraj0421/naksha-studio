@@ -449,3 +449,62 @@ Migrating from hardcoded values to tokens — how to do it without breaking ever
 - Keep the old version live in `Archive` page for 1 sprint after migration
 
 ---
+
+## Reference-Sourced Insights
+
+### Early Developer Involvement Rewrites the Handoff Model (From Figma Developer Handoff Guide)
+
+- The traditional handoff model — designer finishes, tosses final screens over a fence — created ambiguity, surprises, and frustration on both sides. The fix is not a better spec document; it's inviting developers into Figma **during** design, not after. Dropbox, Expedia, and Cash App all restructured their workflows around this principle.
+- Give developers Viewer access (free, no paid license required) from day one. Viewers can inspect designs, view the code panel, export assets, comment, and navigate prototypes — everything they need without editing access risks.
+- Share a single Figma file link (not exported screens) in your spec document or Notion/Dropbox Paper design doc. The file becomes the living source of truth; a static spec document becomes a problem description + context, not a pixel spec.
+
+### Page Naming as a Status Communication System (From Figma Developer Handoff Guide)
+
+- Use page names to signal implementation readiness — developers should know at a glance whether a page is in-progress, ready for feedback, or ready to build. All three teams at Dropbox, Expedia, and Cash App used page naming for this purpose. Example conventions:
+  - `🏗️ WIP — [Feature Name]` — in progress, not ready for review
+  - `💭 Review — [Feature Name]` — ready for feedback
+  - `🚢 Ready — [Feature Name]` — approved, ready to build
+- Emojis in page names serve as fast visual scanners — they break the uniform text list and communicate status before anyone reads the label.
+- Set a custom frame as the file thumbnail (right-click > "Set as Thumbnail") so the file browser shows a meaningful preview rather than a random canvas state. Expedia and Cash App both used deliberate thumbnails for better file-browser orientation.
+
+### The "Frame-as-Component" Clean Page Technique (From Figma Developer Handoff Guide — Cash App)
+
+- Cash App's workflow: for every frame ready for developer review, convert it to a component and place an **instance** on a dedicated clean page. The messy working page stays as-is; developers navigate to the clean page.
+- The benefit: changes made on the working page automatically propagate to the instance on the clean page — zero manual sync. No duplicate screens to keep updated.
+- The clean page contains only final approved screens with clear flow indicators. This removes cognitive load for developers and non-designers who aren't used to reading messy design files.
+
+### Co-Located Component Documentation for "Go to Master Component" (From Figma Developer Handoff Guide — Expedia)
+
+- When a developer selects a component instance, they can click "Go to master component" to jump to its origin. Expedia exploited this navigation: the master component's home page includes a documentation frame directly alongside the component showing its name, description, usage instructions, variants, and states.
+- This means the master component page IS the documentation — no external wiki needed. Every developer who inspects an instance can reach full usage documentation in one click.
+- Always invite developers into the library files that hold master components. Without access, they get a 404 error when using "Go to master component" — defeating the entire documentation strategy.
+- Add component descriptions in the properties sidebar — they appear as tooltips in the components panel and in the code panel during inspection. Use descriptions to include: component name in the codebase, accessibility notes (including contrast guidance), and links to implementation docs.
+
+### Style Names as the Design-to-Code Translation Layer (From Figma Developer Handoff Guide — Expedia + Figma Best Practices)
+
+- Style names appear as comments in the CSS code panel and as line items in table view. If your Figma style name matches your codebase token name, developers can implement the variable directly without translation. If names don't match, you're creating unnecessary mapping work on every handoff.
+- Use slash-prefixed groups in style names to mirror your code token structure. Example: `color/brand/primary`, `color/neutral/100`, `type/heading/xl` — these groups display as nested categories in the style picker and map directly to CSS custom property or design token naming conventions.
+- Add style descriptions with usage guidance (e.g., "Use for primary CTAs. Min contrast 4.5:1 on white backgrounds"). This surfaces accessibility constraints passively during development.
+- Decoupled text styles (Figma separates alignment and color from the style definition) means you don't need a separate style per color/alignment combination — fewer styles, less maintenance, easier for developers to navigate.
+
+### Library Architecture: Single vs. Multi-Library Decision (From Figma Best Practices)
+
+- Small teams (1-3 designers, one product): single library is simpler — one place to find everything, one file to maintain.
+- Larger organizations or multi-product teams: split into a **foundation library** (colors, typography, spacing, icons) and **product-specific component libraries** that consume the foundation. This prevents the foundation from being polluted by product-specific components and allows different products to have distinct components while sharing tokens.
+- When consuming your own library, treat the designers using it as your end users — apply the same UX thinking you'd use for a product feature. Poor asset panel organization is a usability failure for your design system.
+
+### Variant Property Naming Mirrors Code Props/Values (From Figma Variants Best Practices)
+
+- Variant property names should map directly to component props in code. If your React Button has `variant="primary"`, `variant="secondary"`, your Figma variant property should be named `Variant` with values `Primary` and `Secondary` — not "Type" with values "Solid" and "Outline". The closer the mapping, the less translation a developer needs.
+- Forward-slash grouping in layer names converts to variant property values when combining variants — plan your naming before combining to avoid messy migration.
+- Component set descriptions and individual variant descriptions both appear in the inspect panel. Write the set description for "what is this component," and the variant description for "when to use this specific variant."
+
+### Grid Styles for Layout Standardization Across Handoff (From Figma Best Practices)
+
+- Create named grid styles — not just for desktop and mobile column grids, but also combined row+column grids used as padding visualizers inside components. A `spacing/component-padding` grid style applied inside a button component lets developers immediately read margins without annotation callouts.
+- Grid styles are often overlooked in design systems but are the highest-leverage way to communicate spacing intent during handoff — they translate spacing behavior visually without any redlining.
+
+### Trust and Transparency as the Real Outcome of Collaborative Handoff (From Figma Developer Handoff Guide — Expedia/Ben Munge)
+
+- Expedia's senior iOS developer described the primary benefit of design-developer collaboration in Figma not as "better specs" but as **trust** — seeing the iterations that didn't work built confidence in the decisions that did. When developers can see the whole process, they stop questioning the conclusions.
+- Practical implication: don't hide exploration. In-progress pages are not embarrassing — they're evidence of a rigorous process. Sharing often and early prevents "why did it end up like this" questions at build time.

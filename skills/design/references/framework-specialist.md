@@ -483,3 +483,213 @@ Before delivering framework output:
 - [ ] Accessibility: ARIA attributes, keyboard nav, semantic HTML preserved
 - [ ] Framework-idiomatic patterns used (not just HTML copied into JSX)
 - [ ] Named exports for tree-shaking (no default exports on utilities)
+
+---
+
+## Reference-Sourced Insights
+
+### Modern CSS Reset Baseline (From Josh W. Comeau)
+
+Every React/Vue/Svelte/Next.js/Astro project should start with this modern CSS reset. It replaces outdated resets (Eric Meyer's is 15+ years old) with modern, well-reasoned rules:
+
+```css
+/* 1. Intuitive box-sizing — must-have */
+*, *::before, *::after { box-sizing: border-box; }
+
+/* 2. Remove default margin (but preserve dialog centering) */
+*:not(dialog) { margin: 0; }
+
+/* 3. Enable keyword animations for height: auto transitions */
+@media (prefers-reduced-motion: no-preference) {
+  html { interpolate-size: allow-keywords; }
+}
+
+body {
+  /* 4. WCAG requires line-height ≥ 1.5 for body text */
+  line-height: 1.5;
+  /* 5. Better font rendering on macOS (Apple disabled subpixel antialiasing in macOS Mojave) */
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 6. Media elements: block by default, never overflow container */
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* 7. Form controls inherit font — prevents mismatched font in inputs */
+input, button, textarea, select { font: inherit; }
+
+/* 8. Prevent text overflow on long words */
+p, h1, h2, h3, h4, h5, h6 { overflow-wrap: break-word; }
+
+/* 9. Better line-wrapping */
+p { text-wrap: pretty; }
+h1, h2, h3, h4, h5, h6 { text-wrap: balance; }
+
+/* 10. Root stacking context — prevents z-index bugs in React/Next.js */
+#root, #__next { isolation: isolate; }
+```
+
+**Key insight:** `interpolate-size: allow-keywords` (rule 3) enables `height: 0px` to `height: auto` CSS transitions without JavaScript. Currently Chrome/Edge only (March 2025) — wrap in `prefers-reduced-motion` to prevent issues on unsupported browsers. Fallback (no animation) is acceptable.
+
+**Why `box-sizing: border-box` is non-negotiable:** Without it, a `width: 100%` element with padding overflows its container. This is so universally correct that `*` selector application has zero performance impact.
+
+---
+
+### Tailwind CSS v4 Changes (From Tailwind Blog)
+
+Tailwind CSS v4.0 (January 2025) is a breaking change from v3. Key differences when outputting framework code:
+
+**v4 config is CSS-first, not JS-first:**
+```css
+/* tailwind.config.ts is GONE in v4 — config lives in globals.css */
+@import "tailwindcss";
+
+@theme {
+  --color-primary: oklch(0.5 0.2 240);
+  --font-sans: "Inter", sans-serif;
+  --radius-md: 0.375rem;
+}
+```
+
+**v4 uses CSS custom properties natively:**
+- Design tokens are defined as `--*` variables in `@theme` block
+- No more `hsl(var(--primary))` indirection — use `oklch()` or direct hex
+- All spacing/color/typography tokens auto-generate utility classes
+
+**v4 content detection is automatic:**
+- No more `content: ['./src/**/*.{ts,tsx}']` in config
+- v4 scans files automatically via the Vite/PostCSS plugin
+
+**Check user's Tailwind version before generating config:** If `package.json` shows `"tailwindcss": "^4.x"`, use CSS-based config. If `"^3.x"`, use the JS config pattern from the existing reference.
+
+**Tailwind Plus (formerly Tailwind UI):** All UI blocks in Tailwind Plus are now available in plain HTML (not just React/Vue), with vanilla JavaScript for interactive components (dialogs, dropdowns, etc.) — as of July 2025.
+
+---
+
+### shadcn/ui Integration Patterns (From shadcn/ui docs)
+
+shadcn/ui is a copy-paste component library — it installs components into your project (not as a dependency), making them fully customizable. When a user says "use shadcn" or their project has a `components/ui/` folder, follow these patterns:
+
+**Install pattern:**
+```bash
+npx shadcn@latest add button card dialog
+```
+This copies the component source into `components/ui/button.tsx` — you own the code.
+
+**Component customization:** shadcn components use the `cn()` utility and CVA (Class Variance Authority) for variant management:
+```tsx
+// shadcn Button source pattern (v4 style)
+import { cva, type VariantProps } from 'class-variance-authority'
+
+const buttonVariants = cva(
+  'inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
+  {
+    variants: {
+      variant: {
+        default: 'bg-primary text-primary-foreground hover:bg-primary/90',
+        destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
+        outline: 'border border-input bg-background hover:bg-accent hover:text-accent-foreground',
+        secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
+        ghost: 'hover:bg-accent hover:text-accent-foreground',
+        link: 'text-primary underline-offset-4 hover:underline',
+      },
+      size: {
+        default: 'h-10 px-4 py-2',
+        sm: 'h-9 rounded-md px-3',
+        lg: 'h-11 rounded-md px-8',
+        icon: 'h-10 w-10',
+      },
+    },
+    defaultVariants: { variant: 'default', size: 'default' },
+  }
+)
+```
+
+**Theming:** shadcn uses CSS variables in `globals.css` for all colors. The `<Theme accentColor="..." grayColor="..." radius="...">` approach (Radix Themes) is the alternative if using `@radix-ui/themes` instead of shadcn.
+
+**shadcn vs Radix Themes:** shadcn = headless primitives + Tailwind classes you control. Radix Themes = pre-styled components with a theme wrapper. If the user's project uses `@radix-ui/themes`, use the `<Theme>` wrapper and import pre-styled components directly.
+
+---
+
+### Radix UI Themes (From Radix Themes docs)
+
+When user mentions `@radix-ui/themes` (not just `@radix-ui/react-*` primitives):
+
+**Setup:**
+```tsx
+// root layout
+import '@radix-ui/themes/styles.css'
+import { Theme } from '@radix-ui/themes'
+
+export default function Layout({ children }) {
+  return (
+    <html>
+      <body>
+        <Theme accentColor="blue" grayColor="slate" radius="medium" scaling="100%">
+          {children}
+        </Theme>
+      </body>
+    </html>
+  )
+}
+```
+
+**Component usage (no class names needed):**
+```tsx
+import { Flex, Button, Text, Card } from '@radix-ui/themes'
+
+<Card>
+  <Flex direction="column" gap="2">
+    <Text size="3" weight="bold">Title</Text>
+    <Button variant="solid">Action</Button>
+  </Flex>
+</Card>
+```
+
+**Theme configuration props:**
+- `accentColor`: `"blue" | "crimson" | "green" | ...` (29 options)
+- `grayColor`: `"slate" | "mauve" | "sand" | "olive" | ...`
+- `radius`: `"none" | "small" | "medium" | "large" | "full"`
+- `scaling`: `"90%" | "95%" | "100%" | "105%" | "110%"`
+
+**Dark mode:** Wrap sections in `<Theme appearance="dark">` or apply the `dark` class to `<html>`.
+
+---
+
+### Algorithmic Layout Patterns (From Every Layout)
+
+Every Layout (Heydon Pickering & Andy Bell) teaches layout primitives that work without `@media` breakpoints — the browser decides. Apply these patterns when generating framework components:
+
+**The Stack:** Consistent vertical spacing between siblings using `gap` or the lobotomized owl selector (`* + * { margin-top: var(--space) }`). Use for any vertical flow of content.
+
+**The Sidebar layout:** Main content + fixed-width sidebar that wraps when the container is too narrow. Pure CSS, no breakpoints:
+```css
+.with-sidebar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.sidebar { flex-basis: 240px; flex-grow: 1; }
+.not-sidebar { flex-basis: 0; flex-grow: 999; min-width: 50%; }
+```
+This wraps the sidebar below main content when the container shrinks below the `min-width` threshold — no `@media` query required.
+
+**The Switcher:** N items in a row that automatically stack when the container is too narrow:
+```css
+.switcher { display: flex; flex-wrap: wrap; gap: 1rem; }
+.switcher > * { flex-basis: calc((30rem - 100%) * 999); flex-grow: 1; }
+```
+
+**The Center:** Horizontally centered container with max-width and padding:
+```css
+.center { max-width: var(--measure, 65ch); margin-inline: auto; padding-inline: 1rem; }
+```
+
+**The Grid:** Auto-fill grid that adapts to content:
+```css
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(240px, 100%), 1fr)); gap: 1rem; }
+```
+
+**Principle:** These layouts work in any framework because they're CSS-only. Prefer these intrinsic layout patterns over media-query-based breakpoint grids when building framework-agnostic components.

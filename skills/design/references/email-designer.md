@@ -320,3 +320,122 @@ When no ESP is specified, use `{{{VARIABLE_NAME}}}` triple-brace syntax and docu
 - [ ] All links use `https://` absolute URLs
 - [ ] Physical address in footer
 - [ ] Dark mode works (at least not broken)
+
+---
+
+## Reference-Sourced Insights
+
+### MJML as an Abstraction Layer (From MJML docs)
+
+MJML is a markup language that compiles to responsive email HTML. Use it when generating email templates programmatically — it abstracts away Outlook VML, inline style inlining, and table nesting.
+
+**Core MJML structure:**
+```xml
+<mjml>
+  <mj-head>
+    <mj-preview>Preview text here</mj-preview>
+    <mj-font name="Inter" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700" />
+    <mj-attributes>
+      <mj-all font-family="Inter, Arial, sans-serif" />
+      <mj-text padding="0" />
+    </mj-attributes>
+  </mj-head>
+  <mj-body width="600px">
+    <mj-section background-color="#ffffff">
+      <mj-column>
+        <mj-text font-size="16px">Body content</mj-text>
+        <mj-button href="https://example.com">CTA Text</mj-button>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>
+```
+
+**Key MJML rules:**
+- All content must go inside `<mj-column>` — columns live inside `<mj-section>`
+- Column auto-sizing: 2 columns = 50%/50%, 3 = 33%/33%/33%. Use `width="200px"` on `<mj-column>` for manual sizing
+- `<mj-breakpoint width="480px" />` controls when mobile layout kicks in (default is 480px)
+- `<mj-attributes>` in `<mj-head>` sets global defaults — use `<mj-all font-family="...">` to set font globally without repeating on every tag
+- `<mj-include path="./header.mjml" />` for modular templates — good for reusable header/footer
+
+**When to output MJML vs raw HTML:** Output MJML when the user/system will compile it; output raw HTML when the email is for direct ESP upload.
+
+---
+
+### Bulletproof Button Techniques (From Litmus)
+
+There are 5 distinct methods for email CTAs, each with trade-offs:
+
+| Method | Outlook rounded corners | Full button clickable | Complexity |
+|--------|------------------------|----------------------|------------|
+| **Conditional-padding** (recommended by Litmus) | No | Yes | Medium |
+| **VML-based** | Yes | Yes | High (dual URLs) |
+| **Padding-based (table `<td>`)** | No | No (text only) | Low |
+| **Border-based (on `<a>` tag)** | No | Yes | Low |
+| **Padding + border combo** | No | Yes | Medium |
+
+**Never use image-based buttons** — they disappear when images are blocked (affects up to 40% of recipients). Image-blocking is on by default in: Outlook 2007+, Outlook.com, Yahoo Mail, Gmail (non-trusted senders).
+
+**Border-based button** (simplest fully clickable approach, no VML):
+```html
+<a href="https://example.com"
+   style="font-size:16px; font-family:Helvetica,Arial,sans-serif; font-weight:bold;
+          color:#ffffff; text-decoration:none; border-radius:5px;
+          background-color:#2563eb;
+          border-top:12px solid #2563eb; border-bottom:12px solid #2563eb;
+          border-right:24px solid #2563eb; border-left:24px solid #2563eb;
+          display:inline-block;">
+  Get Started →
+</a>
+```
+Caveat: Outlook renders no rounded corners and slightly shrinks borders.
+
+**Button size rules (From Litmus):** CTA button height should be 42–72px for mobile tap targets. CTA text: 1–5 words maximum. Use `line-height` for vertical height in Outlook (not `padding-top/bottom`).
+
+---
+
+### Image Blocking Reality (From Campaign Monitor)
+
+- Up to **40% of email recipients never enable images at all**
+- Gmail, Outlook 2007+, Outlook.com, and Yahoo Mail block images by default
+- Apple Mail shows a question mark icon (not alt text) when images are blocked
+- Yahoo Mail does not show alt text at all when images are blocked
+- Gmail shows alt text only if short enough
+
+**Defensive design rules:**
+- Never put essential information (price, CTA text, headline) inside an image
+- Always start email body with preheader text — not an image — so preview pane shows content, not a blank square
+- Test your email with images disabled as part of every QA review
+- For clients who insist on image-heavy designs: show them the image-blocked version and ask "would you click through on this blank page?"
+- Spam filters use image-to-text ratio as a spam signal — all-image emails are more likely to be filtered
+
+---
+
+### CSS Support Reality (From Campaign Monitor)
+
+- **Only client that strips ALL CSS** (embedded `<style>` and inline) is Gmail app with non-Gmail addresses (GANGA)
+- Modern email clients: Gmail strips `<style>` from `<head>`; Outlook (Windows) uses Word engine, no CSS floats, unreliable margins
+- **Safe to use in `<style>` block** (not just inline): `@media` queries, `:hover` states, `@font-face`, animation (ignored gracefully by non-supporting clients)
+- **Never use**: CSS floats for layout, `display: flex`, `display: grid`, CSS variables (`var(--x)`)
+- **Whitespace in HTML tables matters**: Remove whitespace between `</td>` and `<td>` tags — some clients render it as layout gaps
+
+**Development workflow:** Build with `<style>` block first for speed, then inline with a CSS inliner tool (Campaign Monitor CSS Inliner, Premailer) at the end. Keep both — the `<style>` block serves clients that support it, inline serves those that strip it.
+
+---
+
+### Video and Rich Media Rules (From Campaign Monitor)
+
+- **JavaScript is unsupported** in all major email clients (security risk, spam signal)
+- **Flash is dead in email** — even fallback images often don't render
+- **HTML5 video:** Works in Apple Mail and some mobile clients, but blocked in Gmail, Outlook, and most clients
+- **Animated GIFs:** Solid support across all clients, but Outlook (Windows) renders only the **first frame** — design first frame to stand alone as a static image
+- **Video best practice:** Use a video thumbnail image with a play button overlay, linked to the video on your website. One extra click, guaranteed to work everywhere
+
+---
+
+### Number Precision in KPI Display (From Geckoboard — applicable to email data summaries)
+
+When including data numbers in email (receipts, reports, summaries):
+- Round to meaningful precision — showing conversion rate to 3 decimal places when you only care about whole-number changes adds noise
+- Show units clearly: `$84K` not `$84,231.47` for executive summaries; use full precision only in transactional/receipt emails where the exact amount matters
+- Trend indicators: show context ("vs last month") not just the number — "↑ 12%" means nothing without the baseline

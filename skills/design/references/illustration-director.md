@@ -409,3 +409,38 @@ File extension: .svg always. No .png in the icon directory (PNG generated at bui
 12. Check final file size: icons ≤ 2KB, spot illustrations ≤ 20KB. If over, re-examine path count and detail level.
 
 ---
+
+## Reference-Sourced Insights
+
+*Note: All targeted illustration-specific scraped sources (Smashing Magazine, UX Design CC, Storyset) returned 404 errors or homepage-only content. The insights below are drawn from adjacent scraped sources (Figma's developer handoff guide, Sprout Social's visual content strategy) where illustration and visual asset topics intersect.*
+
+### Illustration Assets in Design System Libraries (From Figma Developer Handoff Guide)
+
+- Treat illustration assets — spot illustrations, icon sets, empty-state graphics — as Figma library components with the same documentation discipline applied to UI components: name, description, usage context, and do/don't variants co-located on the master component page.
+- Developers need to know if an illustration comes from the design system library or was created specifically for a project. The distinction determines whether they can pull an existing asset from code or need to export a new one. Make this explicit via the page organization or component description field.
+- Export illustrations from a dedicated "Ready" page (not the working canvas) to prevent developers from accidentally pulling in-progress or rejected illustration states. Follow the same page naming convention as UI screens: `🚢 Ready — Illustrations`.
+- When using `<use>` references in SVG sprite systems, ensure all referenced `id` attributes are preserved through optimization — SVGO's `cleanupIDs` must not rename IDs used in `<use href="#...">` references. This is the most common illustration-to-code breakage point.
+
+### Illustration Style Consistency at Scale (From Sprout Social Video/Visual Content Strategy)
+
+- Episodic and series-level visual content requires a **template system for illustrations**, not just color palettes. Define: character pose library (standing, pointing, celebrating, thinking), scene background templates (office, outdoor, abstract), and a fixed color palette with specific hex values. Without templates, a series of 12 illustrations drifts visually across 12 different "interpretations" of the same style guide.
+- For brand illustration used in social or marketing content: the illustration style should survive compression and resizing to the smallest social media thumbnail (roughly 150×150px on mobile feed). If character faces or key metaphors become illegible at that size, the style is too detailed for multi-channel use.
+- Authentic-style illustration (loose linework, imperfect shapes, visible texture) outperforms overly polished vector illustration in social-media contexts where audiences expect human-feeling content. Consider deliberate imperfection as a brand strategy, not a quality failure — particularly for TikTok, Instagram Reels, and LinkedIn storytelling content.
+
+### Illustration Color System — Practical Constraints (Derived from Figma Best Practices)
+
+- Illustration color palettes should be defined as Figma Color Styles (or Variables for multi-brand/dark mode support) in the same library file as the illustration components. This enforces exact hex-value consistency across all illustration contributors and enables systematic palette swaps when brand colors update.
+- Limit illustration color palettes to 5-8 named colors: 2-3 brand primaries, 1-2 neutrals (skin tones, backgrounds), 1 accent, 1 dark, 1 white/near-white. Illustrations that use more than 8 colors are difficult to maintain as a system and create visual inconsistency across a product.
+- When defining color styles for illustration, use the slash-group naming format to separate illustration palette from UI palette: `illustration/primary`, `illustration/skin/light`, `illustration/background`. This prevents illustration colors from polluting UI component color pickers.
+
+### Empty State Illustration Direction (Derived from Design Systems Practice)
+
+- Empty states are the highest-frequency illustration use case in product UI. They require a distinct sub-style within the broader illustration language: slightly more narrative (a character or scene), higher warmth, lower complexity than marketing illustrations. Empty states are UI micro-moments — they communicate tone at a moment of user friction.
+- Every empty state illustration should convey one of three messages: (1) "nothing here yet — start" (positive, forward-looking), (2) "an error occurred — here's help" (empathetic, action-oriented), or (3) "nothing matched — adjust your search" (neutral, instructive). The illustration's visual metaphor, character expression, and body language should match the category.
+- Empty state illustrations should always be paired with a headline and body copy. Never ship an illustration-only empty state — the illustration provides tone, the copy provides instruction. Defining the copy character limit (e.g., headline ≤ 40 chars, body ≤ 80 chars) constrains the illustration framing so copy doesn't overlap or push the illustration off-screen.
+
+### AI-Assisted Illustration Consistency Techniques
+
+- When generating illustration variations via AI tools (Midjourney, Stable Diffusion, Firefly), the primary consistency failure mode is **character drift** — the same character looks different across prompts. Mitigation: define a character "seed" prompt that includes: hair color + style, skin tone in specific terms (e.g., "warm brown skin"), clothing color exactly, and body proportions (e.g., "round face, wide shoulders"). Store this seed in the illustration style guide as the canonical character definition.
+- Use AI generation for composition ideation and rough thumbnails, not final asset production. Final production should use the AI output as a reference sketch, with manual vector refinement in Figma or Illustrator to enforce style guide compliance (stroke weights, corner radii, color palette).
+- Maintain a "consistency test" frame in the illustration file: a grid of 6-8 illustration samples from different scenes that a reviewer can scan to assess visual coherence. If a new illustration doesn't look like it belongs in this grid, it fails the style test regardless of individual quality.

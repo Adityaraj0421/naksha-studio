@@ -377,3 +377,43 @@ What adapts: [list of flexible elements]
 - [ ] Launch timing: release within 24h across platforms (not weeks apart)
 
 ---
+
+## Reference-Sourced Insights
+
+### Platform-Native Video Strategy (From Sprout Social)
+
+- Short-form video (under 60 seconds) is now the top ROI driver for 71% of video marketers — design thumbnails and cover frames for this format first.
+- 52% of consumers prioritize short-form videos when interacting with brands, favoring human-generated, authentic storytelling over high-fidelity production. Do NOT over-polish short-form visual assets; raw, native-feeling design outperforms slick ads.
+- Brands are building in-house content studios (e.g., Under Armour's Lab96 Studios) and producing episodic series. Visual language must support series recognition: consistent color treatment, typography lock-up, and recurring graphic motifs across every episode's thumbnail and cover.
+- Branded series (like Bilt's "Roomies") are designed to feel like bingeable entertainment, not branded content. Visual style directive: lean lifestyle/editorial, not corporate or advertising.
+
+### Video Type → Visual Template Mapping (From Sprout Social)
+
+| Video type | Thumbnail/cover treatment |
+|---|---|
+| Educational | Bold text overlay with the lesson outcome ("How to X in 3 steps") |
+| Explainer / Product demo | Product UI screenshot as hero + benefit label |
+| Testimonial | Face close-up with company logo badge + metric callout |
+| Behind-the-scenes | Candid, unpolished feel — avoid heavy graphic overlays |
+| Thought leadership | Headshot + channel/show identity badge |
+| Brand story | Cinematic still from the narrative + minimal title treatment |
+
+### Awareness-Stage Video Design (From Sprout Social)
+
+- Gymshark's awareness ads use cinematic slow-motion, dramatic lighting, and close-up fabric shots — designed to function equally as organic Reel, TikTok, YouTube Short, or paid ad. Design multi-format cuts from the same visual source.
+- Decision-stage videos (customer testimonials like Monday.com's Knight Frank case study) intercut interview talking heads with product dashboard visualizations. Always design a product visualization template alongside the testimonial talking-head template — viewers expect both.
+
+### Template Minimum Set (From Buffer Strategy)
+
+- From Buffer's 7-step strategy: content pillars anchor what templates are needed. If you have 3–5 content pillars, you need a minimum template for each pillar type — not just one generic template. Build: educational tip template, inspiration/story template, promotional launch template, entertainment/trend template, and community engagement template.
+- Content ideas living in DMs and comments (real user language) should inform the headline copy in your overlay text. Capture exact user phrasing; it converts better than internal marketing language.
+
+### Audience Research as Design Input (From Buffer Strategy)
+
+- The best social design brief starts with the audience's exact pain point language (from DMs, comments, community spaces). Don't design for what you think looks good; design for what your audience is already saying they need.
+- "Social listening" means monitoring comments under competitors' content — watch which visual formats (carousel, video, static image) those posts use when they get high engagement, then design toward those patterns for that audience segment.
+
+### Strategy-First Platform Selection Rule (From Buffer)
+
+- Start all creative work for one platform, then adapt: "go deep, not wide." Design a canonical version of each template for your primary platform, then create adaptation rules for adjacent platforms (e.g., TikTok → Instagram Reels). Do not start with 5-platform design specs simultaneously.
+- Adjacent network pairs: TikTok ↔ Instagram Reels (9:16 portrait, same dimensions, minimal adaptation), YouTube Shorts ↔ Reels (same), LinkedIn ↔ Twitter/X (horizontal/landscape, text-forward).

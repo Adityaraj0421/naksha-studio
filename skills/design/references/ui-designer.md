@@ -433,3 +433,103 @@ Shadows communicate z-axis position — they're a communication tool, not decora
 - Dark mode: shadows are invisible on dark backgrounds — use border + subtle background shift for elevation instead
 
 ---
+
+---
+
+## Reference-Sourced Insights
+
+### Laws of UX — Applied to Visual Design Decisions
+
+From **Laws of UX** (lawsofux.com):
+
+**Hick's Law** — Decision time increases logarithmically with the number of choices. Limit navigation to 5–7 items max. Limit option sets in dropdowns and menus. Group options so users chunk, not count. Don't present 15 filter options without grouping them.
+
+**Fitts's Law** — Target acquisition time = a + b × log₂(2D/W). Bigger and closer = faster to hit. Make primary CTAs the largest buttons, place them where the eye lands. Make destructive actions smaller and physically separated. Don't make "Cancel" and "Delete" buttons equal size adjacent to each other.
+
+**Miller's Law** — Working memory holds 7 ± 2 items. Group form sections, navigation items, and setting categories into chunks of ≤7. Above 7, split into subsections or use progressive disclosure.
+
+**Jakob's Law** — Users spend most of their time on other sites. They expect your product to work like everything else they know. The payoff of violating conventions must be enormous to justify the confusion cost. Default to platform conventions unless you have an exceptional reason to deviate.
+
+**Law of Proximity** — Elements near each other are perceived as related. Spacing is your most powerful grouping tool. Items sharing a group need tighter internal spacing than the gap between groups. If your spacing hierarchy is wrong, your visual hierarchy is wrong — fixing font size won't save it.
+
+**Law of Common Region** — Elements inside a boundary (card, panel, box) are grouped. Use cards to create grouping without proximity alone. A border or background difference is often clearer than whitespace alone for complex UIs.
+
+**Von Restorff Effect (Isolation Effect)** — The element that differs from its surroundings is remembered and noticed. Use this deliberately: your primary CTA should differ visually from everything around it. Only one element should trigger this effect per section — if everything is highlighted, nothing is.
+
+**Serial Position Effect** — Users remember the first and last items in a list better than the middle. Put critical navigation items at the top and bottom. Don't bury the most important option in the middle of a long list.
+
+**Peak-End Rule** — Users judge an experience by its peak moment and its ending, not the average. Design your happiest moment (task completion, delight animation) and your ending (empty state, success confirmation) with extra care. These disproportionately shape how users remember the product.
+
+**Doherty Threshold** — Productivity soars when a system responds in under 400ms. Users feel interactions are instant below this threshold; above it, they feel the wait. Show loading states for anything over 400ms. Optimize or fake responsiveness (optimistic UI) for critical interactions.
+
+**Goal-Gradient Effect** — Motivation increases as users approach goal completion. Progress bars, step indicators, and "X of 5 steps complete" all accelerate completion. The closer a user is to finishing, the less friction they'll tolerate — remove all unnecessary steps in the final 20% of any flow.
+
+**Aesthetic-Usability Effect** — Users perceive aesthetically pleasing designs as more usable, even when they aren't. A beautiful interface buys tolerance for usability problems during early use. This is not an excuse to skip usability work — it's a reason to invest in visual quality as part of the whole.
+
+**Zeigarnik Effect** — People remember incomplete tasks better than completed ones. Onboarding checklists exploit this deliberately: showing "3 of 5 tasks complete" creates productive tension. Incomplete progress indicators are more motivating than blank slates.
+
+**Tesler's Law (Law of Conservation of Complexity)** — Every system has an irreducible complexity. You can't eliminate it, only move it. The UI designer's job is to absorb complexity on behalf of the user. When you simplify a UI, you are often pushing work from the user to the developer, server, or design system.
+
+---
+
+### Nielsen's 10 Heuristics — Precise Design Implications
+
+From **Nielsen Norman Group** (nngroup.com/articles/ten-usability-heuristics):
+
+**Heuristic 1 — Visibility of System Status:** Every action with consequences must communicate feedback immediately. No action should be invisible to the user. Status feedback must come ideally instantly, and always before 1s for operations that can't complete immediately.
+
+**Heuristic 5 — Error Prevention:** Two types of errors exist — *slips* (unconscious, caused by inattention) and *mistakes* (conscious, caused by mental model mismatch). Design against slips with constraints (disable invalid options, use good defaults). Design against mistakes with confirmation dialogs and undo. Prioritize prevention of high-cost errors first, minor frustrations second.
+
+**Heuristic 8 — Aesthetic and Minimalist Design:** "Interfaces should not contain information that is irrelevant or rarely needed. Every extra unit of information competes with relevant information and diminishes its relative visibility." This is not about flat design — it's about ensuring every visual element supports the user's primary goals. Apply content prioritization, not style preference.
+
+**Heuristic 9 — Help Users Recover from Errors:** Error messages must: (1) use plain language — no error codes, (2) precisely indicate the problem, (3) constructively suggest a solution. Use traditional error visuals (bold red text) so users immediately recognize them as errors without reading.
+
+---
+
+### Style Tiles — Brand Direction Before Full Screens
+
+From **Learn UI Design** (learnui.design):
+
+Before designing full screens, create a **style tile** — a small composition combining ALL brand elements: typography, color, imagery, UI controls, iconography. It is NOT a full page. It answers: "Does this combination achieve the intended brand feel?"
+
+**What to decide in a style tile:**
+1. Font choice (heading + body pairing)
+2. Color palette (dominant + accent)
+3. Imagery style (photo, illustration, icon-based)
+4. Control styling (button, input, card shapes and radii)
+5. Tone (formal, playful, minimal, bold)
+
+You can evaluate a brand direction in 20 minutes with a style tile. You cannot evaluate it from a full page design without wasting hours on the wrong direction. Do the style tile first.
+
+**Mood-to-technique mappings:**
+- Relaxed / casual: pastel color palette (high brightness, low-to-medium saturation)
+- Playful: scattered layouts, grid-breaking elements, asymmetric compositions
+- Classy / premium: uppercase type with generous letter-spacing (+0.08em+), tight color range, serif accents
+- Modern / technical: monospace or geometric sans, low color palette, high whitespace
+
+**Copywork as a design skill-builder:** Recreating a design pixel-for-pixel forces you to confront every micro-decision the original designer made — font weight, exact spacing, hover states, alignment choices. Each decision noticed and remade becomes a reusable technique. When you don't know why something works, copy it exactly and you will understand it.
+
+---
+
+### WCAG Non-Text Contrast and Spacing (Often Missed)
+
+From **WebAIM WCAG 2.2 Checklist** and **A11y Project Checklist**:
+
+**Non-text contrast (WCAG 1.4.11, AA required):** UI components and graphical objects — buttons, form controls, focus indicators, chart elements, icons — must have at least **3:1 contrast** against adjacent colors. Not just text. This means:
+- A gray border on a white input field must pass 3:1
+- A low-contrast icon must pass 3:1 against its background
+- Focus rings must pass 3:1 against all adjacent colors
+
+**Text contrast precision (WCAG 1.4.3, AA):** Normal text needs 4.5:1. Large text (18pt / 24px regular, OR 14pt / ~18.66px bold) only needs 3:1. Knowing this threshold matters: a large heading can be lighter than body text and still be compliant.
+
+**Text spacing (WCAG 1.4.12, AA):** Layouts must not break when users adapt: paragraph spacing to 2× font size, line height to 1.5× font size, word spacing to 0.16× font size, letter spacing to 0.12× font size. Avoid pixel-fixed heights on text containers — they break under user text spacing overrides.
+
+**Content on hover/focus (WCAG 1.4.13, AA):** Tooltips and hover content must: (1) be dismissible without moving the pointer (via Esc), (2) allow moving the pointer to the new content without it disappearing, (3) remain visible until the pointer moves away. Tooltips that vanish when you try to read them fail WCAG.
+
+**Reflow (WCAG 1.4.10, AA):** No loss of content when presented at 320px-equivalent width. Test: set browser to 1280px wide, zoom to 400%. If horizontal scrolling appears (except for maps/tables/complex charts), it fails.
+
+**Viewport zoom:** Never set `user-scalable=no` or `maximum-scale=1` in the viewport meta tag. Users who need to zoom text must be allowed to.
+
+**Autocomplete attributes (WCAG 1.3.5, AA):** Input fields collecting personal information (name, email, address, phone, credit card) must have appropriate `autocomplete` attribute values. This enables autofill for users with motor disabilities and cognitive impairments.
+
+**Orientation lock (WCAG 1.3.4, AA):** Do not restrict orientation to portrait or landscape unless specifically necessary for the content (e.g., a piano keyboard). Most web apps fail this by only testing in portrait mode.

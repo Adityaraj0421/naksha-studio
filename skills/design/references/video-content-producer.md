@@ -340,3 +340,85 @@ CTA:     [50–60s] Follow, save, try, or visit
 ```
 
 ---
+
+## Reference-Sourced Insights
+
+### Video as a Core Content Format, Not a Campaign Deliverable (From Sprout Social Video Strategy)
+
+- Short-form video is the top ROI driver for **71% of video marketers** (Statista). Video supports every stage of the marketing funnel — it attracts attention, builds trust, educates, converts, and enables advocacy. Brands that treat video as a campaign deliverable (one-off execution) miss its compounding value as a long-term content engine.
+- The strategic shift: leading brands now think like media companies. Under Armour launched Lab96 Studios (in-house content studio producing everything from short-form social to docuseries). Bilt's "Roomies" branded series is designed to be bingeable entertainment, not traditional brand content. Both signal the shift from "we make videos" to "we produce programming."
+- 52% of consumers now prioritize short-form videos (under 60 seconds) when interacting with brands. The appetite has moved toward **human-generated, authentic storytelling** over high-fidelity production. Lo-fi formats are the new norm on TikTok, Reels, and LinkedIn.
+
+### Funnel-Stage Video Type Mapping (From Sprout Social Video Strategy)
+
+Each stage of the buyer journey requires a different video approach — not just a different CTA:
+
+| Funnel Stage | Goal | Video Types | Key Signal |
+|--------------|------|-------------|-----------|
+| **Awareness** | Reach new audience | Cinematic brand films, thought leadership, entertaining, educational | Stop the scroll; establish brand identity |
+| **Consideration** | Generate demand | How-tos, influencer demos, explainers, tutorials | Show product in action; build envisionment |
+| **Decision** | Drive conversion | Customer testimonials, case studies, product demos | Real outcomes from real customers |
+| **Adoption** | Educate customers | How-to series, webinars, feature deep-dives, live streams | Reduce friction; build confidence |
+| **Advocacy** | Inspire evangelism | UGC, employee advocacy, social proof clips | Leverage organic love for the brand |
+
+- **Awareness example (Gymshark)**: Cinematic clip featuring athletes training in the Onyx V5 collection, shot in action-movie style — dramatic lighting, slow-motion lifts, fabric close-ups. Designed to work as organic Reel, TikTok post, YouTube Short, and paid social ad simultaneously. The production intent was multi-format from the start.
+- **Consideration example (Frank Body)**: Nano-influencer walkthrough of a nighttime skincare ritual using specific products. Cozy, relatable, aligned with product promise. Key insight: when an audience sees someone use a product to solve a recognizable problem, they envision themselves doing the same — this bridges consideration to purchase intent better than product features alone.
+- **Decision example (Monday.com)**: Customer story featuring three team members explaining how they unified fragmented workflows. Interviews intercut with dashboard visualizations. Aspirational but grounded in reality — the "someone in my role solved this problem" proof pattern is the most effective conversion asset type.
+
+### Video Storytelling as the Primary Engagement Engine (From Vidyard)
+
+- The key to a successful video is **emotion**. Emotion builds connection, makes the brand feel human, and drives action. Emotion is accessed through story.
+- Three-structure approach for any video:
+  1. **Character → Conflict → Resolution** (traditional narrative structure, strongest emotional engagement)
+  2. **Problem → Solution → Results** (works even without a character; effective for product demos and case studies)
+- "Show, don't tell" is not just a writing rule — it's a video production imperative. Showing a customer struggling with a problem is more persuasive than a narrator describing the same struggle. Every script review should ask: "Are we showing this or just saying it?"
+- Tell one story at a time. Multi-message videos lose audiences at the point of topic switch. One clear narrative thread per video, one CTA per video.
+
+### Video ROI and Justification Data (From Vidyard / Wyzowl)
+
+- 96% of marketers say video marketing is an important part of their strategy
+- 91% say video increases traffic
+- 95% say video increases brand awareness
+- 96% say video helps buyers better understand the offering
+- 90% say video generates leads
+- 87% say video increases sales
+- 92% say video gives them a good return on their investment
+- **89% of buyers** say that watching a video has convinced them to make a purchase
+- Use these as internal justification benchmarks when advocating for video investment. When a stakeholder questions video budget, the default response is the 92% ROI stat + the 89% buyer-conversion stat.
+
+### Platform-by-Platform Video Content Strategy (From Sprout Social Video Strategy)
+
+| Platform | Best For | Video Priority |
+|----------|----------|---------------|
+| YouTube | Search-driven discovery, tutorials, long-form educational, episodic series | Shorts complement long-form; both serve different audience intents |
+| TikTok | Trend-driven reach, authentic lo-fi content, edutainment, cultural relevance | Volume + authenticity over polish |
+| Instagram | Short-form discovery, creator collabs, behind-the-scenes, visual storytelling | Reels for reach; Stories for retention; Lives for community |
+| LinkedIn | Thought leadership, B2B storytelling, company culture, executive POV, customer success | Longer watch times acceptable for professional insight content |
+| Facebook | Broad reach, older demographics, testimonials, community-focused, paid distribution | Groups and paid amplification outperform organic feed |
+| Pinterest | Tutorials, step-by-step, DIY, evergreen discovery | Visual search optimization; planning-moment context |
+| X/Twitter | Timely reactions, commentary, event-driven clips, fast takes | Video supports conversation, not polished storytelling |
+
+- **Cross-posting rule**: Instagram Reels, TikTok, and YouTube Shorts all use 9:16 vertical aspect ratio — shoot for this format by default to maximize cross-platform distribution from a single production. Plan for multi-format from the shoot, not in post.
+- Start with the platforms where you already have an active audience. Expand only after establishing a consistent production rhythm on the primary platform.
+
+### Episodic and Series Video Strategy (From Sprout Social Video Strategy)
+
+- Episodic branded content (like Bilt's "Roomies" series or Sweetgreen's "Faces of the Farm" farmer series) builds **anticipation and return viewership** — audiences tune in for the next episode, not just consume standalone content. This compounds value over time in a way no one-off video can.
+- Series design requires: consistent episode naming convention, recurring visual identity (intro/outro template, color grade, title card style), stable CTA format per episode ("follow to catch every episode"), and a branded hashtag for the series.
+- Narrative videos that introduce real people (founders, customers, farmers, team members) outperform product-forward content on authenticity metrics. Sweetgreen's farmer series generated brand depth that product demos cannot — audiences connected with the sourcing story as brand identity.
+
+### Video Strategy Decision Framework (From Vidyard — 9-Question Model)
+
+Before producing any video, answer these 9 questions to define the strategic context:
+
+1. **Goal**: What specific outcome does this video support? (awareness / leads / conversion / retention / advocacy)
+2. **Audience**: Who is this for? What do they want from this video?
+3. **Type**: What format serves this goal and audience? (educational / testimonial / narrative / product / entertaining)
+4. **Budget**: What resources are available? How do we maximize their impact?
+5. **Ownership**: Who is responsible for creation, review, and publishing?
+6. **Integration**: How does this video fit into broader campaigns? (email nurture / paid ads / landing page / organic social)
+7. **Distribution**: Where will this live? How will it be hosted and shared?
+8. **Measurement**: What metrics define success for this specific video?
+9. **Internal users**: Which other teams (sales, support, onboarding) can repurpose this video?
+
+The 9-question framework prevents the most common video production failure: creating videos without a defined distribution channel, measurement plan, or integration into the broader marketing system.

@@ -401,3 +401,137 @@ Use this structure for recruiting participants who match your target:
 | **Observer effect** | Users behave differently when watched | Use unmoderated testing where possible. Warm up participants. Give them time to forget you're watching. |
 
 ---
+
+---
+
+## Reference-Sourced Insights
+
+### Usability Testing — Precise Protocols and Numbers
+
+From **Nielsen Norman Group** (nngroup.com/articles/usability-testing-101):
+
+**Qualitative vs. quantitative usability tests are different studies:**
+- Qualitative: 5 participants, goal = discover problems. Output: findings and redesign recommendations. Takes ~3 days (1 plan, 1 test, 1 analyze).
+- Quantitative: larger n (typically 20–30+), goal = measure task success rate and time-on-task as benchmarks. Used to track improvement over time or compare against competitors.
+
+**The think-aloud method is the #1 usability tool.** Ask participants to narrate their actions and thoughts in real time. This externalizes cognition that would otherwise be invisible. Facilitator rule: do NOT help, explain, or answer questions during tasks. Take notes on where participants hesitate, misclick, or express confusion — these are the findings.
+
+**Task writing rules:**
+- Write tasks as goals, not steps: "Find a product you'd like to buy and add it to your cart" not "Click on Products, then select a category."
+- Use realistic scenarios, not artificial ones. Ground the task in a plausible user situation.
+- Have participants read task instructions out loud — this ensures they read fully, and helps researchers track which task is being performed.
+- Small errors in task phrasing cause priming — the wording influences how the participant interprets the task. Pilot test every task script with 1–2 people before running the real study.
+
+**Remote moderated vs. unmoderated:**
+- Moderated (researcher present via video): richer data, ability to probe, more expensive, harder to scale
+- Unmoderated (automated tool delivers tasks): scales easily, cheaper, no probing possible, participant completes at own time
+- Use moderated when the interface is complex or findings are likely to need follow-up probing. Use unmoderated for benchmarking, A/B comparisons, and when you have clear, well-scoped tasks.
+
+**Costs to know:**
+- Minimum viable usability study: ~3 days of researcher time + participant incentives (a few hundred dollars). No lab required.
+- Add cost for: competitive testing, international users, multiple user groups, quantitative measurement, eyetracking.
+
+---
+
+### Card Sorting — Precise Execution Rules
+
+From **Nielsen Norman Group** (nngroup.com/articles/card-sorting-definition):
+
+**Recommended card count: 30–50 cards.** Fewer = insufficient data. More = user fatigue, less thoughtful sorting. Once users establish their first few groups, additional cards become faster to place — so 50 feels less daunting than it appears.
+
+**Card label rules:**
+- Avoid identical words across different cards — users will automatically group same-word cards together without thinking about relationships (e.g., "Toyota Camry," "Toyota Land Cruiser," and "Toyota Matrix" will always be grouped by brand, not use case).
+- Pilot test card labels with 2–3 people before the full study — unclear labels produce noise, not signal.
+
+**Participant minimums:**
+- Qualitative card sort (think-aloud, understanding why): minimum **15 participants**
+- Quantitative card sort (statistical grouping patterns): minimum **30–50 participants**
+- Increasing n beyond these doesn't hurt but isn't required given typical budgets.
+
+**Three card sort types — when to use each:**
+- **Open** (participants create their own categories): recommended as default. Reveals users' actual mental models without bias from your proposed structure.
+- **Closed** (participants sort into predefined categories): useful for validation. But if you want to test existing navigation categories, **tree testing is better** — it tests the full hierarchy under realistic conditions.
+- **Hybrid** (some predefined + user-created categories): generally avoid. Predefined categories bias users toward similar structures. Use only if you're confident in 1–2 categories but uncertain about the rest.
+
+**Labeling sequence matters:** Always have participants *first* sort cards into groups, *then* label the groups. If you ask for labels while sorting, participants constrain their groupings to fit labels they've already committed to.
+
+**Analysis rule:** Items sorted together >70% of the time belong in the same category. Items appearing together 30–70% of the time need further investigation or user interviews to understand why sorting is inconsistent.
+
+**Card sorting vs. tree testing:** Card sorting builds IA. Tree testing validates IA. Always run card sorting first, build/revise the IA, then tree test to confirm users can navigate it before building.
+
+---
+
+### Cognitive Walkthroughs — The 4-Question Framework
+
+From **Nielsen Norman Group** (nngroup.com/articles/cognitive-walkthroughs):
+
+A cognitive walkthrough is a team inspection method for evaluating learnability — done without users, in a workshop setting. Best for: complex apps, novel interactions, kiosk/walk-up-and-use systems, anything users arrive at without prior training.
+
+**4 questions to answer at every step of the task flow:**
+1. Will users try to achieve the right result? (Do they understand this step is part of reaching their goal?)
+2. Will users notice the correct action is available? (Is the right control visible and findable?)
+3. Will users associate the correct action with the result they're trying to achieve? (Does the label or icon communicate what it does?)
+4. After the action, will users see that progress was made? (Is feedback clear enough to confirm they're on track?)
+
+Any "No" = that step is a **Fail**. Document all fail steps and redesign before usability testing.
+
+**Workshop roles:** Facilitator (performs the tasks, asks the questions), Evaluators (the team, answering from the user's perspective), Recorder (documents answers and fail/pass determinations per step).
+
+**Granularity rule:** Group small related actions into one step (filling a short form section + clicking Next = one step). Don't break every field into its own step — it becomes unmanageable and loses signal.
+
+**Cognitive walkthrough vs. heuristic evaluation:**
+- Heuristic evaluation = general usability audit against 10 principles, covers the whole product
+- Cognitive walkthrough = learnability audit for specific task flows, from a new user's perspective
+- They're complementary — run both on complex new interfaces for comprehensive coverage.
+
+---
+
+### WCAG Accessibility — Precise Audit Rules
+
+From **WebAIM WCAG 2.2 Checklist** and **A11y Project Checklist**:
+
+**Contrast thresholds (WCAG 1.4.3, AA):**
+- Normal text: 4.5:1 minimum
+- Large text (≥24px regular or ≥18.66px bold): 3:1 minimum
+- UI component boundaries and graphical objects (WCAG 1.4.11, AA): 3:1 minimum
+
+**Non-obvious color-alone failures (WCAG 1.4.1, Level A):**
+- Links in body text cannot be distinguished by color alone — they must also differ by underline (at rest) OR have 3:1 contrast against surrounding text AND show an additional distinction (underline, weight) on hover/focus.
+- Error states cannot be communicated by red color alone — must also include an icon, text label, or other non-color indicator.
+
+**Text content rules (A11y Project):**
+- Write content at approximately 8th grade reading level for general audiences (WCAG 3.1.5 AAA, but practically important)
+- Button, link, and label text must be unique and descriptive. "Click here" and "Read more" fail — screen reader users navigate by a list of links/buttons and cannot distinguish them.
+- Do NOT use justified text — the uneven word spacing harms readability for users with dyslexia.
+
+**Critical HTML structure rules:**
+- Every page needs a unique `<title>` — the first thing screen readers announce on navigation
+- Use `<html lang="xx">` — required for screen readers to use correct pronunciation rules
+- Landmark elements (`<main>`, `<nav>`, `<header>`, `<footer>`) are required for screen reader navigation shortcuts
+- Remove `tabindex` values other than 0 or -1 — arbitrary tab order values break keyboard navigation
+
+**Timing rules (WCAG 2.2.1, Level A):**
+- Any timed session must be adjustable. Users with motor/cognitive disabilities need more time. Always provide a "extend session" mechanism — never just log users out silently.
+
+**Autofocus avoidance:** Do not use the `autofocus` attribute. It disorients blind users (focus moves without their permission) and creates extra navigation burden for motor-impaired users.
+
+---
+
+### Research Method Selection — Attitudinal vs. Behavioral
+
+From **Nielsen Norman Group** (nngroup.com/articles/which-ux-research-methods):
+
+The most consequential research decision: are you measuring what people *say* or what they *do*?
+
+**Attitudinal methods** (surveys, interviews, focus groups, card sorting, desirability studies): good for mental models, preferences, vocabulary, and attitudes. Limited by what participants are aware of and willing to report.
+
+**Behavioral methods** (A/B testing, analytics, clickstream, eyetracking, unmoderated task testing): good for measuring actual behavior, task success, and conversion. Limited by inability to explain why behavior occurs.
+
+**The gap between the two is where the most important UX insights live.** Example: survey data shows users say they want more features; behavioral data shows power users only use 3 features. The behavioral data should drive the roadmap, but qualitative follow-up explains which 3 features and why.
+
+**20 methods organized by phase (NN/g framework):**
+- Early / generative: field studies, diary studies, contextual inquiry, interviews, participatory design, concept testing
+- Mid / formative: card sorting, tree testing, moderated usability testing, remote moderated testing
+- Late / summative: benchmarking, unmoderated testing, A/B testing, clickstream analytics, surveys
+
+**Diary studies:** Participants self-record over days or weeks using their own device. Captures naturally occurring behavior that labs can't — how real users encounter your product in their actual context. High cost (participant burden, analysis time). Use when: you need longitudinal behavior data, or when in-lab observation would distort the behavior you're studying.

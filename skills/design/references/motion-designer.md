@@ -406,3 +406,110 @@ When briefing an animator for Lottie files:
 | Export format | Lottie JSON (preferred) or SVG + GSAP |
 
 ---
+
+## Reference-Sourced Insights
+
+### The Purpose Test — 4 Valid Reasons to Animate (From NNGroup / Page Laubheimer)
+
+Every animation must pass the purpose test. Animation in UX is justified only for these four functions:
+
+1. **Feedback** — confirms that an action was recognized by the system (button press, cart add, form submit). Static feedback is often missed due to change blindness; animation overcomes this. Example: shopping cart badge updating without animation is frequently missed by users who then add the same item twice.
+2. **State change communication** — signals a mode transition (edit → save, loading → ready, collapsed → expanded). The animation conveys the conceptual metaphor of the transition, not just that it happened.
+3. **Spatial metaphor / navigation** — communicates position within a hierarchy or process. Zoom-in = going deeper into a hierarchy; slide-left = moving forward in a flow; slide-right = going back. Without this, anchor links and accordions disorient users who mistake them for page navigations.
+4. **Signifier** — teaches the user how to interact. A card that slides up from the bottom signals that it can be dismissed by pulling down. A brief bounce on a list item signals that swiping reveals options.
+
+**Not valid**: Delight-only animation, time-filling animation during transitions, attention-hijacking motion. These degrade UX and frustrate users — especially with repeated exposure.
+
+### The Attention Hijacking Problem (From NNGroup)
+
+Human peripheral vision is optimized by evolution to detect motion as potential danger. This means:
+- Any moving element — even at the edge of the screen — involuntarily pulls user attention
+- If the motion is not relevant to the current task, it actively degrades experience
+- This is why parallax backgrounds, ambient pulses, and auto-playing decorative animations measure negatively in usability testing
+- **The dark pattern form**: Using motion to trigger loss aversion (flashing countdown timer) is exploiting a cognitive bias, not providing UX value
+
+**Rule**: If an animation would distract a user from reading, it should not exist during a reading task. Use `IntersectionObserver` or scroll-driven triggers to ensure decorative animation only plays when the element has the user's attention.
+
+### Duration Rules by Platform (From UX Collective / Taras Skytskyi + Material Design)
+
+The existing duration table is solid. These are the platform-specific multipliers from research:
+- **Mobile (iOS/Android)**: 200–300ms for standard UI transitions
+- **Tablet**: +30% vs. mobile = 400–450ms (larger screen means longer distances traveled)
+- **Wearables**: -30% vs. mobile = 150–200ms (smaller screen, shorter distances)
+- **Web (browser transitions)**: 2× shorter than mobile = 150–200ms for transitions (users expect near-instant page interactions)
+- **Decorative/attention animations on web**: Exception — can be longer, as they are not functional
+
+**Object-size rule**: Duration scales with both distance AND object size. Smaller objects with small changes should move faster. Among objects of the same size traveling different distances, the one traveling the shorter path stops first.
+
+### Asymmetric Easing: Acceleration Shorter Than Deceleration (From UX Collective + Material Design)
+
+The standard `ease-in-out` curve should be asymmetric in practice — the deceleration phase should be longer than the acceleration phase. Why: users pay more attention to the end state (where the object settles) than the beginning. A longer deceleration phase emphasizes the final position and makes the state change more legible.
+
+- **Symmetric ease-in-out**: Equal time accelerating and decelerating — looks mechanical
+- **Asymmetric ease-in-out**: Short acceleration, long deceleration — emphasizes the endpoint, feels natural
+
+Material Design's recommended standard curve reflects this: `cubic-bezier(0.4, 0, 0.2, 1)` — note the asymmetry (0.4 start vs. 0.2 end control point).
+
+**Applied rule**: For elements repositioning on screen, always use asymmetric ease-in-out. The deceleration should be ~60–70% of total duration; acceleration ~30–40%.
+
+### Choreography: Two Types of Stagger (From UX Collective)
+
+The existing stagger reference covers equal-step timing. Two distinct choreography patterns:
+
+**Equal interaction** (grid/list): All items follow one common rule, creating a directional flow. Cards in a vertical list stagger top-to-bottom. Cards in a grid stagger diagonally (not row-by-row, which creates a zigzag). The diagonal rule for grids: reveal in diagonal reading-order batches, not row-by-row.
+
+**Subordinate interaction**: One central "hero" element animates first; all supporting elements are subordinate to it. The hero finishes its animation; everything else follows. This focuses user attention and creates a clear visual hierarchy. Rule: animate as few objects as possible simultaneously; the central object gets full attention.
+
+**Physical collision rule**: When objects move near each other, they cannot pass through each other. They must either slow to let the other pass, accelerate out of the way, or lift to a different z-plane. This "physical world" constraint makes UI motion feel grounded.
+
+### Arc Motion for Disproportional Resizing (From UX Collective / Material Design)
+
+When an element changes size disproportionally (different rates for width vs. height — e.g., a square card expanding into a wide rectangle), it should travel along an arc path, not a straight line. Straight-line disproportional resizing looks like a mechanical stretch; arc motion matches how physical objects behave.
+
+- **Proportional resize** (maintains aspect ratio): straight-line path is correct
+- **Disproportional resize** (width and height change at different rates): arc path required
+- **Arc direction**: matches the primary scroll axis of the interface
+  - Vertical-scrolling interface → card expands with "Vertical out" (moves right then down)
+  - Horizontal interface → "Horizontal out" (moves down then right)
+
+### Motion as Brand Expression (From Smashing Magazine / Val Head + Material Design)
+
+Motion has brand equity — easing curves communicate personality just as color and type do. Two applications:
+- **Customized transitions**: Parallax effects, emphasized easing, and directional choices signal brand character. A fast-luxury brand uses sharp, decisive transitions; a playful consumer brand uses bouncy spring physics.
+- **Animated icons/logos**: Subtle icon animation adds polish and reinforces icon meaning (a trash icon that "drops in" before disappearing, a microphone icon that "vibrates" when active). Reserve animated logos for loading screens and onboarding — not UI chrome.
+
+**From Val Head (Smashing Magazine)**: "Create your own customized curves and don't just use the CSS defaults. This is the most effective way to build consistent motion association for your brand and build 'motion equity.'" The exact cubic-bezier values of your three core curves are your brand's motion signature.
+
+### Motion Principles as Decision Filters (From Smashing Magazine / Val Head)
+
+A design system's motion section must include principles (not just implementation values) to make animation discussions tractable for non-animators. Without principles, motion discussions devolve to "do you like it?" subjective debates.
+
+Motion principle format: short statement + description + illustration. Examples from real systems:
+- **Microsoft Fluent**: Physical, Functional, Continuous, Contextual
+- **Adobe Spectrum**: Purposeful, Intuitive, Seamless
+- **Material Design**: Informative, Focused, Expressive
+
+**Rule**: Each principle should be specific enough to veto a proposed animation. "Functional" can veto a decorative background pulse. "Purposeful" can veto a logo animation on every page load. If a principle can't veto anything, it's not useful.
+
+### Motion Design System: Three Levels of Animation Spec (From Smashing Magazine / Val Head)
+
+A motion section needs at minimum:
+1. **Motion principles** (3–5 high-level statements about why and how the brand uses motion)
+2. **Duration tokens** (named scale, device-adjusted if needed, provided as design tokens)
+3. **Easing tokens** (3 custom curves minimum: ease-in for exits, ease-out for entrances, ease-in-out for repositioning)
+
+Optional (for brands where motion plays a larger role):
+4. **Named effects library** — keep it small; more named effects = more maintenance. Lightning Design System's approach of composable micro-effects is preferable to a large library of full animations
+5. **Component-level animation specs** — bake motion directly into component documentation rather than maintaining a separate library
+
+**The iteration rule**: Ship motion guidelines in stages. Version 1 with just duration + easing prevents chaos and provides immediate team value. Talk to the team after shipping v1 to identify which pain points remain — those become v2.
+
+### No Motion Blur in UI Animation (From UX Collective)
+
+Do not apply motion blur to UI animation. Reasons:
+- Difficult to reproduce faithfully on modern mobile devices
+- Not used in native UI animation at all (iOS, Android, web)
+- Makes interfaces feel like video game cutscenes, not functional software
+- Blurs text and UI elements during motion, reducing readability
+
+Reserve motion blur for video content and After Effects compositions, not CSS/JS UI animation.

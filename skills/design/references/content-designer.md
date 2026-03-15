@@ -386,3 +386,116 @@ How to make required legal text readable without making it inaccurate:
 - "We use this to..." immediately after a sensitive field increases completion rates
 
 ---
+
+## Reference-Sourced Insights
+
+### Error Message Visibility Rules (From NNGroup / Tim Neusesser & Evan Sunwall)
+
+Four visibility requirements that most interfaces fail on at least one:
+
+1. **Display close to the source** — error indicator must be adjacent to the problematic field, not just at the top of the form. Cognitive load increases when users must read an error at the top and then scan down to find the field it refers to.
+
+2. **Use redundant indicators** — do not rely on color alone. Red text + border highlight + icon = three independent signals. This is required for the ~350 million people worldwide with color-vision deficiency. Never use color or animation as the sole error indicator.
+
+3. **Design errors by impact severity** — not all errors look the same:
+   - Minor/informational: inline labels, toast notifications (non-blocking)
+   - Blocking errors: modal dialogs or inline validation that prevents progress
+   - Catastrophic (server down, data at risk): modal + apology + optional novelty element
+
+4. **Avoid premature error display** — do NOT show an error when a user moves focus away from an empty required field before submitting. Validating on blur for an empty field is "grading a test before the student has answered." Exception: real-time validation is appropriate for error-prone fields where the first-attempt failure rate is high (e.g., complex password requirements).
+
+### Error Efficiency: Protect the User's Work (From NNGroup)
+
+Beyond explaining errors, the best error messages reduce recovery effort:
+
+- **Preserve input**: Keep the user's original text in the field even if it's invalid — let them edit it, not restart from scratch. An empty field after a failed submission is a hostile pattern.
+- **Offer guesses**: When possible, suggest the correct value directly. "City and ZIP don't match — did you mean [Springfield, IL]?" with a clickable fix is far better than just stating the mismatch.
+- **Safeguard against known mistakes**: Detect predictable errors before submission (e.g., "Your message mentions an attachment but none was added"). This pattern now exists in email clients, calendar apps, and form tools — implement it when you can predict the mistake.
+- **Link to more detail, don't embed it**: For complex errors requiring explanation, put a concise error message in the UI and hyperlink to a help article. Don't over-explain inline.
+
+### The "Novelty Exception" for Catastrophic Errors (From NNGroup)
+
+For errors so severe there is no recovery path (service outage, server down), humor or novelty is an exception to the "don't be clever" rule — but ONLY when:
+- User data is NOT at risk
+- The context is low-stakes
+- The novelty is genuinely surprising, not a recycled joke
+
+Rationale: The peak-end rule and negativity bias mean severe errors are disproportionately memorable. A whimsical illustration (like Twitter's "Fail Whale") can shift the emotional memory from "the product failed me" to "I remember when the product had a funny thing when it broke." This is not a license to be cute — it's a narrow exception for catastrophic, unavoidable, temporary outages.
+
+**Anti-pattern**: Applying this to routine validation errors. "Oops! Looks like that email isn't quite right! 😅" on a login form is condescending. Reserve novelty for true system failures.
+
+### Error Tone: Words That Blame vs. Words That Help (From NNGroup)
+
+Specific vocabulary to eliminate from error messages:
+- **"Invalid"** — implies user did something wrong. Replace with a specific description of what the input needs to be.
+- **"Illegal"** — wrong register entirely; this is UI, not criminal law.
+- **"Incorrect"** — shifts blame to user. Replace with what the system expects.
+- **"You entered..."** constructions — reframes the error as the user's fault rather than the system's inability to accept that input.
+
+The correct frame: "The system requires X in this format." Not "You did Y wrong."
+
+### Inline Validation Timing — The Right Trigger (From NNGroup)
+
+The evidence-based rule for when to validate:
+- **Validate on blur** (when the user leaves the field) for most fields
+- **Do NOT validate on keystroke** for format errors (e.g., "invalid email" appearing as the user types the first letter of their email address)
+- **Do validate on keystroke** for fields where immediate character-by-character feedback is the feature — password strength meters, character counters, real-time search
+- **Do NOT show errors on empty required fields** until the user has attempted to submit the form
+
+### Notification Copy — Platform-Specific Rules (Synthesized from Content Designer principles)
+
+**Email subject lines** (40-character limit for mobile):
+- Specificity rule: "Your invoice for $240 is ready" over "Something important!"
+- Front-load the most important word: "Invoice ready: $240" — not "We have some news about your account"
+- Preview text must add new information, not repeat the subject line
+
+**Push notifications** (60-character limit for full lock-screen display):
+- Lead with value, not brand name: "Your file is ready to download" — not "Naksha: File ready"
+- Include enough context to act without opening: "Sarah commented: 'Love the new hero section'"
+- Action verb + object structure: under 60 characters
+
+**In-app notifications**:
+- Persistent (requires action) vs. dismissible (informational) — only make notifications persistent when the user must take an action
+- Badge counts: only for unread/actionable items; not for total historical notifications
+- Timing: show at the moment the user can act, not at the moment the event occurs
+
+### Onboarding Copy Anti-Patterns (From Content Designer principles)
+
+The most common onboarding copy failures and their fixes:
+
+| Anti-pattern | Fix |
+|---|---|
+| "Welcome! We're so glad you're here!" | Orient immediately: "Here's what you can do with [Product]." |
+| "Step 1 of 5" with no context | State the outcome: "Set up your workspace (1 of 5)" |
+| "You're almost done!" (pressure) | "Nearly there" (progress without urgency) |
+| "AMAZING! You did it! 🎉🎉🎉" | Celebrate briefly + set up the next action |
+| "Skip" on optional steps | "Set this up later" — specific, not dismissive |
+
+The welcome screen should orient (what is this?) and tell what's next — not celebrate the user for signing up.
+
+### Consent and Privacy Copy — Just-In-Time Principle (From Content Designer principles)
+
+Standard practice: show privacy information at the point of data collection, not only in a policy page buried in the footer:
+- After a sensitive field (phone number, location), immediately show: "We use this to..."
+- Consent language should be specific: "you agree we can store your design files and billing information to provide the service" — not "you agree to our Terms"
+- Material changes to ToS should surface directly in the UI, not only in an email update
+
+**The plain-language summary pattern**: Show both a plain English summary AND the legal text (collapsed). This respects both user comprehension and legal requirements without forcing a tradeoff.
+
+### Number Formatting — Locale and Context Rules
+
+The existing number format table is correct but incomplete. Additional rules:
+- **Percentages on dashboards**: Use 0 decimal places for headline metrics (12%), 1 decimal for precision comparisons (12.3%) — never 2 decimals for percentages shown to non-analysts
+- **Currency in international products**: Don't abbreviate currency symbols across locales. $1.2M works in English; international contexts need spelled-out units or full numbers
+- **Negative numbers**: Use a minus sign (−), not a hyphen (-). The en-dash is better than the hyphen in financial contexts
+- **Relative time expiry**: Switch from relative ("2 hours ago") to absolute ("Mar 9, 2:34 PM") when the age of information matters for decision-making (security events, transaction logs, support tickets)
+
+### The Scannability Hierarchy for Long UI Text (From Content Designer principles + Google Style Guide)
+
+For UI text longer than 2 sentences, apply this hierarchy:
+1. **Headline** that states the conclusion, not the setup
+2. **1–2 sentence summary** that gives enough context to decide whether to read further
+3. **Bulleted details** (never prose paragraphs in UI)
+4. **Progressive disclosure** link for the full explanation
+
+The Google developer documentation principle applies to UI copy too: "Prioritize clarity and consistency for your specific domain and readers, even if it means deviating from a general guideline." The format serves the reader's task — not the writer's completeness instinct.

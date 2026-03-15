@@ -300,3 +300,53 @@ Appendix slides are never shown unless a question arises. They give the presente
 **Font embedding**: Always embed fonts in .pptx exports. Missing fonts cause layout reflow on recipient machines.
 
 ---
+
+## Reference-Sourced Insights
+
+### Pitch Deck Purpose: Securing the Next Meeting, Not Closing the Deal (From Slidebean)
+
+- A pitch deck is not a closing document — its only job is to generate enough interest to secure a second meeting or investment conversation. Design decisions should optimize for clarity and intrigue, not completeness. Investors don't make investment decisions from a deck; they make meeting decisions from a deck.
+- The most effective pitch decks are short and visually compelling. Fewer slides holds attention better than more. Investors receive hundreds of decks; visual appeal signals that the founder understands design as a proxy for execution quality.
+- Pitch decks that succeeded (Airbnb, Facebook, Buffer) shared one pattern: they led with data and real numbers — not aspirational projections. Airbnb used existing user data to anchor credibility before making any claims. Design rule: when you have real traction numbers, make them the visual hero of the slide.
+
+### The Problem Slide is the Most Important Design Challenge (From Slidebean)
+
+- The problem slide determines whether the investor keeps reading. Use a relatable story to frame the problem — not market statistics. A problem that feels viscerally real (an anecdote, a quote from a frustrated customer) creates emotional investment before intellectual evaluation.
+- Design implication: problem slides should lead with a narrative element (a quote, a scenario paragraph, or a one-line customer pain statement) before any supporting data. The visual hierarchy should prioritize the human story over the market size numbers.
+- Never discuss competitive solutions on the problem slide — that belongs on the competition slide. One idea per slide is not just a design rule; it's a cognitive load rule. Mixing problem definition and competitive context on the same slide diffuses the investor's focus.
+
+### Slide-by-Slide Structural Rules for Investor Decks (From Slidebean)
+
+The canonical pitch deck slide order and design intent per slide:
+
+| Slide | Design Priority | Key Rule |
+|-------|----------------|----------|
+| Cover | Captivate + signal brand quality | Company name, tagline, logo — nothing else |
+| Vision / Value Prop | One-sentence clarity | Single sentence; large type; no bullets |
+| Problem | Emotional resonance | Story first, then data; max 40-50 words |
+| Market | Credibility + scale | Total addressable market with source; one chart |
+| Solution | Product clarity | How it works, not why it's great |
+| Product | Show, don't tell | Screenshot or demo still > text descriptions |
+| Go-to-Market | Strategic confidence | 2-3 primary channels; not a laundry list |
+| Traction | Proof of momentum | Key milestones with dates; growth curve chart |
+| Team | Relevant credibility | Only past successes relevant to *this* problem |
+| Competition | Positioning clarity | Matrix showing differentiation, not superiority |
+| Financials | 3-year projection | Revenue, expenses, profit — charts only, no spreadsheets |
+| Ask | Specificity signals preparation | Exact amount + breakdown of use of funds |
+
+- If you don't have a full team yet, list the critical roles that need to be filled and explain *why* each role is essential to the company's growth. Acknowledging gaps is more credible than hiding them.
+- Financial slides: show only total revenue, total customers, total expenses, and total profit in a deck. Detailed spreadsheets belong in a separate data room document, not a presentation.
+
+### Pitch Deck Anti-Patterns That Kill Credibility (From Slidebean)
+
+- **Too much text**: Slides with paragraphs signal that the presenter doesn't trust their verbal delivery — investors should be listening to you, not reading your slides. Any slide where a designer needs to reduce font size to fit content is a content problem, not a design problem. Push back.
+- **Small fonts**: The minimum readable font size in a presentation at normal viewing distance is 24px for body text, 32px+ for key statements. If the message requires a font below 24px, the slide has too many ideas.
+- **Jargon and abbreviations**: Technical language excludes non-specialist investors and signals poor communication skills. Audience adaptation is a design skill: simplify the vocabulary, not the idea.
+- **Too many slides**: The "sweet spot" for investor pitch decks is 10-15 slides. More than 20 slides signals an inability to prioritize. Every slide that can be cut should be cut.
+- **Competition slides that claim "no competition"**: This is the most common credibility-destroying error. Every product has alternatives — direct competitors, indirect substitutes, or the status quo (doing nothing). A matrix showing differentiation from realistic alternatives is more persuasive than claiming the space is empty.
+
+### Proven Pitch Deck Structural Models (From Slidebean)
+
+- **Sequoia Capital's framework** is the most widely validated investor-deck structure: purpose/problem, problem (deeper), solution, why now (market timing), market size, competition, product, business model, team, financials. Use it as the default unless there's a specific reason to deviate.
+- **Buffer's deck** (one of the most cited examples) led with data visualization — showing user growth and engagement metrics early established credibility before any narrative claims. For products with strong quantitative traction, front-load the numbers.
+- **Uber's deck** succeeded despite unimpressive design because the solution resonated so clearly with a universally understood problem. Design lesson: no amount of visual polish compensates for a weak solution framing. The clearest articulation of the problem-solution fit always wins over beautiful but vague decks.

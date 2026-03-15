@@ -425,3 +425,141 @@ for (const s of oldStyles) {
 ### Detailed Reference
 
 See `figma-creation.md` for the complete API patterns, auto-layout configuration, and common pitfalls.
+
+---
+
+## Reference-Sourced Insights
+
+### Atomic Design Hierarchy (From Brad Frost's Atomic Design)
+
+The 5-level methodology is the canonical framework for structuring component systems — not just a metaphor, but a workflow:
+
+- **Atoms**: Individual HTML elements (labels, inputs, buttons) + abstract tokens (color, type, animation). Too abstract to use alone but essential as a reference library.
+- **Molecules**: Small combinations of atoms that "do one thing and do it well" — a form label + input + button together = a search form. Rule: molecules should be relatively simple and highly reusable.
+- **Organisms**: Distinct interface sections composed of molecules and/or atoms — a masthead with logo, nav, search, and social links. This is where layout becomes concrete enough to show clients.
+- **Templates**: Groups of organisms forming page-level layouts — show structure without real content. Start as HTML wireframes, increase fidelity iteratively.
+- **Pages**: Specific template instances with real content. The critical test layer: real content reveals whether the system holds up under actual conditions (long headlines, sparse data, etc.).
+
+**Practical rule**: When you catch yourself designing at the page level first, stop. Back up to the organism level. Design the system bottom-up, not top-down.
+
+### System Classification (From UX Collective / Alla Kholmatova)
+
+Before building, classify your system on three axes — this determines scope and governance:
+
+| Axis | Options | When to go strict/modular/centralized |
+|------|---------|--------------------------------------|
+| **Strictness** | Strict ↔ Loose | Strict: multiple teams, consistent product; Loose: single team, strong art direction |
+| **Structure** | Modular ↔ Integrated | Modular: scales across products, multi-tech (e-commerce, gov); Integrated: one context, changing art direction (portfolios, campaigns) |
+| **Governance** | Centralized ↔ Distributed | Centralized: one DS team facilitates all; Distributed: each team contributes, needs strong overall vision |
+
+**Warning**: A system too strict repels adoption. A system too loose isn't a system. Find the minimum necessary constraint.
+
+### Design System vs. Style Guide vs. Pattern Library (From UX Collective)
+
+These are not synonyms. Conflating them causes scope confusion:
+- **Style Guide**: Visual styles only (colors, fonts, illustrations, usage rules)
+- **Pattern Library**: Functional components with behavior specifications
+- **Design System**: Both of the above + design principles + shared values + team workflow integration = the full product
+
+A design system "is not a deliverable, but a set of deliverables" that constantly evolves.
+
+### Design Principles as Decision Tools (From UX Collective / Medium example)
+
+Design principles are not decoration — they are decision filters. Test every component and pattern against them. Medium's principle "Direction over choice" led directly to a simplified text editor with no color/font options. Concrete application:
+- Write 3–5 principles that are specific enough to rule things out
+- Each principle should make at least one thing obviously wrong
+- Vague principles ("be simple", "be user-friendly") are useless — if they can't veto a design decision, rewrite them
+
+### Token Multi-Format Export Strategy (From Nord Design System)
+
+A production-ready token system exports to multiple formats simultaneously — single source of truth:
+
+| Format | Use |
+|--------|-----|
+| CSS Custom Properties | Web / default |
+| Sass variables + map | Component styling, theming |
+| JavaScript ES module | Design tool integration, programmatic use |
+| JSON / Raw JSON | Cross-tool sharing, Figma Tokens plugin |
+| iOS JSON | Native iOS development |
+| Android XML | Native Android development |
+
+**Naming convention in code**: CSS uses `--n-color-accent`; JS uses `nColorAccent` (camelCase); Sass uses `$n-color-accent` (kebab); JSON uses `n_color_accent` (snake_case). Your token system must generate all four from one source.
+
+### Z-Index Scale (From Nord Design System)
+
+Define z-index as tokens — never use arbitrary values. Nord's production scale:
+
+| Token | Value | Layer |
+|-------|-------|-------|
+| `deep` | -999999 | Behind everything |
+| `default` | 1 | Normal stacking |
+| `masked` | 100 | Elements behind a mask |
+| `mask` | 200 | Masking elements |
+| `sticky` | 300 | Sticky headers/footers |
+| `navigation` | 400 | Nav drawers, sidebars |
+| `top-bar` | 500 | App top bar |
+| `overlay` | 600 | Modal/popup backdrops |
+| `spinner` | 700 | Loading spinners over overlay |
+| `popout` | 800 | Dropdowns, tooltips |
+| `toast` | 900 | Toast notifications |
+| `modal` | 1000 | Modals (must sit above everything but allow popouts to remain visible) |
+
+**Rule**: Toast (900) sits below modal (1000) so that modals can still show toast messages inside them.
+
+### Status Color System — "Strong" vs "Weak" Variants (From Nord Design System)
+
+For each semantic status, define both a strong (foreground/icon) and a weak (background/surface) variant. This prevents the common mistake of using saturated status colors as backgrounds, which fails contrast:
+
+```
+danger:          #d24023  (strong — text, icons, borders on light)
+danger-weak:     #fff0ee  (background surfaces, tinted areas)
+success:         #1d8633  (strong)
+success-weak:    #ebf9eb  (background)
+warning:         #f6cd5a  (strong — NOTE: low contrast on white, use for icons only)
+warning-weak:    #fffae1  (background)
+```
+
+**Critical rule**: Warning yellow (#f6cd5a) fails WCAG on white backgrounds — use it only for icons and decorative elements, never for warning text. Use a darker warning text token (`#946900` or similar) for text on white.
+
+### Component Documentation vs. Pattern Documentation (From Nathan Curtis / UX Collective)
+
+A component and a pattern are different artifacts — both must exist:
+- **Component spec**: Technical + functional documentation — what it is, how it behaves, all states, API/props
+- **Pattern spec**: Guidance on how to use components together — when to use this layout, which combination, in what order
+
+Do not merge them. A button component spec covers states and variants. A "confirmation dialog pattern" spec covers how to compose a button, icon, and copy in a destructive action flow.
+
+### Design System as Product (From UX Collective)
+
+Treat the design system itself as a product with its own backlog and users (designers, developers, PMs). Practical implications:
+- Run a component prioritization workshop before building — don't start with what's easy, start with what's most needed
+- Measure adoption, not just completeness. A system used by 20% of the team is more valuable than a comprehensive system used by 5%
+- The more integrated the system is with designer/developer workflows (plugins, IDE extensions, token sync), the more effective it is
+- Ship version 1 with gaps; iterate based on what pain points remain unsolved
+
+### Font Feature Tokens (From Nord Design System)
+
+Typography tokens should include OpenType feature settings, not just size/weight/family. Nord defines:
+
+```css
+/* Default body text — tabular numbers, contextual alternates, slashed zero */
+--font-features: 'kern' 1, 'tnum' 1, 'calt' 1, 'case' 1, 'cv05' 1, 'zero' 1, 'ss03' 1;
+
+/* Display headings — reduced (no tabular numbers, no slashed zero for visual flow) */
+--font-features-reduced: 'kern' 1, 'tnum' 0, 'calt' 1, 'case' 1, 'cv05' 1, 'zero' 0, 'ss03' 1;
+```
+
+For dashboards and data UIs: always enable `tnum` (tabular numbers) so numeric columns align correctly. For display headings: disable `tnum` for better optical rhythm.
+
+### Motion as a Token Category (From Smashing Magazine / Val Head)
+
+Animation must be tokenized as part of the design system — not left to individual discretion. The minimum viable motion token set:
+- **Duration tokens**: Named values with semantic purpose (not just `200ms`, but `duration-functional` / `duration-expressive`)
+- **Easing tokens**: 3 custom cubic-bezier curves (not CSS defaults): ease-in (exits), ease-out (entrances), ease-in-out (repositioning)
+- **Named effects library**: A small, maintainable set — more named effects = more maintenance burden. Prefer baking motion into component specs rather than a standalone effects library
+
+**Key principle from Val Head**: "Don't just follow another brand's motion guidelines. You wouldn't use another brand's colors or typeface — don't just adopt Material Design motion wholesale either." Customize easing curves to match brand personality. Exact curves are where brand motion equity lives.
+
+### Box Shadow as a Multi-Layer Token (From Nord Design System)
+
+Production-grade shadow tokens combine drop shadow, border simulation, and ambient glow in a single composite value. Nord's card shadow: `0 0 0 1px var(--n-color-border), 0 1px 5px rgba(12,12,12,0.05), 0 0 40px rgba(12,12,12,0.015)` achieves: (1) crisp 1px border via box-shadow inset, (2) lift shadow, (3) ambient glow. This three-layer approach eliminates the visual "floating rectangle" problem that single-shadow cards have.

@@ -207,3 +207,54 @@ When they scroll: [Morning commute, lunch, evening wind-down]
 - **To Growth/Analytics Specialist**: Campaign KPI targets (they define the metrics), conversion funnel stages, tracking requirements, budget allocation for paid
 - **To Product Designer**: User journey from social touchpoint to product, landing page requirements, conversion flow expectations
 - **To UX Researcher**: Audience assumptions to validate, engagement hypotheses, content preference signals to test
+
+---
+
+## Reference-Sourced Insights
+
+### Audience Research Depth (From Buffer Strategy)
+
+- Audience research is the foundation of strategy, not a one-time task. Gather insights from four ongoing sources: DM interactions, direct conversations with your audience, feedback from buyers/customers, and studying which content generates meaningful (not just vanity) engagement.
+- Monitor comments under competitors' content — not just your own. Patterns in competitor comment sections reveal what your shared audience is asking for and not getting.
+- Practical audience research tools: SparkToro (audience intelligence), native platform analytics, community Discord/Reddit monitoring, 1:1 customer calls with gift card incentives.
+- Audience research never finishes. Build a monthly "audience pulse" review into the strategy cycle: what's changed in their pain points, preferred formats, or platform behavior?
+
+### Goals and KPI Discipline (From Buffer Strategy)
+
+- Maximum 3 goals for solo creators/small teams. More than 3 goals = no real focus. Each goal must be converted into a SMART KPI with a specific number and deadline.
+- SMART goal structure: "Increase [metric] by [%] in [timeframe]." Example: "Increase website traffic by 20% in 3 months" — not "increase website traffic."
+- Success metrics depend on objective, not platform. If objective is growth → view-through rate and retention are primary. If objective is community → interactions and replies are primary. Don't borrow metrics from a different objective.
+- Creators: track how content translates to sales and new audience reach (% of non-followers reached), not just follower count.
+
+### Platform Selection Decision Framework (From Buffer Strategy)
+
+- Platform choice = intersection of: (1) where your audience spends time, (2) where you genuinely enjoy consuming and creating content. Both matter equally. If you don't enjoy a platform, you will quit — especially during low-engagement periods.
+- "Once you ace a single social network, you develop the social media muscle and catching up with a new platform becomes easier." Start with one, add more only after mastering the first.
+- Posting frequency benchmarks (From Buffer data): Facebook 1–2/day, Instagram Stories 2/day, Instagram feed (reels/carousels) 1–2/day, TikTok 1–4/day, X 3–4/day, LinkedIn 1/day, YouTube 1/week, YouTube Shorts 1–3/week.
+
+### Content Pillar Discipline (From Buffer Strategy)
+
+- Keep 3–5 content pillars maximum. More than 5 = strategy sprawl; the audience can't understand what you're known for.
+- Content pillars define what you won't post, not just what you will. Use them to quickly discard off-brand ideas.
+- Leave explicit wiggle room in the calendar (10–20% of slots) for trend participation and experiments. A rigid calendar kills cultural relevance.
+- The best content ideas come from your audience's comments and DMs — mine them weekly. Example: Graza (olive oil brand) turned a product defect complaint into a viral Reel from a 5-minute shoot; 1M+ views.
+
+### Audience-to-Platform Matrix Refinement (From Buffer Strategy)
+
+- Instagram Reels and Stories are suitable for polished short-form but also increasingly for authentic, off-the-cuff content as the lines blur with TikTok culture.
+- Facebook: best for long-form storytelling video that benefits from narrative structure; not just "older users" — Facebook Groups drive community depth unavailable on other platforms.
+- LinkedIn: reserved for thought leadership and behind-the-scenes; B2B decision-makers specifically respond to personal story + professional insight combination.
+- YouTube: still the dominant platform for Gen Alpha (even over TikTok) — treat long-form YouTube as a search/discovery asset, not just a social channel.
+
+### Strategy Review Cadence (From Buffer Strategy)
+
+- "Most strategies need at least 3 months to show real impact, so patience is key." Do not pivot strategy before 3 months of consistent execution.
+- When to pivot: downward trend in performance metrics + audience behavior shift + major platform algorithm change. All three, not just one.
+- Weekly: review which posts performed best and worst — document why in a running log.
+- Monthly: revisit content pillar performance, adjust posting frequency per platform based on data.
+- Quarterly: full strategy review against original SMART goals.
+
+### Content Batching for Execution (From Buffer Strategy)
+
+- Content batching = creating multiple pieces of content in one session. For video-heavy strategies, batch filming days (with outfit changes) rather than filming daily. Reserve separate days for editing, community engagement, and idea generation.
+- Systematize your workflow: list every step to create a post → divide days by type of work → enter deep work mode per day. Motivation is not a reliable production system; batching is.

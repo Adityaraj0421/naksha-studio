@@ -245,3 +245,46 @@ Free templates → link below
 - **To Growth/Analytics Specialist**: Copy variants labeled for A/B tracking, UTM parameters for link CTAs, engagement hypotheses to test
 - **To Content Designer**: Social voice documentation for brand guide, terminology decisions, tone adaptation notes per platform
 - **To UX Researcher**: Engagement assumptions, audience response hypotheses, caption A/B test frameworks
+
+---
+
+## Reference-Sourced Insights
+
+### Hook Copy from Real Audience Language (From Buffer Strategy)
+
+- The highest-converting hook language comes directly from your audience's comments, DMs, and community posts — not from your internal messaging. Mine these weekly; exact user phrasing ("I always struggle with X" → "If you always struggle with X, read this") outperforms polished marketing language.
+- Social listening = reading comments under competitors' content. If a competitor's post generates hundreds of comments around the same frustration, that frustration is your hook.
+
+### Caption Strategy Tied to Funnel Stage (From Sprout Social / Vidyard)
+
+- Different funnel stages require different copy structures, not just different CTAs:
+  - **Awareness copy**: Hook with bold problem statement → brief context → soft "follow for more" CTA. Do not pitch.
+  - **Consideration copy**: How-to framing → specific outcome → product-adjacent insight → "save this" or "try it" CTA.
+  - **Decision copy**: Lead with customer result → their before-state → what changed → quantified outcome → hard CTA ("start your trial").
+- Testimonial captions: always lead with the customer's result, not the product feature. "From 200 to 20K followers in 6 months" beats "Our tool helped a customer grow."
+
+### LinkedIn Caption Mechanics (From Buffer Strategy)
+
+- LinkedIn is the only platform where personal story + professional insight is the dominant copy pattern. Combine: a vulnerable or surprising personal observation + a usable professional framework = highest comment volume.
+- "Your success metrics will depend on what your objectives are" (Jade Beason, creator consultant). Write LinkedIn captions that explicitly name what success looks like for the reader — makes them self-identify with the post.
+
+### Video Caption Rules for Short-Form (From Buffer / Sprout Social)
+
+- TikTok and Reels captions should mirror the spoken content tone, not repeat it. If the video says "Here's step one," the caption says "3 steps I wish I knew earlier — full breakdown in the comments." Captions add context or intrigue; they don't narrate what's already visible.
+- For short-form video posts: keep caption under 150 characters on TikTok and front-load the keyword/topic in the first 5 words for SEO discoverability (TikTok search is now a primary discovery channel).
+- Include 1 trending keyword in TikTok captions for algorithm boost — this is distinct from hashtags and should appear as natural language.
+
+### Platform Voice Precision (From Sprout Social)
+
+- Sprout Social's 2026 Content Strategy Report: consumers increasingly expect human-generated, authentic storytelling — not polished brand copy. On TikTok/Reels especially, copy that sounds like a real person (incomplete sentences, em-dashes, direct address) outperforms grammatically perfect brand copy.
+- LinkedIn thought leadership copy pattern that generates long comments: ask a question that has no clear "right" answer — invites practitioners to disagree or add nuance. Example: "Is X still the best approach, or has Y become the standard?" — not "What do you think about X?" (too generic).
+
+### Episodic and Series Copy Conventions (From Sprout Social)
+
+- Episodic branded content (like Bilt's "Roomies" series) requires series-level copy conventions: consistent episode naming, recurring hashtag, and a stable "watch more" CTA format. Write a series copy template that every episode follows — it builds anticipation and searchability.
+- Series copy structure per episode: "[Series name] EP [#]: [episode-specific hook]" + "[what they'll see/learn]" + "[series CTA: follow to catch every episode]."
+
+### Content Batching and Copy Systems (From Buffer Strategy)
+
+- Write captions in batches — the same session as content creation. "Divide your days into themes": one day = filming/visual creation, another = caption writing for the batch.
+- Keep a running "copy swipe file" of your own best-performing hooks and CTAs, organized by format type. When a hook pattern beats benchmarks, document it and reuse the structure (not the exact words) in future captions.

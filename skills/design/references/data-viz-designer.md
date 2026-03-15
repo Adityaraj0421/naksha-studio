@@ -394,3 +394,88 @@ At mobile width (<480px), charts need adaptation — most desktop charts don't w
 - "New items available — click to reload" pattern: better than auto-scroll for most dashboards
 
 ---
+
+## Reference-Sourced Insights
+
+### Categorical Color Theory: Don't Dance All Over the Color Wheel (From Datawrapper)
+
+The most common mistake in data color selection is using maximally distinct hues from across the full color wheel. This looks unprofessional and makes charts harder to read.
+
+**The professional approach:**
+- Use complementary colors (opposite on the color wheel) and their neighbors — not a tetradic/square harmony
+- Avoid "square" or "tetradic" 4-color harmonies — they produce too many competing hues
+- Stay within a small arc of the color wheel and differentiate using saturation and lightness variations within that arc
+- When in doubt: use **warm colors (orange/red/yellow) + blue** as your categorical palette — this is the combination used by The Economist, South China Morning Post, NYT graphics, and FiveThirtyEight because it's versatile, professional, and colorblind-accessible
+
+**Blue is the most flexible data color:** Dark blue, light blue, saturated blue, muted blue — all combinations look professional and calming. Blue pairs naturally with orange/red (colorblind-safe complement), which is why it dominates serious data journalism.
+
+**Green is the hardest hue to use well:** Forest green (90°–150° on the color wheel) is inherently very dark, and lightening it produces neon. To use green well, you must both lighten AND desaturate significantly. If green appears in a palette, it should lean toward yellow-green or blue-green, not pure forest green.
+
+---
+
+### Saturation and Lightness Adjustments (From Datawrapper)
+
+When a color combination doesn't work, **don't add another hue — adjust saturation and lightness first.**
+
+**Common corrections:**
+- Two similar-hue colors (e.g., light orange and dark orange) — desaturate the lighter one to create more perceived separation
+- Palette looks "too bright" — lower brightness/value across all colors; pure (100% saturation, 100% brightness) colors look digital and untrustworthy in data viz
+- Colors don't read as distinct — increase lightness difference between adjacent palette entries rather than changing the hue
+
+**Avoid pure colors:** `rgb(255,0,0)` pure red, `rgb(0,0,255)` pure blue — these are too saturated for data visualization. They compete with everything else on the page and look like warning indicators even when they're not.
+
+**Avoid maximum-saturation colors:** Even if the hue is correct, colors at 90–100% saturation in HSB are visually aggressive and hard to read against both light and dark backgrounds.
+
+---
+
+### Chart Pitfalls from the Data-to-Viz Decision Tree (From data-to-viz.com)
+
+Additional chart type guidance beyond the standard reference:
+
+**Ridgeline / Joy plot:** Use for comparing distributions of a continuous variable across many groups (5+) where violin plots or box plots become too crowded. Requires that overlapping the distributions is meaningful.
+
+**Connected scatter plot:** Use when you have two numeric variables measured over time and you want to show how the relationship between them evolved — NOT just each variable over time. The FiveThirtyEight "connected scatter" style is a canonical example.
+
+**Lollipop chart:** Preferred over bar chart when you have many categories (15+) and precision reading is important. The dot at the end encodes the value precisely; the stem reduces ink without losing the comparison.
+
+**Streamgraph:** Use for showing how composition of a total changes over time when the total itself is the story. Avoid when comparing individual category values is the goal — stacked area or grouped bar is better for that.
+
+**Waterfall chart:** Underused but powerful for showing cumulative addition/subtraction — perfect for financial statements, funnel drop-off, budget allocation. Each bar starts where the previous one ended.
+
+**What to avoid in charts:**
+- Radar/spider charts for anything except showing multivariate profiles at a single point in time — they're terrible for comparisons across time or between groups
+- Circular bar charts look novel but are significantly harder to read than standard bar charts — the outer bars appear longer than inner bars at the same value due to circumference differences
+
+---
+
+### D3.js Gallery Chart Type Map (From Observable D3 Gallery)
+
+D3 supports 173+ chart types. For production use, the most maintainable patterns are:
+
+**For dashboards (use Chart.js or Recharts, not D3):** Bar, line, area, donut — D3 is overkill and harder to maintain.
+
+**For D3 specifically (unique capabilities):**
+- **Sankey diagrams** — `d3-sankey` plugin; excellent for flow/funnel visualization
+- **Force-directed graphs** — network data with `d3-force`
+- **Chord diagrams** — showing bidirectional relationships between categories
+- **Treemaps, circle packing, sunburst** — hierarchical data with `d3-hierarchy`
+- **Choropleth maps** — geographic data with `d3-geo` + GeoJSON
+- **Horizon charts** — dense time series (dozens of simultaneous series) using color banding
+
+**The beeswarm chart** (D3-specific): Shows individual data point distribution without overlapping — superior to a strip plot for dense datasets. Use when the number of individual points matters, not just the distribution shape.
+
+**Slope chart:** Two points in time + many categories — shows who went up, who went down, and by how much. Much cleaner than a line chart for a simple before/after comparison.
+
+---
+
+### Annotation Patterns from D3 Gallery
+
+D3 annotation best practices (applicable to any charting library):
+
+**Inline labels beat legends:** When you have 2–5 series, label each line/bar directly at the end point. The reader's eye doesn't have to travel to a legend and back. For > 5 series, a legend is unavoidable but position it close to the relevant data.
+
+**Voronoi-based labeling:** For dense scatter plots where labels overlap, use Voronoi regions to position labels in the nearest empty space. D3's `d3-voronoi` enables this; for simpler cases, nudge labels manually with `transform`.
+
+**Color legends as annotation:** When color is used for categories, put the color swatch inside the annotation near the data rather than in a separate legend box. This is the "annotate the chart" approach popularized by the NYT graphics desk.
+
+**Line chart tooltips:** Position tooltips to the right of the cursor when within the left 60% of the chart, and to the left when within the right 40%. This prevents tooltips from clipping at the edge.

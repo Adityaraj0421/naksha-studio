@@ -691,3 +691,53 @@ async function createColorStyles(styles) {
   }
 }
 ```
+
+---
+
+## Reference-Sourced Insights
+
+### When to Start Creating Components (From Figma Best Practices)
+
+- Start creating components as soon as you have elements repeated across two or more screens — even at low-fidelity. Do not wait until hi-fi: making changes to one main component propagates to all instances, which saves far more time than the cost of creating the component early.
+- Exception: at the early exploratory stage, don't let component creation hinder fluid design thinking. Sketch freely; componentize when patterns emerge.
+
+### Atomic Component Architecture (From Figma Best Practices)
+
+- Build components atomically: create a small reusable "atom" (e.g., a button shape, an icon container) and nest instances of it inside all larger components that use it. If the atom changes, every parent component updates automatically.
+- Example: a button with Primary/Secondary variants, Desktop/Mobile sizes, and 4 states (normal, disabled, pressed, focused) = 16 potential button variants. Without atomic structure, 16 edits are required per change. With atomic structure (single shape atom + text atom nested), 1 edit propagates to all 16.
+- Prefix internal "atom" components with `_` or `.` to exclude them from library publishing. Designers consuming the library don't need to see internal building-block atoms — keeping them hidden improves the usage experience.
+
+### Variant Design Decisions (From Figma Variants Best Practices)
+
+- Use variants when: multiple versions share the same properties (state, size, count, layout), or components toggle between true/false / on/off states, or variant properties mirror code component props (React/Vue prop/value format).
+- Avoid variants when: adding variants creates an unmanageable number of permutations (e.g., every icon color × every size × every state). Use nested instances + base components instead.
+- For icon swaps inside buttons: do NOT create a variant for every possible icon. Use a nested icon instance and let consumers swap the nested instance. This keeps the button component set manageable.
+- Multiple brand themes/colors should NOT be managed as variants — they create combinatorial explosion. Use Figma Variables + modes (Light/Dark, Brand A/Brand B) instead.
+
+### Preserve Text Overrides When Swapping Variants (From Figma Best Practices)
+
+- Text overrides are preserved when switching between related component variants only if the text layer names are identical across all variants. Name text layers by purpose ("Label", "Heading") not by content ("Submit", "Cancel"). This is critical for real-world usability of component sets.
+
+### Component Descriptions as Documentation (From Figma Best Practices)
+
+- Add a description to every published component. Descriptions appear as tooltips in the assets panel and in the inspect panel. Include: intended usage, which variant to use when, and any overrides that are expected. For complex components, include contrast accessibility guidance directly in the description.
+- At Expedia: each major component set has a dedicated documentation frame showing component name, description, usage instructions, variants, and states — developers navigate to the master component and find the documentation co-located.
+
+### Handoff Organization Patterns (From Figma Developer Handoff Guide)
+
+- Create dedicated "ready for implementation" pages distinct from in-progress pages. Use page naming conventions or emoji prefixes to signal state: `🏗️ In Progress`, `👀 In Review`, `🚢 Ready to Build`.
+- Cash App technique: for every frame ready to share with developers, create a main component from that frame, then place an instance of it on a clean, organized page. Changes made on the messy working page auto-update the clean handoff instance — no re-exporting.
+- Style names in the code panel: when you name color and text styles using token/variable names (not generic names like "Blue" or "Large Text"), developers can implement variables directly from the code panel without asking for values. This is one of the highest-leverage naming decisions you'll make.
+
+### Variables vs. Styles Decision (From Figma Best Practices)
+
+- Color and text **Styles** = static, named reusable properties. Good for simple projects, single-brand files.
+- **Variables** = multi-mode support (Light/Dark, Brand A/Brand B), component-level token binding. Use Variables whenever you need mode switching.
+- For text styles: Figma has decoupled alignment and color from the style itself, so you don't need a separate text style for every color or alignment variant — far fewer styles needed than in Sketch. Typically: one type ramp for mobile, one for desktop.
+- Use slash-separated style naming (`Brand/Primary/Blue`) not for visual grouping alone — it directly corresponds to how token names should map to code (`--brand-primary-blue`), making designer-to-developer token alignment automatic.
+
+### Constraint and Layout Grid Setup for Handoff (From Figma Best Practices)
+
+- Always set proper constraints on every element inside a component before sharing. Developers will resize components; without constraints, layers will break in unexpected ways and generate handoff confusion.
+- Layout grids inside components: use them to visualize internal padding and margins. This communicates spacing intent to developers without needing separate redline annotations.
+- "Clip content" toggle: use it for components like tables or lists where the number of visible items varies — developers can see that the component is designed to reveal additional content when resized.

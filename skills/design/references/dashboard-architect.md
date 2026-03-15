@@ -449,3 +449,107 @@ When showing cached data, always indicate its age:
 - **To Data Viz Designer**: Specify chart dimensions, available data schema, and required interactivity (tooltips, click-through) before they build chart specs
 - **To UI Designer**: KPI card, table row, filter bar, badge, and status indicator styles must match the design system
 - **To Content Designer**: KPI labels, column headers, empty state messages, and trend text need plain-language review
+
+---
+
+## Reference-Sourced Insights
+
+### Data-Ink Ratio: Stripping Visual Noise (From Geckoboard)
+
+Edward Tufte's data-ink ratio principle, applied to dashboards: every pixel that doesn't communicate data is visual noise that slows comprehension.
+
+**Remove by default:**
+- Grid lines in charts (use axis labels + data labels instead; add grid lines only when precision reading is needed)
+- Decorative icons on KPI cards when a number+label is sufficient
+- Background gradients, drop shadows on chart areas
+- Redundant axis labels when the chart title already states the unit
+- Borders between cards if whitespace provides sufficient separation
+
+**The novelty trap:** Colorful backgrounds and quirky illustrations grab attention the first time, but the novelty wears off in 2–3 viewings and then they permanently get in the way. Dashboards are viewed dozens or hundreds of times — optimize for the 100th view, not the first.
+
+**Practical test:** If you removed an element, would the viewer lose any data or context? If no, remove it.
+
+---
+
+### Number Precision and Rounding (From Geckoboard)
+
+**Overly precise numbers hide the signal.** Showing conversion rate as `3.847%` when the relevant range is 1–10% makes the mental comparison harder, not easier.
+
+**Rounding rules by metric type:**
+- Revenue/currency at scale: round to nearest $K or $M ("$84K", not "$84,231")
+- Percentages: 1 decimal place maximum for operational dashboards; round to whole numbers for executive dashboards
+- Counts: whole numbers always — "1,247 users", never "1,246.8 users"
+- Ratios (e.g., NPS, rating): 1 decimal place
+
+**Exception:** Transactional or financial dashboards where the exact cent matters (billing, reconciliation) — use full precision with clear formatting.
+
+---
+
+### Context-First KPI Design (From Geckoboard)
+
+A number without context is just a number. Every KPI must answer: "Is this number good, bad, or normal?"
+
+**Context mechanisms in order of power:**
+1. **Goal/target line** — "84% vs 90% target" immediately signals gap
+2. **Period comparison** — "↑ 12% vs last month" gives direction
+3. **Historical trend** — sparkline shows trajectory (rising, falling, flat, volatile)
+4. **Threshold coloring** — green/amber/red based on pre-set thresholds
+5. **Absolute range** — "high: 94%, low: 71%, average: 83%" for volatile metrics
+
+**Threshold configuration principle:** Thresholds should be set by the person who owns the metric, not the dashboard designer. Design the threshold UI so owners can configure their own acceptable ranges without touching code.
+
+**Ambiguous metrics must use neutral coloring:** Metrics where direction-of-good depends on context (e.g., "sessions per user" — high could mean high engagement OR high confusion) should never use green/red. Use neutral gray + trend arrow.
+
+---
+
+### Grouping and Hierarchy Strategy (From Geckoboard)
+
+**Top-left bias:** Users' eyes are drawn to the top-left corner first. Place the single most important metric there. Top row = most important, bottom = supporting detail.
+
+**Grouping options and when to use each:**
+- By **metric type** (acquisition, activation, retention) — best for product dashboards
+- By **time period** (today, this week, this month) — best for sales/operational dashboards
+- By **entity** (product line, region, team) — best for comparative/segmented views
+- By **workflow stage** — best for funnel or process dashboards
+
+**Group labeling reduces repetition:** Instead of "Signups today", "Signups this week", "Signups this month" — use one group header "Signups" with three sub-cards labeled "Today", "This week", "This month". This is significantly easier to scan.
+
+**Empty space rule:** Leave intentional whitespace rather than stretching elements to fill gaps. A stretched KPI card looks less like a card and more like a banner.
+
+---
+
+### Dashboard Metric Selection Criteria (From Geckoboard)
+
+Every metric on a dashboard should pass all 5 tests:
+
+1. **Tied to the dashboard's stated purpose** — if the purpose is "track customer acquisition", churn metrics belong on a different dashboard
+2. **Actionable by the viewers** — if the team can't do anything about a number, it's a vanity metric
+3. **Comprehensible at a glance** — if it requires a tooltip or footnote to understand, simplify it or put it in a detail view
+4. **Changes meaningfully** — metrics that move < 1% per week are better suited to a weekly report than a live dashboard
+5. **Not so volatile it causes false alarms** — real-time metrics with high natural variance (e.g., events per minute) need smoothing (5-min rolling average) or threshold bands to be actionable
+
+**Too much information is worse than too little.** If a dashboard can't fit on one screen without scrolling, it needs a second dashboard. Asking viewers to scroll through a dashboard breaks the "at a glance" mental model.
+
+---
+
+### Dashboard Evolution: The Behavioral Feedback Loop (From Geckoboard)
+
+After shipping a dashboard, collect these specific signals to iterate:
+
+**Questions to ask the team after 2 weeks of use:**
+- "Which metrics do you look at every day, and which do you skip?"
+- "Has this changed anything about how you make decisions?"
+- "Is there anything missing you wish you had?"
+- "Are there any numbers that confuse you or that you don't trust?"
+
+**Red flag:** If the team consistently ignores certain metrics, they either don't understand them, don't control them, or they've already internalized the normal range and only need to see them when something changes. Consider moving those to an alert-only view.
+
+**Drift problem:** As goals and priorities change, dashboard metrics become stale. Add a quarterly "dashboard audit" checkpoint. Metrics that no longer reflect current priorities actively mislead.
+
+---
+
+### Consistent Visualization Across Similar Metrics (From Geckoboard)
+
+**Do not change visualization type just for variety.** If you're showing the same type of metric for multiple entities (e.g., revenue by region), use the same chart type for all of them. Mixing a bar chart for one region with a line chart for another implies a structural difference that doesn't exist, and makes comparison much harder.
+
+**Consistency rule:** Identical data relationships should always use identical chart types. The viewer builds a mental model — violating it forces a re-read every time.

@@ -351,3 +351,105 @@ The same email should read differently for different user segments:
 - Apply winner to the rest of the list once significance is reached (typically p < 0.05)
 
 ---
+
+## Reference-Sourced Insights
+
+### Subject Line Psychology (From Litmus, Campaign Monitor)
+
+**The specificity rule is the most reliable opener pattern.** Vague subjects get skipped; specific ones feel personally relevant:
+- ❌ "Your account update" → ✓ "Your invoice for $240 is ready"
+- ❌ "Check this out" → ✓ "3 new comments on 'Homepage redesign'"
+- ❌ "Time is running out" → ✓ "Your trial ends in 3 days"
+
+**The curiosity-gap trap:** The email must deliver what the subject promises. Curiosity gaps that don't pay off destroy trust and drive unsubscribes on the second email. Write the subject *after* writing the email body, not before — this prevents click-bait drift.
+
+**Word-count sweet spot:** 6–10 words (30–50 characters) is the mobile-visible range. Subject lines longer than 9 words are truncated on most smartphone screens.
+
+**Emoji usage rule:** Test emoji on your specific audience before using them consistently. B2B audiences (finance, legal, enterprise IT) typically respond negatively. Consumer/lifestyle audiences respond positively. Never lead with emoji — the first character should be a word.
+
+**Subject anti-patterns that signal spam filters:**
+- ALL CAPS anywhere in the subject
+- More than one exclamation mark (`!!`)
+- Misleading "Re:" or "Fwd:" prefixes
+- Dollar signs followed by a number in the first 3 words
+- The word "free" without context (e.g. "Free trial" is OK; "FREE gift inside" triggers filters)
+
+---
+
+### Preview Text as a Second Subject Line
+
+**The most commonly wasted real estate in email.** If you don't set preview text, email clients pull the first visible text in the body — which is often "View in browser | Unsubscribe", destroying the impression before the email is even opened.
+
+**Write preview text before writing the email body** — it forces clarity about the core message.
+
+**The extend-don't-repeat rule:**
+- Never copy the subject line into the preview text
+- Don't start with the brand name (it's already in the sender field)
+- Do: add a secondary hook, a specific detail, or a piece of value the subject teased
+
+**Pattern: Subject sets up the promise → Preview delivers a specific detail:**
+| Subject | Preview text |
+|---|---|
+| "Your trial ends in 3 days" | "Here's what you'll lose access to — and how to keep it." |
+| "New: dark mode is live" | "Switch themes instantly — works across all your projects." |
+| "5 ways to cut design time" | "Plus a free template pack included." |
+
+**Length targeting:** Aim for 85–100 characters — long enough to fill the preview pane on desktop (which shows more than mobile), short enough to not be cut on mobile.
+
+---
+
+### CTA Copy Precision (From Litmus, Real-world patterns)
+
+**The one-to-five word rule:** Litmus data shows CTA copy exceeding 5 words performs worse. The rarity of a long CTA makes it stand out, but as a default, keep it short and action-specific.
+
+**First-person phrasing:** "Get MY report" outperforms "Get your report" in click-rate tests by ~14–17% (consistent finding across multiple CRO studies). Use first-person when the CTA is about something the user owns or receives:
+- ✓ "Download my template"
+- ✓ "Start my free trial"
+- ✓ "See my dashboard"
+- ✗ "Read our blog" (brand-owned content — use second-person or neutral)
+
+**Ghost buttons in email:** Outline/ghost buttons (border only, transparent fill) perform significantly worse than solid filled buttons. In email, where rendering is inconsistent, ghost buttons can disappear entirely. Use solid filled buttons for all primary CTAs.
+
+**Placement redundancy:** For emails over 400px in body height, place the primary CTA both above the fold AND at the bottom after the argument is made. The top CTA serves scanners; the bottom CTA serves readers. Don't add a third — that's too much.
+
+---
+
+### Sequence Timing and Frequency (From industry standards)
+
+**The 3:1 value-to-pitch ratio:** Send 3 emails that provide value (teach something, share something useful, celebrate the user) for every 1 email that makes an offer. Violating this ratio increases unsubscribe rate.
+
+**Frequency ceiling:** No more than 2–3 marketing emails per week per sender. Above that, unsubscribes accelerate regardless of content quality.
+
+**Re-engagement sequence psychology:** The third email in a re-engagement sequence — "Should we remove you from our list?" — consistently generates the highest open rates of any re-engagement email. The subject line "Is this goodbye?" outperforms soft re-engagement subjects by 3–5x. The reverse psychology works because it signals respect for the reader's time.
+
+**Behavioral trigger emails outperform blast emails:** Emails triggered by a specific user action (signed up, hit a milestone, went 30 days inactive) generate 3–5x higher click rates than equivalent scheduled blast emails, because they're contextually relevant at the moment of sending.
+
+---
+
+### Transactional Email Rules (From CAN-SPAM compliance)
+
+Transactional emails (receipts, password resets, shipping confirmations) are **exempt from CAN-SPAM marketing rules** but must follow these constraints:
+- Cannot contain more than 50% promotional content (or they lose transactional status)
+- Must clearly identify the transaction in the subject line
+- Still require physical address
+- Must not add users to marketing lists without explicit opt-in at the time of signup
+
+**Transactional email design principle:** Remove everything except what the recipient needs to complete or confirm their action. One purpose, one action, no distractions. These are the highest-opened emails you'll send — don't dilute them.
+
+---
+
+### Segmentation and Personalization Beyond First Name (Practical patterns)
+
+**High-impact personalization variables beyond `{{{FIRST_NAME}}}`:**
+- `{{{COMPANY_NAME}}}` — highest lift for B2B emails, especially in subject line
+- `{{{PLAN_NAME}}}` / `{{{TIER}}}` — "As a Pro user..." sets correct expectations
+- `{{{DAYS_SINCE_LAST_LOGIN}}}` — "You haven't logged in for 14 days" is more compelling than "We miss you"
+- `{{{LAST_FEATURE_USED}}}` — "Last time you were using [feature]..." grounds the email in the user's reality
+- `{{{TRIAL_DAYS_REMAINING}}}` — "You have 3 days left" beats "Your trial is ending soon"
+
+**Dynamic content blocks vs. separate emails:**
+- Use dynamic blocks (ESP-level content swapping) when the core message is identical but 1–3 details differ
+- Write completely separate emails when the entire tone, CTA, and body change (e.g., free vs. paid onboarding)
+- Separate emails always outperform poorly-personalized single emails
+
+**Suppress users from promotional sequences when they've already converted** — sending "upgrade to Pro" to someone already on Pro is a trust-destroying mistake that's entirely preventable with list segmentation.
