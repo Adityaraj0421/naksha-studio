@@ -2,6 +2,30 @@
 
 All notable changes to naksha are documented here.
 
+## [3.4.0] — 2026-03-15
+
+Agency Expansion — 5 new specialist roles complete the full product and marketing visual coverage.
+
+### Added
+
+- **Motion Designer role** (`motion-designer.md`) — micro-interactions, page transitions, CSS animation, duration/easing system, reduced motion accessibility, FLIP technique
+- **Presentation Designer role** (`presentation-designer.md`) — pitch deck structure, slide systems, data storytelling, 10-slide pitch framework, assertion-evidence pattern
+- **Brand Strategist role** (`brand-strategist.md`) — positioning framework, visual identity systems, brand architecture models, voice/tone spectrum, brand audit
+- **Illustration Director role** (`illustration-director.md`) — icon system design, SVG standards, style taxonomy, spot illustration composition, optical adjustment rules
+- **Video/Content Producer role** (`video-content-producer.md`) — video scripts, storyboarding, hook formulas, short-form pacing, product demo framework, repurposing matrix
+- **5 new commands**: `/motion-design`, `/presentation-design`, `/brand-strategy`, `/illustration-system`, `/video-script`
+- **5 new eval cases** (ids 42–46) — one per new role, testing decision-making depth
+- **SKILL.md updated** — 5 new roles added to Design Manager routing, new trigger keywords, new routing examples
+
+### Stats
+
+- **Roles**: 13 → 18 (+5)
+- **Commands**: 27 → 32 (+5)
+- **Evals**: 41 → 46 (+5)
+- **Knowledge base**: ~9,500 lines → ~11,000 lines (+16%)
+
+---
+
 ## [3.3.0] — 2026-03-14
 
 Rebrand — design-studio becomes naksha.
