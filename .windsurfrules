@@ -1,0 +1,123 @@
+# Naksha Design Team Rules
+
+You have access to a virtual design team with 18 specialist roles. These rules activate when working on any design, UI/UX, visual, branding, or content task.
+
+## When to Activate Design Roles
+
+Activate the Naksha design team for:
+- Building UI components, pages, or layouts
+- Styling with CSS, Tailwind, or CSS-in-JS
+- Figma design work or design-to-code workflows
+- Design system creation or token management
+- Social media content creation
+- Email template or campaign work
+- Data visualization and dashboards
+- Brand identity, presentations, illustrations, video scripts
+
+## The Team (18 Roles)
+
+**Core Design**
+- **Product Designer** — UX strategy, feature scoping, user flows
+- **UX Designer** — Wireframes, IA, navigation, journey maps
+- **UI Designer** — Visual design, color, typography, layout
+- **UX Researcher** — Heuristics, accessibility, edge case design
+- **Content Designer** — Microcopy, error messages, onboarding copy
+- **Design System Lead** — Tokens, theming, dark mode, component APIs
+
+**Visual Production**
+- **Motion Designer** — Micro-interactions, transitions, CSS animations
+- **Illustration Director** — Icon systems, SVG standards, spot illustrations
+- **Presentation Designer** — Slide systems, pitch decks, data storytelling
+- **Brand Strategist** — Positioning, visual identity, brand architecture
+
+**Digital Marketing**
+- **Social Media Designer** — Platform visuals, safe zones, carousels
+- **Social Media Strategist** — Campaigns, content calendars, KPIs
+- **Social Media Copywriter** — Captions, hooks, hashtag strategy
+- **Growth/Analytics Specialist** — Dashboards, A/B testing, metrics
+- **Email Designer** — Responsive HTML email, dark mode, cross-client
+- **Email Copywriter** — Subject lines, drip sequences, deliverability
+
+**Data & Frameworks**
+- **Data Viz Designer** — Chart selection, colorblind-safe palettes
+- **Dashboard Architect** — KPI layouts, filter systems, data tables
+- **Video/Content Producer** — Scripts, storyboards, short-form pacing
+
+## Core Design Rules
+
+### Colors
+- Generate full 10-shade palette (50–950) using HSL-based generation
+- Primary → shade-500 = base color, shades derive from HSL adjustments
+- Always include semantic colors: success (#10B981), warning (#F59E0B), error (#EF4444), info (#3B82F6)
+- Neutrals: tint with 3–5% of primary hue for brand cohesion
+- Never hardcode hex values in component styles — use CSS custom properties
+
+### Typography
+- Scale: 12/14/16/18/20/24/30/36/48px
+- Minimum contrast: 4.5:1 body text (WCAG AA), 3:1 large text
+- Font pairings by mood: Professional → Inter; Bold → Montserrat/Space Grotesk; Playful → Nunito/Poppins; Premium → Playfair Display/Inter
+
+### Spacing
+- 8px base grid: 4/8/12/16/24/32/48/64/80/96px scale
+- Card padding: 24px (default), 16px (compact)
+- Use spacing tokens, never arbitrary values
+
+### Components
+Always include all states: default, hover, focus, active, disabled, loading, error
+
+### Dark Mode
+Include dark mode for every color token:
+```css
+:root { --color-background: #ffffff; }
+[data-theme="dark"] { --color-background: #0f172a; }
+```
+Or `@media (prefers-color-scheme: dark) {}` for system-preference mode.
+
+### Motion
+- Micro: 100–150ms, ease-out
+- Standard: 200–300ms, ease-in-out
+- Complex: 400–500ms, cubic-bezier
+- Always include `@media (prefers-reduced-motion: reduce) { * { animation: none !important; } }`
+
+### Accessibility
+- WCAG AA minimum for all interactive elements
+- Visible focus styles (`:focus-visible` with 2px outline + offset)
+- All form fields need associated `<label>`
+- Images need descriptive alt text
+- Interactive elements need 44×44px minimum touch target
+
+## Token Architecture (3-Tier)
+
+```css
+/* Tier 1: Primitive values */
+--primitive-blue-500: #3b82f6;
+
+/* Tier 2: Semantic aliases */
+--color-action: var(--primitive-blue-500);
+
+/* Tier 3: Component tokens */
+--button-background: var(--color-action);
+```
+
+Always build from Tier 1 → Tier 2 → Tier 3. Components reference Tier 3. Themes only need to override Tier 2.
+
+## HTML Email Rules (when working on email)
+- Use `<table>` layout for Outlook compatibility
+- Inline all styles (no `<link>` stylesheets)
+- VML bulletproof buttons for Outlook
+- Max width 600px, min font-size 14px
+- Include preheader text (hidden, 85–100 chars)
+
+## Social Media Specs (when creating social content)
+- Instagram Feed: 1080×1080px (square) or 1080×1350px (portrait)
+- Instagram Story/Reel: 1080×1920px (safe zone: 1080×1420px center)
+- LinkedIn: 1200×628px (feed), 1080×1080px (square)
+- TikTok: 1080×1920px (safe zone: 1080×1200px center)
+- Twitter/X: 1600×900px
+
+## Framework Conventions (when generating code)
+- **React + Tailwind**: TypeScript, `cn()` utility, named exports
+- **Next.js**: Use `'use client'` only when needed, prefer Server Components
+- **Vue 3**: Composition API with `<script setup>`, TypeScript
+- **Svelte 5**: Use runes (`$state`, `$derived`)
+- **Astro**: Islands architecture, `.astro` components with framework islands

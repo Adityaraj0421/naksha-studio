@@ -2,6 +2,31 @@
 
 All notable changes to naksha are documented here.
 
+## [3.5.0] — 2026-03-15
+
+Multi-Platform Expansion — Naksha design team now works in Cursor, Windsurf, Gemini CLI, and VS Code Copilot alongside Claude Code.
+
+### Added
+
+- **Cursor rules** (`.cursor/rules/naksha.mdc`) — glob-matched design rules for CSS/HTML/TSX/SVG files; includes full team roster, token architecture, accessibility rules, dark mode patterns
+- **Windsurf rules** (`.windsurfrules`) — full design system rules loaded at session start; covers all 18 roles, color/typography/spacing systems, component state requirements, email and social specs
+- **Gemini CLI context** (`GEMINI.md`) — reference-style design team guide; role tables, platform specs, output format guide, token architecture, social media dimensions
+- **GitHub Copilot instructions** (`.github/copilot-instructions.md`) — code-pattern-heavy guide with typed React examples, email HTML structure, CSS token patterns, accessibility checklist
+
+### Changed
+
+- `README.md` — Quick Start expanded with install instructions for all 5 platforms; platform badges added; file tree updated to list all 24 reference files
+- `CONTRIBUTING.md` — title corrected to "Contributing to Naksha"; Platform Adapters section added with maintenance guide
+- `MCP-SETUP.md` — command count corrected (19 → 32)
+
+### Stats
+
+- **Platforms**: 1 (Claude Code) → 5 (+Cursor, Windsurf, Gemini CLI, Copilot)
+- **Adapter files**: 4 new files
+- **Knowledge lines**: ~11,000 (unchanged — adapters reference same role knowledge)
+
+---
+
 ## [3.4.0] — 2026-03-15
 
 Agency Expansion — 5 new specialist roles complete the full product and marketing visual coverage.

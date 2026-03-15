@@ -12,6 +12,10 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Claude Code](https://img.shields.io/badge/Claude_Code-Plugin-blueviolet)](https://claude.ai/claude-code)
+[![Cursor](https://img.shields.io/badge/Cursor-Rules-black)]()
+[![Windsurf](https://img.shields.io/badge/Windsurf-Rules-0099ff)]()
+[![Gemini CLI](https://img.shields.io/badge/Gemini_CLI-GEMINI.md-4285F4)]()
+[![Copilot](https://img.shields.io/badge/Copilot-Instructions-24292e)]()
 [![Roles](https://img.shields.io/badge/Specialist_Roles-18-orange)]()
 [![Commands](https://img.shields.io/badge/Slash_Commands-32-green)]()
 [![Design Knowledge](https://img.shields.io/badge/Design_Knowledge-11000%2B_lines-E8633A)]()
@@ -24,6 +28,8 @@
 
 ## 🚀 Quick Start
 
+### Claude Code (full plugin — 32 commands, agents, hooks)
+
 ```bash
 git clone https://github.com/Adityaraj0421/naksha-studio.git ~/.claude/plugins/naksha
 ```
@@ -32,6 +38,22 @@ Then try:
 ```
 /design Build a landing page for a SaaS analytics product
 ```
+
+### Cursor
+
+Copy `.cursor/rules/naksha.mdc` to your project's `.cursor/rules/` directory. The design team activates automatically for CSS, HTML, TSX, SVG, and token files.
+
+### Windsurf
+
+Copy `.windsurfrules` to your project root. Windsurf reads it automatically at session start.
+
+### Gemini CLI
+
+Copy `GEMINI.md` to your project root. Gemini CLI reads it at session start.
+
+### VS Code Copilot
+
+Copy `.github/copilot-instructions.md` to your project's `.github/` directory. Copilot Chat and inline completions will apply the design team's rules.
 
 ---
 
@@ -561,7 +583,7 @@ Outputs full HTML/CSS with sidebar navigation, 4-column KPI card row, primary + 
 
 ### `/design-tutorial [track]` — Interactive Tutorial
 
-New to Design Studio? Run a guided tour with real exercises:
+New to Naksha? Run a guided tour with real exercises:
 
 ```
 /design-tutorial                    # shows welcome screen + track selection
@@ -571,7 +593,7 @@ New to Design Studio? Run a guided tour with real exercises:
 /design-tutorial social             # 15 min: post design → campaign → analytics
 /design-tutorial email              # 15 min: welcome template → onboarding sequence
 /design-tutorial data-viz           # 15 min: chart design → full dashboard
-/design-tutorial full               # 30 min: complete tour of all 8 wings
+/design-tutorial full               # 30 min: complete tour of all 9 wings
 ```
 
 Each track produces real output — you're not just reading docs, you're running commands. The quick-start track covers the three most common commands (`/design`, `/design-review`, `/design-framework`) in under 5 minutes.
@@ -759,17 +781,31 @@ naksha/
 ├── skills/design/
 │   ├── SKILL.md                        # Design Manager orchestration
 │   ├── settings.local.md              # User-configurable preferences
-│   └── references/
+│   └── references/                     # 18 specialist role knowledge bases
 │       ├── product-designer.md         # End-to-end UX, feature scoping
 │       ├── ux-designer.md              # Flows, wireframes, IA
 │       ├── ui-designer.md              # Color, typography, layout, components
 │       ├── ux-researcher.md            # Heuristics, accessibility, edge cases
 │       ├── content-designer.md         # Microcopy, errors, tone of voice
 │       ├── design-system-lead.md       # 3-tier tokens, theming, dark mode, Figma styles
-│       ├── motion-designer.md          # Timing, easing, micro-interactions
+│       ├── motion-designer.md          # Timing, easing, micro-interactions, FLIP
 │       ├── figma-workflow.md           # Figma MCP tools, design-to-code + creation
 │       ├── figma-creation.md           # Figma API patterns via Desktop Bridge
-│       └── deployment.md              # Preview server, Firebase Hosting
+│       ├── deployment.md              # Preview server, Firebase Hosting
+│       ├── social-media-designer.md    # Platform specs, safe zones, visual systems
+│       ├── social-media-strategist.md  # Campaign planning, content calendar, KPIs
+│       ├── social-media-copywriter.md  # Captions, hooks, hashtag strategy
+│       ├── growth-analytics-specialist.md # Metrics, dashboards, A/B testing
+│       ├── email-designer.md           # HTML email, responsive, dark mode, ESPs
+│       ├── email-copywriter.md         # Subject lines, sequences, deliverability
+│       ├── data-viz-designer.md        # Chart type selection, colorblind-safe palettes
+│       ├── dashboard-architect.md      # KPI layouts, filter systems, data tables
+│       ├── framework-specialist.md     # React/Vue/Svelte/Next.js/Astro patterns
+│       ├── template-gallery.md         # 10 production web templates
+│       ├── presentation-designer.md    # Slide systems, pitch decks, data storytelling
+│       ├── brand-strategist.md         # Positioning, visual identity, brand architecture
+│       ├── illustration-director.md    # Icon systems, SVG standards, style taxonomy
+│       └── video-content-producer.md   # Scripts, storyboards, short-form pacing
 ├── commands/                           # 32 slash commands
 ├── agents/                             # 5 specialist agents
 ├── hooks/hooks.json                    # SessionStart + PreToolUse + Stop hooks

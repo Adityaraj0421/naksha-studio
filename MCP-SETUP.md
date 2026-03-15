@@ -1,6 +1,6 @@
 # MCP Setup Guide
 
-Design Studio uses **4 optional MCP servers** for Figma integration, live preview, and website capture. All 19 commands degrade gracefully without them — you get markdown specs, CSS tokens, and HTML files instead of live Figma/preview workflows.
+Naksha uses **4 optional MCP servers** for Figma integration, live preview, and website capture. All 32 commands degrade gracefully without them — you get markdown specs, CSS tokens, and HTML files instead of live Figma/preview workflows.
 
 ---
 

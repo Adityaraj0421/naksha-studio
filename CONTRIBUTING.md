@@ -1,4 +1,4 @@
-# Contributing to Design Studio
+# Contributing to Naksha
 
 Thanks for your interest in contributing! This guide explains how to add new roles, commands, agents, and references to the plugin.
 
@@ -130,6 +130,28 @@ grep -roh 'references/[a-z-]*.md' skills/design/SKILL.md | sort -u | while read 
   [ -f "skills/design/$f" ] && echo "OK $f" || echo "MISSING: $f"
 done
 ```
+
+## Platform Adapters
+
+Naksha runs on 5 AI coding tools. The knowledge lives in the same role reference files — adapters just surface it differently:
+
+| Tool | Adapter File | How It Loads |
+|------|-------------|-------------|
+| **Claude Code** | `.claude-plugin/plugin.json` + `skills/design/` | Plugin system — full 32 commands, agents, hooks |
+| **Cursor** | `.cursor/rules/naksha.mdc` | Glob-matched rules — activates on CSS/HTML/TSX/SVG |
+| **Windsurf** | `.windsurfrules` | Read at session start for entire project |
+| **Gemini CLI** | `GEMINI.md` | Read at session start for entire project |
+| **VS Code Copilot** | `.github/copilot-instructions.md` | Applied to Copilot Chat + inline completions |
+
+### Updating Adapters
+
+When adding a new role or significant design rule:
+1. Update the role reference file in `skills/design/references/`
+2. Update `skills/design/SKILL.md` routing
+3. Add a summary row to the role table in each adapter file
+4. Key design rules (new token patterns, new platform specs) should be reflected in adapter files too
+
+Adapters are condensed representations — they don't need to include the full depth of role files, just the actionable rules and role descriptions.
 
 ## Sync to Plugin Install
 
