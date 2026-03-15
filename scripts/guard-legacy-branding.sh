@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -euo pipefail
 # guard-legacy-branding.sh — fails if legacy "design-studio" / "Design Studio" strings
 # are found in source files. Prevents silent reintroduction after rebrand.
 # Usage: bash scripts/guard-legacy-branding.sh
@@ -19,7 +20,12 @@ RESULTS=$(grep -rn \
   --exclude-dir="docs" \
   --exclude="CHANGELOG.md" \
   --exclude="guard-legacy-branding.sh" \
-  "$REPO" 2>/dev/null || true)
+  "$REPO" 2>/dev/null) || GREP_RC=$?
+GREP_RC=${GREP_RC:-0}
+if [ "${GREP_RC}" -ge 2 ]; then
+  echo "ERROR: grep failed with exit code ${GREP_RC}"
+  exit 2
+fi
 
 if [ -n "$RESULTS" ]; then
   echo "Banned legacy branding found:"

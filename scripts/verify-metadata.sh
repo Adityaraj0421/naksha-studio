@@ -4,7 +4,7 @@
 # Usage: bash scripts/verify-metadata.sh
 # Exit: 0 if no hard FAILs, 1 if any FAIL found
 
-set -uo pipefail
+set -euo pipefail
 REPO="$(cd "$(dirname "$0")/.." && pwd)"
 STATS="$REPO/meta/stats.json"
 FAILED=0
@@ -24,8 +24,8 @@ STATS_REFS=$(python3 -c "import json; print(json.load(open('$STATS'))['reference
 # ── Check 1: Filesystem counts ──────────────────────────────────────────────
 echo "Check 1 — Filesystem counts"
 
-ACTUAL_COMMANDS=$(ls "$REPO/commands/"*.md 2>/dev/null | wc -l | tr -d ' ')
-ACTUAL_REFS=$(ls "$REPO/skills/design/references/"*.md 2>/dev/null | wc -l | tr -d ' ')
+ACTUAL_COMMANDS=$(find "$REPO/commands" -maxdepth 1 -name '*.md' | wc -l | tr -d ' ')
+ACTUAL_REFS=$(find "$REPO/skills/design/references" -maxdepth 1 -name '*.md' | wc -l | tr -d ' ')
 ACTUAL_LINES=$(cat "$REPO/skills/design/references/"*.md | wc -l | tr -d ' ')
 ACTUAL_VERSION=$(python3 -c "import json; print(json.load(open('$REPO/.claude-plugin/plugin.json'))['version'])")
 
@@ -62,6 +62,9 @@ echo "Check 2 — README badge comparison"
 
 README="$REPO/README.md"
 
+if [ ! -f "$README" ]; then
+  echo "  WARN  README.md not found — skipping badge checks"
+else
 # Extract badge numbers
 BADGE_ROLES=$(grep -o 'Specialist_Roles-[0-9]*-' "$README" | grep -o '[0-9]*' | head -1)
 BADGE_COMMANDS=$(grep -o 'Slash_Commands-[0-9]*-' "$README" | grep -o '[0-9]*' | head -1)
@@ -92,13 +95,14 @@ if [ -n "$BADGE_KNOWLEDGE" ]; then
 else
   echo "  WARN  knowledge_lines badge not found in README"
 fi
+fi
 
 echo ""
 
 # ── Check 3: plugin.json version ────────────────────────────────────────────
 echo "Check 3 — plugin.json version"
 
-PLUGIN_VERSION=$(python3 -c "import json; print(json.load(open('$REPO/.claude-plugin/plugin.json'))['version'])")
+PLUGIN_VERSION="$ACTUAL_VERSION"
 if [ "$STATS_VERSION" != "$PLUGIN_VERSION" ]; then
   echo "  FAIL  version: stats.json=\"$STATS_VERSION\"  plugin.json=\"$PLUGIN_VERSION\""
   FAILED=$((FAILED + 1))
