@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Design Studio — Design Lint Script
+ * Naksha — Design Lint Script
  *
  * Checks HTML and CSS files for common design quality issues:
  * - Accessibility (semantic HTML, ARIA, alt text, lang attribute)
@@ -297,7 +297,7 @@ function main() {
     process.exit(0);
   }
 
-  console.log(`\n🎨 Design Studio Lint — checking ${files.length} file(s)\n`);
+  console.log(`\n🎨 Naksha Lint — checking ${files.length} file(s)\n`);
 
   const allIssues = [];
   let totalPassed = 0;

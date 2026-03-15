@@ -7,7 +7,7 @@ PLUGIN_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 EVALS_FILE="$PLUGIN_ROOT/evals/evals.json"
 
 echo "═══════════════════════════════════════"
-echo "  Design Studio — Eval Validator"
+echo "  Naksha — Eval Validator"
 echo "═══════════════════════════════════════"
 echo ""
 

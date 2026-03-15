@@ -34,7 +34,7 @@
 git clone https://github.com/Adityaraj0421/naksha-studio.git ~/.claude/plugins/naksha
 ```
 
-> **Important:** The folder must be named `naksha` — not `design-studio` or anything else. Claude Code uses the folder name as the plugin identifier.
+> **Important:** The folder must be named `naksha` — not `naksha-studio` or anything else. Claude Code uses the folder name as the plugin identifier.
 
 Then try:
 ```
@@ -62,7 +62,7 @@ Copy `.github/copilot-instructions.md` to your project's `.github/` directory. C
 ## ⚡ Demo
 
 <div align="center">
-<img src="assets/demo.svg" alt="Design Studio demo — building a pricing page" width="720">
+<img src="assets/demo.svg" alt="Naksha demo — building a pricing page" width="720">
 </div>
 
 <br>
@@ -73,7 +73,7 @@ Running `/design Build a pricing page with monthly/annual toggle` automatically 
 <summary><b>More examples</b></summary>
 
 <div align="center">
-<img src="assets/demo-commands.svg" alt="Design Studio command examples — design-review, brand-kit, figma-create, design-sprint" width="820">
+<img src="assets/demo-commands.svg" alt="Naksha command examples — design-review, brand-kit, figma-create, design-sprint" width="820">
 </div>
 
 </details>
@@ -550,7 +550,7 @@ Plan and generate a complete multi-email campaign with copy and HTML templates:
 
 ```
 /email-campaign welcome-series for Figma-clone SaaS — new signups
-/email-campaign product-launch for Design Studio v3 — existing users
+/email-campaign product-launch for Naksha v3 — existing users
 /email-campaign re-engagement for fitness app — 60-day inactive users
 /email-campaign onboarding for project management tool — trial users
 ```

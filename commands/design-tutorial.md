@@ -1,6 +1,6 @@
 ---
 name: design-tutorial
-description: Interactive guided tour of Design Studio — learn commands through real exercises, discover workflows, and get oriented in under 10 minutes
+description: Interactive guided tour of Naksha — learn commands through real exercises, discover workflows, and get oriented in under 10 minutes
 triggers:
   - tutorial
   - getting started
@@ -17,7 +17,7 @@ arguments: "$ARGUMENTS"
 
 # /design-tutorial
 
-Interactive guided tour of Design Studio. Choose a track below and complete a real exercise — you'll produce actual output by the end.
+Interactive guided tour of Naksha. Choose a track below and complete a real exercise — you'll produce actual output by the end.
 
 **Usage:** `/design-tutorial` or `/design-tutorial <track>`
 
@@ -48,11 +48,11 @@ If no track is given, display this orientation:
 
 ```
 ╔══════════════════════════════════════════════════════════════════╗
-║                    Welcome to Design Studio                      ║
+║                    Welcome to Naksha                      ║
 ║                         v2.9.0 · 26 commands                    ║
 ╚══════════════════════════════════════════════════════════════════╝
 
-Design Studio assembles specialist roles for any design task.
+Naksha assembles specialist roles for any design task.
 You give a goal. The right experts activate automatically.
 
 ━━━ What it can do ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -85,7 +85,7 @@ Reply with a number or track name to begin.
 
 ### TRACK: quick-start
 
-**Goal:** Run 3 commands back-to-back. See what Design Studio produces.
+**Goal:** Run 3 commands back-to-back. See what Naksha produces.
 
 ---
 
@@ -346,7 +346,7 @@ Run each exercise in order. Each builds on the last.
 11. **Dashboard** → `/dashboard-layout growth dashboard: signups KPI, revenue KPI, activation rate, chart area`
 12. **Handoff** → `/design-handoff generate developer spec for everything above`
 
-> This is the full Design Studio workflow — idea to developer-ready in 12 commands.
+> This is the full Naksha workflow — idea to developer-ready in 12 commands.
 
 ---
 

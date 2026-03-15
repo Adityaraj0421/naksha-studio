@@ -1,5 +1,5 @@
 {
-  "description": "Design Studio hooks — detect project context, validate HTML output, suggest follow-up commands",
+  "description": "Naksha hooks — detect project context, validate HTML output, suggest follow-up commands",
   "hooks": {
     "SessionStart": [
       {
