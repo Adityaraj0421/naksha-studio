@@ -2,6 +2,21 @@
 
 All notable changes to naksha are documented here.
 
+## [3.8.0] — 2026-03-16
+
+### Added
+- `/email-audit` command — full-spectrum two-phase email audit: Phase 1 (Email Designer) covers 12 technical criteria with corrected HTML for critical issues; Phase 2 (Email Copywriter) covers AIDA body audit, subject line scoring, and targeted rewrites
+- `evals/fixtures/email-audit-output.md` — smoke fixture for `/email-audit`
+- Evals 72–73: `/email-audit` technical and copy/strategy scenarios
+
+### Updated
+- `skills/design/references/email-designer.md` — added missing `## Handoffs`, `## Advanced Patterns`, `## Full Coverage` sections (MJML component system, ESP conditional blocks, retina image technique, GIF first-frame rule, full client rendering matrix)
+- `scripts/behavioral-smoke.sh` — smoke coverage 17/37 → 18/38
+- `skills/design/SKILL.md` — `/email-audit` added to commands table; 7 new email audit trigger keywords added
+- `meta/stats.json` — version 3.7.0 → 3.8.0, commands 37 → 38
+
+---
+
 ## [3.7.0] — 2026-03-16
 
 AI Visual Gen Wing — four new specialist roles and five new commands covering the full generative AI stack: image, video, audio/voiceover, and cross-tool prompt engineering.

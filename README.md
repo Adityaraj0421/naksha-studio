@@ -17,7 +17,7 @@
 [![Gemini CLI](https://img.shields.io/badge/Gemini_CLI-GEMINI.md-4285F4)]()
 [![Copilot](https://img.shields.io/badge/Copilot-Instructions-24292e)]()
 [![Roles](https://img.shields.io/badge/Specialist_Roles-22-orange)]()
-[![Commands](https://img.shields.io/badge/Slash_Commands-37-green)]()
+[![Commands](https://img.shields.io/badge/Slash_Commands-38-green)]()
 [![Design Knowledge](https://img.shields.io/badge/Design_Knowledge-11000%2B_lines-E8633A)]()
 
 [Quick Start](#-quick-start) · [Commands](#-commands) · [The Team](#-the-team) · [How It Works](#-how-it-works) · [Changelog](CHANGELOG.md)
@@ -28,7 +28,7 @@
 
 ## 🚀 Quick Start
 
-### Claude Code (full plugin — 37 commands, agents, hooks)
+### Claude Code (full plugin — 38 commands, agents, hooks)
 
 **Option A — Marketplace install (recommended, Claude Code 2.1.72+)**
 
@@ -316,6 +316,7 @@ _The skill loads only the references your task actually needs_
 | `/design-framework <fw> [file]` | Convert HTML designs to React, Vue, Svelte, Next.js, or Astro |
 | `/email-template <type> for <brand>` | Production HTML email template (responsive, dark mode, cross-client) |
 | `/email-campaign <type> for <product>` | Complete multi-email campaign sequence with copy and HTML templates |
+| `/email-audit` | Full-spectrum email audit — technical rendering issues + copy/strategy critique (two-phase) |
 | `/design-template <category>` | Production web template from gallery (landing-page, dashboard, pricing, auth, blog, ecommerce, portfolio, docs, saas, onboarding) |
 | `/chart-design <description>` | Accessible chart or data visualization — selects chart type, applies colorblind-safe palette, outputs HTML/CSS/JS |
 | `/dashboard-layout <description>` | Complete dashboard — KPI cards, chart areas, filter bar, data table, sidebar, responsive |
