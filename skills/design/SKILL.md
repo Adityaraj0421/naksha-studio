@@ -167,6 +167,7 @@ This skill is part of the **naksha** plugin. For focused workflows, use these co
 | `/design-framework <fw> [file]` | Convert HTML design output to React, Vue, Svelte, Next.js, or Astro components |
 | `/email-template <type> for <brand>` | Generate a production-ready HTML email template (inline styles, table layout, responsive) |
 | `/email-campaign <type> for <product>` | Plan and build a complete multi-email campaign sequence |
+| `/email-audit <email or HTML>` | Full-spectrum audit — technical rendering issues (Phase 1) and copy/strategy critique (Phase 2) |
 | `/design-template <category>` | Production-ready web template from gallery: landing-page, dashboard, pricing, auth, blog, ecommerce, portfolio, docs, saas, onboarding |
 | `/chart-design <description>` | Design a chart or data visualization — selects chart type, applies accessible color palettes, outputs HTML/CSS/JS |
 | `/dashboard-layout <description>` | Build a complete dashboard layout — KPI cards, charts, filter bar, data table, sidebar, responsive |
@@ -346,7 +347,7 @@ Based on the task, activate only the roles needed. Read their reference files fo
 - The **Social Media Designer** joins any visual social content task
 - The **Social Media Strategist** joins campaign planning and content calendar tasks
 - The **Growth/Analytics Specialist** joins when measurement, dashboards, or A/B testing is needed for social
-- **Email** roles activate when the task mentions: "email", "newsletter", "email template", "HTML email", "welcome email", "drip campaign", "email sequence", "onboarding email", "subject line", "preheader", "CAN-SPAM", "Mailchimp", "SendGrid", "Klaviyo", "ESP", "transactional email", or "email campaign"
+- **Email** roles activate when the task mentions: "email", "newsletter", "email template", "HTML email", "welcome email", "drip campaign", "email sequence", "onboarding email", "subject line", "preheader", "CAN-SPAM", "Mailchimp", "SendGrid", "Klaviyo", "ESP", "transactional email", "email campaign", "email audit", "audit email", "audit my email", "review my email", "email review", "check my email template", or "email html issues"
 - The **Email Designer** joins any HTML email template or visual email design task
 - The **Email Copywriter** joins when email copy, subject lines, or email sequences are needed
 - **Data Visualization** roles activate when the task mentions: "chart", "graph", "data viz", "visualization", "bar chart", "line chart", "scatter plot", "pie chart", "donut chart", "histogram", "heatmap", "sparkline", "KPI", "dashboard", "analytics dashboard", "admin panel", "data table", "metrics", "monitoring", or "reporting dashboard"

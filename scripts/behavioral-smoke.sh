@@ -91,6 +91,7 @@ check_fixture "gen-video-output.md"        "shot,runway,prompt,platform,seed"   
 check_fixture "gen-audio-output.md"        "voiceover,elevenlabs,tone,timing,compliance" 2 150
 check_fixture "gen-moodboard-output.md"    "direction,moodboard,prompt,brand,style" 3    200
 check_fixture "prompt-refine-output.md"    "critique,optimized,token,cross-tool"    2    150
+check_fixture "email-audit-output.md"      "critical,technical,subject,cta,rewrite,aida,inline" 3 200
 
 echo ""
 echo "───────────────────────────────────────"
