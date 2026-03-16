@@ -184,7 +184,7 @@ Meta (Facebook/Instagram) ads perform better with less than 20% text coverage on
 
 ---
 
-## Handoff to Other Roles
+## Role Transitions
 
 - **To Social Media Strategist**: Completed visual assets with dimension specs and format details for content calendar placement
 - **To Social Media Copywriter**: Template layouts showing text zones, character limits per text area, visual context for caption writing

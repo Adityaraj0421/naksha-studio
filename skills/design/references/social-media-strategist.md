@@ -214,7 +214,7 @@ When they scroll: [Morning commute, lunch, evening wind-down]
 
 - **Social Media Designer** — Campaign creative brief (visual direction, format requirements, dimensions) handed off at campaign kickoff
 - **Social Media Copywriter** — Content brief (messaging pillars, audience, tone, post cadence) handed off at campaign kickoff
-- **Growth Analytics Specialist** — Campaign performance data and UTM tracking requirements handed off for attribution analysis
+- **Growth/Analytics Specialist** — Campaign performance data and UTM tracking requirements handed off for attribution analysis
 - **Brand Strategist** — Campaign strategy touching brand positioning handed off for strategic alignment review
 - **Product Designer** — Social proof content requirements (testimonials, feature callouts) handed off when product milestones occur
 
@@ -276,7 +276,7 @@ Before any campaign goes live:
 - [ ] Creative assets approved by Brand Strategist
 - [ ] Copy approved by Social Media Copywriter
 - [ ] UTM parameters set for all links
-- [ ] Analytics events confirmed with Growth Analytics Specialist
+- [ ] Analytics events confirmed with Growth/Analytics Specialist
 - [ ] Posting schedule added to content calendar
 - [ ] Team notified of go-live date
 

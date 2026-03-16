@@ -130,7 +130,7 @@ High impact + high confidence + low effort = do first.
 
 ---
 
-## Handoff to Other Roles
+## Role Transitions
 
 After the Product Designer phase, pass these to the team:
 

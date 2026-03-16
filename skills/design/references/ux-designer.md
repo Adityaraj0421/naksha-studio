@@ -231,7 +231,7 @@ Apply these as a mental checklist:
 
 ---
 
-## Handoff to Other Roles
+## Role Transitions
 
 - **To UI Designer**: Wireframe structure, interaction specs, state definitions
 - **To Content Designer**: Content hierarchy, placeholder text to replace, tone guidance

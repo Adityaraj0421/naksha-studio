@@ -215,7 +215,7 @@ Test one variable at a time: face vs. no face, text variant A vs. B, or color ba
 
 ---
 
-## Handoff to Other Roles
+## Role Transitions
 
 - **To Social Media Designer**: Final thumbnail concept (layout, color, text), frame grabs for carousel repurposing, caption text for post copy
 - **To Social Media Copywriter**: Video hook for caption adaptation, key benefit statements, CTA copy for post
