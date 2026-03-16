@@ -36,7 +36,7 @@
   <!-- Divider -->
   <line x1="580" y1="426" x2="700" y2="426" stroke="rgba(232,99,58,0.28)" stroke-width="1"/>
 
-  <!-- Stats — 5 items centred around x=640 — v3.5.0 -->
+  <!-- Stats — 5 items centred around x=640 — v3.6.0 -->
   <!-- Items at x: 240, 440, 640, 840, 1040 | Dividers at 340, 540, 740, 940 -->
 
   <text x="240" y="470" text-anchor="middle"
@@ -76,6 +76,11 @@
   <text x="1040" y="493" text-anchor="middle"
     font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="600"
     fill="rgba(255,255,255,0.3)" letter-spacing="2">PLATFORMS</text>
+
+  <!-- Version badge -->
+  <text x="1220" y="44" text-anchor="end"
+    font-family="Inter, system-ui, sans-serif" font-size="12" font-weight="600"
+    fill="rgba(232,99,58,0.55)" letter-spacing="1.5">v3.6.0</text>
 
   <!-- Footer -->
   <text x="60" y="612"
