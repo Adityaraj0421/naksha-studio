@@ -7,7 +7,8 @@ description: >
   Social Media Strategist, Social Media Copywriter, Growth/Analytics Specialist, Email Designer,
   Email Copywriter, Data Viz Designer, Dashboard Architect, Presentation Designer, Brand Strategist,
   Illustration Director, Video/Content Producer, AI Image Director, AI Video Director,
-  AI Audio & Voice Producer, AI Prompt Engineer) based on the task scope.
+  AI Audio & Voice Producer, AI Prompt Engineer,
+  Print Designer) based on the task scope.
   Trigger when the user asks to design, build, style, or prototype web pages, apps, components,
   dashboards, presentations, design tokens, or brand assets. Also trigger for Figma-to-code workflows,
   design system creation, responsive layouts, dark mode theming, accessibility audits, UX flows,
@@ -26,7 +27,10 @@ description: >
   gen video, ai video, runway, kling, sora, pika, luma dream machine,
   voiceover, voice gen, ai audio, elevenlabs, suno, murf,
   ai prompt, prompt refine, moodboard, gen-moodboard, prompt-refine,
-  ai-generated image, ai-generated video, image generation, video generation.
+  ai-generated image, ai-generated video, image generation, video generation,
+  print layout, business card, pdf report, print design, print audit,
+  preflight check, bleed, certificate design, brochure layout, print artifact,
+  annual report print, invoice design, print flyer.
   Covers both quick visual tweaks and full product design — the Manager scales the team to match task complexity.
 
   <example>
@@ -133,6 +137,16 @@ description: >
   user: "This Midjourney prompt isn't working, can you fix it?"
   assistant: Routes to /prompt-refine with AI Prompt Engineer
   </example>
+
+  <example>
+  user: "Design a business card for our product"
+  assistant: Routes to /print-layout with Print Designer — sets up bleed, safe zone, CMYK colors
+  </example>
+
+  <example>
+  user: "Generate a 12-page annual report PDF for our SaaS product"
+  assistant: Routes to /pdf-report with Print Designer — page geometry, master template, typography system
+  </example>
 ---
 
 # Design Team Skill
@@ -174,6 +188,9 @@ This skill is part of the **naksha** plugin. For focused workflows, use these co
 | `/data-viz-audit <chart or description>` | Audit a chart for type selection, accessible palette, annotations, and anti-patterns. Conditional Phase 2 audits dashboard layout fit |
 | `/design-tutorial [track]` | Interactive guided tour — quick-start, ui, figma, social, email, data-viz, or full (30 min complete tour) |
 | `/figma-component-library <description>` | Generate a complete Figma component library — atoms, molecules, organisms with variants, auto layout, component properties |
+| `/pdf-report <subject> for <brand>` | Generate a multi-page print-ready report layout with named pages, running headers/footers, typography system, and CSS `@page` output |
+| `/print-layout <artifact> for <brand>` | Design a single print artifact (business card, certificate, brochure, invoice) with bleed, safe zone, CMYK color documentation, and print-ready HTML/CSS |
+| `/print-audit <layout or description>` | Audit a print layout for bleed, safe zone, CMYK color mode, font embedding, and page break rules. Conditional Phase 2 reviews brand consistency |
 
 ---
 
