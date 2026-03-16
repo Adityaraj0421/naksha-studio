@@ -2,6 +2,34 @@
 
 All notable changes to naksha are documented here.
 
+## [3.7.0] — 2026-03-16
+
+AI Visual Gen Wing — four new specialist roles and five new commands covering the full generative AI stack: image, video, audio/voiceover, and cross-tool prompt engineering.
+
+### Added
+
+- **AI Image Director** (`skills/design/references/ai-image-director.md`) — tool selection matrix (MJ/DALL-E/Ideogram/Firefly/SD), prompt anatomy, brand consistency system, iteration protocol, platform output specs
+- **AI Video Director** (`skills/design/references/ai-video-director.md`) — tool selection matrix (Runway/Kling/Sora/Pika/Luma), shot prompt structure, consistency across shots, transition planning, platform specs
+- **AI Audio & Voice Producer** (`skills/design/references/ai-audio-voice-producer.md`) — ElevenLabs/Murf/Suno, voice brief template, music brief template, video sync timing, FTC + EU AI Act compliance
+- **AI Prompt Engineer** (`skills/design/references/ai-prompt-engineer.md`) — modular prompt architecture, brand prompt library system, cross-tool translation, seed management, 8-failure-mode diagnosis
+- `/gen-image` — brand-aligned image prompt pack (tool selection + 6-element anatomy + 2 variations + seed strategy)
+- `/gen-video` — shot-by-shot video prompt pack (tool selection + shot structure + consistency notes + platform checklist)
+- `/gen-audio` — AI audio brief (voiceover or music, timing cues, compliance note)
+- `/gen-moodboard` — 3 visual directions with 4–6 prompts each + brand rationale
+- `/prompt-refine` — annotated prompt critique + optimized version + cross-tool variant
+- Smoke fixtures (sentinel): gen-image, gen-video, gen-audio, gen-moodboard, prompt-refine (smoke coverage: 17/37)
+
+### Updated
+
+- `SKILL.md` — 4 new roles added to description + AI gen trigger keywords + 5 new routing examples
+- `plugin.json` — version 3.6.0 → 3.7.0; keywords expanded with 24 AI gen terms
+- `meta/stats.json` — roles 18→22, commands 32→37, reference_files 24→28
+- `illustration-director.md` — handoff note to AI Image Director
+- `video-content-producer.md` — handoff notes to AI Video Director + AI Audio & Voice Producer
+- `brand-strategist.md` — handoff note to AI Image Director for moodboarding
+
+---
+
 ## [3.6.0] — 2026-03-16
 
 Framework Routing + Marketplace Install — `/design` now auto-routes to `/design-framework` based on settings, and Claude Code 2.1.72+ users can install via the marketplace.
