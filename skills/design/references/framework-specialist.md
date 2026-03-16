@@ -486,6 +486,108 @@ Before delivering framework output:
 
 ---
 
+## Handoffs
+
+Framework Specialist hands off to:
+- **Design System Lead** — before conversion, if the source HTML has undocumented color tokens or spacing values. Design System Lead extracts and names them before the Specialist maps them to framework equivalents.
+- **Frontend Developer** — after conversion, delivers `.tsx` / `.vue` / `.svelte` / `.astro` files with a setup note (packages to install, config additions). Frontend Developer handles integration into the project scaffold.
+- **Design Manager** — reports which framework was resolved so subsequent commands in the same session (`/design-review`, `/design-handoff`) can use framework-aware output format.
+
+---
+
+## Advanced Patterns
+
+**Compound component pattern (Radix-style)**
+Components that share state without prop drilling. Use `React.createContext` + a parent component that provides context, with sub-components (`Card.Header`, `Card.Body`, `Card.Footer`) consuming it via `useContext`. In Vue, use `provide`/`inject`. In Svelte 5, use a `$state` rune in a shared module.
+
+**Polymorphic `as` prop**
+Allows callers to change the rendered element without changing the component:
+```tsx
+interface ButtonProps<T extends React.ElementType = 'button'> {
+  as?: T
+  children: React.ReactNode
+}
+export function Button<T extends React.ElementType = 'button'>({
+  as,
+  children,
+  ...props
+}: ButtonProps<T> & Omit<React.ComponentPropsWithoutRef<T>, keyof ButtonProps<T>>) {
+  const Component = as ?? 'button'
+  return <Component {...props}>{children}</Component>
+}
+```
+Use when a design element should render as `<a>`, `<button>`, or `<div>` depending on context.
+
+**Compound variants with `cva`**
+For components with multiple independent variant axes (e.g., `intent` × `size` × `disabled`), use `cva` (class-variance-authority) to declare all combinations declaratively instead of nested conditionals:
+```tsx
+const button = cva('base-classes', {
+  variants: {
+    intent: { primary: '...', secondary: '...' },
+    size: { sm: '...', md: '...', lg: '...' },
+  },
+  compoundVariants: [
+    { intent: 'primary', size: 'lg', class: 'extra-large-primary' },
+  ],
+  defaultVariants: { intent: 'primary', size: 'md' },
+})
+```
+
+**Server/Client component boundary strategy (Next.js App Router)**
+Default to Server Components. Move to Client Component only when you need:
+- `useState`, `useEffect`, `useReducer`
+- Browser-only APIs (`window`, `localStorage`)
+- Event listeners (`onClick`, `onChange`)
+Mark the boundary as low as possible in the tree — a page can be a Server Component with a single Client Component island for interactive parts.
+
+**Island hydration strategy (Astro)**
+Static structure goes in `.astro`. Interactive elements become React/Svelte/Vue components with `client:` directive:
+- `client:load` — hydrate immediately on page load (use for above-the-fold interactive UI)
+- `client:idle` — hydrate when browser is idle (use for secondary interactive elements)
+- `client:visible` — hydrate when component enters viewport (use for below-the-fold, saves JS)
+
+Default to `client:visible` unless immediate interaction is required.
+
+**Svelte 5 rune migration path**
+Svelte 5 replaces the `$:` reactive syntax with explicit runes. Key pairs:
+- `let count = 0` + `$: doubled = count * 2` → `let count = $state(0)` + `let doubled = $derived(count * 2)`
+- `export let name` → `let { name } = $props()`
+- `createEventDispatcher` → `let { onclick } = $props()` (events become props)
+- `<slot />` → `{@render children?.()}`
+
+---
+
+## Full Coverage
+
+Add exactly these 5 worked examples in order:
+
+**React + Tailwind — SaaS dashboard page**
+Input: HTML dashboard with sidebar nav, header with user menu, main area with stat cards and a data table.
+Output: `DashboardLayout.tsx` (Server Component), `Sidebar.tsx` (Server), `UserMenu.tsx` (Client — dropdown state), `StatCard.tsx` (Server), `DataTable.tsx` (Client — sort/filter state).
+Watch for: Don't make the entire layout a Client Component because one dropdown needs state. Isolate the interactive island.
+
+**Vue 3 + UnoCSS — e-commerce product card**
+Input: HTML product card with image, title, price, color swatches, add-to-cart button.
+Output: `ProductCard.vue` with `<script setup lang="ts">`, typed `defineProps`, `defineEmits` for cart event, `ref` for selected color state. UnoCSS utility classes replace inline styles.
+Watch for: `defineEmits` type must match the parent's `@add-to-cart` handler signature. Don't use Options API.
+
+**Svelte 5 — interactive form**
+Input: HTML multi-step form with validation state and error messages.
+Output: `MultiStepForm.svelte` using `$state` for step and field values, `$derived` for validation errors, `$effect` for side effects (localStorage save). Use `{@render}` for step slot content.
+Watch for: `$effect` runs after every reactive update — scope it tightly. Don't use `onMount` (Svelte 4 pattern).
+
+**Next.js App Router — page with static header + client data table**
+Input: HTML analytics page with a static page header and a filterable/sortable data table.
+Output: `page.tsx` (Server Component, no `'use client'`) + `DataTable.tsx` (Client Component with `'use client'`, `useState` for filters). `metadata` export on the page.
+Watch for: The `metadata` export is only valid in Server Components. The Client Component cannot export `metadata`.
+
+**Astro — marketing landing with React island CTA**
+Input: HTML landing page with hero, features grid, pricing section, and an interactive pricing toggle (monthly/annual).
+Output: `LandingPage.astro` (static hero + features + pricing layout) + `PricingToggle.tsx` (React island with `client:visible`). Astro props typed with `interface Props`.
+Watch for: Astro components don't support client-side state — the toggle must be a React/Svelte/Vue island. Pass initial data as props from the `.astro` parent to the island.
+
+---
+
 ## Reference-Sourced Insights
 
 ### Modern CSS Reset Baseline (From Josh W. Comeau)
@@ -692,3 +794,5 @@ This wraps the sidebar below main content when the container shrinks below the `
 ```
 
 **Principle:** These layouts work in any framework because they're CSS-only. Prefer these intrinsic layout patterns over media-query-based breakpoint grids when building framework-agnostic components.
+
+---
