@@ -80,6 +80,12 @@ check_fixture "design-system-output.md" "token,component,typography"            
 check_fixture "figma-output.md"         "frame,component,variant"                  2    100
 check_fixture "brand-output.md"         "voice,color,typography"                   2    100
 check_fixture "design-framework-output.md" "component,tsx,props"                   2    150
+check_fixture "email-template-output.md"    "inline,table,button"                  2    200
+check_fixture "email-campaign-output.md"    "sequence,subject,cta"                 2    200
+check_fixture "chart-design-output.md"      "chart,axis,color"                     2    150
+check_fixture "design-template-output.md"   "template,layout,component"            2    150
+check_fixture "design-tutorial-output.md"   "step,track,command"                   3    150
+check_fixture "dashboard-layout-output.md"  "kpi,grid,widget"                      2    150
 
 echo ""
 echo "───────────────────────────────────────"
