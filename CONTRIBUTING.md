@@ -137,7 +137,7 @@ Naksha runs on 5 AI coding tools. The knowledge lives in the same role reference
 
 | Tool | Adapter File | How It Loads |
 |------|-------------|-------------|
-| **Claude Code** | `.claude-plugin/plugin.json` + `skills/design/` | Plugin system — full 38 commands, agents, hooks |
+| **Claude Code** | `.claude-plugin/plugin.json` + `skills/design/` | Plugin system — full 39 commands, agents, hooks |
 | **Cursor** | `.cursor/rules/naksha.mdc` | Glob-matched rules — activates on CSS/HTML/TSX/SVG |
 | **Windsurf** | `.windsurfrules` | Read at session start for entire project |
 | **Gemini CLI** | `GEMINI.md` | Read at session start for entire project |

@@ -8,8 +8,8 @@
     {
       "name": "naksha",
       "source": "./",
-      "description": "A virtual design team for Claude Code — 22 specialist roles, 38 commands, 11,000+ lines of expert design knowledge. Your agency's design brain, inside your terminal.",
-      "version": "3.8.0",
+      "description": "A virtual design team for Claude Code — 22 specialist roles, 39 commands, 11,000+ lines of expert design knowledge. Your agency's design brain, inside your terminal.",
+      "version": "3.9.0",
       "author": {
         "name": "Aditya Raj"
       },

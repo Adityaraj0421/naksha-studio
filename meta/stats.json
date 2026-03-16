@@ -1,7 +1,1 @@
-{
-  "version": "3.8.0",
-  "roles": 22,
-  "commands": 38,
-  "knowledge_lines": 11113,
-  "reference_files": 28
-}
+{"version":"3.9.0","roles":22,"commands":39,"knowledge_lines":11350,"reference_files":28}

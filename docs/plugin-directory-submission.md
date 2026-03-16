@@ -14,7 +14,7 @@ Use this document when submitting to the Claude Code plugin directory.
 |-------|-------|
 | Plugin name (slug) | `naksha` |
 | Display name | Naksha — Design Team |
-| Version | 3.8.0 |
+| Version | 3.9.0 |
 | License | MIT |
 | Author | Aditya Raj |
 | Author GitHub | https://github.com/Adityaraj0421 |
@@ -31,14 +31,14 @@ Use this document when submitting to the Claude Code plugin directory.
 
 **Short description (≤160 chars):**
 ```
-A virtual design team for Claude Code — 22 specialist roles, 38 commands, 11,000+ lines of design knowledge.
+A virtual design team for Claude Code — 22 specialist roles, 39 commands, 11,000+ lines of design knowledge.
 ```
 
 **Long description:**
 ```
 Naksha assembles specialist roles automatically based on what you're designing. UI Designer, UX Researcher, Content Designer, Motion Designer, Figma Expert, Email Designer, Data Viz Designer, Brand Strategist, and more — 22 roles total.
 
-38 slash commands cover the full design-to-code pipeline: /design builds pages and components, /design-review audits for accessibility and usability, /design-system extracts tokens, /design-framework converts HTML to React/Vue/Svelte/Next.js/Astro components, /figma-create builds Figma frames, /email-template generates production HTML emails, /chart-design produces accessible data visualizations, and more.
+39 slash commands cover the full design-to-code pipeline: /design builds pages and components, /design-review audits for accessibility and usability, /design-system extracts tokens, /design-framework converts HTML to React/Vue/Svelte/Next.js/Astro components, /figma-create builds Figma frames, /email-template generates production HTML emails, /chart-design produces accessible data visualizations, and more.
 
 Over 11,000 lines of expert design knowledge, source-attributed from authoritative references (WCAG, Nielsen heuristics, Refactoring UI, MJML docs, etc.).
 
@@ -75,9 +75,9 @@ Assets for the submission form:
 
 ## Checklist Before Submitting
 
-- [ ] Version is `3.8.0` in `plugin.json`
-- [ ] GitHub release `v3.8.0` exists and is tagged `Latest`
+- [ ] Version is `3.9.0` in `plugin.json`
+- [ ] GitHub release `v3.9.0` exists and is tagged `Latest`
 - [ ] README has install instructions for both methods
 - [ ] `marketplace.json` is present in `.claude-plugin/`
-- [ ] All 38 commands work in Claude Code
+- [ ] All 39 commands work in Claude Code
 - [ ] Issue #4 is closed

@@ -2,6 +2,23 @@
 
 All notable changes to naksha are documented here.
 
+## [3.9.0] — 2026-03-16
+
+Data Viz Wing Completion — polished the Dashboard Architect role file and added a new `/data-viz-audit` command covering chart quality (always) and dashboard layout fit (conditional).
+
+### Added
+- `/data-viz-audit` command — two-phase audit: Phase 1 (Data Viz Designer) covers chart type selection, accessible palette, annotations, and anti-patterns; Phase 2 (Dashboard Architect) covers dashboard fit, hierarchy placement, and filter alignment — runs only when dashboard context is provided
+- `evals/fixtures/data-viz-audit-output.md` — smoke fixture for `/data-viz-audit`
+- Evals 74–75: `/data-viz-audit` chart-only and dashboard-context scenarios
+
+### Updated
+- `skills/design/references/dashboard-architect.md` — added missing `## Advanced Patterns` (drill-through navigation, real-time refresh, cross-filter coordination, progressive disclosure) and `## Full Coverage` (5 dashboard type scenarios, empty/loading/error states, mobile degradation at 375px, export patterns)
+- `scripts/behavioral-smoke.sh` — smoke coverage 18/38 → 19/39
+- `skills/design/SKILL.md` — `/data-viz-audit` added to commands table; 7 new data viz audit trigger keywords added
+- `meta/stats.json` — version 3.8.0 → 3.9.0, commands 38 → 39
+
+---
+
 ## [3.8.0] — 2026-03-16
 
 ### Added

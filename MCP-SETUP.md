@@ -1,6 +1,6 @@
 # MCP Setup Guide
 
-Naksha uses **4 optional MCP servers** for Figma integration, live preview, and website capture. All 38 commands degrade gracefully without them — you get markdown specs, CSS tokens, and HTML files instead of live Figma/preview workflows.
+Naksha uses **4 optional MCP servers** for Figma integration, live preview, and website capture. All 39 commands degrade gracefully without them — you get markdown specs, CSS tokens, and HTML files instead of live Figma/preview workflows.
 
 ---
 
