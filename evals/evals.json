@@ -2873,6 +2873,31 @@
         {"name": "verifies-semantic-html", "description": "Audit confirms use of appropriate semantic HTML elements such as nav and aria landmarks"},
         {"name": "checks-skip-navigation", "description": "Report notes the presence or absence of a skip-to-main-content link"}
       ]
+    },
+    {
+      "id": 118,
+      "name": "template-gallery-noargs",
+      "command": "/design-template",
+      "role": "UI Designer",
+      "prompt": "/design-template",
+      "assertions": [
+        {"name": "shows-all-10-categories", "description": "Gallery output includes all 10 categories: landing-page, dashboard, pricing, auth, blog, ecommerce, portfolio, docs, saas, onboarding"},
+        {"name": "includes-sections-per-category", "description": "Each category entry lists its key sections (e.g. Hero · Features · CTA for landing-page)"},
+        {"name": "includes-best-for-tags", "description": "Each category entry includes a Best for tag describing the ideal use case"},
+        {"name": "includes-try-example", "description": "Each category entry includes a Try: example command with a style flag"}
+      ]
+    },
+    {
+      "id": 119,
+      "name": "template-gallery-discovery-phrase",
+      "command": "/design-template",
+      "role": "UI Designer",
+      "prompt": "what templates are available in naksha?",
+      "assertions": [
+        {"name": "routes-to-gallery-mode", "description": "Discovery phrase triggers the gallery mode, not a template generation attempt"},
+        {"name": "shows-all-10-categories", "description": "Gallery output includes all 10 template categories"},
+        {"name": "includes-usage-hint", "description": "Response ends with a usage hint or invitation to specify a category"}
+      ]
     }
   ]
 }
