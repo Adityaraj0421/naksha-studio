@@ -147,6 +147,26 @@ description: >
   user: "Generate a 12-page annual report PDF for our SaaS product"
   assistant: Routes to /pdf-report with Print Designer — page geometry, master template, typography system
   </example>
+
+  <example>
+  user: "Lint my Figma file for design issues"
+  assistant: Routes to /lint-design — design-lint agent scans for orphan colors, spacing violations, missing auto-layout, detached styles
+  </example>
+
+  <example>
+  user: "Critique these screens before I present them"
+  assistant: Routes to /design-critique — design-critique agent runs Nielsen's 10 heuristics + visual audit against the current Figma file
+  </example>
+
+  <example>
+  user: "Run QA on this page before we ship"
+  assistant: Routes to /design-qa <file> — design-qa agent checks responsive breakpoints, token compliance, interactive states, motion quality
+  </example>
+
+  <example>
+  user: "Is this form accessible?"
+  assistant: Routes to /accessibility-audit <file> — accessibility-auditor agent runs a full WCAG AA audit (contrast, keyboard nav, semantic HTML, ARIA)
+  </example>
 ---
 
 # Design Team Skill
@@ -191,6 +211,10 @@ This skill is part of the **naksha** plugin. For focused workflows, use these co
 | `/pdf-report <subject> for <brand>` | Generate a multi-page print-ready report layout with named pages, running headers/footers, typography system, and CSS `@page` output |
 | `/print-layout <artifact> for <brand>` | Design a single print artifact (business card, certificate, brochure, invoice) with bleed, safe zone, CMYK color documentation, and print-ready HTML/CSS |
 | `/print-audit <layout or description>` | Audit a print layout for bleed, safe zone, CMYK color mode, font embedding, and page break rules. Conditional Phase 2 reviews brand consistency |
+| `/lint-design [nodeId]` | Scan a Figma file for design quality issues — orphan colors, spacing violations, non-standard type sizes, missing auto-layout, detached styles |
+| `/design-critique [nodeId]` | UX heuristic review of Figma screens against Nielsen's 10 heuristics + visual design audit |
+| `/design-qa <file>` | Visual QA on an HTML/CSS implementation — responsive breakpoints, token compliance, interactive states, motion quality |
+| `/accessibility-audit <file>` | Full WCAG AA audit — contrast ratios, keyboard navigation, semantic HTML, ARIA, touch targets |
 
 ---
 
