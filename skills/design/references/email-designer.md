@@ -323,6 +323,109 @@ When no ESP is specified, use `{{{VARIABLE_NAME}}}` triple-brace syntax and docu
 
 ---
 
+## Handoffs
+
+- **→ Email Copywriter**: Always request a copy brief before building HTML — subject line, preview text, headline, body paragraphs, CTA text, footer copy. Building templates from vague briefs leads to rework.
+- **→ Framework Specialist**: When email must be generated programmatically (e.g., transactional receipts from a Next.js API route), hand off the MJML source + variable schema. They wire it into the backend.
+- **→ Design System Lead**: When brand tokens need to sync between email templates and the web product — they own the token source; the email designer adapts tokens to inline-style–safe hex values (no CSS variables in email).
+- **→ Design Manager**: Flag when a template requires a new ESP automation workflow (triggered sequences, behavioral sends) — that is outside email designer scope.
+
+---
+
+## Advanced Patterns
+
+### Modular MJML Component System
+
+Use `<mj-include>` to build a reusable component library: `header.mjml`, `footer.mjml`, `button.mjml`. Each is a standalone MJML fragment assembled at compile time. Prevents visual inconsistency across a 10+ template campaign suite — one change to `footer.mjml` propagates everywhere.
+
+```xml
+<!-- main-template.mjml -->
+<mjml>
+  <mj-head>
+    <mj-include path="./partials/head-styles.mjml" />
+  </mj-head>
+  <mj-body>
+    <mj-include path="./partials/header.mjml" />
+    <!-- unique per-email content here -->
+    <mj-include path="./partials/footer.mjml" />
+  </mj-body>
+</mjml>
+```
+
+When to output MJML vs raw HTML: output MJML when the system will compile it (agency workflow, CI pipeline); output raw HTML when the email is for direct ESP upload.
+
+---
+
+### Conditional Content Blocks for ESP Segmentation
+
+Dynamic content swapping without duplicating full templates. Use ESP-native conditional syntax to swap hero sections, CTAs, or offer blocks by user segment:
+
+| ESP | Conditional syntax |
+|-----|--------------------|
+| Klaviyo | `{% if person.plan == "pro" %}...{% endif %}` |
+| Mailchimp | `*|IF:MERGE_FIELD = "value"|*...*|END:IF|*` |
+| Salesforce MC | `%%[ IF @plan == "pro" THEN ]%%...%%[ ENDIF ]%%` |
+| HubSpot | `{% if contact.plan == "pro" %}...{% endif %}` |
+
+Use for: swapping hero sections by plan tier, showing different CTAs by lifecycle stage, suppressing upgrade offers for existing paid users.
+
+---
+
+### Retina Image Technique
+
+Serve `@2x` images (e.g., `image@2x.png` at 1200×600px) but declare half dimensions in HTML attributes (`width="600" height="300"`). Renders crisp on retina screens. Outlook ignores `srcset` but respects HTML dimension attributes — this technique works in all clients.
+
+```html
+<img src="https://cdn.example.com/hero@2x.png"
+     width="600" height="300"
+     alt="Lumina Beauty serum on marble surface"
+     style="display: block; max-width: 100%; height: auto; border: 0;"
+     class="fluid">
+```
+
+Use PNG for logos and icons (sharp edges); JPEG for photos (smaller file size). Keep all images under 200KB.
+
+---
+
+### Animated GIF First-Frame Design Rule
+
+Outlook (all Windows versions) renders **only the first frame** of an animated GIF. Design rule: frame 1 must function as a complete static image — headline visible, CTA text legible, message clear, no mid-animation state.
+
+Workflow: pause the GIF at frame 1 in your editing tool before including it. If frame 1 doesn't stand alone, restructure the animation to start from a complete state.
+
+---
+
+## Full Coverage
+
+Email client rendering support matrix — what works, what needs a workaround, what to avoid:
+
+| Feature | Gmail (web) | Gmail app | Outlook 2016–2021 | Outlook 365 | Apple Mail | Yahoo Mail | Samsung Mail |
+|---------|------------|-----------|-------------------|-------------|------------|------------|--------------|
+| `<style>` block | Stripped from `<head>` (body `<style>` survives) | Stripped | Partial | Partial | ✅ Full | ✅ Full | ✅ Full |
+| Inline styles | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| `@media` queries | ✅ | ✅ iOS / ✅ Android² | ❌ | ❌ | ✅ | ✅ | ✅ |
+| Web fonts (`@font-face`) | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ✅ |
+| CSS `display:flex` | ❌ | ❌ | ❌ | ❌ | ✅ | Partial | Partial |
+| CSS floats | ❌ | ❌ | ❌ | ❌ | ✅ | Partial | Partial |
+| CSS variables (`var()`) | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
+| Animated GIF | ✅ | ✅ | ❌ (frame 1 only) | ❌ (frame 1 only) | ✅ | ✅ | ✅ |
+| HTML5 `<video>` | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
+| Dark mode `@media` | ❌ | Partial | Partial | ✅ | ✅ | ❌ | ✅ |
+| VML (bulletproof buttons) | ❌ (ignored) | ❌ | ✅ Required | ✅ Required | ❌ (ignored) | ❌ (ignored) | ❌ (ignored) |
+| Image blocking default | Off | Off | On | On | Off (MPP pre-fetches) | On | Off |
+
+² Gmail Android has supported `@media` queries since 2019 — this differs from older legacy guides that mark it as unsupported.
+
+**Key takeaways:**
+- Always inline styles — `<style>` block is stripped by Gmail and unreliable across Outlook versions
+- `@media` queries are safe for modern clients; Outlook ignores them gracefully (design desktop-first at 600px)
+- Web fonts only work in Apple Mail and Samsung Mail — always specify system font fallbacks
+- Bulletproof VML buttons are required for Outlook; all other clients ignore VML (that's the point)
+- Animated GIFs must have a functional first frame — Outlook shows only frame 1
+- Never put essential information (price, CTA text, headline) inside an image — up to 40% of recipients block images by default
+
+---
+
 ## Reference-Sourced Insights
 
 ### MJML as an Abstraction Layer (From MJML docs)
