@@ -14,14 +14,32 @@ Follow the `design` skill's full orchestration workflow.
 
 ## Process
 
-### 0. Check for Framework Flag
+### 0. Resolve Framework Target
 
-If `$ARGUMENTS` contains `--framework <name>` (e.g., `--framework react-tailwind`, `--framework vue`, `--framework nextjs`):
-- Strip the flag from the task description
-- Run the full design workflow (steps 1–5 below)
-- After Step 5 (Build the Implementation), invoke `/design-framework <framework> <output-file>` to convert the HTML output to the target framework
+Determine the output framework using this priority order — stop at the first match:
 
-Recognized frameworks: `react-tailwind`, `react`, `vue`, `vue3`, `nuxt`, `svelte`, `sveltekit`, `nextjs`, `next`, `astro`
+1. **`--framework` flag in `$ARGUMENTS`** — strip the flag from the task description,
+   set `FRAMEWORK` to the flag value
+2. **`js_framework` in `settings.local.md`** — if the field exists and is not `"auto"`,
+   set `FRAMEWORK` to that value. Note: if both `js_framework` and `output_format` are
+   set to non-default values, `js_framework` takes precedence (first match wins).
+3. **`output_format` in `settings.local.md`** — if the field exists and is not `"html"`,
+   set `FRAMEWORK` to that value. Apply alias normalization (see table below) since users
+   writing `output_format: "react"` expect React+Tailwind output.
+4. **None of the above** — set `FRAMEWORK = null` (HTML-only output, no conversion)
+
+Framework aliases — apply normalization to ALL resolved values (flag, `js_framework`,
+and `output_format`) before carrying forward:
+- `react` / `react-tw` / `react-tailwind` → `react-tailwind`
+- `next` / `next-app` / `nextjs`          → `nextjs`
+- `sveltekit` / `svelte`                  → `svelte`
+- `nuxt` / `vue3` / `vue`                 → `vue`
+- `astro`                                 → `astro`
+
+This replacement also supersedes the inline alias list at `design.md` line 24
+(`Recognized frameworks: react-tailwind, react, vue, vue3, ...`).
+
+Carry `FRAMEWORK` through steps 1–8.
 
 ### 1. Load Settings & Analyze the Task
 
@@ -80,6 +98,9 @@ Implementation standards:
 - Smooth transitions on interactive elements (150-300ms, ease-out)
 - Inter font via CDN, Lucide icons where needed
 
+Write the final HTML to **`design-output.html`** in the current working directory.
+This is the canonical handoff artifact — used by `/design-framework` and `/design-review`.
+
 ### 6. Preview & Verify
 
 Use the Preview MCP tools to show live results:
@@ -89,7 +110,22 @@ Use the Preview MCP tools to show live results:
 4. Verify interactive states work (hover, focus, click)
 5. Run a quick accessibility pass (contrast, keyboard nav)
 
-### 7. Quality Review
+### 7. Framework Handoff
+
+**If `FRAMEWORK != null`:**
+Invoke `/design-framework <FRAMEWORK> design-output.html` to convert the HTML output
+into idiomatic framework components. The framework specialist will:
+- Decompose the page into a component hierarchy
+- Generate typed props interfaces
+- Map CSS custom properties to framework token equivalents
+- Output framework-native files (`.tsx`, `.vue`, `.svelte`, or `.astro`)
+
+**If `FRAMEWORK == null`:**
+HTML output is complete. After delivering, suggest:
+- "`/design-framework react-tailwind design-output.html` — convert to React components"
+- "Or set `js_framework: react` in settings.local.md for automatic conversion next time"
+
+### 8. Quality Review
 
 Before delivering, verify:
 - [ ] Output matches the creative direction set in Step 2
