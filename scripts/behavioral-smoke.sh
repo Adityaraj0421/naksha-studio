@@ -117,6 +117,10 @@ check_fixture "motion-design-output.md"           "animation,duration,easing,tra
 check_fixture "presentation-design-output.md"     "slide,deck,narrative,layout,typography,visual"                     3    300
 check_fixture "site-to-figma-output.md"           "capture,layer,component,token,spacing,import"                      3    300
 check_fixture "video-script-output.md"            "scene,voiceover,shot,script,hook,duration"                         3    300
+check_fixture "lint-design-output.md"             "lint,orphan,spacing,contrast,autolayout,severity"                  3    300
+check_fixture "design-critique-output.md"         "heuristic,critique,visibility,feedback,usability,recommendation"   3    300
+check_fixture "design-qa-output.md"               "responsive,token,breakpoint,compliance,state,score"                3    300
+check_fixture "accessibility-audit-output.md"     "wcag,contrast,aria,keyboard,semantic,violation"                    3    300
 
 echo ""
 echo "───────────────────────────────────────"

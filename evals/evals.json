@@ -2769,6 +2769,110 @@
         {"name": "visual-direction-notes-included", "description": "Visual direction or shot type notes are included for each scene"},
         {"name": "hook-and-duration-defined", "description": "The opening hook and total video duration are defined"}
       ]
+    },
+    {
+      "id": 110,
+      "name": "lint-design-figma-page",
+      "command": "/lint-design",
+      "role": "Design Linter",
+      "prompt": "Lint the current Figma page for design quality issues",
+      "assertions": [
+        {"name": "produces-lint-report", "description": "Response produces a lint report with categorized design issues"},
+        {"name": "identifies-severity-levels", "description": "Issues are categorized by severity levels such as error, warning, and info"},
+        {"name": "includes-fix-suggestions", "description": "Each issue includes a specific, actionable fix suggestion"},
+        {"name": "covers-multiple-categories", "description": "Report covers at least two categories such as color, typography, or spacing"}
+      ]
+    },
+    {
+      "id": 111,
+      "name": "lint-design-component-set",
+      "command": "/lint-design",
+      "role": "Design Linter",
+      "prompt": "Lint the Button component set in Figma for design inconsistencies",
+      "assertions": [
+        {"name": "targets-specified-component", "description": "Response targets the named component rather than scanning the whole file"},
+        {"name": "checks-variant-naming", "description": "Report includes a check for variant naming conventions such as Property=Value format"},
+        {"name": "reports-lint-score", "description": "Response includes a numerical lint score out of 100"},
+        {"name": "groups-related-issues", "description": "Similar issues across multiple nodes are grouped rather than listed individually"}
+      ]
+    },
+    {
+      "id": 112,
+      "name": "design-critique-onboarding",
+      "command": "/design-critique",
+      "role": "UX Design Critic",
+      "prompt": "Critique the onboarding flow screens in the current Figma file",
+      "assertions": [
+        {"name": "applies-nielsen-heuristics", "description": "Evaluation references Nielsen's usability heuristics by name or number"},
+        {"name": "leads-with-strengths", "description": "Response acknowledges what the design does well before listing issues"},
+        {"name": "prioritizes-issues", "description": "Issues are categorized by priority such as critical, major, or minor"},
+        {"name": "provides-visual-design-score", "description": "Response includes a visual design quality score or rating across key criteria"}
+      ]
+    },
+    {
+      "id": 113,
+      "name": "design-critique-checkout",
+      "command": "/design-critique",
+      "role": "UX Design Critic",
+      "prompt": "Review the checkout flow screens for UX issues before the v2 launch",
+      "assertions": [
+        {"name": "evaluates-user-control", "description": "Critique checks for user control and freedom such as back navigation or undo options"},
+        {"name": "checks-error-prevention", "description": "Report reviews error prevention and recovery patterns in the flow"},
+        {"name": "provides-actionable-recommendations", "description": "Top recommendations are specific and implementable, not vague suggestions"},
+        {"name": "references-heuristics-by-name", "description": "At least one issue references a specific Nielsen heuristic number or name"}
+      ]
+    },
+    {
+      "id": 114,
+      "name": "design-qa-responsive-check",
+      "command": "/design-qa",
+      "role": "Design QA Specialist",
+      "prompt": "Run QA on the pricing page at src/pages/pricing.html",
+      "assertions": [
+        {"name": "tests-three-breakpoints", "description": "QA report checks behavior at mobile, tablet, and desktop breakpoints"},
+        {"name": "produces-overall-score", "description": "Response includes an overall QA score out of 100"},
+        {"name": "checks-interactive-states", "description": "Report verifies hover, focus, and active states on interactive elements"},
+        {"name": "identifies-blocking-issues", "description": "Any issues that would block launch are clearly flagged as blockers"}
+      ]
+    },
+    {
+      "id": 115,
+      "name": "design-qa-token-compliance",
+      "command": "/design-qa",
+      "role": "Design QA Specialist",
+      "prompt": "Check if the dashboard page at src/pages/dashboard.html uses design tokens correctly",
+      "assertions": [
+        {"name": "identifies-hardcoded-values", "description": "Report flags hardcoded CSS values that should use design tokens"},
+        {"name": "calculates-compliance-percentage", "description": "Response reports a percentage of tokenized versus total CSS values"},
+        {"name": "suggests-token-mappings", "description": "Each hardcoded value is paired with a suggested token name or variable"},
+        {"name": "categorizes-violations-by-type", "description": "Token violations are grouped by type such as color, spacing, or typography"}
+      ]
+    },
+    {
+      "id": 116,
+      "name": "accessibility-audit-form",
+      "command": "/accessibility-audit",
+      "role": "Accessibility Specialist",
+      "prompt": "Audit the signup form at src/components/SignupForm.html for WCAG AA compliance",
+      "assertions": [
+        {"name": "produces-wcag-compliance-grade", "description": "Response assigns a WCAG AA compliance grade or pass/partial/fail status"},
+        {"name": "checks-label-associations", "description": "Audit verifies that form inputs have programmatically associated labels"},
+        {"name": "provides-exact-code-fixes", "description": "Every critical issue includes the exact HTML or CSS code change needed"},
+        {"name": "covers-four-wcag-principles", "description": "Audit addresses all four WCAG principles: perceivable, operable, understandable, and robust"}
+      ]
+    },
+    {
+      "id": 117,
+      "name": "accessibility-audit-navigation",
+      "command": "/accessibility-audit",
+      "role": "Accessibility Specialist",
+      "prompt": "Check the navigation component at src/components/Nav.html for keyboard accessibility",
+      "assertions": [
+        {"name": "checks-focus-management", "description": "Audit verifies that all focusable elements have visible focus styles"},
+        {"name": "identifies-keyboard-traps", "description": "Report checks for keyboard traps in navigation patterns such as dropdown menus"},
+        {"name": "verifies-semantic-html", "description": "Audit confirms use of appropriate semantic HTML elements such as nav and aria landmarks"},
+        {"name": "checks-skip-navigation", "description": "Report notes the presence or absence of a skip-to-main-content link"}
+      ]
     }
   ]
 }

@@ -2,6 +2,23 @@
 
 All notable changes to naksha are documented here.
 
+## [3.13.0] — 2026-03-16
+
+Agent Commands — surfaces 4 previously-hidden QA agents as slash commands, growing the command count from 42 to 46.
+
+### Added
+- `/lint-design [nodeId]` — Figma design quality linter (orphan colors, spacing, contrast, auto-layout)
+- `/design-critique [nodeId]` — UX heuristic review against Nielsen's 10 heuristics + visual audit
+- `/design-qa <file>` — HTML/CSS implementation QA (responsive, token compliance, states, motion)
+- `/accessibility-audit <file>` — Full WCAG AA audit (contrast, keyboard nav, semantic HTML, ARIA)
+- 4 new smoke fixtures; 8 new evals (ids 110–117)
+
+### Updated
+- `skills/design/SKILL.md` — 4 new routing examples + 4 new Plugin Commands table rows
+- `meta/stats.json` — commands 42 → 46
+
+---
+
 ## [3.12.0] — 2026-03-16
 
 Quality Infrastructure — achieves 100% smoke fixture coverage (22/42 → 42/42) across all 42 commands and fills eval gaps for under-tested commands, growing the eval suite from 84 to 110.
