@@ -93,6 +93,9 @@ check_fixture "gen-moodboard-output.md"    "direction,moodboard,prompt,brand,sty
 check_fixture "prompt-refine-output.md"    "critique,optimized,token,cross-tool"    2    150
 check_fixture "email-audit-output.md"      "critical,technical,subject,cta,rewrite,aida,inline" 3 200
 check_fixture "data-viz-audit-output.md"   "chart-type,palette,annotation,colorblind,anti-pattern,dashboard-fit,rewrite" 3 200
+check_fixture "pdf-report-output.md"       "cover,toc,typography,page-break,widows,preflight,@page"                       3 200
+check_fixture "print-layout-output.md"     "bleed,safe-zone,cmyk,trim,grid,typography,preflight"                          3 200
+check_fixture "print-audit-output.md"      "bleed,safe-zone,cmyk,font-embed,page-break,brand-fit,rewrite"                 3 200
 
 echo ""
 echo "───────────────────────────────────────"
