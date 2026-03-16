@@ -2,6 +2,23 @@
 
 All notable changes to naksha are documented here.
 
+## [3.6.0] — 2026-03-16
+
+Framework Routing + Marketplace Install — `/design` now auto-routes to `/design-framework` based on settings, and Claude Code 2.1.72+ users can install via the marketplace.
+
+### Added
+
+- `.claude-plugin/marketplace.json` — enables `/plugin marketplace add` installation for Claude Code 2.1.72+ (fixes #4)
+- Framework routing in `/design` — `--framework` flag and `js_framework`/`output_format` settings now auto-invoke `/design-framework` for component output; priority ladder: flag → `js_framework` → `output_format` → null (HTML only)
+- Smoke test fixtures for 6 more commands: email-template, email-campaign, chart-design, design-template, design-tutorial, dashboard-layout (smoke coverage: 12/32 commands)
+
+### Fixed
+
+- `/design` Step 0 now reads `js_framework` and `output_format` from `settings.local.md` (previously only checked `--framework` flag in `$ARGUMENTS`)
+- `/design` Step 5 now writes output to canonical `design-output.html` for reliable `/design-framework` handoff
+
+---
+
 ## [3.5.0] — 2026-03-15
 
 Multi-Platform Expansion — Naksha design team now works in Cursor, Windsurf, Gemini CLI, and VS Code Copilot alongside Claude Code.
