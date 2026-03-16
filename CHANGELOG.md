@@ -2,6 +2,19 @@
 
 All notable changes to naksha are documented here.
 
+## v3.17.0 (2026-03-17)
+
+### Added
+- **Template Gallery**: `/design-template` with no arguments now shows a rich catalog of all 10 template categories — each with name, section breakdown, best-for tags, and an example command with style flags
+- 5 new SKILL.md discovery trigger phrases (`Browse available templates`, `What templates are available?`, `Show me template options`, `Template list`, `Available templates`)
+- 2 new behavioral evals (ids 118–119): `template-gallery-noargs`, `template-gallery-discovery-phrase`. Total: 120 evals
+- 1 new smoke fixture (`template-gallery-output`). Total: 49 fixtures
+
+### Fixed
+- `plugin.json` description corrected from "42 commands, 11,000+ lines" to "46 commands, 12,500+ lines"
+
+---
+
 ## [3.16.0] — 2026-03-17
 
 Source-Anchoring Completion — adds ## Reference-Sourced Insights to deployment.md,

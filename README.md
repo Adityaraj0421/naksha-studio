@@ -28,7 +28,7 @@
 
 ## 🚀 Quick Start
 
-### Claude Code (full plugin — 42 commands, agents, hooks)
+### Claude Code (full plugin — 46 commands, agents, hooks)
 
 **Option A — Marketplace install (recommended, Claude Code 2.1.72+)**
 
@@ -882,7 +882,7 @@ naksha/
 ```
 
 <details>
-<summary><b>Design knowledge breakdown (11,000+ raw lines)</b></summary>
+<summary><b>Design knowledge breakdown (12,500+ raw lines)</b></summary>
 
 | File | Lines | Covers |
 |------|-------|--------|
