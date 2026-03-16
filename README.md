@@ -6,7 +6,7 @@
 
 **Your agency's design brain. Always on, always yours.**
 
-*The Naksha design team, inside your terminal — 18 specialist roles activate automatically based on what you're building. Also available as a web workspace at [naksha.ai](https://naksha.ai).*
+*The Naksha design team, inside your terminal — 22 specialist roles activate automatically based on what you're building. Also available as a web workspace at [naksha.ai](https://naksha.ai).*
 
 <br>
 
@@ -16,8 +16,8 @@
 [![Windsurf](https://img.shields.io/badge/Windsurf-Rules-0099ff)]()
 [![Gemini CLI](https://img.shields.io/badge/Gemini_CLI-GEMINI.md-4285F4)]()
 [![Copilot](https://img.shields.io/badge/Copilot-Instructions-24292e)]()
-[![Roles](https://img.shields.io/badge/Specialist_Roles-18-orange)]()
-[![Commands](https://img.shields.io/badge/Slash_Commands-32-green)]()
+[![Roles](https://img.shields.io/badge/Specialist_Roles-22-orange)]()
+[![Commands](https://img.shields.io/badge/Slash_Commands-37-green)]()
 [![Design Knowledge](https://img.shields.io/badge/Design_Knowledge-11000%2B_lines-E8633A)]()
 
 [Quick Start](#-quick-start) · [Commands](#-commands) · [The Team](#-the-team) · [How It Works](#-how-it-works) · [Changelog](CHANGELOG.md)
@@ -28,7 +28,7 @@
 
 ## 🚀 Quick Start
 
-### Claude Code (full plugin — 32 commands, agents, hooks)
+### Claude Code (full plugin — 37 commands, agents, hooks)
 
 **Option A — Marketplace install (recommended, Claude Code 2.1.72+)**
 
@@ -247,6 +247,39 @@ Scripts
 </td>
 </tr>
 <tr>
+<td align="center">
+
+**AI Image Director**
+
+Image Gen
+
+</td>
+<td align="center">
+
+**AI Video Director**
+
+Video Gen
+
+</td>
+<td align="center">
+
+**AI Audio & Voice Producer**
+
+Voiceover & Music
+
+</td>
+<td align="center">
+
+**AI Prompt Engineer**
+
+Prompt Systems
+
+</td>
+<td align="center" colspan="3">
+
+</td>
+</tr>
+<tr>
 <td align="center" colspan="7">
 
 _The skill loads only the references your task actually needs_
@@ -293,6 +326,11 @@ _The skill loads only the references your task actually needs_
 | `/brand-strategy <brand name>` | Define or audit a brand — positioning, visual identity, voice and tone, brand architecture |
 | `/illustration-system <scope>` | Design an illustration style guide, icon system, or SVG asset set |
 | `/video-script <video type>` | Write a video script, storyboard, or content series plan for demos, explainers, social video, or ads |
+| `/gen-image <subject> for <brand>` | Generate a brand-aligned AI image — tool selection (MJ/DALL-E/Ideogram/Firefly/SD), full 6-element prompt, 2 variations, seed strategy |
+| `/gen-video <scene> for <platform>` | Generate a shot-by-shot AI video prompt pack — tool selection (Runway/Kling/Sora/Pika/Luma), consistency strategy, platform spec |
+| `/gen-audio <voice or music> for <platform>` | Generate an AI audio brief — voiceover (ElevenLabs/Murf) or music/jingle (Suno), timing cues, FTC/EU AI Act compliance |
+| `/gen-moodboard <concept> for <brand>` | Generate 3 AI moodboard directions — brand personality extraction, visual style, 4–6 prompts per direction |
+| `/prompt-refine <existing prompt>` | Diagnose and optimise any AI gen prompt — annotated critique, optimised version, cross-tool variant |
 
 <details>
 <summary><b>📖 Command details & examples</b></summary>
@@ -793,7 +831,7 @@ naksha/
 ├── skills/design/
 │   ├── SKILL.md                        # Design Manager orchestration
 │   ├── settings.local.md              # User-configurable preferences
-│   └── references/                     # 18 specialist role knowledge bases
+│   └── references/                     # 22 specialist role knowledge bases
 │       ├── product-designer.md         # End-to-end UX, feature scoping
 │       ├── ux-designer.md              # Flows, wireframes, IA
 │       ├── ui-designer.md              # Color, typography, layout, components
