@@ -22,7 +22,7 @@ Determine the output framework using this priority order — stop at the first m
    set `FRAMEWORK` to the flag value
 2. **`js_framework` in `settings.local.md`** — if the field exists and is not `"auto"`,
    set `FRAMEWORK` to that value. Note: if both `js_framework` and `output_format` are
-   set to non-default values, `js_framework` takes precedence (first match wins).
+   set to non-default values, `js_framework` takes precedence because it appears earlier in this list.
 3. **`output_format` in `settings.local.md`** — if the field exists and is not `"html"`,
    set `FRAMEWORK` to that value. Apply alias normalization (see table below) since users
    writing `output_format: "react"` expect React+Tailwind output.
@@ -35,9 +35,6 @@ and `output_format`) before carrying forward:
 - `sveltekit` / `svelte`                  → `svelte`
 - `nuxt` / `vue3` / `vue`                 → `vue`
 - `astro`                                 → `astro`
-
-This replacement also supersedes the inline alias list at `design.md` line 24
-(`Recognized frameworks: react-tailwind, react, vue, vue3, ...`).
 
 Carry `FRAMEWORK` through steps 1–8.
 
@@ -113,7 +110,7 @@ Use the Preview MCP tools to show live results:
 ### 7. Framework Handoff
 
 **If `FRAMEWORK != null`:**
-Invoke `/design-framework <FRAMEWORK> design-output.html` to convert the HTML output
+Invoke `/design-framework` with the resolved `FRAMEWORK` value and `design-output.html` as arguments — e.g., `/design-framework react-tailwind design-output.html` — to convert the HTML output
 into idiomatic framework components. The framework specialist will:
 - Decompose the page into a component hierarchy
 - Generate typed props interfaces
