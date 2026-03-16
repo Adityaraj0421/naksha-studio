@@ -14,7 +14,7 @@ Use this document when submitting to the Claude Code plugin directory.
 |-------|-------|
 | Plugin name (slug) | `naksha` |
 | Display name | Naksha — Design Team |
-| Version | 3.15.0 |
+| Version | 3.16.0 |
 | License | MIT |
 | Author | Aditya Raj |
 | Author GitHub | https://github.com/Adityaraj0421 |
@@ -75,8 +75,8 @@ Assets for the submission form:
 
 ## Checklist Before Submitting
 
-- [ ] Version is `3.15.0` in `plugin.json`
-- [ ] GitHub release `v3.15.0` exists and is tagged `Latest`
+- [ ] Version is `3.16.0` in `plugin.json`
+- [ ] GitHub release `v3.16.0` exists and is tagged `Latest`
 - [ ] README has install instructions for both methods
 - [ ] `marketplace.json` is present in `.claude-plugin/`
 - [ ] All 42 commands work in Claude Code

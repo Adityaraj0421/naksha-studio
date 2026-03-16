@@ -429,3 +429,47 @@ document.documentElement.style.opacity = '1';
 - **UI Designer** — Deploy-gated visual verification tasks (check production renders correctly at all breakpoints) handed off post-deploy
 - **Design System Lead** — Token file build artifacts and CDN paths handed off when design tokens are published to production
 - **UX Researcher** — Production analytics access and event tracking confirmation handed off when instrumentation is verified live
+
+---
+
+## Reference-Sourced Insights
+
+### Largest Contentful Paint — What Actually Delays It (From web.dev)
+
+LCP measures the render time of the largest visible image, text block, or video in the viewport from the moment navigation begins. The threshold: ≤ 2.5s is good, 2.5–4.0s needs improvement, > 4.0s is poor — measured at the 75th percentile of real users.
+
+Key insight: LCP delay compounds across a chain of bottlenecks. A slow TTFB (server response) delays the HTML; render-blocking CSS delays discovery of the LCP image; an unsized image delays layout. Optimizing LCP means identifying which link in the chain is longest — not applying generic performance fixes. Use the `web-vitals` JavaScript library to capture field data before optimizing.
+
+Priority optimizations ranked by impact: (1) reduce server response time / TTFB, (2) eliminate render-blocking resources (inline critical CSS, defer non-critical JS), (3) ensure the LCP resource is discoverable in HTML source (not injected by JS), (4) add `fetchpriority="high"` to the LCP image.
+
+> Source: https://web.dev/articles/lcp — accessed 2026-03-17
+
+### Cumulative Layout Shift — Causes and Fixes (From web.dev)
+
+CLS measures visual instability: unexpected layout shifts that move content under the user's cursor. Target: ≤ 0.1 is good, 0.1–0.25 needs improvement, > 0.25 is poor. Shifts within 500ms of user input (clicks, keypresses) are excluded as expected.
+
+Top causes: images and videos without explicit `width`/`height` attributes (browser can't reserve space before they load); web fonts rendering at different metrics than fallback fonts; dynamically injected ads or banners that push content down; third-party widgets with unpredictable dimensions.
+
+Most impactful fix: always set explicit dimensions on images and video elements. For dynamic content that must be inserted, reserve space with a min-height container before the content loads. To shift elements without triggering CLS, use CSS `transform: translate()` and `transform: scale()` rather than modifying position/dimension properties directly.
+
+> Source: https://web.dev/articles/cls — accessed 2026-03-17
+
+### Interaction to Next Paint — The Three Phases (From web.dev)
+
+INP replaced First Input Delay (FID) as Chrome's responsiveness Core Web Vital in 2024. Unlike FID (which only measured the first interaction's input delay), INP observes all interactions throughout the session — click, tap, and keyboard press — and reports the worst-case percentile. Threshold: ≤ 200ms is good, 201–500ms needs improvement, > 500ms is poor.
+
+Every interaction has three phases: **input delay** (time from user action until event handlers start — caused by long tasks blocking the main thread), **processing time** (event handler execution — caused by heavy JS in click/keydown listeners), and **presentation delay** (browser rendering after handlers complete — caused by large DOM trees, forced reflows, or expensive style recalculations).
+
+Optimization by phase: for input delay, break up long tasks with `scheduler.yield()` or `setTimeout`; for processing time, defer non-critical work out of event handlers; for presentation delay, avoid forced synchronous layouts and reduce DOM size so style/layout passes are fast.
+
+> Source: https://web.dev/articles/inp — accessed 2026-03-17
+
+### Web Font Loading — Performance and Stability Trade-offs (From web.dev)
+
+Font loading strategy is a CLS and LCP issue simultaneously. The `font-display` property controls the trade-off: `swap` shows fallback text immediately and swaps when the web font arrives (fastest text render, highest CLS risk); `optional` renders fallback only and skips the swap if the font isn't cached (lowest CLS, font may never show); `fallback` balances the two with a 100ms invisible period then fallback, 3-second swap window.
+
+Practical recommendations: use `font-display: swap` for body text where speed matters and FOUT (flash of unstyled text) is acceptable; use `font-display: optional` for decorative fonts where the swap would be jarring. To reduce FOUT impact, use the `size-adjust` CSS descriptor on the `@font-face` fallback definition — this adjusts fallback font metrics to match the web font, minimizing layout shift on swap.
+
+Always serve fonts in WOFF2 format only — it provides ~30% better compression than WOFF via Brotli and has universal browser support. For third-party fonts (Google Fonts, Adobe), add `<link rel="preconnect">` to the document `<head>` to establish the connection early. Avoid `<link rel="preload">` for fonts loaded via external stylesheets — it bypasses `unicode-range` negotiation and may load unnecessary character sets.
+
+> Source: https://web.dev/articles/font-best-practices — accessed 2026-03-17

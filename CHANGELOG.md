@@ -2,6 +2,19 @@
 
 All notable changes to naksha are documented here.
 
+## [3.16.0] — 2026-03-17
+
+Source-Anchoring Completion — adds ## Reference-Sourced Insights to deployment.md,
+the last role file missing this section.
+
+### Added
+- `## Reference-Sourced Insights` to: deployment (LCP, CLS, INP, font-best-practices)
+
+### Updated
+- `meta/stats.json` — knowledge_lines 12,500 → 12,545
+
+---
+
 ## [3.15.0] — 2026-03-16
 
 Wing Completion Pass 2 — adds ## Handoffs + ## Advanced Patterns + ## Full Coverage to 5 role reference files.
