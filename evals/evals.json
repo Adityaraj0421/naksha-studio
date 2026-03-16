@@ -2064,6 +2064,64 @@
           "description": "Each direction includes ready-to-use image prompts"
         }
       ]
+    },
+    {
+      "id": 72,
+      "name": "email-audit technical",
+      "prompt": "Audit this email HTML for Lumina Beauty — it's a promotional email for the Glow Serum launch: <!DOCTYPE html><html><head><title>Email</title></head><body><table width='600'><tr><td><h1>Introducing version 2 of our Glow Serum</h1><p>We've improved the formula.</p><a href='#' style='background-color:#c9a96e;color:#fff;padding:12px 24px;'>Click here</a></td></tr></table></body></html>",
+      "expected_output": "Phase 1 technical audit with at least 2 critical issues: missing bulletproof VML button and missing preheader. Corrected HTML provided for critical issues. Phase 2 copy audit flags feature-first headline and weak CTA text, provides rewrites.",
+      "files": ["commands/email-audit.md", "skills/design/references/email-designer.md", "skills/design/references/email-copywriter.md"],
+      "assertions": [
+        {
+          "name": "flags-missing-vml-button",
+          "description": "Identifies missing bulletproof VML button as a critical issue"
+        },
+        {
+          "name": "flags-missing-preheader",
+          "description": "Identifies missing preheader as a critical issue"
+        },
+        {
+          "name": "provides-corrected-vml-html",
+          "description": "Provides corrected VML + HTML fallback button code block"
+        },
+        {
+          "name": "rewrites-weak-cta",
+          "description": "Flags 'Click here' CTA as weak and provides an action-specific rewrite"
+        },
+        {
+          "name": "rewrites-feature-first-headline",
+          "description": "Flags feature-first headline and provides a benefit-first rewrite"
+        }
+      ]
+    },
+    {
+      "id": 73,
+      "name": "email-audit-copy",
+      "prompt": "Audit the copy of this email for a re-engagement campaign targeting lapsed Lumina Beauty customers. Subject: 'Update from Lumina Beauty'. Preview text: none. Headline: 'We have some news to share with you'. Body: 'We have been busy at Lumina Beauty HQ. We wanted to reach out because we noticed you haven't visited us in a while. We have a new serum. We hope you like it.' CTA: 'Submit'.",
+      "expected_output": "Phase 2 copy audit scoring the subject line low on specificity, flagging missing preview text, identifying brand-first and passive body copy, flagging 'Submit' as the weakest possible CTA. Provides rewrites for subject, preview text, headline, body copy, and CTA.",
+      "files": ["commands/email-audit.md", "skills/design/references/email-copywriter.md"],
+      "assertions": [
+        {
+          "name": "scores-subject-specificity-low",
+          "description": "Scores subject line specificity as low (2/5 or below)"
+        },
+        {
+          "name": "flags-missing-preview-text",
+          "description": "Flags missing preview text and provides a written suggestion"
+        },
+        {
+          "name": "flags-brand-first-opening",
+          "description": "Identifies brand-first opening ('We have been busy') as a copy anti-pattern"
+        },
+        {
+          "name": "rewrites-submit-cta",
+          "description": "Rewrites CTA from 'Submit' to something action-specific with verb + outcome"
+        },
+        {
+          "name": "provides-benefit-first-headline",
+          "description": "Provides at least one benefit-first headline rewrite"
+        }
+      ]
     }
   ]
 }
