@@ -79,7 +79,7 @@ check_fixture "design-review-output.md" "heuristic,contrast,accessibility"      
 check_fixture "design-system-output.md" "token,component,typography"               4    200
 check_fixture "figma-output.md"         "frame,component,variant"                  2    100
 check_fixture "brand-output.md"         "voice,color,typography"                   2    100
-check_fixture "design-framework-output.md" "component,tsx,props"                   2    150
+check_fixture "design-framework-output.md" "component,tsx,props,tailwind,interface,cn"   3    300
 check_fixture "email-template-output.md"    "inline,table,button"                  2    200
 check_fixture "email-campaign-output.md"    "sequence,subject,cta"                 2    200
 check_fixture "chart-design-output.md"      "chart,axis,color"                     2    150
