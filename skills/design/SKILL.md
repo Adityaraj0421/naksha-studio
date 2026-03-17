@@ -30,7 +30,14 @@ description: >
   ai-generated image, ai-generated video, image generation, video generation,
   print layout, business card, pdf report, print design, print audit,
   preflight check, bleed, certificate design, brochure layout, print artifact,
-  annual report print, invoice design, print flyer.
+  annual report print, invoice design, print flyer,
+  chatbot, conversational UI, voice interface, chat widget, virtual assistant, dialog flow,
+  visionOS, Vision Pro, spatial UI, depth hierarchy, WebXR, mixed reality, augmented reality,
+  immersive, AR design, AR overlay, world tracking, spatial computing,
+  GDPR, CCPA, compliance design, cookie consent, consent banner, HIPAA, PCI DSS,
+  data deletion, data portability, accessibility compliance, ADA compliance,
+  naksha-init, naksha-status, project memory, pipeline, run pipeline,
+  competitor analysis, compare designs, competitive audit, design compare.
   Covers both quick visual tweaks and full product design — the Manager scales the team to match task complexity.
 
   <example>
@@ -167,6 +174,61 @@ description: >
   user: "Is this form accessible?"
   assistant: Routes to /accessibility-audit <file> — accessibility-auditor agent runs a full WCAG AA audit (contrast, keyboard nav, semantic HTML, ARIA)
   </example>
+
+  <example>
+  user: "Set up my project with brand colors and framework"
+  assistant: Routes to /naksha-init — interactive wizard writes .naksha/project.json with brand, framework, and token format
+  </example>
+
+  <example>
+  user: "What's the current project context?"
+  assistant: Routes to /naksha-status — displays .naksha/ project memory, brand tokens, and recent decisions
+  </example>
+
+  <example>
+  user: "Run the launch-prep pipeline"
+  assistant: Routes to /pipeline run launch-prep — executes design → accessibility-audit → design-review → design-handoff in sequence
+  </example>
+
+  <example>
+  user: "Compare our landing page to Stripe's"
+  assistant: Routes to /design-compare — captures both URLs via Playwright, side-by-side layout and UX analysis
+  </example>
+
+  <example>
+  user: "Analyze Figma's website for design patterns I can steal"
+  assistant: Routes to /competitive-audit — captures site, extracts color palette, type system, UX patterns with rated recommendations
+  </example>
+
+  <example>
+  user: "Design a customer support chatbot UI"
+  assistant: Routes to /design-chatbot — Conversational Designer generates dialog flow, bubble UI spec, quick replies, error states
+  </example>
+
+  <example>
+  user: "Design a voice interface for our smart home app"
+  assistant: Routes to /design-voice-ui — Conversational Designer generates wake word flow, confirmation patterns, audio feedback spec
+  </example>
+
+  <example>
+  user: "Design a visionOS productivity app"
+  assistant: Routes to /design-spatial — Spatial Designer generates window type selection, depth hierarchy, ornament spec, spatial typography
+  </example>
+
+  <example>
+  user: "Design an AR overlay for assembly instructions"
+  assistant: Routes to /design-ar-overlay — Spatial Designer generates anchor strategy, tracking states, instruction cards, occlusion handling
+  </example>
+
+  <example>
+  user: "Design our cookie consent flow for EU users"
+  assistant: Routes to /design-gdpr — Compliance Designer generates IAB TCF cookie banners, privacy control center, data deletion flow
+  </example>
+
+  <example>
+  user: "Audit our payment form for PCI compliance"
+  assistant: Routes to /design-compliance --regulation pci — Compliance Designer audits card field isolation, CVV handling, error message standards
+  </example>
 ---
 
 # Design Team Skill
@@ -215,6 +277,22 @@ This skill is part of the **naksha** plugin. For focused workflows, use these co
 | `/design-critique [nodeId]` | UX heuristic review of Figma screens against Nielsen's 10 heuristics + visual design audit |
 | `/design-qa <file>` | Visual QA on an HTML/CSS implementation — responsive breakpoints, token compliance, interactive states, motion quality |
 | `/accessibility-audit <file>` | Full WCAG AA audit — contrast ratios, keyboard navigation, semantic HTML, ARIA, touch targets |
+| **Memory & Pipelines** | |
+| `/naksha-init` | Set up project memory — stores brand colors, font, framework, token format in `.naksha/project.json` |
+| `/naksha-status` | Display current project context and last 10 design decisions from `.naksha/memory.md` |
+| `/pipeline <action>` | Run a multi-step design pipeline: `run <name>`, `list` available pipelines, `show <name>` to preview steps |
+| **Vision & Intelligence** | |
+| `/design-compare <url1> <url2>` | Capture two live sites via Playwright, side-by-side design analysis: layout, type, color, UX patterns |
+| `/competitive-audit <url>` | Capture a competitor site, extract design system patterns, output rated "Steal This" recommendations |
+| **Conversational UI Wing** | |
+| `/design-chatbot [type] [platform] [brief]` | Design chatbot/assistant UI: dialog flows, bubble spec, quick replies, error states, accessibility |
+| `/design-voice-ui [type] [platform] [screen]` | Design voice interface: wake word flows, confirmation patterns, earcon spec, hybrid screen layout |
+| **Spatial & AR Wing** | |
+| `/design-spatial [app-type] [platform] [brief]` | Design spatial computing UI for visionOS/WebXR: window selection, depth hierarchy, ornaments, typography |
+| `/design-ar-overlay [use-case] [platform]` | Design AR overlay: anchor strategy, world tracking states, instruction cards, confirmation overlays |
+| **Compliance Wing** | |
+| `/design-gdpr [product] [jurisdiction] [categories]` | Design GDPR/CCPA consent flows: cookie banners, privacy control center, data deletion request UI |
+| `/design-compliance --regulation <hipaa\|pci\|ada>` | Audit or generate regulation-specific UI: HIPAA PHI fields, PCI payment forms, ADA accessibility specs |
 
 ---
 
@@ -280,6 +358,14 @@ This skill is part of the **naksha** plugin. For focused workflows, use these co
 | **Figma Creator** | Build pages, frames, components, styles in Figma via Desktop Bridge | When the task requires creating designs inside Figma | `agents/figma-creator.md` |
 | **Design Critique** | UX heuristic review — Nielsen's 10, visual audit, interaction states | When user wants design feedback, or before presenting designs | `agents/design-critique.md` |
 | **Design Lint** | Scan Figma files for orphan colors, non-standard spacing, low contrast | When auditing Figma file quality, or before handoff | `agents/design-lint.md` |
+
+### Frontier Wing Specialists
+
+| Role | Expertise | When to activate | Reference |
+|------|-----------|-----------------|-----------|
+| **Conversational Designer** | Chatbot UI, dialog flow design, VUI principles, persona systems, multi-modal design | Chatbot/assistant UI, voice interfaces, dialog flows, chat widgets, virtual assistants | `references/conversational-designer.md` |
+| **Spatial Designer** | visionOS/Vision Pro HIG, WebXR, depth layers, gaze/gesture input, spatial typography, AR anchoring | Vision Pro apps, visionOS UI, WebXR experiences, AR overlays, spatial computing, immersive UI | `references/spatial-designer.md` |
+| **Compliance Designer** | GDPR/CCPA consent UX, HIPAA healthcare UI, PCI payment forms, ADA/Section 508 accessibility compliance | Consent flows, cookie banners, PHI fields, payment form compliance, accessibility audits, regulated industries | `references/compliance-designer.md` |
 
 ---
 
@@ -380,6 +466,14 @@ Based on the task, activate only the roles needed. Read their reference files fo
 | "Build a KPI dashboard for e-commerce" | Dashboard Architect, Data Viz Designer, UI Designer + `/dashboard-layout` |
 | "Design a monitoring dashboard for API metrics" | Dashboard Architect, Data Viz Designer + `/dashboard-layout --style dark-tech` |
 | "Make a heatmap showing user engagement" | Data Viz Designer + `/chart-design` |
+| "Design a customer support chatbot" | Conversational Designer, UI Designer, Content Designer |
+| "Design a visionOS productivity app" | Spatial Designer, UI Designer, Motion Designer |
+| "Design an AR instruction overlay" | Spatial Designer, UI Designer |
+| "Design a GDPR consent flow" | Compliance Designer, UI Designer, Content Designer |
+| "Audit payment form for PCI" | Compliance Designer + `/design-compliance --regulation pci` |
+| "Set up project memory" | routes to `/naksha-init` directly |
+| "Run the launch-prep pipeline" | routes to `/pipeline run launch-prep` directly |
+| "Analyze a competitor site" | routes to `/competitive-audit` directly |
 
 **Rules:**
 - Simple visual tasks (icon, color tweak) → 1–2 roles, no overhead
@@ -402,6 +496,12 @@ Based on the task, activate only the roles needed. Read their reference files fo
 - The **Dashboard Architect** joins when the output is a full dashboard layout (vs. a single chart)
 - **Tutorial** activates when the user says: "tutorial", "getting started", "how do I use", "what can you do", "new user", "first time", "show me", "help me get started" → route directly to `/design-tutorial`
 - **Component Library** activates when the user says: "component library", "figma library", "atoms molecules organisms", "build all components", "generate component library", "create a design system in Figma" → route to `/figma-component-library`
+- **Memory** commands activate when the user says: "naksha-init", "set up project memory", "project context", "naksha-status", "what's the current project context", "show project memory", "save brand settings", "project setup wizard" → route to `/naksha-init` or `/naksha-status` as appropriate
+- **Pipeline** activates when the user says: "run pipeline", "design pipeline", "launch prep", "brand audit pipeline", "component build pipeline", "pipeline list", "available pipelines", "run the", "chain commands" → route to `/pipeline run <name>` or `/pipeline list`
+- **Vision/Competitive** activates when the user says: "compare designs", "compare these two sites", "competitor analysis", "analyze this competitor", "competitive audit", "steal this design", "what can I steal from", "benchmark against", "design compare" → route to `/design-compare` or `/competitive-audit`
+- **Conversational Designer** activates when the task mentions: "chatbot", "conversational UI", "voice interface", "chat widget", "virtual assistant", "dialog flow", "VUI", "IVR design", "voice UI", "chatbot bubbles", "message bubbles", "typing indicator", "quick replies", "voice assistant", "speech interface", "barge-in"
+- **Spatial Designer** activates when the task mentions: "visionOS", "Vision Pro", "spatial UI", "depth hierarchy", "WebXR", "mixed reality", "augmented reality", "immersive", "AR design", "AR overlay", "world tracking", "spatial computing", "gaze input", "pinch gesture", "ornament", "visionOS app"
+- **Compliance Designer** activates when the task mentions: "GDPR", "CCPA", "compliance design", "cookie consent", "consent banner", "HIPAA", "PCI DSS", "data deletion", "data portability", "accessibility compliance", "ADA compliance", "privacy controls", "PHI fields", "Section 508", "EN 301 549", "consent flow", "cookie banner"
 
 ### Step 4 — Execute the Workflow
 
@@ -546,3 +646,12 @@ Unless the user specifies otherwise:
 | Dashboard layout | Full dashboard with KPI cards, charts, filter bar, tables | `/dashboard-layout` command |
 | Tutorial / onboarding | Interactive guided tour with track selection and real exercises | `/design-tutorial` command |
 | Figma component library | Full atoms/molecules/organisms library with variants and auto layout | `/figma-component-library` command |
+| Project memory context | `.naksha/project.json` (brand, framework, token format) + `.naksha/memory.md` (decision log) | `/naksha-init`, `/naksha-status` commands |
+| Pipeline execution report | Aggregated multi-command summary with per-step status | `/pipeline run` command |
+| Competitive analysis | Design pattern extract with ⭐-rated "Steal This" recommendations | `/competitive-audit`, `/design-compare` commands |
+| Chatbot UI spec | Dialog flow map, bubble spec, component library, error states, accessibility notes | `/design-chatbot` command |
+| Voice UI spec | Interaction flows, confirmation patterns, audio feedback spec, earcon design | `/design-voice-ui` command |
+| Spatial UI spec | Window type selection, depth hierarchy, ornament spec, spatial typography scale | `/design-spatial` command |
+| AR overlay spec | Anchor strategy, tracking states, instruction cards, scan state designs | `/design-ar-overlay` command |
+| GDPR/CCPA consent UI | Cookie banner variants, consent flow, privacy control center, deletion request flow | `/design-gdpr` command |
+| Compliance audit/spec | Regulation-specific UI: HIPAA fields, PCI payment forms, ADA component specs | `/design-compliance` command |
