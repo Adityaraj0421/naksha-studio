@@ -2,6 +2,20 @@
 
 All notable changes to naksha are documented here.
 
+## v4.4.0 — Discovery & Polish (2026-03-17)
+
+**Version-agnostic assets:**
+- Removed version badge from `assets/social-preview.svg` — design is now evergreen
+- Updated stale stat numbers in social preview to current values with `+` notation (26+ roles, 57+ commands, 13,500+ lines, 7 agents)
+- Removed `v3.5.0` text from `demos/demo.svg` — replaced with `naksha-studio` wordmark
+
+**New command:**
+- `/naksha-help` — contextual quick-reference: browse all 11 categories, list per-category commands, or get a reference card for any specific command (58th command)
+
+**Wiring:**
+- `naksha-help` added to SKILL.md trigger phrases and command table
+- `naksha-help` added to Stop hook suggestions
+
 ## v4.3.0 — Agent Upgrades (2026-03-17)
 
 **New agents:**

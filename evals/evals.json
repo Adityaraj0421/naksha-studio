@@ -4090,6 +4090,51 @@
         { "name": "interactive-state-check", "description": "checks hover, focus, active, disabled states" },
         { "name": "overall-qa-score", "description": "shows overall QA score out of 100" }
       ]
+    },
+    {
+      "id": 154,
+      "name": "naksha-help-overview",
+      "description": "Category overview mode",
+      "prompt": "/naksha-help",
+      "expected_output": "Category overview listing all command categories with counts and popular starting points",
+      "assertions": [
+        { "name": "shows-category-list", "description": "shows list of command categories" },
+        { "name": "shows-design-category", "description": "includes design category" },
+        { "name": "shows-frontier-category", "description": "includes frontier category" },
+        { "name": "shows-popular-starting-points", "description": "shows popular starting points or quick-start suggestions" },
+        { "name": "shows-command-counts", "description": "shows command counts per category" },
+        { "name": "includes-naksha-init", "description": "mentions /naksha-init or project memory" }
+      ]
+    },
+    {
+      "id": 155,
+      "name": "naksha-help-category",
+      "description": "Category drill-down mode",
+      "prompt": "/naksha-help frontier",
+      "expected_output": "List of frontier commands with one-line descriptions",
+      "assertions": [
+        { "name": "lists-frontier-commands", "description": "lists frontier category commands" },
+        { "name": "includes-design-chatbot", "description": "includes /design-chatbot" },
+        { "name": "includes-design-spatial", "description": "includes /design-spatial" },
+        { "name": "includes-design-gdpr", "description": "includes /design-gdpr" },
+        { "name": "includes-design-compare", "description": "includes /design-compare" },
+        { "name": "provides-one-line-descriptions", "description": "each command has a brief description" }
+      ]
+    },
+    {
+      "id": 156,
+      "name": "naksha-help-command-card",
+      "description": "Specific command card mode",
+      "prompt": "/naksha-help design-compare",
+      "expected_output": "Reference card for /design-compare showing usage and description",
+      "assertions": [
+        { "name": "shows-command-name", "description": "shows /design-compare as the command name" },
+        { "name": "shows-description", "description": "shows command description" },
+        { "name": "shows-usage-example", "description": "shows usage pattern or example" },
+        { "name": "structured-card-format", "description": "output is in a structured reference card format" },
+        { "name": "mentions-two-urls", "description": "references two URL arguments or side-by-side comparison" },
+        { "name": "actionable-output", "description": "output is actionable and ready to use" }
+      ]
     }
   ]
 }
