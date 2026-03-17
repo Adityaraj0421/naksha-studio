@@ -2,6 +2,17 @@
 
 All notable changes to naksha are documented here.
 
+## v3.19.0 (2026-03-17)
+### Added
+- **Wishlist issue template**: `.github/ISSUE_TEMPLATE/wishlist-item.yml` — YAML form with Wing/Area, What to build, Why it matters, Acceptance criteria, Difficulty, Related files fields. Auto-labels issues with `wishlist`.
+- **Validate structure script**: `scripts/validate-structure.js` — checks command count, reference count, version consistency, command frontmatter completeness, and no empty command files. Runnable locally: `node scripts/validate-structure.js`.
+- **Validate structure CI**: `.github/workflows/validate-structure.yml` — triggers on PRs touching `commands/**`, `skills/design/references/**`, `.claude-plugin/plugin.json`, or `meta/stats.json`. Posts PR comment with failure details.
+- **CONTRIBUTING.md "Finding Work" section**: label system docs, issue links, claim/release instructions.
+- **CONTRIBUTING.md "Definition of Done" section**: contribution checklist in prose with rationale for each item.
+- **PR template expanded**: per-contribution-type checklists for new command, new role, and knowledge/reference updates.
+
+---
+
 ## v3.18.0 (2026-03-17)
 ### Changed
 - `/design-tutorial` fully refreshed for v3.17.0 state: 46 commands, all wings represented
