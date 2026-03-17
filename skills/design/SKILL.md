@@ -282,6 +282,7 @@ This skill is part of the **naksha** plugin. For focused workflows, use these co
 | **Memory & Pipelines** | |
 | `/naksha-init` | Set up project memory — stores brand colors, font, framework, token format in `.naksha/project.json` |
 | `/naksha-status` | Display current project context and last 10 design decisions from `.naksha/memory.md` |
+| `/naksha-doctor` | Run all naksha quality checks and report the plugin's health status — structural validation, metadata consistency, behavioral smoke, legacy branding guard |
 | `/naksha-help` | Quick-reference for all commands — browse by category or look up a specific command |
 | `/pipeline <action>` | Run a multi-step design pipeline: `run <name>`, `list` available pipelines, `show <name>` to preview steps |
 | **Vision & Intelligence** | |
@@ -503,6 +504,7 @@ Based on the task, activate only the roles needed. Read their reference files fo
 - **Help / Command Reference** activates when the user says: "what commands are there", "list all commands", "command reference", "what can naksha do", "show me all commands", "naksha help", "help me find a command" → route directly to `/naksha-help`
 - **Component Library** activates when the user says: "component library", "figma library", "atoms molecules organisms", "build all components", "generate component library", "create a design system in Figma" → route to `/figma-component-library`
 - **Memory** commands activate when the user says: "naksha-init", "set up project memory", "project context", "naksha-status", "what's the current project context", "show project memory", "save brand settings", "project setup wizard" → route to `/naksha-init` or `/naksha-status` as appropriate
+- **Doctor / Health Check** activates when the user says: "doctor", "health check", "plugin broken", "validate plugin", "check naksha", "diagnose naksha", "something wrong with naksha" → route directly to `/naksha-doctor`
 - **Pipeline** activates when the user says: "run pipeline", "design pipeline", "launch prep", "brand audit pipeline", "component build pipeline", "pipeline list", "available pipelines", "run the", "chain commands" → route to `/pipeline run <name>` or `/pipeline list`
 - **Vision/Competitive** activates when the user says: "compare designs", "compare these two sites", "competitor analysis", "analyze this competitor", "competitive audit", "steal this design", "what can I steal from", "benchmark against", "design compare" → route to `/design-compare` or `/competitive-audit`
 - **Conversational Designer** activates when the task mentions: "chatbot", "conversational UI", "voice interface", "chat widget", "virtual assistant", "dialog flow", "VUI", "IVR design", "voice UI", "chatbot bubbles", "message bubbles", "typing indicator", "quick replies", "voice assistant", "speech interface", "barge-in"
