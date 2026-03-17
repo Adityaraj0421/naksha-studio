@@ -1,0 +1,13 @@
+name: social-launch
+description: Full social media launch — campaign strategy, visual content creation, and analytics setup
+steps:
+  - command: social-campaign
+    args: "$INPUT"
+    description: "Develop social media campaign strategy"
+  - command: social-content
+    pass-output-as: context
+    description: "Create visual content for social platforms"
+  - command: social-analytics
+    pass-output-as: context
+    description: "Set up analytics and tracking"
+on-error: stop

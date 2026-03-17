@@ -1,0 +1,13 @@
+name: component-build
+description: Build a component end-to-end — design, framework conversion, and QA
+steps:
+  - command: design
+    args: "$INPUT"
+    description: "Design the component"
+  - command: design-framework
+    pass-output-as: context
+    description: "Convert design to framework-specific code"
+  - command: design-qa
+    pass-output-as: context
+    description: "Quality assurance and testing of component"
+on-error: stop

@@ -1,0 +1,13 @@
+name: brand-audit
+description: Complete brand health check — brand strategy assessment, visual design review, and Figma file linting
+steps:
+  - command: brand-strategy
+    args: "$INPUT"
+    description: "Assess brand strategy and positioning"
+  - command: design-review
+    pass-output-as: context
+    description: "Review visual design alignment with brand"
+  - command: lint-design
+    pass-output-as: context
+    description: "Lint Figma file for quality and consistency"
+on-error: stop

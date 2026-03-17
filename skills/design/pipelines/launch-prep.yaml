@@ -1,0 +1,16 @@
+name: launch-prep
+description: Full pre-launch design pass — design, accessibility audit, design review, and developer handoff
+steps:
+  - command: design
+    args: "$INPUT"
+    description: "Create comprehensive design for the project"
+  - command: accessibility-audit
+    pass-output-as: context
+    description: "Audit design for accessibility compliance"
+  - command: design-review
+    pass-output-as: context
+    description: "Conduct design review and feedback"
+  - command: design-handoff
+    pass-output-as: context
+    description: "Prepare design handoff documentation for developers"
+on-error: stop
