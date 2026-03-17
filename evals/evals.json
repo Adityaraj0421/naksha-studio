@@ -3893,22 +3893,12 @@
       "prompt": "/design-tutorial conversational",
       "expected_output": "Design a chatbot UI, voice interface",
       "assertions": [
-        {
-          "name": "output-contains-chatbot",
-          "description": "output contains 'chatbot'"
-        },
-        {
-          "name": "output-contains-dialog",
-          "description": "output contains 'dialog'"
-        },
-        {
-          "name": "output-contains-bubble",
-          "description": "output contains 'bubble'"
-        },
-        {
-          "name": "output-contains-accessibility",
-          "description": "output contains 'accessibility'"
-        }
+        { "name": "shows-chatbot-goal", "description": "shows chatbot track goal or exercise header" },
+        { "name": "includes-exercise-1-chatbot", "description": "exercise 1 covers /design-chatbot command" },
+        { "name": "includes-dialog-flow", "description": "mentions dialog flow or intent mapping" },
+        { "name": "includes-bubble-ui", "description": "mentions message bubble UI or bubble spec" },
+        { "name": "includes-accessibility-notes", "description": "includes accessibility notes or ARIA mentions" },
+        { "name": "includes-exercise-2-voice", "description": "exercise 2 covers /design-voice-ui or voice interface" }
       ]
     },
     {
@@ -3917,22 +3907,12 @@
       "prompt": "/design-tutorial conversational",
       "expected_output": "Voice interface exercises",
       "assertions": [
-        {
-          "name": "output-contains-voice",
-          "description": "output contains 'voice'"
-        },
-        {
-          "name": "output-contains-wake",
-          "description": "output contains 'wake'"
-        },
-        {
-          "name": "output-contains-confirmation",
-          "description": "output contains 'confirmation'"
-        },
-        {
-          "name": "output-contains-earcon",
-          "description": "output contains 'earcon'"
-        }
+        { "name": "includes-wake-word-flow", "description": "includes wake word flow or wake word diagram" },
+        { "name": "includes-confirmation-patterns", "description": "describes confirmation patterns (explicit/implicit)" },
+        { "name": "includes-hybrid-layout", "description": "mentions hybrid screen layout or screen+voice combination" },
+        { "name": "includes-ssml-guidance", "description": "includes SSML guidance or audio feedback spec" },
+        { "name": "includes-earcon-spec", "description": "includes earcon frequency or audio spec" },
+        { "name": "covers-error-recovery", "description": "covers error recovery or fallback patterns for voice" }
       ]
     },
     {
@@ -3941,22 +3921,12 @@
       "prompt": "/design-tutorial spatial",
       "expected_output": "visionOS spatial design",
       "assertions": [
-        {
-          "name": "output-contains-spatial",
-          "description": "output contains 'spatial'"
-        },
-        {
-          "name": "output-contains-depth",
-          "description": "output contains 'depth'"
-        },
-        {
-          "name": "output-contains-window",
-          "description": "output contains 'window'"
-        },
-        {
-          "name": "output-contains-ornament",
-          "description": "output contains 'ornament'"
-        }
+        { "name": "shows-spatial-goal", "description": "shows spatial track goal or visionOS exercise header" },
+        { "name": "includes-depth-hierarchy", "description": "includes depth hierarchy or layer model" },
+        { "name": "includes-window-types", "description": "mentions window types: Window, Volumetric, or Immersive Space" },
+        { "name": "includes-ornament-guidance", "description": "mentions ornament placement or attachmentAnchor" },
+        { "name": "includes-spatial-typography", "description": "includes spatial typography or minimum legibility at depth" },
+        { "name": "includes-comfort-guidelines", "description": "includes comfort guidelines, session length, or field-of-view" }
       ]
     },
     {
@@ -3965,22 +3935,12 @@
       "prompt": "/design-tutorial spatial",
       "expected_output": "AR overlay design",
       "assertions": [
-        {
-          "name": "output-contains-anchor",
-          "description": "output contains 'anchor'"
-        },
-        {
-          "name": "output-contains-tracking",
-          "description": "output contains 'tracking'"
-        },
-        {
-          "name": "output-contains-scan",
-          "description": "output contains 'scan'"
-        },
-        {
-          "name": "output-contains-overlay",
-          "description": "output contains 'overlay'"
-        }
+        { "name": "includes-anchor-strategy", "description": "includes anchor strategy or anchor type selection" },
+        { "name": "includes-world-tracking-states", "description": "describes world tracking states: Searching, Found, Tracking Lost" },
+        { "name": "includes-instruction-card", "description": "mentions instruction card pattern or gaze range" },
+        { "name": "includes-scan-states", "description": "describes scan state designs" },
+        { "name": "includes-occlusion-handling", "description": "mentions occlusion handling" },
+        { "name": "covers-competitive-audit-exercise", "description": "exercise 3 covers /competitive-audit command" }
       ]
     },
     {
@@ -3989,42 +3949,26 @@
       "prompt": "/design-tutorial compliance",
       "expected_output": "GDPR consent flow",
       "assertions": [
-        {
-          "name": "output-contains-gdpr",
-          "description": "output contains 'gdpr'"
-        },
-        {
-          "name": "output-contains-consent",
-          "description": "output contains 'consent'"
-        },
-        {
-          "name": "output-contains-banner",
-          "description": "output contains 'banner'"
-        },
-        {
-          "name": "output-contains-privacy",
-          "description": "output contains 'privacy'"
-        }
+        { "name": "shows-compliance-goal", "description": "shows compliance track goal or GDPR exercise header" },
+        { "name": "includes-banner-variants", "description": "describes cookie banner variants (minimal/standard/detailed)" },
+        { "name": "includes-consent-flow", "description": "includes consent flow or progressive disclosure model" },
+        { "name": "includes-privacy-control-center", "description": "mentions privacy control center or data export flow" },
+        { "name": "includes-jurisdiction-checklist", "description": "includes jurisdiction checklist or IAB TCF reference" },
+        { "name": "covers-hipaa-exercise", "description": "exercise 2 covers /design-compliance --regulation hipaa" }
       ]
     },
     {
       "id": 145,
       "name": "compliance-track-pipeline",
       "prompt": "/pipeline list",
-      "expected_output": "Available pipelines listing",
+      "expected_output": "All 7 available pipelines listed with names and descriptions",
       "assertions": [
-        {
-          "name": "output-contains-launch-prep",
-          "description": "output contains 'launch-prep'"
-        },
-        {
-          "name": "output-contains-design-tokens",
-          "description": "output contains 'design-tokens'"
-        },
-        {
-          "name": "output-contains-email-launch",
-          "description": "output contains 'email-launch'"
-        }
+        { "name": "lists-launch-prep", "description": "lists launch-prep pipeline" },
+        { "name": "lists-design-tokens", "description": "lists design-tokens pipeline" },
+        { "name": "lists-email-launch", "description": "lists email-launch pipeline" },
+        { "name": "lists-ar-prototype", "description": "lists ar-prototype pipeline" },
+        { "name": "lists-brand-audit", "description": "lists brand-audit pipeline" },
+        { "name": "lists-social-launch", "description": "lists social-launch pipeline" }
       ]
     }
   ]
