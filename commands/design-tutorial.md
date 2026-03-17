@@ -1,6 +1,7 @@
 ---
 name: design-tutorial
 description: Interactive guided tour of Naksha — learn commands through real exercises, discover workflows, and get oriented in under 10 minutes
+allowed-tools: ["Read", "Write", "Edit", "Bash", "Glob", "Grep", "mcp__*"]
 triggers:
   - tutorial
   - getting started

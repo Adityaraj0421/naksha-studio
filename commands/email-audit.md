@@ -1,6 +1,7 @@
 ---
 name: email-audit
 description: Full-spectrum email audit — technical rendering issues (Phase 1, Email Designer) and copy/strategy critique (Phase 2, Email Copywriter). Accepts pasted HTML or a description of an existing email.
+allowed-tools: ["Read", "Write", "Edit", "Bash", "Glob", "Grep", "mcp__*"]
 arguments: "<paste HTML or describe the email> — <ESP and audience context>"
 ---
 

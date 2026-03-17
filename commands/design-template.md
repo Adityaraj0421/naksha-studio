@@ -1,6 +1,7 @@
 ---
 name: design-template
 description: Generate a production-ready web page from a curated template category. Pick a category (landing-page, dashboard, pricing, auth, blog, ecommerce, portfolio, docs, saas, or onboarding) and get a fully-built, customized HTML/CSS template — brand colors, copy, and responsive layout included.
+allowed-tools: ["Read", "Write", "Edit", "Bash", "Glob", "Grep", "mcp__*"]
 arguments: "<category> [brand-color] [--style <style>] [--dark]"
 ---
 

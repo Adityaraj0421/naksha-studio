@@ -1,6 +1,7 @@
 ---
 name: gen-image
 description: Generate a brand-aligned AI image — tool selection, full prompt (subject, style, lighting, camera, mood, negatives), variation prompts, and seed strategy. Works across Midjourney, DALL-E, Ideogram, Firefly, and Stable Diffusion.
+allowed-tools: ["Read", "Write", "Edit", "Bash", "Glob", "Grep", "mcp__*"]
 arguments: "<subject> for <brand/product> — <style intent and platform>"
 ---
 

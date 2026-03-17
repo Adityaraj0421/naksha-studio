@@ -1,6 +1,7 @@
 ---
 name: gen-audio
 description: Generate an AI audio brief — voiceover (ElevenLabs, Murf) or music/jingle (Suno), with tool selection, voice/music brief template, timing cues for video sync, and synthetic voice compliance note.
+allowed-tools: ["Read", "Write", "Edit", "Bash", "Glob", "Grep", "mcp__*"]
 arguments: "<voice or music> for <platform/video> — <tone and use context>"
 ---
 

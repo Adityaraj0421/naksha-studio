@@ -1,6 +1,7 @@
 ---
 name: email-template
 description: Generate a production-ready HTML email template — inline styles, table layout, bulletproof buttons, responsive, dark mode, and deliverability-optimized. Works across Gmail, Outlook, Apple Mail, Yahoo Mail.
+allowed-tools: ["Read", "Write", "Edit", "Bash", "Glob", "Grep", "mcp__*"]
 arguments: "<email type> for <brand/product> — <brief description>"
 ---
 

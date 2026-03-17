@@ -1,6 +1,7 @@
 ---
 name: figma-component-library
 description: Generate a complete component library in Figma from a design system config — atoms, molecules, and organisms with all variants, auto layout, and component properties
+allowed-tools: ["Read", "Write", "Edit", "Bash", "Glob", "Grep", "mcp__*"]
 triggers:
   - component library
   - figma library

@@ -1,6 +1,7 @@
 ---
 name: chart-design
 description: Design a chart or data visualization — selects the right chart type, applies accessible color palettes, adds annotations, and outputs production-ready HTML/CSS/JS
+allowed-tools: ["Read", "Write", "Edit", "Bash", "Glob", "Grep", "mcp__*"]
 triggers:
   - chart
   - graph

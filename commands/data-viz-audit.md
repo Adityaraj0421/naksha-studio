@@ -1,6 +1,7 @@
 ---
 name: data-viz-audit
 description: Audit a data visualization for chart type selection, accessible color palette, annotations, and anti-patterns. Optionally audits dashboard layout fit when context is provided. Outputs a scored checklist and corrected code.
+allowed-tools: ["Read", "Write", "Edit", "Bash", "Glob", "Grep", "mcp__*"]
 triggers:
   - audit chart
   - chart audit

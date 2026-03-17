@@ -1,6 +1,7 @@
 ---
 name: gen-video
 description: Generate a shot-by-shot AI video prompt pack — tool selection (Runway, Kling, Sora, Pika, Luma), shot prompt structure, consistency strategy (seeds, style refs), and platform spec checklist.
+allowed-tools: ["Read", "Write", "Edit", "Bash", "Glob", "Grep", "mcp__*"]
 arguments: "<scene description> for <platform> — <duration and style intent>"
 ---
 

@@ -1,6 +1,7 @@
 ---
 name: gen-moodboard
 description: Generate 3 AI moodboard directions for a concept or campaign — brand personality extraction, visual style definition, and 4–6 ready-to-paste image prompts per direction with rationale.
+allowed-tools: ["Read", "Write", "Edit", "Bash", "Glob", "Grep", "mcp__*"]
 arguments: "<concept or campaign brief> for <brand/product>"
 ---
 

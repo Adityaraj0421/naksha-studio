@@ -1,6 +1,7 @@
 ---
 name: email-campaign
 description: Plan and write a complete multi-email campaign sequence — welcome flows, onboarding sequences, promotional campaigns, re-engagement, and launch sequences. Outputs a campaign brief, sequence map, and all email templates.
+allowed-tools: ["Read", "Write", "Edit", "Bash", "Glob", "Grep", "mcp__*"]
 arguments: "<campaign type> for <product/goal> — <audience and context>"
 ---
 

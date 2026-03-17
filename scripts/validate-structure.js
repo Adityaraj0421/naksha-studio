@@ -72,9 +72,7 @@ check('command-frontmatter', () => {
   for (const file of files) {
     const content = fs.readFileSync(path.join(commandDir, file), 'utf-8');
     if (!content.includes('description:')) missing.push(`${file}: missing description:`);
-    // Note: allowed-tools: is not checked here because 17/46 existing commands use
-    // an older schema without it. The PR template and CONTRIBUTING.md require it for
-    // new commands (human-checked), but this script only enforces the universal baseline.
+    // Note: allowed-tools: is enforced by check 8 (all 57 commands verified present).
   }
   if (missing.length > 0) return missing.join(' | ');
   return true;
@@ -122,6 +120,19 @@ check('skill-command-sync', () => {
     }
   }
   if (missing.length > 0) return `commands not referenced in SKILL.md: ${missing.join(', ')}`;
+  return true;
+});
+
+// --- Check 8: command-allowed-tools ---
+check('command-allowed-tools', () => {
+  const commandDir = path.join(ROOT, 'commands');
+  const files = fs.readdirSync(commandDir).filter(f => f.endsWith('.md'));
+  const missing = [];
+  for (const file of files) {
+    const content = fs.readFileSync(path.join(commandDir, file), 'utf-8');
+    if (!content.includes('allowed-tools:')) missing.push(file);
+  }
+  if (missing.length > 0) return `commands missing allowed-tools: ${missing.join(', ')}`;
   return true;
 });
 

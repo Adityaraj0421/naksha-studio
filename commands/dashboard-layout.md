@@ -1,6 +1,7 @@
 ---
 name: dashboard-layout
 description: Design and build a complete dashboard layout — sidebar navigation, KPI cards, chart areas, data tables, filter bar, and responsive behavior. Outputs production-ready HTML/CSS.
+allowed-tools: ["Read", "Write", "Edit", "Bash", "Glob", "Grep", "mcp__*"]
 triggers:
   - dashboard
   - admin panel

@@ -1,6 +1,7 @@
 ---
 name: pdf-report
 description: Generate a multi-page print-ready report or document layout with page geometry, master template, typography system, and CSS @media print + @page output.
+allowed-tools: ["Read", "Write", "Edit", "Bash", "Glob", "Grep", "mcp__*"]
 triggers:
   - pdf report
   - generate report

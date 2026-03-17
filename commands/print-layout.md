@@ -1,6 +1,7 @@
 ---
 name: print-layout
 description: Design a single print artifact (business card, flyer, certificate, brochure, invoice) with correct bleed, safe zone, CMYK color system, and print-ready HTML/CSS output.
+allowed-tools: ["Read", "Write", "Edit", "Bash", "Glob", "Grep", "mcp__*"]
 triggers:
   - print layout
   - business card

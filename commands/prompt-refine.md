@@ -1,6 +1,7 @@
 ---
 name: prompt-refine
 description: Diagnose and optimize any AI gen prompt — annotated critique of weak tokens and missing modifiers, optimized prompt with explanations, and a cross-tool variant adapted for a second tool.
+allowed-tools: ["Read", "Write", "Edit", "Bash", "Glob", "Grep", "mcp__*"]
 arguments: "<existing prompt> [-- tool: midjourney|dalle|runway|ideogram|sd]"
 ---
 

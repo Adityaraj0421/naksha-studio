@@ -1,6 +1,7 @@
 ---
 name: print-audit
 description: Audit a print layout for bleed, safe zone, color mode, font embedding, and page break rules. Optionally audits brand consistency when brand context is provided.
+allowed-tools: ["Read", "Write", "Edit", "Bash", "Glob", "Grep", "mcp__*"]
 triggers:
   - audit print
   - print audit
