@@ -89,6 +89,24 @@ check('no-empty-commands', () => {
   return true;
 });
 
+// --- Check 6: Pipeline YAML structure ---
+check('pipeline-yaml-structure', () => {
+  const pipelineDir = path.join(ROOT, 'skills/design/pipelines');
+  if (!fs.existsSync(pipelineDir)) return 'skills/design/pipelines/ directory not found';
+  const files = fs.readdirSync(pipelineDir).filter(f => f.endsWith('.yaml') || f.endsWith('.yml'));
+  if (files.length === 0) return 'no pipeline YAML files found in skills/design/pipelines/';
+  const invalid = [];
+  for (const file of files) {
+    const content = fs.readFileSync(path.join(pipelineDir, file), 'utf-8');
+    if (!content.includes('name:')) invalid.push(`${file}: missing name:`);
+    else if (!content.includes('description:')) invalid.push(`${file}: missing description:`);
+    else if (!content.includes('steps:')) invalid.push(`${file}: missing steps:`);
+    else if (!content.includes('command:')) invalid.push(`${file}: steps missing command: entries`);
+  }
+  if (invalid.length > 0) return invalid.join(' | ');
+  return true;
+});
+
 // --- Result ---
 if (failed === 0) {
   console.log(`✅ validate-structure: ${passed} checks passed`);
