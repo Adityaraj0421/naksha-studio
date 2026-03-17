@@ -24,8 +24,19 @@ function check(name, fn) {
 }
 
 // --- Load data files ---
-const stats = JSON.parse(fs.readFileSync(path.join(ROOT, 'meta/stats.json'), 'utf-8'));
-const plugin = JSON.parse(fs.readFileSync(path.join(ROOT, '.claude-plugin/plugin.json'), 'utf-8'));
+let stats, plugin;
+try {
+  stats = JSON.parse(fs.readFileSync(path.join(ROOT, 'meta/stats.json'), 'utf-8'));
+} catch (e) {
+  console.log(`❌ setup: cannot read meta/stats.json — ${e.message}`);
+  process.exit(1);
+}
+try {
+  plugin = JSON.parse(fs.readFileSync(path.join(ROOT, '.claude-plugin/plugin.json'), 'utf-8'));
+} catch (e) {
+  console.log(`❌ setup: cannot read .claude-plugin/plugin.json — ${e.message}`);
+  process.exit(1);
+}
 
 // --- Check 1: Command file count ---
 check('command-count', () => {
