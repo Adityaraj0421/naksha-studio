@@ -262,6 +262,29 @@ Every spatial design must be tested under these conditions before handoff:
 
 ---
 
+### Dynamic Type
+
+Dynamic type refers to the user's system-configured accessibility text size preference — on visionOS and iPadOS this is the Dynamic Type size category, set in Settings > Accessibility > Larger Text. Spatial layouts must honor this preference. Ignoring it breaks the system accessibility contract and can render content unreadable for users with low vision.
+
+**The compounding problem in spatial.** Text in spatial UI already scales with physical depth (see the distance-size table above). If dynamic type is also uncapped, the two scaling systems compound: a user at the `accessibility5` size category viewing text placed at 2m can receive a rendered size 3–4× larger than designed, breaking containers and occluding adjacent content.
+
+**Cap the dynamic type range in SwiftUI.** Use `.dynamicTypeSize()` with a closed range to set a floor and ceiling:
+
+```swift
+Text("Panel label")
+    .dynamicTypeSize(.xSmall ... .accessibility2)
+```
+
+`.accessibility2` covers the large majority of accessibility needs without compounding destructively with depth scaling. Calibrate the upper bound per component: a large display headline can tolerate `.accessibility3`; a dense data label should cap at `.xLarge`.
+
+**visionOS-specific rules:**
+- Do not hardcode `font(.system(size:))` with a fixed point value — this bypasses dynamic type entirely. Use semantic styles (`font(.body)`, `font(.headline)`) so SwiftUI applies dynamic type automatically.
+- Adopt `UIContentSizeCategoryAdjusting` in UIKit components to opt in to dynamic type propagation.
+- At your capped maximum size, verify each text element still satisfies the distance-size minimums from the table above. A label designed for 1m must still meet the 36pt minimum at 1m when scaled to the largest permitted category.
+- **Always test at the largest accessibility size before shipping.** Set the device or simulator to the maximum permitted category, walk every screen at its intended depth, and treat any overflow or truncation as a bug.
+
+---
+
 ## Lighting-Aware Design
 
 ### Material Behavior in visionOS
