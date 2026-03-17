@@ -1,0 +1,97 @@
+name: Quality Check
+
+on:
+  pull_request:
+    paths:
+      - 'evals/fixtures/**'
+      - 'scripts/behavioral-smoke.sh'
+      - 'scripts/guard-legacy-branding.sh'
+      - 'commands/**'
+
+jobs:
+  quality-check:
+    name: Behavioral Smoke & Branding Guard
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run behavioral-smoke
+        id: smoke
+        shell: bash
+        run: bash scripts/behavioral-smoke.sh 2>&1 | tee smoke-output.txt; exit ${PIPESTATUS[0]}
+        continue-on-error: true
+
+      - name: Run guard-legacy-branding
+        id: branding
+        shell: bash
+        run: bash scripts/guard-legacy-branding.sh 2>&1 | tee branding-output.txt; exit ${PIPESTATUS[0]}
+        continue-on-error: true
+
+      - name: Post PR comment
+        if: steps.smoke.outcome == 'failure' || steps.branding.outcome == 'failure'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const smokeOut = fs.existsSync('smoke-output.txt')
+              ? fs.readFileSync('smoke-output.txt', 'utf-8').trim()
+              : 'No output.';
+            const brandOut = fs.existsSync('branding-output.txt')
+              ? fs.readFileSync('branding-output.txt', 'utf-8').trim()
+              : 'No output.';
+
+            const smokeStatus = '${{ steps.smoke.outcome }}' === 'failure' ? '❌' : '✅';
+            const brandStatus = '${{ steps.branding.outcome }}' === 'failure' ? '❌' : '✅';
+
+            let body = `## Quality Check Results\n\n`;
+            body += `| Check | Status |\n|---|---|\n`;
+            body += `| Behavioral Smoke | ${smokeStatus} |\n`;
+            body += `| Legacy Branding Guard | ${brandStatus} |\n\n`;
+
+            if ('${{ steps.smoke.outcome }}' === 'failure') {
+              body += `<details><summary>Behavioral Smoke — Failures</summary>\n\n\`\`\`\n${smokeOut}\n\`\`\`\n\n</details>\n\n`;
+              body += `**Fix:** Run \`bash scripts/behavioral-smoke.sh\` locally and update the failing fixtures.\n\n`;
+            }
+            if ('${{ steps.branding.outcome }}' === 'failure') {
+              body += `<details><summary>Legacy Branding — Violations</summary>\n\n\`\`\`\n${brandOut}\n\`\`\`\n\n</details>\n\n`;
+              body += `**Fix:** Replace banned strings (design-studio / Design Studio) with "naksha".\n\n`;
+            }
+
+            body += `> Run locally: \`bash scripts/quality-check.sh\``;
+
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            const botComment = comments.find(c =>
+              c.user.type === 'Bot' && c.body.includes('Quality Check Results')
+            );
+
+            if (botComment) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            }
+
+      - name: Fail if any check failed
+        if: steps.smoke.outcome == 'failure' || steps.branding.outcome == 'failure'
+        run: |
+          echo "One or more quality checks failed. See PR comment for details."
+          exit 1
