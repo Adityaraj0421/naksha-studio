@@ -1,0 +1,72 @@
+name: Wishlist Item
+description: Maintainer-curated feature request — something we'd like to see built
+title: "[Wishlist] "
+labels: [wishlist]
+body:
+  - type: dropdown
+    id: area
+    attributes:
+      label: Wing / Area
+      description: Which part of the plugin does this affect?
+      options:
+        - commands
+        - roles
+        - agents
+        - knowledge
+        - evals
+        - tooling
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-to-build
+    attributes:
+      label: What to build
+      description: 2–3 sentences describing the outcome (not the implementation)
+      placeholder: "Add a /figma-tokens command that exports Figma variables as CSS custom properties and a Tailwind config."
+    validations:
+      required: true
+
+  - type: textarea
+    id: why-it-matters
+    attributes:
+      label: Why it matters
+      description: Design rationale and user value
+      placeholder: "Token sync is currently one-way. This closes the loop for teams who define tokens in Figma first."
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance criteria
+      description: Bullet list — what does done look like?
+      placeholder: |
+        - Command accepts a Figma file URL as argument
+        - Outputs CSS custom properties to stdout
+        - Eval case added in evals/evals.json
+    validations:
+      required: true
+
+  - type: dropdown
+    id: difficulty
+    attributes:
+      label: Difficulty
+      description: How complex is this contribution? (Maintainers will apply good-first-issue / help-wanted labels based on this.)
+      options:
+        - beginner
+        - intermediate
+        - advanced
+    validations:
+      required: true
+
+  - type: textarea
+    id: related-files
+    attributes:
+      label: Related files
+      description: Files a contributor should read before starting (optional)
+      placeholder: |
+        - commands/figma-sync.md
+        - skills/design/references/figma-creation.md
+    validations:
+      required: false
