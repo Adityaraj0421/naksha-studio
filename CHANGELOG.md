@@ -2,6 +2,17 @@
 
 All notable changes to naksha are documented here.
 
+## v3.18.0 (2026-03-17)
+### Changed
+- `/design-tutorial` fully refreshed for v3.17.0 state: 46 commands, all wings represented
+- Welcome screen updated: version badge (v2.9.0 → v3.18.0), command count (26 → 46), 2 new wing rows (AI Visual Gen, Print/PDF)
+- 2 new tutorial tracks: `ai-visual-gen` (3 exercises: gen-image, gen-video, gen-moodboard) and `print-pdf` (3 exercises: print-layout, pdf-report, print-audit)
+- `full` track expanded: 12 → 16 steps, adding AI image, AI moodboard, print layout, PDF report exercises
+- Step 4 command table refreshed: 26 → 46 commands organized across 12 wings
+- Track list renumbered: `full` moves from 7 → 9 to accommodate the 2 new tracks
+
+---
+
 ## v3.17.0 (2026-03-17)
 
 ### Added
