@@ -168,6 +168,41 @@ description: >
   </example>
 
   <example>
+  user: "Score my design"
+  assistant: Routes to /design-score — quantitative 0–100 quality score across Accessibility, Usability, Visual Quality, and Token Compliance
+  </example>
+
+  <example>
+  user: "Give me a design score for this page"
+  assistant: Routes to /design-score — quantitative 0–100 quality score across Accessibility, Usability, Visual Quality, and Token Compliance
+  </example>
+
+  <example>
+  user: "Rate this design"
+  assistant: Routes to /design-score — quantitative 0–100 quality score across Accessibility, Usability, Visual Quality, and Token Compliance
+  </example>
+
+  <example>
+  user: "How good is this design?"
+  assistant: Routes to /design-score — quantitative 0–100 quality score across Accessibility, Usability, Visual Quality, and Token Compliance
+  </example>
+
+  <example>
+  user: "Give me a score"
+  assistant: Routes to /design-score — quantitative 0–100 quality score across Accessibility, Usability, Visual Quality, and Token Compliance
+  </example>
+
+  <example>
+  user: "What's the design quality score?"
+  assistant: Routes to /design-score — quantitative 0–100 quality score across Accessibility, Usability, Visual Quality, and Token Compliance
+  </example>
+
+  <example>
+  user: "Quantify this design"
+  assistant: Routes to /design-score — quantitative 0–100 quality score across Accessibility, Usability, Visual Quality, and Token Compliance
+  </example>
+
+  <example>
   user: "Run QA on this page before we ship"
   assistant: Routes to /design-qa <file> — design-qa agent checks responsive breakpoints, token compliance, interactive states, motion quality
   </example>
@@ -277,6 +312,7 @@ This skill is part of the **naksha** plugin. For focused workflows, use these co
 | `/print-audit <layout or description>` | Audit a print layout for bleed, safe zone, CMYK color mode, font embedding, and page break rules. Conditional Phase 2 reviews brand consistency |
 | `/lint-design [nodeId]` | Scan a Figma file for design quality issues — orphan colors, spacing violations, non-standard type sizes, missing auto-layout, detached styles |
 | `/design-critique [nodeId]` | UX heuristic review of Figma screens against Nielsen's 10 heuristics + visual design audit |
+| `/design-score` | Quantitative 0–100 design quality score across Accessibility, Usability, Visual Quality, and Token Compliance | [url | file | --screenshot <path>] |
 | `/design-qa <file>` | Visual QA on an HTML/CSS implementation — responsive breakpoints, token compliance, interactive states, motion quality |
 | `/accessibility-audit <file>` | Full WCAG AA audit — contrast ratios, keyboard navigation, semantic HTML, ARIA, touch targets |
 | **Memory & Pipelines** | |
