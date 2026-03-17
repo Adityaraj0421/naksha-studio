@@ -99,7 +99,7 @@ SYSTEM: [Action attempted — service call fails]
 | 4 more seconds | "You can say 'yes' to continue, 'start over' to begin again, or 'goodbye' to end." |
 | Third silence | "I'll end our session now — [platform wake word] anytime." End gracefully. |
 
-Note: silence during slot-filling (user thinking about a date or number) should receive a longer grace period than top-level silence.
+Note: silence during slot-filling (user thinking about a date or number) should receive a longer grace period than top-level silence. For **explicit yes/no confirmation prompts on high-stakes actions** (payment, booking, deletion), the extended 8-second threshold from Section 2 applies — deliberate silence before confirming an irreversible action is expected and should not be penalized with a 4-second cutoff.
 
 ---
 
@@ -257,7 +257,7 @@ Apply these SSML treatments to all synthesized voice responses:
 |---|---|
 | Confirmation numbers, codes | `say-as interpret-as="characters"` |
 | Dates | `say-as interpret-as="date"` |
-| Currency amounts | `say-as interpret-as="cardinal"` + spoken prefix ("$") |
+| Currency amounts | `say-as interpret-as="currency"` (SSML 1.1, Polly, Google TTS); fallback if unsupported: `interpret-as="cardinal"` + spell out "dollars and X cents" in text |
 | Legal or terms copy | `prosody rate="slow"` |
 | Lists (≤3 items) | `<break time="300ms"/>` between items |
 | Emotional success moment | `prosody pitch="+5%"` for slight warmth |

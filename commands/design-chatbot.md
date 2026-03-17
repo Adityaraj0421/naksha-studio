@@ -177,8 +177,7 @@ Specs for each interactive component in the chat UI.
 
 #### Typing Indicator
 - Three-dot animated pulse: dots sequentially grow and fade in a loop
-- **Show after**: 500ms has elapsed since user's last message (prevents flicker on fast responses)
-- **Do not show** for sub-200ms responses
+- **Show after**: 300ms of no response since the user's message — if the bot replies within 300ms, skip the indicator entirely (prevents flicker on fast responses)
 - If no response within 1.5s of indicator appearing: show "still thinking…" label below dots
 - Hide automatically when response arrives
 - Accessible label: `aria-label="Assistant is typing"`
@@ -252,7 +251,7 @@ Every element that reaches users must meet WCAG 2.1 AA minimum. These specs are 
 - Quick reply chips: `role="button"` + descriptive `aria-label` (not just the chip text if context is needed)
 
 #### Keyboard Navigation
-- Tab order: input bar → send button → persistent menu → quick reply chips (left to right)
+- Tab order: persistent menu → text input → send button → quick reply chips (left to right) — matches visual left-to-right layout, satisfying WCAG 2.4.3 Focus Order
 - Enter or Space: activates focused quick reply chip or button
 - Escape: closes any open overlays (persistent menu, confirmation dialogs)
 - Arrow keys: navigate within carousel (left/right arrow)
