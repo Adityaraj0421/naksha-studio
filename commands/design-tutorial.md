@@ -49,7 +49,7 @@ If no track is given, display this orientation:
 ```
 ╔══════════════════════════════════════════════════════════════════╗
 ║                    Welcome to Naksha                      ║
-║                         v2.9.0 · 26 commands                    ║
+║                         v3.18.0 · 46 commands                   ║
 ╚══════════════════════════════════════════════════════════════════╝
 
 Naksha assembles specialist roles for any design task.
@@ -65,6 +65,8 @@ You give a goal. The right experts activate automatically.
   Data Visualization       /chart-design /dashboard-layout
   Framework Code           /design-framework (React/Vue/Svelte/Next.js/Astro)
   Templates                /design-template (10 production-ready layouts)
+  AI Visual Gen            /gen-image /gen-video /gen-audio /gen-moodboard /prompt-refine
+  Print / PDF              /pdf-report /print-layout /print-audit
 
 ━━━ Choose a learning track ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -74,7 +76,9 @@ You give a goal. The right experts activate automatically.
   4. social       15 min  Post design → campaign → analytics dashboard
   5. email        15 min  Welcome template → onboarding sequence
   6. data-viz     15 min  Chart design → full dashboard
-  7. full         30 min  Complete tour of all wings
+  7. ai-visual-gen  15 min  Generate images, video briefs, audio specs, moodboards
+  8. print-pdf      15 min  Build a print layout, PDF report, preflight audit
+  9. full           40 min  Complete tour: all wings, all workflows (~40 min)
 
 Reply with a number or track name to begin.
 ```
