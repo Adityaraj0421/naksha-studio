@@ -30,7 +30,10 @@ Interactive guided tour of Naksha. Choose a track below and complete a real exer
 - `/design-tutorial data-viz` — Design a bar chart, then build a full analytics dashboard
 - `/design-tutorial ai-visual-gen` — Generate image prompts, video briefs, and moodboards
 - `/design-tutorial print-pdf` — Build a print layout, PDF report, and run a preflight audit
-- `/design-tutorial full` — Complete tour: all wings, all workflows (~40 min)
+- `/design-tutorial conversational` — Design a chatbot UI, voice interface, and pipeline chain
+- `/design-tutorial spatial` — Build a visionOS spec, AR overlay, and audit a competitor
+- `/design-tutorial compliance` — Generate GDPR consent flow, HIPAA audit, and set up project memory
+- `/design-tutorial full` — Complete tour: all wings, all workflows (~45 min)
 
 ---
 
@@ -69,6 +72,9 @@ You give a goal. The right experts activate automatically.
   Templates                /design-template (10 production-ready layouts)
   AI Visual Gen            /gen-image /gen-video /gen-audio /gen-moodboard /prompt-refine
   Print / PDF              /pdf-report /print-layout /print-audit
+  Frontier Wings           /design-chatbot /design-voice-ui /design-spatial /design-ar-overlay
+                           /design-gdpr /design-compliance
+  Memory & Pipelines       /naksha-init /naksha-status /pipeline /design-compare /competitive-audit
 
 ━━━ Choose a learning track ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -80,7 +86,10 @@ You give a goal. The right experts activate automatically.
   6. data-viz     15 min  Chart design → full dashboard
   7. ai-visual-gen  15 min  Generate images, video briefs, audio specs, moodboards
   8. print-pdf      15 min  Build a print layout, PDF report, preflight audit
-  9. full           40 min  Complete tour: all wings, all workflows (~40 min)
+  9. full           45 min  Complete tour: all wings, all workflows (~45 min)
+ 10. conversational 15 min  Chatbot UI → voice interface → pipeline chaining
+ 11. spatial        15 min  visionOS spec → AR overlay → competitive audit
+ 12. compliance     15 min  GDPR consent → HIPAA audit → project memory
 
 Reply with a number or track name to begin.
 ```
@@ -611,8 +620,11 @@ Run each exercise in order. Each builds on the last.
 14. **★ Print Layout** → `/print-layout business card with the brand kit above. Name: Alex Rivera, Design Lead`
 15. **★ PDF Report** → `/pdf-report design system status report. Sections: Summary, Token Changes, Component Coverage`
 16. **Handoff** → `/design-handoff generate developer spec for everything above`
+17. **★ Chatbot** → `/design-chatbot customer support assistant for the product above. Platform: web.`
+18. **★ Compliance** → `/design-gdpr for the product above. Jurisdiction: EU. Categories: analytics, marketing.`
+19. **★ Pipeline** → `/pipeline run launch-prep`
 
-> This is the full Naksha workflow — idea to developer-ready in 16 commands.
+> This is the full Naksha workflow — idea to developer-ready, compliance-checked, and pipeline-automated in 19 commands.
 
 ---
 
@@ -669,7 +681,7 @@ You've learned: [list the commands used in this track]
   Tutorial        /design-tutorial
 
   Run /design-tutorial <track> to explore another wing.
-  Tracks: quick-start · ui · figma · social · email · data-viz · ai-visual-gen · print-pdf · full
+  Tracks: quick-start · ui · figma · social · email · data-viz · ai-visual-gen · print-pdf · conversational · spatial · compliance · full
   Run /design <anything> to start real work.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
