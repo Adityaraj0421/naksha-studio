@@ -37,9 +37,9 @@ You are the Spatial Designer on the team. Your job is to design interfaces and e
 
 Ornaments are UI elements attached to the outside of a window frame. They extend the window's interactive surface without cluttering the primary content area.
 
-- **Position:** Front-facing edge of a window, offset ~60–120pt from the frame edge
+- **Position:** Front-facing edge of a window, positioned via the `attachmentAnchor` parameter of the `ornament()` modifier — use scene-relative anchors rather than fixed point offsets, which vary by window size and context. Keep ornament width narrower than the host window width.
 - **Use for:** Contextual toolbars, inspector panels, minimap, quick-action buttons
-- **Depth offset:** Ornaments sit slightly in front of the window plane (~10–20pt forward) to visually separate them
+- **Depth offset:** The system automatically places ornaments slightly in front of the window plane — do not specify a fixed point depth offset. Let the system handle z-separation; override only when a custom `offset` is required by a specific layout need.
 - **Rules:**
   - Never place interactive content where an ornament can occlude it
   - Ornaments should be anchored to a specific window edge and track with window movement
@@ -234,9 +234,9 @@ Text in spatial computing must be sized relative to its physical distance from t
 | 2.0m | 70pt | 88pt |
 | 3.0m | 108pt | 132pt |
 
-**Scaling formula:** `size_at_distance = base_size_at_1m × distance_in_meters`
+**Recommended size formula:** `recommended_size = 44pt × distance_in_meters`
 
-Use this to generate intermediate values. The base recommended size at 1m is 44pt.
+Use this to generate intermediate recommended values. For minimum sizes, apply a 0.82× factor: `minimum_size ≈ recommended_size × 0.82` (e.g. 36pt at 1m = 44 × 0.82). This linear approximation is valid for 0.5m–3m; do not extrapolate beyond this range.
 
 ---
 
@@ -279,7 +279,7 @@ Text("Panel label")
 
 **visionOS-specific rules:**
 - Do not hardcode `font(.system(size:))` with a fixed point value — this bypasses dynamic type entirely. Use semantic styles (`font(.body)`, `font(.headline)`) so SwiftUI applies dynamic type automatically.
-- Adopt `UIContentSizeCategoryAdjusting` in UIKit components to opt in to dynamic type propagation.
+- In UIKit components, set `adjustsFontForContentSizeCategory = true` on `UILabel`, `UITextField`, and `UITextView` to enable automatic dynamic type scaling. visionOS apps are primarily SwiftUI-first; UIKit is secondary but must honor dynamic type when used.
 - At your capped maximum size, verify each text element still satisfies the distance-size minimums from the table above. A label designed for 1m must still meet the 36pt minimum at 1m when scaled to the largest permitted category.
 - **Always test at the largest accessibility size before shipping.** Set the device or simulator to the maximum permitted category, walk every screen at its intended depth, and treat any overflow or truncation as a bug.
 
@@ -317,68 +317,27 @@ visionOS materials are designed to respond to real-world environment lighting, c
 
 ## Reference-Sourced Insights
 
-> **Source:** https://developer.apple.com/design/human-interface-guidelines/visionos — Apple visionOS HIG
->
+### Adaptive Spatial Layout — Apple
+From **visionOS Human Interface Guidelines** (https://developer.apple.com/design/human-interface-guidelines/visionos):
 > "People can place and resize windows throughout their surroundings, so design your windows to look great at various sizes and in various locations." Apple's HIG explicitly frames spatial layout as user-controlled, not designer-controlled. Spatial designers must design adaptive layouts, not fixed canvases.
 
-> **Source:** https://www.w3.org/TR/webxr/ — W3C WebXR Device API Specification
->
-> "A UA [User Agent] MUST NOT grant an immersive session request if the page does not have focus." The WebXR spec requires explicit user gesture for any immersive session. Design your entry points as intentional opt-in flows — a splash/onboarding screen before requesting XR permissions is always required, never optional.
+---
 
-> **Source:** https://www.w3.org/immersive-web/ — W3C Immersive Web Working Group
->
-> The Immersive Web CG's explainers note that hit-testing (determining what real-world surface a ray intersects) is a separate capability from basic AR session establishment. Design AR anchor workflows with graceful fallback for devices that support `immersive-ar` but not the `hit-test` module — not all AR devices expose hit-test results.
-
-> **Source:** Google Daydream Design Guidelines (archived, 2016–2019) — historical reference
->
-> Daydream's guidelines established that a 3-degree-of-freedom (3DoF) input model (rotation only, no positional tracking) fundamentally limits direct manipulation design. Always identify your minimum DOF requirement early in the design process — 3DoF controllers must rely on ray-casting and gaze, not direct reach. This constraint still applies to any XR device without full 6DoF positional tracking.
+### XR Session Focus Requirements — W3C
+From **WebXR Device API Specification** (https://www.w3.org/TR/webxr/):
+> The spec requires that a user agent must not grant an immersive session request if the page does not have focus. Entry points must be intentional opt-in flows — an onboarding screen before requesting XR permissions is always required, never optional.
 
 ---
 
-## Handoffs
-
-### → UI Designer
-Provide flat UI equivalents for every spatial screen. The spatial design should never be the only representation. Flat equivalents are used for:
-- Non-XR device fallbacks
-- Marketing and documentation screenshots
-- Accessibility audit (standard WCAG tooling works on flat, not spatial)
-- Design system component mapping
-
-Deliver: annotated Figma frames with spatial measurements called out, flat equivalent frames, component mapping table.
+### Hit-Test as Separate Capability — W3C Immersive Web
+From **W3C Immersive Web Working Group** (https://www.w3.org/immersive-web/):
+> Hit-testing (determining what real-world surface a ray intersects) is a separate capability from basic AR session establishment. Design AR anchor workflows with graceful fallback for devices that support `immersive-ar` but not the `hit-test` module — not all AR devices expose hit-test results.
 
 ---
 
-### → Motion Designer
-Spatial transitions require coordination with the Motion Designer for:
-- **Scene transition animations:** Fade-to-black timing (target: 0.3s), what appears/disappears in what order
-- **Depth-based parallax:** Content at different depth layers moves at different rates during head movement — define parallax multipliers per layer
-- **Gaze hover states:** The scale/brightness animation on gaze focus — duration, easing, return timing
-- **Ornament reveal/hide:** Ornaments that show/hide based on context need smooth entrance/exit choreography
-
-Deliver: motion spec sheet with layer-specific timing, easing curves, and parallax multipliers.
-
----
-
-### → Frontend Developer
-Spatial implementation requires explicit handoff of:
-- **WebXR session setup:** Which session types to request, fallback chain, feature detection code pattern
-- **Three.js / Babylon.js scene graph:** Layer assignments, Z-position values in world units, material types
-- **Performance budgets:** Draw call targets (≤100 for Quest 2, ≤200 for Quest Pro/Vision Pro), texture memory budgets, polygon budgets per Volume
-- **Input handling:** Priority order for input fallbacks, dwell timer implementation, ray-cast target list
-
-Deliver: spatial spec sheet with world-space coordinates, performance budgets table, input fallback documentation.
-
----
-
-### → UX Researcher
-Spatial usability testing has unique observation challenges:
-
-- **Observation problem:** Researchers cannot see what the participant is looking at. Use session recording with gaze overlay, or a mirrored 2D display showing the headset view.
-- **Protocol modifications:** Standard think-aloud is difficult while wearing a headset. Use post-task retrospective verbal protocol combined with gaze recording.
-- **Comfort monitoring:** Include a comfort check-in every 10 minutes. Use the Simulator Sickness Questionnaire (SSQ) or a simplified 3-item scale pre/during/post session.
-- **Recruitment:** Recruit participants with XR experience AND without. Naive users often reveal comfort issues that experienced users have habituated to.
-
-Deliver: usability test brief with spatial-specific protocol modifications, comfort monitoring checklist, gaze recording setup requirements.
+### 3DoF Input Constraints — Historical Reference
+From **Google Daydream Design Guidelines** (archived 2016–2019):
+> A 3-degree-of-freedom (3DoF) input model (rotation only, no positional tracking) fundamentally limits direct manipulation design. Always identify your minimum DOF requirement early — 3DoF controllers must rely on ray-casting and gaze, not direct reach. This constraint still applies to any XR device without full 6DoF positional tracking.
 
 ---
 
@@ -448,21 +407,96 @@ Multi-user shared spatial environments require additional design consideration:
 
 ---
 
+## Handoffs
+
+### → UI Designer
+Provide flat UI equivalents for every spatial screen. The spatial design should never be the only representation. Flat equivalents are used for:
+- Non-XR device fallbacks
+- Marketing and documentation screenshots
+- Accessibility audit (standard WCAG tooling works on flat, not spatial)
+- Design system component mapping
+
+Deliver: annotated Figma frames with spatial measurements called out, flat equivalent frames, component mapping table.
+
+---
+
+### → Motion Designer
+Spatial transitions require coordination with the Motion Designer for:
+- **Scene transition animations:** Fade-to-black timing (target: 0.3s), what appears/disappears in what order
+- **Depth-based parallax:** Content at different depth layers moves at different rates during head movement — define parallax multipliers per layer
+- **Gaze hover states:** The scale/brightness animation on gaze focus — duration, easing, return timing
+- **Ornament reveal/hide:** Ornaments that show/hide based on context need smooth entrance/exit choreography
+
+Deliver: motion spec sheet with layer-specific timing, easing curves, and parallax multipliers.
+
+---
+
+### → Frontend Developer
+Spatial implementation requires explicit handoff of:
+- **WebXR session setup:** Which session types to request, fallback chain, feature detection code pattern
+- **Three.js / Babylon.js scene graph:** Layer assignments, Z-position values in world units, material types
+- **Performance budgets:** Draw call targets (≤100 for Quest 2, ≤200 for Quest Pro/Vision Pro), texture memory budgets, polygon budgets per Volume
+- **Input handling:** Priority order for input fallbacks, dwell timer implementation, ray-cast target list
+
+Deliver: spatial spec sheet with world-space coordinates, performance budgets table, input fallback documentation.
+
+---
+
+### → UX Researcher
+Spatial usability testing has unique observation challenges:
+
+- **Observation problem:** Researchers cannot see what the participant is looking at. Use session recording with gaze overlay, or a mirrored 2D display showing the headset view.
+- **Protocol modifications:** Standard think-aloud is difficult while wearing a headset. Use post-task retrospective verbal protocol combined with gaze recording.
+- **Comfort monitoring:** Include a comfort check-in every 10 minutes. Use the Simulator Sickness Questionnaire (SSQ) or a simplified 3-item scale pre/during/post session.
+- **Recruitment:** Recruit participants with XR experience AND without. Naive users often reveal comfort issues that experienced users have habituated to.
+
+Deliver: usability test brief with spatial-specific protocol modifications, comfort monitoring checklist, gaze recording setup requirements.
+
+---
+
 ## Full Coverage Checklist
 
-The following scenarios must each have a design solution before a spatial project is considered complete. Use this as your pre-handoff verification:
+The following scenarios must each have a design solution before a spatial project is considered complete. Use this as your pre-handoff verification checklist.
 
-| Scenario | Key Design Consideration |
-|----------|--------------------------|
-| Solo productivity app | Window type selection, ornament system, depth layer assignment for all panels |
-| Multi-user experience | Avatar system, shared anchor, voice proximity, personal space rules |
-| AR overlay on real object | World-lock accuracy, passthrough legibility, real-world lighting adaptation |
-| Pure VR environment | Locomotion method, horizon stability, environment design, exit affordance |
-| WebXR fallback to flat | `inline` session layout, feature-detect messaging, no broken states on desktop |
-| Input with controllers | Ray-cast UI sizing (44pt min at 1m), trigger mapping, haptic feedback spec |
-| Input with hands only | Direct manipulation zones, ray-cast fallback for distance, pinch threshold feedback |
-| Input with eyes only | Dwell timing (600–800ms), gaze affordance on all interactive elements, confirmation step |
-| Mixed near+far interactions | Layer separation, target size scaling by distance, no cross-layer accidental activation |
-| Text entry in spatial | Virtual keyboard placement (1m, eye level), dictation fallback, confirmation before submit |
+### Core Interaction Scenarios
+
+- [ ] **Solo productivity app** — Window type selection justified, ornament system designed, depth layer assignment documented for all panels
+- [ ] **Multi-user experience** — Avatar system, shared anchor onboarding, voice proximity model, personal space rules documented
+- [ ] **AR overlay on real object** — World-lock accuracy strategy, passthrough legibility at target ambient light levels, real-world lighting adaptation
+- [ ] **Pure VR environment** — Locomotion method, horizon stability, environment design, exit affordance always accessible
+- [ ] **WebXR fallback to flat** — `inline` session layout complete, feature-detect messaging in place, no broken states on non-XR devices
+- [ ] **Input with controllers** — Ray-cast UI sizing (44pt min at 1m), trigger mapping, haptic feedback spec delivered to dev
+- [ ] **Input with hands only** — Direct manipulation zones, ray-cast fallback for distance interaction, pinch threshold feedback
+- [ ] **Input with eyes only** — Dwell timing (600–800ms), gaze affordance on all interactive elements, mandatory confirmation step before destructive actions
+- [ ] **Mixed near+far interactions** — Layer separation clear, target size scales by distance, no cross-layer accidental activation paths
+- [ ] **Text entry in spatial** — Virtual keyboard placement (1m, eye level), dictation fallback designed, confirmation before submit
+
+---
+
+### Accessibility Checklist
+
+- [ ] **Low-vision + capped dynamic type** — All text elements tested at the maximum permitted `.dynamicTypeSize()` category; no overflow, truncation, or occlusion at any distance in the distance-size range
+- [ ] **Switch access fallback** — All interactive elements reachable via switch control sequential focus; no focus traps in spatial layouts
+- [ ] **Voice Control (Accessibility)** — All buttons and interactive elements have unique, accessible labels that Voice Control can target by name
+- [ ] **Reduced motion** — All entrance/exit animations and parallax effects respect `accessibilityReduceMotion`; no rapid movement without this check
+- [ ] **High contrast** — UI elements meet 4.5:1 contrast against glass materials at target passthrough brightness levels
+
+---
+
+### Performance Budget Checklist
+
+- [ ] **Draw call count** — Total draw calls per frame within target budget (≤100 for Quest 2, ≤200 for Quest Pro/Vision Pro) confirmed with Frontend
+- [ ] **Texture memory** — Total texture memory for active scene within device budget; no uncompressed textures in production
+- [ ] **Polygon budget** — Per-Volume polygon count documented and approved; no unbounded mesh complexity
+- [ ] **Frame rate target** — Experience maintains target frame rate (90fps Vision Pro, 72/90fps Quest) under worst-case content load
+
+---
+
+### Comfort and Safety Checklist
+
+- [ ] **Vestibular safety review** — No continuous locomotion, rapid camera cuts, or large optic flow without comfort options (vignetting, teleport alternative)
+- [ ] **Session length guidance** — In-experience rest reminder surfaced after 20–30 minutes of continuous use; tested and confirmed present
+- [ ] **SSQ comfort test** — Simulator Sickness Questionnaire administered to at least 3 participants during usability testing; no Category 3+ symptom responses without design remediation
+- [ ] **Eye strain protocol** — Extended session test (30+ minutes) completed with no participant-reported eye fatigue; text contrast and size validated
 
 ---
