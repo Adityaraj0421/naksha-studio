@@ -44,6 +44,8 @@ function defaultState() {
     commands: [],
     tokens: { color: 0, spacing: 0, radius: 0, typography: 0, health: null, updated: null },
     lint: { issues: 0, files_scanned: 0, updated: null },
+    chat: [],
+    thinking: false,
     queue: [],
   };
 }
@@ -115,8 +117,19 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
     },
     {
       name: "dashboard_get_queue",
-      description: "Read and clear the command queue set by the UI. Returns array of pending commands.",
+      description: "Read and clear the queue set by the UI. Returns array of pending items. Each item has a `type` field: 'command' (run a slash command) or 'chat' (user sent a natural language message — read it, formulate a contextual reply using current dashboard state, then call dashboard_chat_response with your answer). Always process chat items before command items.",
       inputSchema: { type: "object", properties: {} },
+    },
+    {
+      name: "dashboard_chat_response",
+      description: "Send Claude's reply to a chat message back to the dashboard UI. Call this after responding to a 'chat' type item from dashboard_get_queue. Include current design context in your reply where relevant (score, token health, recent command results).",
+      inputSchema: {
+        type: "object",
+        properties: {
+          message: { type: "string", description: "Claude's reply text. Plain text, keep it concise (2-4 sentences max). Can reference current scores, token health, or suggest next commands." },
+        },
+        required: ["message"],
+      },
     },
   ],
 }));
@@ -162,6 +175,14 @@ server.setRequestHandler(CallToolRequestSchema, async (req) => {
       state.queue = [];
       writeState(state);
       return { content: [{ type: "text", text: JSON.stringify(queue) }] };
+    }
+
+    case "dashboard_chat_response": {
+      const entry = { role: "claude", message: args.message, timestamp: new Date().toISOString() };
+      state.chat = [...(state.chat ?? []), entry].slice(-50); // keep last 50 messages
+      state.thinking = false;
+      writeState(state);
+      return { content: [{ type: "text", text: "Chat response sent to dashboard." }] };
     }
 
     default:

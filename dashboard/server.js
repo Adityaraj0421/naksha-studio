@@ -50,6 +50,35 @@ app.post("/api/queue", (req, res) => {
   res.json({ ok: true, queued: command });
 });
 
+// POST /api/chat — user sent a message from the dashboard chat panel
+app.post("/api/chat", (req, res) => {
+  const { message } = req.body ?? {};
+  if (!message?.trim()) return res.status(400).json({ error: "message required" });
+
+  let state = defaultState();
+  try { state = JSON.parse(fs.readFileSync(STATE_FILE, "utf8")); } catch {}
+
+  // append user message to chat history
+  const userEntry = { role: "user", message: message.trim(), timestamp: new Date().toISOString() };
+  state.chat = [...(state.chat ?? []), userEntry].slice(-50);
+
+  // set thinking flag so UI shows indicator
+  state.thinking = true;
+
+  // if message starts with "/" treat as command queue item, otherwise chat
+  const isCommand = message.trim().startsWith("/");
+  state.queue = [
+    ...(state.queue ?? []),
+    isCommand
+      ? { type: "command", command: message.trim(), queued: new Date().toISOString() }
+      : { type: "chat", message: message.trim(), queued: new Date().toISOString() },
+  ];
+
+  state.updated = new Date().toISOString();
+  fs.writeFileSync(STATE_FILE, JSON.stringify(state, null, 2));
+  res.json({ ok: true, type: isCommand ? "command" : "chat" });
+});
+
 // ── http + websocket ──────────────────────────────────────────────────────────
 
 const httpServer = createServer(app);
@@ -105,6 +134,8 @@ function defaultState() {
     commands: [],
     tokens: { color: 0, spacing: 0, radius: 0, typography: 0, health: null, updated: null },
     lint: { issues: 0, files_scanned: 0, updated: null },
+    chat: [],
+    thinking: false,
     queue: [],
   };
 }

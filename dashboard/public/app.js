@@ -28,6 +28,7 @@ function render(state) {
   renderScore(state.score);
   renderTokens(state.tokens, state.lint);
   renderHistory(state.commands);
+  renderChat(state.chat, state.thinking);
 }
 
 function renderScore(score) {
@@ -79,6 +80,79 @@ function renderHistory(commands) {
     </li>
   `).join("");
 }
+
+function renderChat(messages, thinking) {
+  const container = document.getElementById("chat-messages");
+  const indicator = document.getElementById("thinking-indicator");
+
+  // show/hide thinking indicator
+  if (indicator) {
+    indicator.className = thinking ? "thinking" : "thinking hidden";
+  }
+
+  if (!messages?.length) return; // keep welcome message visible if no history
+
+  // only re-render if message count changed (avoid scroll jump on every WS tick)
+  const currentCount = container.querySelectorAll(".chat-bubble").length;
+  if (currentCount === messages.length) return;
+
+  // remove welcome message once we have real messages
+  const welcome = container.querySelector(".chat-welcome");
+  if (welcome) welcome.remove();
+
+  // render only new messages (append, don't replace)
+  const existing = container.querySelectorAll(".chat-bubble").length;
+  const newMessages = messages.slice(existing);
+
+  newMessages.forEach(msg => {
+    const div = document.createElement("div");
+    div.className = `chat-bubble ${msg.role}`;
+    div.innerHTML = `${esc(msg.message)}<span class="bubble-time">${relTime(msg.timestamp)}</span>`;
+    container.appendChild(div);
+  });
+
+  // scroll to bottom
+  container.scrollTop = container.scrollHeight;
+}
+
+// ── chat input ────────────────────────────────────────────────────────────────
+
+async function sendChatMessage(message) {
+  if (!message.trim()) return;
+
+  const input = document.getElementById("chat-input");
+  const sendBtn = document.getElementById("chat-send");
+
+  input.value = "";
+  input.disabled = true;
+  sendBtn.disabled = true;
+
+  try {
+    await fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: message.trim() }),
+    });
+    // state update will come via WebSocket — no need to do anything else
+  } catch {
+    // silently fail; WS will show the state when server recovers
+  } finally {
+    input.disabled = false;
+    sendBtn.disabled = false;
+    input.focus();
+  }
+}
+
+document.getElementById("chat-send").addEventListener("click", () => {
+  sendChatMessage(document.getElementById("chat-input").value);
+});
+
+document.getElementById("chat-input").addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    sendChatMessage(e.target.value);
+  }
+});
 
 // ── quick launch ──────────────────────────────────────────────────────────────
 

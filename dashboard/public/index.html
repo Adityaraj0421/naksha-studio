@@ -85,6 +85,33 @@
     </section>
   </main>
 
+  <!-- Chat Panel — full width below the 4 cards -->
+  <section class="card chat-card" id="chat-card">
+    <h2>
+      Ask naksha
+      <span id="thinking-indicator" class="thinking hidden">
+        <span class="dot-pulse"></span><span class="dot-pulse"></span><span class="dot-pulse"></span>
+      </span>
+    </h2>
+    <div class="chat-messages" id="chat-messages">
+      <div class="chat-welcome">
+        <p>Ask anything about your design. Type a message or a <code>/command</code>.</p>
+        <p class="examples">Try: <em>"How's my score looking?"</em> · <em>"What should I fix first?"</em> · <em>"/design-score src/Button.tsx"</em></p>
+      </div>
+    </div>
+    <div class="chat-input-row">
+      <input
+        id="chat-input"
+        type="text"
+        class="chat-input"
+        placeholder="Ask naksha… or type /design-review"
+        autocomplete="off"
+        spellcheck="false"
+      />
+      <button id="chat-send" class="chat-send-btn">Send</button>
+    </div>
+  </section>
+
   <script src="app.js"></script>
 </body>
 </html>
