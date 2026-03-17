@@ -9,3 +9,8 @@ node_modules/
 .superpowers/
 docs/superpowers/
 .firecrawl/
+
+# Local working files — brand assets, lint output, internal reviews
+brand/
+design-lint-report.json
+REVIEW.md
