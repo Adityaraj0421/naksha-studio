@@ -30,11 +30,10 @@ Single-file comprehensive edit of `commands/design-tutorial.md`. One commit, one
 ║                    v3.18.0 · 46 commands                  ║
 ```
 
-**Command overview — 3 new rows added:**
+**Command overview — 2 new rows added:**
 ```
 AI Visual Gen    /gen-image /gen-video /gen-audio /gen-moodboard /prompt-refine
 Print / PDF      /pdf-report /print-layout /print-audit
-Agent Ops        /design-agent /ux-agent /brand-agent /print-agent /email-agent
 ```
 
 **Track menu — 2 new tracks inserted, `full` renumbered:**
@@ -175,7 +174,7 @@ Replace "All 26 commands" with the full current list (46 commands), organized by
 ## v3.18.0 (2026-03-17)
 ### Changed
 - /design-tutorial fully refreshed for v3.17.0 state: 46 commands, all wings represented
-- Welcome screen updated: version badge, command count, 3 new wing rows (AI Visual Gen, Print/PDF, Agent Ops)
+- Welcome screen updated: version badge, command count, 2 new wing rows (AI Visual Gen, Print/PDF)
 - 2 new tutorial tracks: `ai-visual-gen` (3 exercises) and `print-pdf` (3 exercises)
 - `full` track expanded: 12 → 16 steps, adding AI image, AI moodboard, print layout, PDF report exercises
 - Step 4 command table refreshed: 26 → 46 commands organized across 12 wings
