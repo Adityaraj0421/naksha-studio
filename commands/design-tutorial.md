@@ -444,7 +444,7 @@ Take the business card CSS from Exercise 1 and run:
 
 ### TRACK: full
 
-**Goal:** Complete tour of all 8 design wings.
+**Goal:** Complete tour of all design wings — UI, Figma, Social, AI Visual Gen, Email, Data Viz, Print/PDF, and Handoff.
 
 Run each exercise in order. Each builds on the last.
 
@@ -456,12 +456,16 @@ Run each exercise in order. Each builds on the last.
 6. **Template** → `/design-template landing-page --style minimal`
 7. **Figma Creation** → `/figma-create a hero section with the brand kit above`
 8. **Social** → `/social-content Instagram Story: launch announcement for the product above`
-9. **Email** → `/email-template welcome email with the brand kit above`
-10. **Data Viz** → `/chart-design user signups last 30 days as a line chart`
-11. **Dashboard** → `/dashboard-layout growth dashboard: signups KPI, revenue KPI, activation rate, chart area`
-12. **Handoff** → `/design-handoff generate developer spec for everything above`
+9. **★ AI Image** → `/gen-image hero illustration for the product above. Style: minimal, abstract, blue palette`
+10. **★ AI Moodboard** → `/gen-moodboard brand visual direction for the product above. Tone: trustworthy, modern`
+11. **Email** → `/email-template welcome email with the brand kit above`
+12. **Data Viz** → `/chart-design user signups last 30 days as a line chart`
+13. **Dashboard** → `/dashboard-layout growth dashboard: signups KPI, revenue KPI, activation rate, chart area`
+14. **★ Print Layout** → `/print-layout business card with the brand kit above. Name: Alex Rivera, Design Lead`
+15. **★ PDF Report** → `/pdf-report design system status report. Sections: Summary, Token Changes, Component Coverage`
+16. **Handoff** → `/design-handoff generate developer spec for everything above`
 
-> This is the full Naksha workflow — idea to developer-ready in 12 commands.
+> This is the full Naksha workflow — idea to developer-ready in 16 commands.
 
 ---
 
