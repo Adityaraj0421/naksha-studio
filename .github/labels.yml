@@ -1,0 +1,75 @@
+# Canonical GitHub label definitions for naksha-studio.
+# Apply with: bash scripts/sync-labels.sh
+# Labels in this file are the source of truth.
+
+labels:
+  # === Triage ===
+  - name: bug
+    color: "d73a4a"
+    description: "Something isn't working correctly"
+
+  - name: enhancement
+    color: "a2eeef"
+    description: "New feature or request"
+
+  - name: documentation
+    color: "0075ca"
+    description: "Improvements or additions to documentation"
+
+  - name: question
+    color: "d876e3"
+    description: "Further information is requested"
+
+  - name: duplicate
+    color: "cfd3d7"
+    description: "This issue or pull request already exists"
+
+  - name: wontfix
+    color: "ffffff"
+    description: "This will not be worked on"
+
+  - name: invalid
+    color: "e4e669"
+    description: "This doesn't seem right"
+
+  # === Workflow ===
+  - name: wishlist
+    color: "7057ff"
+    description: "Maintainer-curated feature request — scoped and ready to build"
+
+  - name: good first issue
+    color: "7057ff"
+    description: "Good for newcomers — well-defined scope"
+
+  - name: help wanted
+    color: "008672"
+    description: "Extra attention is needed — any skill level"
+
+  - name: claimed
+    color: "0e8a16"
+    description: "Someone is actively working on this issue"
+
+  # === Area ===
+  - name: commands
+    color: "e4b429"
+    description: "Affects slash commands in commands/"
+
+  - name: agents
+    color: "f9a825"
+    description: "Affects agent files in agents/"
+
+  - name: knowledge
+    color: "ffd54f"
+    description: "Affects role reference files in skills/design/references/"
+
+  - name: evals
+    color: "b0bec5"
+    description: "Affects eval test cases in evals/"
+
+  - name: ci
+    color: "0052cc"
+    description: "Affects GitHub Actions workflows or CI scripts"
+
+  - name: wing
+    color: "c5def5"
+    description: "New frontier wing — role reference + commands + evals"
