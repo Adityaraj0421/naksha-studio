@@ -38,6 +38,20 @@ and `output_format`) before carrying forward:
 
 Carry `FRAMEWORK` through steps 1–8.
 
+### Step 0.5: Load Project Memory
+
+Check if `.naksha/project.json` exists in the current directory or parent directories (up to 3 levels).
+
+If found:
+- Read the file and apply these defaults (user can override in their request):
+  - Brand colors → use `brand.primary` and `brand.secondary` as the default color palette
+  - Font → use `brand.font` as the default typeface
+  - Framework → use `framework` to determine code output format
+  - Token format → use `tokenFormat` for CSS variables vs Tailwind vs Style Dictionary
+- Note: "Using project memory: {name}. Override any setting by specifying it in your request."
+
+If not found: continue normally (no project memory, no message).
+
 ### 1. Load Settings & Analyze the Task
 
 Read `${CLAUDE_PLUGIN_ROOT}/skills/design/settings.local.md` if it exists — apply any configured brand defaults, framework preferences, or quality settings.
@@ -132,6 +146,13 @@ Before delivering, verify:
 - [ ] Animations are purposeful and smooth
 - [ ] Consistent tokens/patterns throughout
 - [ ] No placeholder text ("Lorem ipsum") in final output
+
+### Memory Write
+
+If `.naksha/memory.md` exists: append a summary entry:
+```
+[{ISO timestamp}] /design: {one-line summary of key design decisions made, e.g., "Landing page, hero split layout, primary-500 CTA, Inter font"}
+```
 
 ## MCP Fallback
 

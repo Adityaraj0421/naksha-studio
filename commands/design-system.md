@@ -75,6 +75,14 @@ Always output tokens as CSS custom properties. Include a usage example showing h
 
 **MCP Fallback**: If Figma MCP tools are unavailable for Mode B, ask the user to export their Figma variables as JSON or provide screenshots of their design tokens. If Preview MCP is unavailable, write files directly and instruct the user to open them locally.
 
+## Memory Write
+
+If `.naksha/memory.md` exists: append:
+```
+[{ISO timestamp}] /design-system: {token format used}, design system path: {output file path if written}
+```
+If `.naksha/project.json` exists: update `tokenFormat`, `designSystemPath`, and `updatedAt` fields.
+
 ## What's Next
 
 After generating a design system:
