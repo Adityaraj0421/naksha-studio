@@ -2,6 +2,30 @@
 
 All notable changes to naksha are documented here.
 
+## v4.7.0 — Design Intelligence (2026-03-17)
+
+**`/design-score` command (60th command):**
+- Quantitative 0–100 score across 4 dimensions: Accessibility (25pts), Usability (25pts), Visual Quality (25pts), Token Compliance (25pts)
+- Grade scale: A (90–100 production ready) → F (<60 requires redesign)
+- Inputs: URL (Playwright), local file, `--screenshot <path>`, or Figma node ID
+- Output: `╔ Design Score ╗` card with ASCII progress bars per dimension, grade, top-5 issues sorted by impact, per-dimension breakdown, score methodology footer
+- Reads `.naksha/project.json` for brand token context in Token Compliance scoring
+
+**`design-critic` agent upgraded (170 → 227 lines):**
+- Added **Scoring Calculation** step — derives all 4 dimension scores from pass findings before writing the final output
+- Added **Pass 4: Token Compliance** — scans for hardcoded color/typography/spacing values vs. token system; 5 sub-criteria × 5pts each; fallback to visual consistency when no token system present
+- Final output now opens with `━━━ Design Score Summary ━━━` block: overall score, per-dimension bars, grade
+- Updated `━━━ Overall Assessment ━━━` to include Usability Y/25, Visual Quality, and Token Compliance (replaces old "Heuristics Score: X/30")
+- Scoring model is identical to `/design-score` — critic and score outputs are directly comparable
+
+**Evals (IDs 157–160, total: 161):**
+- ID 157: `design-score-landing-page` — URL input, 6 assertions
+- ID 158: `design-score-screenshot-mode` — screenshot input, code-inspection limits noted, 5 assertions
+- ID 159: `design-critic-produces-score-summary` — upgrade validation, 6 assertions
+- ID 160: `design-critic-token-compliance-pass` — Pass 4 presence + token guidance, 5 assertions
+
+---
+
 ## v4.6.0 — CI/CD & Community Health (2026-03-17)
 
 **CI/CD:**
