@@ -282,6 +282,7 @@ This skill is part of the **naksha** plugin. For focused workflows, use these co
 | **Memory & Pipelines** | |
 | `/naksha-init` | Set up project memory — stores brand colors, font, framework, token format in `.naksha/project.json` |
 | `/naksha-status` | Display current project context and last 10 design decisions from `.naksha/memory.md` |
+| `/naksha-help` | Quick-reference for all commands — browse by category or look up a specific command |
 | `/pipeline <action>` | Run a multi-step design pipeline: `run <name>`, `list` available pipelines, `show <name>` to preview steps |
 | **Vision & Intelligence** | |
 | `/design-compare <url1> <url2>` | Capture two live sites via Playwright, side-by-side design analysis: layout, type, color, UX patterns |
@@ -499,6 +500,7 @@ Based on the task, activate only the roles needed. Read their reference files fo
 - The **Data Viz Designer** joins any chart or visualization task
 - The **Dashboard Architect** joins when the output is a full dashboard layout (vs. a single chart)
 - **Tutorial** activates when the user says: "tutorial", "getting started", "how do I use", "what can you do", "new user", "first time", "show me", "help me get started" → route directly to `/design-tutorial`
+- **Help / Command Reference** activates when the user says: "what commands are there", "list all commands", "command reference", "what can naksha do", "show me all commands", "naksha help", "help me find a command" → route directly to `/naksha-help`
 - **Component Library** activates when the user says: "component library", "figma library", "atoms molecules organisms", "build all components", "generate component library", "create a design system in Figma" → route to `/figma-component-library`
 - **Memory** commands activate when the user says: "naksha-init", "set up project memory", "project context", "naksha-status", "what's the current project context", "show project memory", "save brand settings", "project setup wizard" → route to `/naksha-init` or `/naksha-status` as appropriate
 - **Pipeline** activates when the user says: "run pipeline", "design pipeline", "launch prep", "brand audit pipeline", "component build pipeline", "pipeline list", "available pipelines", "run the", "chain commands" → route to `/pipeline run <name>` or `/pipeline list`
