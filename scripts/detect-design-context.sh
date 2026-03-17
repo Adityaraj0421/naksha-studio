@@ -25,8 +25,8 @@ if [ -n "$NAKSHA_JSON" ]; then
   NAKSHA_BRAND_PRIMARY=$(grep '"primary"' "$NAKSHA_JSON" | sed 's/.*: *"\(.*\)".*/\1/' | head -1)
   [ -n "$NAKSHA_BRAND_PRIMARY" ] && NAKSHA_CONTEXT="${NAKSHA_CONTEXT}- Brand: ${NAKSHA_BRAND_PRIMARY}\n"
 
-  NAKSHA_BRAND_SECONDARY=$(grep '"secondary"' "$NAKSHA_JSON" | sed 's/.*: *"\(.*\)".*/\1/' | head -1)
-  if [ -n "$NAKSHA_BRAND_SECONDARY" ] && [ "$NAKSHA_BRAND_SECONDARY" != "null" ]; then
+  NAKSHA_BRAND_SECONDARY=$(grep '"secondary"' "$NAKSHA_JSON" | sed 's/.*"secondary"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/' | head -1)
+  if [ -n "$NAKSHA_BRAND_SECONDARY" ] && [ "$NAKSHA_BRAND_SECONDARY" != "null" ] && echo "$NAKSHA_BRAND_SECONDARY" | grep -q "^#"; then
     NAKSHA_CONTEXT="${NAKSHA_CONTEXT}- Brand accent: ${NAKSHA_BRAND_SECONDARY}\n"
   fi
 
