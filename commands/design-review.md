@@ -36,6 +36,17 @@ Use this section when the input is an image file, a Figma URL, or a captured pre
 - **Preview server**: Call `preview_screenshot` to capture the current state
 - **"current preview"**: Call `preview_screenshot`
 
+**Live Website URL (non-Figma):**
+If `$ARGUMENTS` contains a URL that is NOT a Figma URL (doesn't contain `figma.com`):
+1. Use `mcp__plugin_playwright_playwright__browser_resize` to set viewport to 1440×900
+2. Use `mcp__plugin_playwright_playwright__browser_navigate` to load the URL
+3. Use `mcp__plugin_playwright_playwright__browser_take_screenshot` to capture the current view
+4. Resize to 390×844 and take a second screenshot for mobile view
+5. Proceed with visual analysis using both screenshots as the design to review
+6. Note at top of output: "Captured from live URL: {url}"
+
+MCP Fallback: If Playwright is unavailable, ask the user to provide a screenshot file path.
+
 ### Visual Design Principles Scoring
 
 Analyze the screenshot against the following 6 principles. Score each 0–10.
