@@ -6,7 +6,7 @@
 
 **Your agency's design brain. Always on, always yours.**
 
-*The Naksha design team, inside your terminal — 22 specialist roles activate automatically based on what you're building. Also available as a web workspace at [naksha.ai](https://naksha.ai).*
+*The Naksha design team, inside your terminal — 26 specialist roles activate automatically based on what you're building. Also available as a web workspace at [naksha.ai](https://naksha.ai).*
 
 <br>
 
@@ -16,9 +16,9 @@
 [![Windsurf](https://img.shields.io/badge/Windsurf-Rules-0099ff)]()
 [![Gemini CLI](https://img.shields.io/badge/Gemini_CLI-GEMINI.md-4285F4)]()
 [![Copilot](https://img.shields.io/badge/Copilot-Instructions-24292e)]()
-[![Roles](https://img.shields.io/badge/Specialist_Roles-23-orange)]()
-[![Commands](https://img.shields.io/badge/Slash_Commands-46-green)]()
-[![Design Knowledge](https://img.shields.io/badge/Design_Knowledge-12500%2B_lines-E8633A)]()
+[![Roles](https://img.shields.io/badge/Specialist_Roles-26-orange)]()
+[![Commands](https://img.shields.io/badge/Slash_Commands-57-green)]()
+[![Design Knowledge](https://img.shields.io/badge/Design_Knowledge-13500%2B_lines-E8633A)]()
 
 [Quick Start](#-quick-start) · [Commands](#-commands) · [The Team](#-the-team) · [How It Works](#-how-it-works) · [Changelog](CHANGELOG.md)
 
@@ -28,7 +28,7 @@
 
 ## 🚀 Quick Start
 
-### Claude Code (full plugin — 46 commands, agents, hooks)
+### Claude Code (full plugin — 57 commands, agents, hooks)
 
 **Option A — Marketplace install (recommended, Claude Code 2.1.72+)**
 
@@ -838,11 +838,11 @@ Settings marked `"auto"` or left empty defer to auto-detection. The Design Manag
 
 ```
 naksha/
-├── .claude-plugin/plugin.json          # Plugin manifest (v3.4.0)
+├── .claude-plugin/plugin.json          # Plugin manifest (v4.0.0)
 ├── skills/design/
 │   ├── SKILL.md                        # Design Manager orchestration
 │   ├── settings.local.md              # User-configurable preferences
-│   └── references/                     # 22 specialist role knowledge bases
+│   └── references/                     # 32 specialist role knowledge bases
 │       ├── product-designer.md         # End-to-end UX, feature scoping
 │       ├── ux-designer.md              # Flows, wireframes, IA
 │       ├── ui-designer.md              # Color, typography, layout, components
@@ -866,8 +866,11 @@ naksha/
 │       ├── presentation-designer.md    # Slide systems, pitch decks, data storytelling
 │       ├── brand-strategist.md         # Positioning, visual identity, brand architecture
 │       ├── illustration-director.md    # Icon systems, SVG standards, style taxonomy
-│       └── video-content-producer.md   # Scripts, storyboards, short-form pacing
-├── commands/                           # 32 slash commands
+│       ├── video-content-producer.md   # Scripts, storyboards, short-form pacing
+│       ├── conversational-designer.md  # Chatbot UI, VUI, dialog flows, persona systems
+│       ├── spatial-designer.md         # visionOS HIG, WebXR, depth layers, gaze/gesture
+│       └── compliance-designer.md      # GDPR/CCPA consent UX, HIPAA, PCI, ADA compliance
+├── commands/                           # 57 slash commands
 ├── agents/                             # 5 specialist agents
 ├── hooks/hooks.json                    # SessionStart + PreToolUse + Stop hooks
 ├── scripts/
@@ -882,7 +885,7 @@ naksha/
 ```
 
 <details>
-<summary><b>Design knowledge breakdown (12,500+ raw lines)</b></summary>
+<summary><b>Design knowledge breakdown (13,500+ raw lines)</b></summary>
 
 | File | Lines | Covers |
 |------|-------|--------|

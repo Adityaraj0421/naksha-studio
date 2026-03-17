@@ -1,7 +1,7 @@
 {
   "name": "naksha",
-  "version": "3.19.0",
-  "description": "A virtual design team for Claude Code, Cursor, Windsurf, Gemini CLI, and Copilot — powered by Naksha. Assembles specialist roles — UI designer, UX researcher, content designer, Figma expert, data viz, email, social, motion, presentation, brand strategy, illustration, video, and more — for any design task. 23 roles, 46 commands, 12,500+ lines of expert design knowledge. Your agency's design brain, inside your terminal.",
+  "version": "4.0.0",
+  "description": "A virtual design team for Claude Code, Cursor, Windsurf, Gemini CLI, and Copilot — powered by Naksha. Assembles specialist roles — UI designer, UX researcher, content designer, Figma expert, data viz, email, social, motion, presentation, brand strategy, illustration, video, conversational, spatial, compliance, and more — for any design task. 26 roles, 57 commands, 13,500+ lines of expert design knowledge. Your agency's design brain, inside your terminal.",
   "author": {
     "name": "adityaraj0421"
   },
@@ -12,5 +12,13 @@
     "suno", "voiceover", "prompt-engineering", "ai-gen", "generative-ai",
     "print-design", "print-layout", "print-artifact", "pdf-report", "business-card",
     "certificate-design", "brochure-layout", "print-audit", "preflight", "bleed",
-    "cmyk", "print-typography", "page-geometry", "at-page", "print-css"]
+    "cmyk", "print-typography", "page-geometry", "at-page", "print-css",
+    "chatbot", "conversational-ui", "dialog-flow", "voice-interface", "vui", "chat-widget",
+    "virtual-assistant", "wake-word", "ssml", "barge-in", "persona",
+    "vision-pro", "visionos", "spatial-ui", "webxr", "ar-design", "mixed-reality",
+    "augmented-reality", "immersive", "depth-hierarchy", "ornament", "realitykit",
+    "gdpr", "ccpa", "compliance", "hipaa", "pci", "cookie-consent", "consent-banner",
+    "privacy-control", "data-subject-rights", "ada", "section-508",
+    "naksha-init", "naksha-status", "project-memory", "pipeline", "design-pipeline",
+    "competitive-audit", "design-compare", "visual-comparison"]
 }

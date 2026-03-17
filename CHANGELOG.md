@@ -2,6 +2,56 @@
 
 All notable changes to naksha are documented here.
 
+## v4.0.0 (2026-03-17)
+
+The biggest naksha release — four pillars that transform the plugin from a stateless command toolkit into a project-aware, vision-capable, pipeline-driven design operations platform with three new frontier wings.
+
+**Stats:** 26 roles (+3), 57 commands (+11), 13,500+ knowledge lines (+1,000), 32 reference files (+3)
+
+### Added — Pillar 1: Project Memory
+- **`/naksha-init`** — interactive project setup wizard; writes `.naksha/project.json` (brand colors, font, framework, token format) and creates `.naksha/memory.md` (append-only decision log)
+- **`/naksha-status`** — display current project context and last 10 design decisions from memory
+- **SessionStart hook**: `detect-design-context.sh` now walks up 3 directory levels for `.naksha/project.json` and prepends a "Project Memory" section to session context
+- Memory write-back in `/design`, `/brand-kit`, `/design-system` — significant decisions appended to `.naksha/memory.md` automatically
+
+### Added — Pillar 2: Agentic Pipelines
+- **`/pipeline`** — meta-command: `run <name>` executes multi-step design pipelines sequentially; `list` enumerates available pipelines; `show <name>` previews pipeline definition
+- **4 built-in pipeline definitions** in `skills/design/pipelines/`: `launch-prep` (design → accessibility-audit → design-review → design-handoff), `brand-audit`, `component-build`, `social-launch`
+
+### Added — Pillar 3: Vision-Powered Reviews
+- **`/design-compare <url1> <url2>`** — capture two URLs via Playwright, side-by-side visual analysis, "Steal This" recommendation table
+- **`/competitive-audit <url>`** — extract color palette, type system, layout grid, UX patterns, quality-rated recommendations
+- **`/design-review`** enhanced: non-Figma URLs auto-captured via Playwright before analysis
+- **`/design-critique`** enhanced: `--screenshot <path>` flag for vision-mode heuristic review
+
+### Added — Pillar 4: Frontier Wings
+
+**Conversational Design Wing**
+- **`skills/design/references/conversational-designer.md`** — 400+ lines: dialog flow design, chatbot UI patterns (bubbles, quick replies, typing indicators, carousels), VUI principles (wake word, SSML, barge-in, earcons), persona systems, multi-modal design
+- **`/design-chatbot`** — complete chatbot/assistant UI spec: persona & voice, dialog flow map (4 paths), message bubble UI, component library, error states, accessibility (WCAG 2.1 AA)
+- **`/design-voice-ui`** — voice interface spec: wake word flows, confirmation patterns, screen companion layout (hybrid), SSML guidelines, earcon design, no-input handling
+
+**Spatial & AR Design Wing**
+- **`skills/design/references/spatial-designer.md`** — 468+ lines: visionOS/Vision Pro HIG (window types, ornaments, depth layers), WebXR design patterns, input methods (gaze/pinch/hand/voice), comfort guidelines, spatial typography with Dynamic Type, lighting-aware design
+- **`/design-spatial`** — spatial computing spec: window type selection, depth hierarchy document, ornament placement (attachmentAnchor-based), spatial typography scale, interaction model, comfort checklist
+- **`/design-ar-overlay`** — AR overlay spec: anchor strategy, world tracking UI (3 states), instruction card patterns, scan state designs, confirmation overlays, occlusion handling
+
+**Compliance Design Wing**
+- **`skills/design/references/compliance-designer.md`** — 636 lines: GDPR/CCPA consent UX, Privacy Control Center, HIPAA healthcare UI (PHI handling, session timeout, audit logs), PCI DSS payment forms (iframe isolation, 3DS), ADA/EN 301 549 compliance, regulated industry patterns
+- **`/design-gdpr`** — GDPR/CCPA consent flow spec: 3 cookie banner variants, consent flow, privacy control center wireframe, data deletion request flow (5-step), jurisdiction-split compliance checklists
+- **`/design-compliance`** — `--regulation <hipaa|pci|ada>` flag; HIPAA: PHI field marking, session timeout (15 min), audit log UI, access control display; PCI: card field isolation, tokenization flow, 3DS challenge UI; ADA: 508 compliance checklist, focus management, screen reader live regions
+
+### Updated
+- **`skills/design/SKILL.md`** — 6 locations updated: trigger phrases (+25 new terms), examples (+11), command table (+11 rows in 5 new sections), team table (new "Frontier Wing Specialists" section with 3 roles), routing rules (+6 bullets, +9 team assembly examples), output formats (+9 rows)
+- **`hooks/hooks.json`** — Stop hook suggestion list updated with all 11 new commands
+- **Platform adapters** — all 4 updated to 26 roles / 57 commands / 13,500+ lines: `GEMINI.md`, `.cursor/rules/naksha.mdc`, `.windsurfrules`, `.github/copilot-instructions.md`
+
+### Tests
+- **20 new eval entries** (IDs 120–139) covering all 11 new commands in `evals/evals.json`
+- **11 new smoke fixtures** in `evals/fixtures/` with corresponding `check_fixture` rows in `behavioral-smoke.sh`
+
+---
+
 ## v3.19.0 (2026-03-17)
 ### Added
 - **Wishlist issue template**: `.github/ISSUE_TEMPLATE/wishlist-item.yml` — YAML form with Wing/Area, What to build, Why it matters, Acceptance criteria, Difficulty, Related files fields. Auto-labels issues with `wishlist`.
