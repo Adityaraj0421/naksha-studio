@@ -442,6 +442,55 @@ Take the business card CSS from Exercise 1 and run:
 
 ---
 
+### TRACK: conversational
+
+**Goal:** Design a chatbot UI, a voice interface, and chain them through a pipeline — see how Naksha handles multi-modal conversational products.
+
+---
+
+**Exercise 1 of 3 — Chatbot UI**
+
+Run this command now:
+
+```
+/design-chatbot customer support assistant. Platform: web. Persona: friendly, concise.
+```
+
+> **What to watch for:** Five-section output — persona spec, dialog flow map (intent → response → fallback), message bubble UI spec (user vs. assistant styling, max-width, padding), quick reply component patterns, and an accessibility checklist (tab order, ARIA live regions, keyboard trap prevention).
+
+---
+
+**Exercise 2 of 3 — Voice Interface**
+
+```
+/design-voice-ui smart home assistant. Platform: custom device. Screen: hybrid (4" display).
+```
+
+> **What to watch for:** Wake word flow diagram, confirmation pattern table (explicit for destructive actions, implicit for routine ones), hybrid screen layout spec showing how the small display complements voice output, SSML guidelines (pause, emphasis, `<say-as interpret-as="currency">`), and earcon frequency/duration spec.
+
+---
+
+**Exercise 3 of 3 — Pipeline Chaining**
+
+```
+/pipeline run conversational-launch
+```
+
+> **What to watch for:** If `conversational-launch` isn't defined, the pipeline command will output a manual checklist of steps instead — that's the MCP Fallback in action. Try `/pipeline list` to see available pipelines, then `/pipeline run launch-prep` for a working example.
+
+---
+
+**Conversational track complete.** You've seen:
+- `/design-chatbot` → persona, dialog flows, bubble UI, accessibility
+- `/design-voice-ui` → wake word, confirmation patterns, hybrid layout, SSML
+- `/pipeline` → multi-command chaining with fallback mode
+
+**Suggested next:**
+- `/design-tutorial spatial` for the Spatial & AR wing
+- `/design-tutorial full` for the complete tour
+
+---
+
 ### TRACK: full
 
 **Goal:** Complete tour of all design wings — UI, Figma, Social, AI Visual Gen, Email, Data Viz, Print/PDF, and Handoff.
