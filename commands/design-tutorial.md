@@ -333,6 +333,61 @@ After reviewing the card output, run:
 
 ---
 
+### TRACK: ai-visual-gen
+
+**Goal:** Generate an image prompt → produce a video brief → build a moodboard.
+
+---
+
+**Exercise 1 of 3 — Generate an Image**
+
+Run this command now:
+
+```
+/gen-image hero illustration for a SaaS landing page: abstract, minimal, blue palette
+```
+
+> **What to watch for:** The AI Image Director produces a structured prompt optimized for Midjourney/DALL-E/Firefly — negative prompts, aspect ratio, style references, and seed suggestions. Output is a ready-to-paste generation prompt, not a generic description.
+
+Once you see the output, continue to Exercise 2.
+
+---
+
+**Exercise 2 of 3 — Write a Video Brief**
+
+Run:
+
+```
+/gen-video 15-second product launch teaser. Tone: confident, modern. No voiceover.
+```
+
+> **What to watch for:** The AI Video Director outputs a shot-by-shot brief with scene timing, motion direction, music mood, and color grading notes — everything a motion designer needs without a briefing call.
+
+---
+
+**Exercise 3 of 3 — Build a Moodboard**
+
+Run:
+
+```
+/gen-moodboard brand moodboard for the SaaS product above. Style: clean tech, trustworthy.
+```
+
+> **What to watch for:** The moodboard command assembles visual direction references — typography pairings, color story, photography style, UI texture — as a structured brief you can drop into Figma or hand to a visual designer.
+
+---
+
+**AI Visual Gen track complete.** You've seen:
+- `/gen-image` → structured generation prompt optimized for AI tools
+- `/gen-video` → shot-by-shot motion brief
+- `/gen-moodboard` → brand visual direction brief
+
+**Suggested next tracks:**
+- `/design-tutorial print-pdf` for the print/PDF pipeline
+- `/design-tutorial full` for the complete tour
+
+---
+
 ### TRACK: full
 
 **Goal:** Complete tour of all 8 design wings.
