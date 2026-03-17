@@ -17,8 +17,8 @@
 [![Gemini CLI](https://img.shields.io/badge/Gemini_CLI-GEMINI.md-4285F4)]()
 [![Copilot](https://img.shields.io/badge/Copilot-Instructions-24292e)]()
 [![Roles](https://img.shields.io/badge/Specialist_Roles-26-orange)]()
-[![Commands](https://img.shields.io/badge/Slash_Commands-57-green)]()
-[![Design Knowledge](https://img.shields.io/badge/Design_Knowledge-13500%2B_lines-E8633A)]()
+[![Commands](https://img.shields.io/badge/Slash_Commands-60-green)]()
+[![Design Knowledge](https://img.shields.io/badge/Design_Knowledge-13800%2B_lines-E8633A)]()
 
 [Quick Start](#-quick-start) · [Commands](#-commands) · [The Team](#-the-team) · [How It Works](#-how-it-works) · [Changelog](CHANGELOG.md)
 
@@ -28,7 +28,7 @@
 
 ## 🚀 Quick Start
 
-### Claude Code (full plugin — 57 commands, agents, hooks)
+### Claude Code (full plugin — 60 commands, agents, hooks)
 
 **Option A — Marketplace install (recommended, Claude Code 2.1.72+)**
 
@@ -363,6 +363,14 @@ _The skill loads only the references your task actually needs_
 | `/design-ar-overlay <use-case> [platform]` | AR overlay spec — anchor strategy, world tracking UI, instruction cards, scan states, occlusion handling |
 | `/design-gdpr <type> [jurisdiction]` | GDPR/CCPA consent flows — cookie banner variants, privacy control center, data deletion request flow |
 | `/design-compliance --regulation <hipaa\|pci\|ada>` | Compliance design audit or generation — HIPAA PHI handling, PCI payment form isolation, ADA/Section 508 |
+
+**v4.6.0 — CI/CD & Health**
+
+| `/naksha-doctor [--fix]` | Plugin health check — validates command count, references, version consistency, allowed-tools; probes Playwright + Figma MCP availability; `--fix` remediates issues automatically |
+
+**v4.7.0 — Design Intelligence**
+
+| `/design-score <file or URL>` | Quantitative 0–100 design score across 4 dimensions: Accessibility (WCAG), Usability (Nielsen), Visual Quality, Token Compliance — ASCII bar chart, A–F grade |
 
 <details>
 <summary><b>📖 Command details & examples</b></summary>
@@ -737,6 +745,8 @@ Commands chain together. Each command suggests relevant next steps:
 | Chatbot + voice | `/design-chatbot` → `/design-voice-ui` → `/design-system` |
 | Spatial app | `/design-spatial` → `/design-ar-overlay` → `/design-system` |
 | GDPR + compliance | `/design-gdpr` → `/design-compliance --regulation ada` |
+| Design quality gate | `/design` → `/design-score` → `/design-review` |
+| Plugin health check | `/naksha-doctor` → `/naksha-doctor --fix` |
 
 ---
 
@@ -808,8 +818,10 @@ graph TB
 | **accessibility-auditor** | Comprehensive WCAG AA compliance audit with specific code fixes | Background |
 | **design-qa** | Visual QA at 3 breakpoints, token compliance scoring, interaction state check | Background |
 | **figma-creator** | Creates pages, frames, components, and styles directly in Figma via Desktop Bridge | Foreground |
-| **design-critique** | Automated UX heuristic review — Nielsen's 10 heuristics, visual audit, interaction states | Foreground |
-| **design-lint** | Scans Figma files for orphan colors, non-standard spacing, low contrast, missing auto-layout | Foreground |
+| **design-critique** | Automated UX heuristic review — Nielsen's 10 heuristics, visual audit, interaction states + 4-dimension scoring | Foreground |
+| **design-lint** | Scans Figma files for orphan colors, non-standard spacing, low contrast, missing auto-layout (haiku model) | Foreground |
+| **design-token-extractor** | Extracts design tokens from CSS/Figma files — color, typography, spacing, shadows (haiku model) | Background |
+| **design-score** | Quantitative design scorer — derives Accessibility, Usability, Visual Quality, Token Compliance dimensions | Foreground |
 
 Background agents run in parallel with your main work. Foreground agents run interactively.
 
@@ -865,7 +877,7 @@ Settings marked `"auto"` or left empty defer to auto-detection. The Design Manag
 
 ```
 naksha/
-├── .claude-plugin/plugin.json          # Plugin manifest (v4.1.0)
+├── .claude-plugin/plugin.json          # Plugin manifest (v4.8.0)
 ├── skills/design/
 │   ├── SKILL.md                        # Design Manager orchestration
 │   ├── settings.local.md              # User-configurable preferences
@@ -897,14 +909,14 @@ naksha/
 │       ├── conversational-designer.md  # Chatbot UI, VUI, dialog flows, persona systems
 │       ├── spatial-designer.md         # visionOS HIG, WebXR, depth layers, gaze/gesture
 │       └── compliance-designer.md      # GDPR/CCPA consent UX, HIPAA, PCI, ADA compliance
-├── commands/                           # 57 slash commands
-├── agents/                             # 5 specialist agents
+├── commands/                           # 60 slash commands
+├── agents/                             # 7 specialist agents
 ├── hooks/hooks.json                    # SessionStart + PreToolUse + Stop hooks
 ├── scripts/
 │   ├── detect-design-context.sh        # Project stack detection
 │   └── run-evals.sh                    # Eval structure validator
 ├── evals/
-│   ├── evals.json                      # 140 eval cases (prompt + assertion specs)
+│   ├── evals.json                      # 161 eval cases (prompt + assertion specs)
 │   └── fixtures/                       # 60 output fixtures for behavioral smoke tests
 ├── assets/                             # Social preview + demo images
 ├── CHANGELOG.md                       # Version history
@@ -912,7 +924,7 @@ naksha/
 ```
 
 <details>
-<summary><b>Design knowledge breakdown (13,500+ raw lines)</b></summary>
+<summary><b>Design knowledge breakdown (13,800+ raw lines)</b></summary>
 
 | File | Lines | Covers |
 |------|-------|--------|
