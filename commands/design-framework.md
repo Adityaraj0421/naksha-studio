@@ -1,7 +1,7 @@
 ---
 description: "Convert HTML/CSS design output to framework-specific component code. Supports React+Tailwind, Vue 3+UnoCSS, Svelte 5, Next.js App Router, and Astro."
 argument-hint: "<framework> [source file or description]"
-allowed-tools: ["Read", "Write", "Edit", "Bash", "Glob", "Grep"]
+allowed-tools: ["Read", "Write", "Edit", "Bash", "Glob", "Grep", "mcp__plugin_context7_context7__resolve-library-id", "mcp__plugin_context7_context7__query-docs"]
 ---
 
 # /design-framework
@@ -34,6 +34,28 @@ If no framework is specified, ask the user which framework they're using before 
 **If no file path is provided:**
 - Ask the user to paste the HTML/CSS or describe the component
 - Or look for the most recently created HTML file in the current directory
+
+### 2.5. Fetch Live Framework Documentation
+
+Use Context7 to pull current framework documentation before generating code. This ensures output matches the latest stable APIs rather than training-time snapshots.
+
+**Library IDs to resolve** (call `mcp__plugin_context7_context7__resolve-library-id`):
+- `react-tailwind` → resolve `"tailwindcss"`, then `"react"`
+- `vue` → resolve `"vue"`, then `"unocss"`
+- `svelte` → resolve `"svelte"`
+- `nextjs` → resolve `"next"`
+- `astro` → resolve `"astro"`
+
+**Documentation to query** (call `mcp__plugin_context7_context7__query-docs` with the resolved library ID):
+- React+Tailwind: query `"utility classes configuration theme extend"` on tailwindcss
+- Vue 3: query `"script setup defineProps composition api"` on vue
+- Svelte 5: query `"runes $state $props $derived"` on svelte
+- Next.js App Router: query `"server components client components use client"` on next
+- Astro: query `"component props client directives islands"` on astro
+
+Extract any **version-specific breaking changes** from the docs (e.g., Tailwind v4 CSS-first config vs v3 JS config, Svelte 5 rune syntax vs Svelte 4 stores). Apply these in the conversion step.
+
+**Context7 Fallback**: If the tools are unavailable or return an error, proceed with the built-in framework knowledge from `framework-specialist.md`. Add a footer note to the output: `> ℹ Using cached framework knowledge — connect Context7 MCP for live documentation.`
 
 ### 3. Decompose into Components
 
