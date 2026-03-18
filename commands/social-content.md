@@ -1,5 +1,5 @@
 ---
-description: "Design social media visual content — posts, stories, reels, carousels — optimized for platform dimensions and safe zones."
+description: "Design social media visual content — posts, stories, reels, carousels — mobile-first, platform-exact dimensions. Exports PNG via Playwright. Supports AI-generated image backgrounds."
 argument-hint: "[platform] [content type: post, story, reel, carousel] [description]"
 allowed-tools: ["Read", "Write", "Edit", "Bash", "Glob", "Grep", "mcp__*"]
 ---
@@ -32,13 +32,40 @@ From the Social Media Designer reference, load:
 - File format and size limits
 - Platform-specific rules (e.g., Meta 20% text rule for ads)
 
+### 2.5. Image Decision
+
+Determine whether this post needs an AI-generated background or illustration:
+
+**Needs AI image** if any of the following apply:
+- Content describes a lifestyle scene, environment, or product in context
+- No brand photography is available and a plain colour background would look weak
+- The brief says "image", "photo", "scene", "illustration", or similar
+
+**Does NOT need AI image** if:
+- Typographic / quote / data post — design-led content works standalone
+- Brand already supplies a photo path in the arguments
+- Abstract gradient or geometric background fits the concept better
+
+**If AI image is needed**, call `/gen-image [subject] for [brand] — [style intent] [platform aspect ratio]` now. Capture the returned prompt pack and note the recommended tool + dimensions. Embed the image path or inline the base64 output as the HTML background once generated.
+
+**If standalone**, proceed with a purposeful design-led background (gradient, geometric pattern, bold solid colour, duotone, or abstract shape system).
+
 ### 3. Set Creative Direction
 
 Define the visual approach:
 - **Color palette**: Brand colors if available, or purposeful defaults
-- **Typography**: Bold, mobile-readable fonts at platform minimum sizes
+- **Typography**: Bold, mobile-readable, minimum 28px body / 48px headline at 1080px canvas — scales to ~14px/24px on device
 - **Layout pattern**: Select from feed post patterns, carousel system, or story templates
 - **Mood**: Match the campaign tone or choose appropriate defaults
+
+**Mobile-first composition rules** (all social platforms are consumed on phone):
+- Treat the canvas as a 375px-wide phone screen mentally — will it read instantly?
+- Primary message in the top-centre safe zone — visible without scrolling or expanding
+- No information in hover states — every element must be statically visible
+- Minimum tap target 44×44pt for any interactive element reference (CTA, link)
+- High contrast for outdoor / bright-screen viewing — text contrast ≥ 4.5:1 against background
+- Avoid fine detail below 2px that disappears at phone resolution
+- Thumbnail-check: squint at 160px — can you still read the hook?
 
 ### 4. Create Visual Content
 
@@ -71,20 +98,26 @@ For **stories/reels**: Design the static frame/thumbnail:
 - **Story safe zones**: Confirm nothing hidden under platform UI overlays
 - **Mobile preview**: Test at 375px viewport width for actual device rendering
 
-### 6. Preview & Verify
+### 6. Export PNG via Playwright
 
-Use the preview server to display at actual platform dimensions:
+Use Playwright to screenshot the HTML at native resolution and save as a PNG:
+
 ```
-preview_start → launch
-preview_screenshot → capture visual proof
+1. Write the HTML file to disk (e.g., post-instagram-feed.html)
+2. Use mcp__plugin_playwright_playwright__browser_navigate to open it (file:// or via preview server)
+3. Use mcp__plugin_playwright_playwright__browser_resize to set the viewport to the exact canvas dimensions
+   e.g., 1080×1080 for IG feed square, 1080×1920 for Stories/Reels, 1200×628 for LinkedIn
+4. Use mcp__plugin_playwright_playwright__browser_take_screenshot to save the PNG
+   Save as: [platform]-[type]-[slug].png (e.g., instagram-feed-launch-post.png)
 ```
 
-Check:
-- Dimensions match exactly
+Check the screenshot for:
+- Dimensions match exactly (confirm in file metadata)
 - Text is readable at mobile size
 - Safe zones are respected
 - Brand consistency maintained
-- Visual hierarchy is clear
+- Visual hierarchy is clear — primary message reads in < 2 seconds
+- If carousel: export each slide as a numbered PNG (slide-01.png, slide-02.png, …)
 
 ### 7. Quality Review
 

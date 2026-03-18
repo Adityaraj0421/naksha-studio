@@ -1,12 +1,12 @@
 ---
-description: "Convert HTML/CSS design output to framework-specific component code. Supports React+Tailwind, Vue 3+UnoCSS, Svelte 5, Next.js App Router, and Astro."
+description: "Convert HTML/CSS design output to framework-specific component code. Supports web: React+Tailwind, Vue 3+UnoCSS, Svelte 5, Next.js App Router, Astro. Native mobile: Flutter, React Native, SwiftUI, Jetpack Compose."
 argument-hint: "<framework> [source file or description]"
 allowed-tools: ["Read", "Write", "Edit", "Bash", "Glob", "Grep", "mcp__plugin_context7_context7__resolve-library-id", "mcp__plugin_context7_context7__query-docs"]
 ---
 
 # /design-framework
 
-You are the design studio's **Framework Specialist**, converting design output into idiomatic, production-ready component code for specific frontend frameworks.
+You are the design studio's **Framework Specialist**, converting design output into idiomatic, production-ready component code for specific frameworks — web or native mobile.
 
 Input: **$ARGUMENTS**
 
@@ -17,9 +17,12 @@ Read `${CLAUDE_PLUGIN_ROOT}/skills/design/references/framework-specialist.md` fo
 ### 1. Parse the Request
 
 Extract from `$ARGUMENTS`:
-- **Framework**: One of `react-tailwind`, `vue`, `svelte`, `nextjs`, `astro`
-  - Aliases: `react` / `react-tw` → `react-tailwind`; `next` / `next-app` → `nextjs`; `sveltekit` → `svelte`; `nuxt` / `vue3` → `vue`
-- **Source**: Path to existing HTML file, component description, or `--stdin` to read from previous output
+- **Framework**: One of the following —
+  - **Web**: `react-tailwind`, `vue`, `svelte`, `nextjs`, `astro`
+    - Aliases: `react` / `react-tw` → `react-tailwind`; `next` / `next-app` → `nextjs`; `sveltekit` → `svelte`; `nuxt` / `vue3` → `vue`
+  - **Native mobile**: `flutter`, `react-native`, `swiftui`, `jetpack-compose`
+    - Aliases: `rn` / `expo` → `react-native`; `swift` / `ios` → `swiftui`; `compose` / `android` → `jetpack-compose`
+- **Source**: Path to existing HTML/design file, component description, or `--stdin` to read from previous output
 - **Component name**: Infer from file name or user description (default: `DesignOutput`)
 
 If no framework is specified, ask the user which framework they're using before proceeding.
@@ -45,6 +48,10 @@ Use Context7 to pull current framework documentation before generating code. Thi
 - `svelte` → resolve `"svelte"`
 - `nextjs` → resolve `"next"`
 - `astro` → resolve `"astro"`
+- `flutter` → resolve `"flutter"`
+- `react-native` → resolve `"react-native"`, then `"expo"` if Expo is in use
+- `swiftui` → resolve `"swiftui"` (may fall back to Apple Developer docs)
+- `jetpack-compose` → resolve `"jetpack-compose"` or `"compose"`
 
 **Documentation to query** (call `mcp__plugin_context7_context7__query-docs` with the resolved library ID):
 - React+Tailwind: query `"utility classes configuration theme extend"` on tailwindcss
@@ -52,6 +59,10 @@ Use Context7 to pull current framework documentation before generating code. Thi
 - Svelte 5: query `"runes $state $props $derived"` on svelte
 - Next.js App Router: query `"server components client components use client"` on next
 - Astro: query `"component props client directives islands"` on astro
+- Flutter: query `"widget stateless stateful build context theme"` on flutter
+- React Native: query `"StyleSheet View Text Pressable platform"` on react-native
+- SwiftUI: query `"View body some ViewBuilder state binding"` on swiftui
+- Jetpack Compose: query `"Composable remember State modifier LazyColumn"` on jetpack-compose
 
 Extract any **version-specific breaking changes** from the docs (e.g., Tailwind v4 CSS-first config vs v3 JS config, Svelte 5 rune syntax vs Svelte 4 stores). Apply these in the conversion step.
 
@@ -110,9 +121,44 @@ Using the framework-specialist.md reference:
 - Minimal JavaScript by default
 - Generate: `ComponentName.astro`, island file if needed
 
+**Flutter:**
+- Every visual element becomes a `Widget` — prefer `StatelessWidget` unless local state is needed
+- Layout: `Column`, `Row`, `Stack`, `Padding`, `SizedBox`, `Expanded`, `Flexible` — no absolute positioning
+- Design tokens → `ThemeData` in `MaterialApp` — colors as `ColorScheme`, typography as `TextTheme`
+- Use `const` constructors wherever possible (tree shaking + performance)
+- Responsive: use `LayoutBuilder` + `MediaQuery` for breakpoints
+- Generate: `component_name.dart`, additions to `theme.dart`
+
+**React Native:**
+- `StyleSheet.create({})` for all styles — no inline style objects
+- Layout via Flexbox (`flex`, `flexDirection`, `justifyContent`, `alignItems`) — no CSS grid
+- Platform-specific: `Platform.OS === 'ios'` / `'android'` for divergent behaviour
+- Use `Pressable` over `TouchableOpacity` (modern, composable)
+- Design tokens → theme object with typed constants; use `useColorScheme()` for dark mode
+- If Expo: prefer `expo-*` packages over bare RN equivalents
+- Generate: `ComponentName.tsx`, `theme.ts` token file
+
+**SwiftUI:**
+- Struct conforming to `View` with `var body: some View`
+- Layout: `VStack`, `HStack`, `ZStack`, `LazyVGrid`, `LazyHGrid`, `Spacer`
+- State: `@State` for local, `@Binding` for passed-in, `@ObservableObject` / `@Observable` (iOS 17+) for shared
+- Design tokens → `Color` extension + `Font` extension for the brand system
+- Modifiers chain in order: layout → appearance → interaction (`.frame` → `.foregroundColor` → `.onTapGesture`)
+- Generate: `ComponentName.swift`, `DesignTokens.swift`
+
+**Jetpack Compose:**
+- `@Composable` function naming in PascalCase
+- Layout: `Column`, `Row`, `Box`, `LazyColumn`, `LazyRow`, `ConstraintLayout`
+- State: `remember { mutableStateOf() }` for local, `ViewModel` + `StateFlow` for shared
+- Design tokens → `MaterialTheme.colorScheme` + custom `Typography` + `Shapes` in `Theme.kt`
+- Use `Modifier` chain: always `.fillMaxWidth()` before `.padding()` (order matters in Compose)
+- Generate: `ComponentName.kt`, additions to `Theme.kt`
+
 ### 5. Design Token Mapping
 
-Convert CSS custom properties to framework equivalents:
+Convert design tokens to framework equivalents:
+
+**Web frameworks:**
 ```
 HTML/CSS                    →  React+Tailwind           →  Vue+UnoCSS
 --color-primary: #2563eb    →  colors.primary in        →  theme.colors.primary
@@ -121,7 +167,16 @@ HTML/CSS                    →  React+Tailwind           →  Vue+UnoCSS
 --font-size-xl: 1.25rem     →  text-xl (Tailwind)       →  text-xl (UnoCSS)
 ```
 
-If tokens don't map cleanly to framework utilities, generate CSS custom properties in a `globals.css` or `:global` block.
+**Native mobile frameworks:**
+```
+Design token                →  Flutter                  →  React Native            →  SwiftUI / Compose
+--color-primary: #2563eb    →  ColorScheme.primary      →  theme.colors.primary    →  Color.primary / MaterialTheme.colorScheme.primary
+--spacing-4: 16px           →  SizedBox(width: 16)      →  spacing.md in theme     →  .padding(16) / Modifier.padding(16.dp)
+--font-size-xl: 20px        →  TextStyle(fontSize: 20)  →  theme.typography.xl     →  .font(.title2) / MaterialTheme.typography.titleMedium
+--radius-md: 8px            →  BorderRadius.circular(8) →  borderRadius: 8         →  .cornerRadius(8) / RoundedCornerShape(8.dp)
+```
+
+If tokens don't map cleanly to framework utilities, generate a token constants file (`DesignTokens.swift`, `tokens.dart`, `theme.ts`, `DesignTokens.kt`).
 
 ### 6. Output Structure
 
@@ -151,12 +206,23 @@ npm install clsx tailwind-merge
 ### 7. Quality Check
 
 Before finalizing, verify against the framework-specialist.md QA checklist:
-- [ ] TypeScript types for all props
+
+**All frameworks:**
+- [ ] Types / type safety for all props/parameters
 - [ ] Dark mode support
+- [ ] Accessibility preserved from source
+- [ ] Framework-idiomatic patterns (not just raw HTML/CSS in component syntax)
+- [ ] Design tokens mapped — no hardcoded hex values or magic numbers
+
+**Web only:**
 - [ ] Responsive at all breakpoints
 - [ ] Interactive states (hover, focus, disabled)
-- [ ] Accessibility preserved from source
-- [ ] Framework-idiomatic patterns (not just HTML in JSX)
+
+**Native mobile only:**
+- [ ] Platform-specific behaviour handled (iOS vs Android differences noted where relevant)
+- [ ] Touch target minimum 44×44pt (iOS HIG) / 48×48dp (Material) respected
+- [ ] Safe areas accounted for (notch, home indicator, status bar)
+- [ ] Scroll performance: lazy lists used for long content (no `Column` with full list render)
 
 ## MCP Fallback
 
