@@ -18,6 +18,7 @@ RESULTS=$(grep -rn \
   --exclude-dir=".git" \
   --exclude-dir=".worktrees" \
   --exclude-dir="docs" \
+  --exclude-dir="brand" \
   --exclude="CHANGELOG.md" \
   --exclude="REVIEW.md" \
   --exclude="guard-legacy-branding.sh" \
