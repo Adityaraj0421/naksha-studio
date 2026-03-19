@@ -130,6 +130,32 @@ Spacing: [compact | comfortable | spacious]
 
 ---
 
+### 2.5: Stitch Quick Proto
+
+If `$ARGUMENTS` contains `--stitch`, `quick proto`, or `fast visual`:
+
+1. Find or create a Stitch project:
+   ```
+   mcp__stitch__list_projects → use first owned project, or mcp__stitch__create_project(title: "[category] Template")
+   ```
+2. Generate a Stitch screen (async — do not retry on connection errors):
+   ```
+   mcp__stitch__generate_screen_from_text(
+     projectId: [id],
+     prompt: "[category] page, [style modifier] style, primary color [brand hex], mobile-first layout",
+     deviceType: MOBILE,
+     modelId: GEMINI_3_PRO
+   )
+   ```
+3. Poll `mcp__stitch__get_screen` until `screenMetadata.status === "COMPLETE"` (every 30s, timeout 3 min).
+4. Download HTML:
+   ```bash
+   curl -L "[htmlCode.downloadUrl]" -o stitch-proto.html
+   ```
+5. Use `stitch-proto.html` as the starting point for Step 6 (Build the HTML) — apply full brand customization from Step 4 on top.
+
+If Stitch MCP unavailable, skip and proceed with Claude's native template generation.
+
 ### 3. Generate the Template
 
 Build a complete, production-ready HTML/CSS file for the chosen category. Follow the section structure below per category.

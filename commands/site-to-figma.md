@@ -111,6 +111,37 @@ mcp__plugin_playwright_playwright__browser_evaluate: `
 `
 ```
 
+### 1.5: Stitch Alternative Intake
+
+Use this path if **Playwright MCP is unavailable** OR if `$ARGUMENTS` contains `--stitch`:
+
+1. Find or create a Stitch project:
+   ```
+   mcp__stitch__list_projects → use first owned project, or mcp__stitch__create_project(title: "Site Capture — [domain]")
+   ```
+
+2. Generate a Stitch screen from the site description (async — do not retry on connection errors):
+   ```
+   mcp__stitch__generate_screen_from_text(
+     projectId: [id],
+     prompt: "Recreate the layout and visual style of [URL or site description]: [key sections, colors, and style noted from $ARGUMENTS]",
+     deviceType: DESKTOP,
+     modelId: GEMINI_3_PRO
+   )
+   ```
+   Poll `mcp__stitch__get_screen` until `screenMetadata.status === "COMPLETE"`.
+
+3. Download outputs:
+   ```bash
+   curl -L "[screenshot.downloadUrl]" -o stitch-capture.png
+   curl -L "[htmlCode.downloadUrl]" -o stitch-capture.html   # if figmaExport absent
+   curl -L "[figmaExport.downloadUrl]" -o stitch-export.fig  # if figmaExport present
+   ```
+
+4. If `figmaExport` is present: open in Figma Desktop → use `get_design_context` → skip Steps 3–5, go to Step 7 (Validate).
+
+5. If only `htmlCode`: use `stitch-capture.png` as the reference screenshot for Step 6, and derive color/type styles from the HTML rather than Playwright evaluation.
+
 ### 2. Connect to Figma
 
 ```

@@ -1,6 +1,6 @@
 ---
 description: "Generate A/B test design variants from an existing Figma screen — alternate layouts, CTA placements, color treatments, and copy variations."
-argument-hint: "[frame name or node ID] [what to vary: layout, cta, color, copy, or 'all']"
+argument-hint: "[frame name or node ID] [what to vary: layout, cta, color, copy, or 'all'] [--stitch for Stitch engine]"
 allowed-tools: ["Read", "Write", "Edit", "Bash", "Glob", "Grep", "mcp__*"]
 ---
 
@@ -83,6 +83,58 @@ figma_execute: `
 ```
 
 ### 4. Generate Variants
+
+#### Mode A: Stitch Engine (preferred — when Stitch MCP is available)
+
+Stitch's `generate_variants` produces real rendered variants with configurable creative range.
+
+1. Identify the Stitch screen for the source. If the source came from a Stitch project (known `projectId` + `screenId`), use it directly. Otherwise, upload the Figma screenshot as a Stitch screen:
+   ```
+   mcp__stitch__list_projects → find active project (or create one)
+   mcp__stitch__upload_screens_from_images(
+     projectId: [id],
+     images: [{ fileContentBase64: [base64 of source screenshot], mimeType: "image/png" }]
+   )
+   ```
+   Note the returned `screenId`.
+
+2. Map the user's variation intent to Stitch options:
+
+   | User asks to vary | `aspects` | `creativeRange` |
+   |---|---|---|
+   | layout / structure | `["LAYOUT"]` | `EXPLORE` |
+   | color / palette | `["COLOR_SCHEME"]` | `EXPLORE` |
+   | copy / text / headlines | `["TEXT_CONTENT"]` | `REFINE` |
+   | fonts / typography | `["TEXT_FONT"]` | `REFINE` |
+   | "all" / radical | `["LAYOUT","COLOR_SCHEME","IMAGES"]` | `REIMAGINE` |
+   | subtle refinements | any | `REFINE` |
+
+3. Generate variants (async — do not retry on connection errors):
+   ```
+   mcp__stitch__generate_variants(
+     projectId: [id],
+     selectedScreenIds: [sourceScreenId],
+     prompt: [variation intent from user input],
+     variantOptions: {
+       variantCount: 3,
+       creativeRange: [mapped value],
+       aspects: [mapped array]
+     },
+     deviceType: MOBILE
+   )
+   ```
+   Each returned screen is a variant. Poll `mcp__stitch__get_screen` for each until `status === "COMPLETE"`.
+
+4. Download `screenshot` and `htmlCode` for each variant via their `downloadUrl`.
+
+5. Screenshot each variant using Playwright if available:
+   ```bash
+   curl -L "[screenshot.downloadUrl]" -o variant-[A|B|C].png
+   ```
+
+Skip the Figma clone steps below — go directly to Step 5 (Label Variants) using the Stitch screenshots.
+
+#### Mode B: Figma Clone (fallback — when Stitch MCP is unavailable)
 
 #### Variant A (Control)
 Clone the original as-is:

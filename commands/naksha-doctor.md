@@ -1,7 +1,7 @@
 ---
 description: "Run all naksha quality checks and report the plugin's health status."
 argument-hint: "[--fix]"
-allowed-tools: ["Bash", "Read", "Glob", "mcp__plugin_playwright_playwright__browser_navigate", "mcp__figma-console__figma_get_status"]
+allowed-tools: ["Bash", "Read", "Glob", "mcp__plugin_playwright_playwright__browser_navigate", "mcp__figma-console__figma_get_status", "mcp__stitch__list_projects"]
 ---
 
 # /naksha-doctor
@@ -51,7 +51,12 @@ Attempt to call `mcp__figma-console__figma_get_status`.
 - If the call succeeds → record `AVAILABLE`
 - If the tool throws an error or is not found → record `UNAVAILABLE`
 
-Record both results for inclusion in the health report.
+**Stitch MCP:**
+Attempt to call `mcp__stitch__list_projects`.
+- If the call succeeds → record `AVAILABLE`
+- If the tool throws an error or is not found → record `UNAVAILABLE`
+
+Record all three results for inclusion in the health report.
 
 ## Step 3: Build the health report
 
@@ -70,6 +75,7 @@ Parse each script's output and exit code. Present results in this format when al
   ──────────────────────────────────────
   MCPs         playwright  ✅ AVAILABLE
                figma       ✅ AVAILABLE
+               stitch      ✅ AVAILABLE
   ──────────────────────────────────────
 
   ══════════════════════════════════════
@@ -92,6 +98,7 @@ When any quality check fails, show ❌ and a one-line summary. The HEALTHY/UNHEA
   ──────────────────────────────────────
   MCPs         playwright  ❌ UNAVAILABLE
                figma       ✅ AVAILABLE
+               stitch      ✅ AVAILABLE
   ──────────────────────────────────────
   Note: /design-compare, /competitive-audit require Playwright.
   These commands will fall back to manual screenshot mode.
@@ -112,6 +119,7 @@ When any quality check fails, show ❌ and a one-line summary. The HEALTHY/UNHEA
 Only show the MCP Note line when at least one MCP is UNAVAILABLE. Map each unavailable MCP to the commands that depend on it:
 - playwright UNAVAILABLE → `/design-compare`, `/competitive-audit`, `/design-review` (URL mode), `/design-critique` (URL mode)
 - figma UNAVAILABLE → `/figma-create`, `/figma-sync`, `/design-lint`, `/design-score` (Figma mode)
+- stitch UNAVAILABLE → `/design` (--stitch mode), `/design-template` (--stitch mode), `/ab-variants` (Stitch engine), `/design-system` (--stitch export), `/figma` (stitch: input), `/site-to-figma` (--stitch mode)
 
 ## Step 4: Fix mode (if --fix argument present)
 
@@ -144,7 +152,13 @@ When `--fix` is present, after the report add a numbered remediation checklist f
 **MCP availability (informational — not a quality gate):**
 - `playwright UNAVAILABLE`: Playwright MCP is not running in this session. Ensure `mcp__plugin_playwright_playwright` is configured in your Claude Code MCP settings and the Playwright server is started.
 - `figma UNAVAILABLE`: Figma MCP is not running. Ensure `mcp__figma-console` is installed and the Figma plugin bridge is active in your Figma desktop app.
-- Both MCPs unavailable does not affect plugin health — it only limits vision-powered and Figma-native commands.
+- `stitch UNAVAILABLE`: Stitch MCP is not connected. Add it with:
+  ```bash
+  claude mcp add stitch --transport http https://stitch.googleapis.com/mcp \
+    --header "X-Goog-Api-Key: YOUR_KEY" -s user
+  ```
+  Get your API key at https://stitch.withgoogle.com → Settings → API Keys.
+- All three MCPs unavailable does not affect plugin health — it only limits vision-powered, Figma-native, and Stitch-powered commands.
 
 ## Notes
 

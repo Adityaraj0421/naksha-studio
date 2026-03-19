@@ -52,6 +52,36 @@ If found:
 
 If not found: continue normally (no project memory, no message).
 
+### Step 0.75: Stitch Quick Proto
+
+If `$ARGUMENTS` contains `--stitch`, `quick proto`, `stitch it`, or `fast visual`:
+
+1. Extract the design intent (strip the trigger phrase/flag from the description).
+2. Find or create a Stitch project:
+   ```
+   mcp__stitch__list_projects → use first owned project, or mcp__stitch__create_project(title: "[task name]")
+   ```
+3. Generate the screen (async — do not retry on connection errors):
+   ```
+   mcp__stitch__generate_screen_from_text(
+     projectId: [id],
+     prompt: [design intent + any brand/style context from Step 0.5],
+     deviceType: MOBILE,
+     modelId: GEMINI_3_PRO
+   )
+   ```
+4. Poll until complete (check every 30s, timeout 3 min):
+   ```
+   mcp__stitch__get_screen(name, projectId, screenId) → wait for screenMetadata.status === "COMPLETE"
+   ```
+5. Download the HTML:
+   ```bash
+   curl -L "[htmlCode.downloadUrl]" -o stitch-proto.html
+   ```
+6. Use `stitch-proto.html` as the base for Step 5 (Build the Implementation) — apply brand tokens, responsive polish, and framework conversion on top. Note: "Stitch quick proto used as visual baseline."
+
+If Stitch MCP is unavailable, skip silently and proceed with Claude's native HTML generation.
+
 ### 1. Load Settings & Analyze the Task
 
 Read `${CLAUDE_PLUGIN_ROOT}/skills/design/settings.local.md` if it exists — apply any configured brand defaults, framework preferences, or quality settings.

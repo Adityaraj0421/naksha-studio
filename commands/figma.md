@@ -14,6 +14,36 @@ Input: **$ARGUMENTS**
 
 ### 1. Get the Design
 
+#### Stitch Input (if `$ARGUMENTS` contains `stitch:` or `stitch `)
+
+If the input is a Stitch screen reference (format: `stitch:[projectId]/[screenId]` or `stitch [projectId] [screenId]`):
+
+1. Fetch screen details:
+   ```
+   mcp__stitch__get_screen(
+     name: "projects/[projectId]/screens/[screenId]",
+     projectId: [projectId],
+     screenId: [screenId]
+   )
+   ```
+2. Download visual reference:
+   ```bash
+   curl -L "[screenshot.downloadUrl]" -o stitch-reference.png
+   ```
+3. If `figmaExport` is present in the screen response, download it:
+   ```bash
+   curl -L "[figmaExport.downloadUrl]" -o stitch-export.fig
+   ```
+   Open `stitch-export.fig` in Figma Desktop, then use `get_design_context` normally. Skip to Step 3.
+
+4. If only `htmlCode` is available (no figmaExport), download it:
+   ```bash
+   curl -L "[htmlCode.downloadUrl]" -o stitch-source.html
+   ```
+   Use `stitch-source.html` as the implementation base — skip Steps 1–4, go directly to Step 5 (Preview and Compare) using `stitch-reference.png` as the visual target.
+
+#### Figma URL Input
+
 - If a **Figma URL** is provided, extract the fileKey and nodeId:
   - URL format: `https://figma.com/design/:fileKey/:fileName?node-id=:nodeId`
   - Node ID format in URL uses `-` separator, convert to `:` for API (e.g., `1-2` → `1:2`)
