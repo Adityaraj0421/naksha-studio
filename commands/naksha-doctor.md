@@ -58,6 +58,16 @@ Attempt to call `mcp__stitch__list_projects`.
 
 Record all three results for inclusion in the health report.
 
+## Step 2.6: Project Memory Check
+
+Look for `.naksha/project.json` in the current directory and up to 3 parent directories.
+
+- **Not found** → record `NO_PROJECT` (informational — the plugin may be running outside a project directory)
+- **Found, has `schema_version: "5"`** → record `V5`
+- **Found, missing `schema_version`** → record `V4` (v4 project — eligible for v5 upgrade)
+
+Record this result for the health report. This check is **informational** — v4 projects are valid, they just lack v5 memory features.
+
 ## Step 3: Build the health report
 
 Parse each script's output and exit code. Present results in this format when all quality checks pass:
@@ -77,13 +87,20 @@ Parse each script's output and exit code. Present results in this format when al
                figma       ✅ AVAILABLE
                stitch      ✅ AVAILABLE
   ──────────────────────────────────────
+  Memory       schema      ✅ v5 (project.json found)
+  ──────────────────────────────────────
 
   ══════════════════════════════════════
   Status: HEALTHY — 4/4 checks passed
   ══════════════════════════════════════
 ```
 
-When any quality check fails, show ❌ and a one-line summary. The HEALTHY/UNHEALTHY status and N/4 count is based on script checks only — MCP availability is shown separately as an environment probe:
+Show the Memory row based on Step 2.6 result:
+- `V5` → `✅ v5 (project.json found)`
+- `V4` → `⚠  v4 — run /naksha-doctor --fix to upgrade to v5`
+- `NO_PROJECT` → `ℹ  no project.json — run /naksha-init to set up`
+
+When any quality check fails, show ❌ and a one-line summary. The HEALTHY/UNHEALTHY status and N/4 count is based on script checks only — MCP and memory availability are shown separately as environment probes:
 
 ```
 ╔═══════════════════════════════════════╗
@@ -102,6 +119,8 @@ When any quality check fails, show ❌ and a one-line summary. The HEALTHY/UNHEA
   ──────────────────────────────────────
   Note: /design-compare, /competitive-audit require Playwright.
   These commands will fall back to manual screenshot mode.
+  ──────────────────────────────────────
+  Memory       schema      ⚠  v4 — run /naksha-doctor --fix to upgrade to v5
   ──────────────────────────────────────
 
   ══════════════════════════════════════
@@ -159,6 +178,24 @@ When `--fix` is present, after the report add a numbered remediation checklist f
   ```
   Get your API key at https://stitch.withgoogle.com → Settings → API Keys.
 - All three MCPs unavailable does not affect plugin health — it only limits vision-powered, Figma-native, and Stitch-powered commands.
+
+**Project memory — no project.json found:**
+- Run `/naksha-init` from the project root directory to create `.naksha/project.json` and set up brand and framework context.
+
+**Project memory — v4 schema detected:**
+- When project.json exists but has no `schema_version` field, it is a v4 project.
+- To upgrade: read the current `.naksha/project.json`, add these four fields, and write it back:
+  ```json
+  "schema_version": "5",
+  "constraints": {},
+  "component_patterns": [],
+  "browser_findings": []
+  ```
+  Preserve all existing v4 fields (`name`, `brand`, `framework`, `tokenFormat`, `createdAt`, etc.) unchanged. Report:
+  ```
+  [MEMORY] project.json upgraded: v4 → v5 (schema_version, constraints, component_patterns, browser_findings added)
+  ```
+- Alternatively, re-run `/naksha-init` — it now upgrades automatically while keeping all brand and framework values.
 
 ## Notes
 

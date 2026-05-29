@@ -444,7 +444,7 @@ export interface ProjectJsonPatch {
 
 /** Append a finding to browser_findings (with FIFO cap enforcement). */
 export interface BrowserFindingWrite {
-  type: 'browser_finding';
+  type: 'browser_finding_write';
   /** The full BrowserFinding object to append. */
   finding: BrowserFinding;
 }

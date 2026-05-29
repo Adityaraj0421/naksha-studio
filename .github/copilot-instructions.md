@@ -234,3 +234,16 @@ Before suggesting any UI code, verify:
 - [ ] Focus indicators are visible (`:focus-visible` with outline)
 - [ ] ARIA roles only where semantic HTML isn't sufficient
 - [ ] Touch targets ≥ 44×44px on mobile
+
+## Project Memory Commands (v5)
+
+Naksha v5 stores project context in `.naksha/project.json` and makes it available to all design commands. Use these commands to build and inspect it:
+
+- **`/naksha-browse <url>`** — browse a URL with Playwright, extract design patterns, and persist them as browser research. Works on your running dev server (inspect mode) or any external site (research mode).
+- **`/naksha-remember <decision>`** — save a design constraint or component pattern:
+  - `/naksha-remember grid is 8px; no dark mode; WCAG AA required`
+  - `/naksha-remember card component: white bg, 1px border, 8px radius, 16px padding`
+- **`/naksha-status`** — display full project memory: brand settings, design constraints, component patterns, and recent browser research.
+- **`/naksha-init`** — set up project context for the first time, or update it; re-running on a v4 project upgrades it to v5 schema automatically.
+
+The saved context is injected automatically into `/design`, `/design-review`, `/design-score`, `/design-system`, and `/brand-kit` so constraints and patterns are applied consistently without repeating them each time.

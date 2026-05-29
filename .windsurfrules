@@ -126,3 +126,16 @@ Always build from Tier 1 → Tier 2 → Tier 3. Components reference Tier 3. The
 - **Vue 3**: Composition API with `<script setup>`, TypeScript
 - **Svelte 5**: Use runes (`$state`, `$derived`)
 - **Astro**: Islands architecture, `.astro` components with framework islands
+
+## Project Memory Commands (v5)
+
+Naksha v5 adds persistent project context across sessions. These commands build and query it:
+
+- **`/naksha-browse <url>`** — browse a URL, extract design patterns, save to project memory. Works on your running localhost UI (inspect mode) or external sites (research mode). Requires the Playwright MCP; skips gracefully without it.
+- **`/naksha-remember <decision>`** — save a design constraint or component pattern. Examples:
+  - `/naksha-remember grid is 8px; no dark mode; WCAG AA required`
+  - `/naksha-remember card: white bg, 1px border, 8px radius, 16px padding`
+- **`/naksha-status`** — view all saved project memory (brand, constraints, component patterns, browser captures).
+- **`/naksha-init`** — set up or update project context; re-running on an existing project upgrades it to v5 schema.
+
+Commands `/design`, `/design-review`, `/design-score`, `/design-system`, and `/brand-kit` all read project memory automatically.

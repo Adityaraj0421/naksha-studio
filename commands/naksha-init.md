@@ -26,6 +26,7 @@ test -f .naksha/project.json && cat .naksha/project.json || echo "NOT_FOUND"
 
 Capture the existing values (if any) as:
 - `existing_name`, `existing_primary`, `existing_secondary`, `existing_font`, `existing_voice`, `existing_framework`, `existing_token_format`, `existing_created_at`
+- `existing_schema_version`, `existing_constraints`, `existing_component_patterns`, `existing_browser_findings` (v5 fields — will be absent on v4 projects; default to `"5"`, `{}`, `[]`, `[]` respectively)
 
 ## Step 2: Ask 7 Questions (One at a Time)
 
@@ -97,7 +98,12 @@ Use this as `updated_at`. If creating fresh, also use it as `created_at`. If upd
 
 Construct the JSON object with the collected values. If `brand_secondary` was skipped, omit the `"secondary"` key entirely from the `brand` object.
 
-**With secondary color:**
+Always write v5 fields (`schema_version`, `constraints`, `component_patterns`, `browser_findings`):
+- **Fresh init**: set `schema_version: "5"`, `constraints: {}`, `component_patterns: []`, `browser_findings: []`
+- **Updating v4** (existing file has no `schema_version` field): add v5 fields with the defaults above. Note "Upgraded to v5 schema." in the Step 5 summary.
+- **Updating v5** (existing file already has `schema_version: "5"`): preserve the existing `constraints`, `component_patterns`, and `browser_findings` values as-is — only update the brand/framework/token fields.
+
+**Fresh init — with secondary color:**
 ```json
 {
   "name": "<project_name>",
@@ -109,12 +115,16 @@ Construct the JSON object with the collected values. If `brand_secondary` was sk
   },
   "framework": "<framework>",
   "tokenFormat": "<token_format>",
+  "schema_version": "5",
+  "constraints": {},
+  "component_patterns": [],
+  "browser_findings": [],
   "createdAt": "<created_at>",
   "updatedAt": "<updated_at>"
 }
 ```
 
-**Without secondary color:**
+**Fresh init — without secondary color:**
 ```json
 {
   "name": "<project_name>",
@@ -125,10 +135,16 @@ Construct the JSON object with the collected values. If `brand_secondary` was sk
   },
   "framework": "<framework>",
   "tokenFormat": "<token_format>",
+  "schema_version": "5",
+  "constraints": {},
+  "component_patterns": [],
+  "browser_findings": [],
   "createdAt": "<created_at>",
   "updatedAt": "<updated_at>"
 }
 ```
+
+**Updating v4 or v5** — same shape as above, but substitute the three v5 fields from `existing_constraints`, `existing_component_patterns`, and `existing_browser_findings` captured in Step 1 (default to `{}`, `[]`, `[]` if absent). All string fields (`<project_name>` etc.) follow the same substitution rule as the fresh-init templates.
 
 Write this to `.naksha/project.json` using the `Write` tool.
 
@@ -166,16 +182,20 @@ Naksha initialized for: <project_name>
 
   Framework:    <framework>
   Token format: <token_format>
+  Schema:       v5  <add "(upgraded from v4)" if this was a v4 update>
 
   Files written:
     .naksha/project.json
     .naksha/memory.md  <(created) or (already existed — preserved)>
 
 Run /naksha-status anytime to see your project context.
+Run /naksha-remember to save design constraints and component patterns.
 ```
 
 ## Notes
 
-- Re-running `/naksha-init` is safe. It overwrites `project.json` with updated values while preserving `createdAt` and all existing `memory.md` entries.
+- Re-running `/naksha-init` is safe. It overwrites `project.json` with updated values while preserving `createdAt`, all `memory.md` entries, and any existing v5 fields (`constraints`, `component_patterns`, `browser_findings`).
+- If updating a v4 project (created before v5), `/naksha-init` upgrades the schema to v5 automatically — no data is lost.
 - If you want to commit your project context to git, add and commit the `.naksha/` directory. To keep it local-only, add `.naksha/` to your `.gitignore`.
 - All other Naksha commands (e.g. `/brand-kit`, `/design`, `/design-system`) automatically read from `.naksha/project.json` when present.
+- After initializing, use `/naksha-remember` to add design constraints and component patterns, and `/naksha-browse` to capture visual research.

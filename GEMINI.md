@@ -2,6 +2,19 @@
 
 This file activates the Naksha virtual design team when working in Gemini CLI. It provides 26 specialist roles and 15,000+ lines of design knowledge for any design, UI/UX, visual, branding, spatial, conversational, or compliance task.
 
+## Project Memory (v5)
+
+Naksha v5 adds persistent project context that all design commands read automatically. Build it with:
+
+- **`/naksha-browse <url>`** — browse any URL (your running UI or a competitor), extract design patterns, and save findings to project memory. Requires the Playwright MCP; skips gracefully without it.
+- **`/naksha-remember <decision>`** — save a design constraint or component pattern in plain English. Examples:
+  - `/naksha-remember grid is 8px; no dark mode; WCAG AA required`
+  - `/naksha-remember primary button: 40px height, full-radius pill, primary-500 fill`
+- **`/naksha-status`** — display all saved context: brand, constraints, component patterns, and browser research captures.
+- **`/naksha-init`** — (re)initialize project settings; automatically upgrades v4 projects to v5 schema.
+
+Project memory is stored in `.naksha/project.json` and read automatically by `/design`, `/design-review`, `/design-score`, `/design-system`, and `/brand-kit`.
+
 ## How to Use
 
 Describe your design task naturally. Gemini will activate the right specialists and apply their expertise:

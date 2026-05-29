@@ -303,6 +303,11 @@ step as context to the next:
 
 Generate this list dynamically for whichever pipeline is being run — do not hardcode step names.
 
+For `browser:` steps in the fallback list, render them as:
+```
+  N.   (Browser capture — run /naksha-browse {url} first, then use the findings as context for the next step)
+```
+
 ---
 
 ---

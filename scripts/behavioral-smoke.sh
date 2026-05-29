@@ -124,6 +124,9 @@ check_fixture "accessibility-audit-output.md"     "wcag,contrast,aria,keyboard,s
 check_fixture "template-gallery-output.md"        "landing-page,dashboard,pricing,ecommerce,Try:"                     2    200
 check_fixture "naksha-init-output.md"             "init,project,brand,memory"                                          3    300
 check_fixture "naksha-status-output.md"           "status,context,brand,framework"                                     3    300
+check_fixture "naksha-browse-output.md"           "pattern,url,capture,findings,browser"                               3    300
+check_fixture "naksha-remember-output.md"         "constraint,classified,memory,project,patch"                         2    200
+check_fixture "naksha-doctor-output.md"           "healthy,validate,check,mcp,memory"                                  3    300
 check_fixture "pipeline-output.md"                "pipeline,step,launch,summary"                                       3    300
 check_fixture "design-compare-output.md"          "compare,layout,typography,steal"                                    3    300
 check_fixture "competitive-audit-output.md"       "audit,palette,pattern,recommendation"                               3    300

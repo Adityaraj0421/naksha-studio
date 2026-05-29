@@ -78,3 +78,16 @@ Load `skills/design/references/` files for deep expertise:
 - `design-system-lead.md` — token architecture patterns
 - `motion-designer.md` — animation system
 - `figma-workflow.md` — Figma integration patterns
+
+## Project Memory Commands (v5)
+
+Naksha v5 adds persistent project context that design commands read automatically. Build it with:
+
+- **`/naksha-browse <url>`** — capture design patterns from any URL (your running UI or a reference site) and save to project memory. Requires the Playwright MCP; skips gracefully without it.
+- **`/naksha-remember <decision>`** — persist a design constraint or component pattern in plain English:
+  - `/naksha-remember grid is 8px; no dark mode; WCAG AA required`
+  - `/naksha-remember primary button: 40px height, full-radius pill, primary-500 fill`
+- **`/naksha-status`** — view all saved context: brand settings, constraints, component patterns, and browser research.
+- **`/naksha-init`** — initialize or update project settings; upgrades v4 projects to v5 automatically.
+
+The context in `.naksha/project.json` is injected automatically into `/design`, `/design-review`, `/design-score`, `/design-system`, and `/brand-kit`.
