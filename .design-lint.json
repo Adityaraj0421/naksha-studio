@@ -1,0 +1,9 @@
+{
+  "ignorePatterns": [
+    "evals/**",
+    "social/**",
+    "demos/**",
+    "assets/**",
+    "brand/**"
+  ]
+}

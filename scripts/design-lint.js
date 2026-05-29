@@ -62,6 +62,20 @@ function getFilesToLint() {
   return found;
 }
 
+function matchesIgnore(relPath, pattern) {
+  const norm = relPath.replace(/\\/g, '/');
+  const pat = pattern.replace(/\\/g, '/');
+  if (pat.endsWith('/**')) {
+    const dir = pat.slice(0, -3);
+    return norm === dir || norm.startsWith(dir + '/');
+  }
+  if (pat.endsWith('/')) {
+    const dir = pat.slice(0, -1);
+    return norm === dir || norm.startsWith(dir + '/');
+  }
+  return norm === pat;
+}
+
 function scanDir(dir, result, depth = 0) {
   if (depth > 4) return;
   const entries = fs.readdirSync(dir, { withFileTypes: true });
@@ -197,8 +211,8 @@ CHECKS.push({
   type: 'css',
   severity: 'warning',
   check(content) {
-    // Look for fixed pixel widths wider than 400px not inside a media query or max-width
-    const fixedWidths = content.match(/(?<![max|min]-)\bwidth\s*:\s*([5-9]\d{2}|[1-9]\d{3})px\b/g) || [];
+    // Look for fixed pixel widths wider than 400px not inside a max-width or min-width rule
+    const fixedWidths = content.match(/(?<!\bmax-)(?<!\bmin-)width\s*:\s*([5-9]\d{2}|[1-9]\d{3})px\b/g) || [];
     if (fixedWidths.length > 3) {
       return `${fixedWidths.length} fixed pixel widths found — use % or max-width for responsive layouts`;
     }
@@ -258,8 +272,7 @@ function runChecks(file, content, type, config) {
     }
     // Match check to file type ('html' checks run on HTML, 'css' checks run on CSS and HTML)
     if (check.type === 'css' && type === 'html' && !content.includes('<style')) {
-      // HTML files without <style> blocks skip CSS checks
-      if (!content.includes('<style')) { passed++; continue; }
+      passed++; continue;
     }
     if (check.type === 'html' && type === 'css') {
       passed++;
@@ -299,8 +312,12 @@ function main() {
   const config = loadConfig();
   const files = getFilesToLint().filter(f => {
     if (!fs.existsSync(f)) return false;
-    const type = classifyFile(f);
-    return type !== null;
+    if (classifyFile(f) === null) return false;
+    if (config.ignorePatterns && config.ignorePatterns.length > 0) {
+      const rel = path.relative(process.cwd(), f);
+      if (config.ignorePatterns.some(p => matchesIgnore(rel, p))) return false;
+    }
+    return true;
   });
 
   if (files.length === 0) {

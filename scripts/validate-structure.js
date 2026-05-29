@@ -72,7 +72,7 @@ check('command-frontmatter', () => {
   for (const file of files) {
     const content = fs.readFileSync(path.join(commandDir, file), 'utf-8');
     if (!content.includes('description:')) missing.push(`${file}: missing description:`);
-    // Note: allowed-tools: is enforced by check 8 (all 57 commands verified present).
+    // Note: allowed-tools: is enforced by check 8 (all 60 commands verified present).
   }
   if (missing.length > 0) return missing.join(' | ');
   return true;
