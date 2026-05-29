@@ -14,6 +14,7 @@
 [![Windsurf](https://img.shields.io/badge/Windsurf-Rules-0099ff)]()
 [![Gemini CLI](https://img.shields.io/badge/Gemini_CLI-GEMINI.md-4285F4)]()
 [![Copilot](https://img.shields.io/badge/Copilot-Instructions-24292e)]()
+[![Autohand Code CLI](https://img.shields.io/badge/Autohand_Code_CLI-AGENTS.md-0A84FF)](https://github.com/autohandai/code-cli)
 [![Roles](https://img.shields.io/badge/Specialist_Roles-26-orange)]()
 [![Commands](https://img.shields.io/badge/Slash_Commands-60-green)]()
 [![Design Knowledge](https://img.shields.io/badge/Design_Knowledge-15000%2B_lines-E8633A)]()
@@ -55,6 +56,10 @@ Copy `GEMINI.md` to your project root. Gemini CLI reads it at session start.
 ### VS Code Copilot
 
 Copy `.github/copilot-instructions.md` to your project's `.github/` directory. Copilot Chat and inline completions will apply the design team's rules.
+
+### Autohand Code CLI
+
+Copy `AGENTS.md` to your project root and copy `skills/design/` to `.autohand/skills/naksha-design/`. Autohand Code CLI will read the project instructions and load the Naksha design skill from its project-level skills directory.
 
 ---
 

@@ -168,7 +168,7 @@ done
 
 ## Platform Adapters
 
-Naksha runs on 5 AI coding tools. The knowledge lives in the same role reference files — adapters just surface it differently:
+Naksha runs on multiple AI coding tools. The knowledge lives in the same role reference files — adapters just surface it differently:
 
 | Tool | Adapter File | How It Loads |
 |------|-------------|-------------|
@@ -177,6 +177,7 @@ Naksha runs on 5 AI coding tools. The knowledge lives in the same role reference
 | **Windsurf** | `.windsurfrules` | Read at session start for entire project |
 | **Gemini CLI** | `GEMINI.md` | Read at session start for entire project |
 | **VS Code Copilot** | `.github/copilot-instructions.md` | Applied to Copilot Chat + inline completions |
+| **Autohand Code CLI** | `AGENTS.md` + `skills/design/` copied to `.autohand/skills/naksha-design/` | AGENTS.md project instructions + project-level skill |
 
 ### Updating Adapters
 
