@@ -4,6 +4,8 @@ The `.naksha/` directory is the canonical project context system for naksha-stud
 
 This document is the single source of truth for the `.naksha/` schema specification. It defines every field, type, validation rule, and usage pattern for both files.
 
+> **Schema version:** v4 fields are documented in the tables below. v5 additive fields (`constraints`, `component_patterns`, `browser_findings`, `schema_version`) are documented in the [v5 Field Additions](#v5-field-additions-optional) section. v4 `project.json` files are valid v5 documents — all new fields are optional. See [types/v5.ts](../types/v5.ts) for the TypeScript type contract.
+
 ## File Structure
 
 ```
@@ -63,6 +65,107 @@ The `.naksha/` directory is created by the `/naksha-init` command at the project
 - **`tokenFormat`**: Must be one of the exact enum values (case-sensitive lowercase with hyphens)
 - **`designSystemPath`**: If provided, should be a relative path (no leading `/`)
 - **`createdAt`** and **`updatedAt`**: ISO 8601 format with timezone offset (e.g., `2026-03-17T14:22:00Z`)
+
+---
+
+## v5 Field Additions (optional)
+
+All fields below are **optional and additive**. Existing v4 `project.json` files are fully valid without them. They are added by v5 commands or by re-running `/naksha-init` on a v4 project.
+
+### v5 Full JSON Example
+
+```json
+{
+  "name": "Lumina SaaS",
+  "brand": {
+    "primary": "#6366F1",
+    "secondary": "#F59E0B",
+    "font": "Inter",
+    "voice": "professional and approachable"
+  },
+  "framework": "nextjs",
+  "tokenFormat": "css-vars",
+  "designSystemPath": "src/tokens/tokens.css",
+  "createdAt": "2026-03-17T14:22:00Z",
+  "updatedAt": "2026-05-29T15:00:00Z",
+  "schema_version": "5",
+  "constraints": {
+    "grid": "4px",
+    "dark_mode": false,
+    "min_contrast_ratio": 4.5,
+    "breakpoints": [768, 1024, 1280],
+    "max_content_width": 1280,
+    "accessibility_target": "WCAG AA",
+    "out_of_scope": ["dark mode", "RTL support"],
+    "notes": ["Cards always use 16px padding"]
+  },
+  "component_patterns": [
+    {
+      "name": "card-layout",
+      "description": "Primary content container: white background, 1px border, 8px radius, 16px padding.",
+      "example": "src/components/Card.tsx",
+      "recorded_at": "2026-05-29T15:00:00Z",
+      "source_command": "/design"
+    }
+  ],
+  "browser_findings": [
+    {
+      "captured_at": "2026-05-29T15:00:00Z",
+      "mode": "research",
+      "url": "https://stripe.com/settings",
+      "patterns": [
+        {
+          "name": "left-nav settings layout",
+          "description": "Settings categories in a fixed left sidebar; content scrolls independently on the right."
+        }
+      ],
+      "source_command": "/naksha-browse"
+    }
+  ]
+}
+```
+
+### v5 Field Reference
+
+| Field | Type | Required | Added by | Description |
+|-------|------|----------|----------|-------------|
+| `schema_version` | `"5"` | No | `/naksha-init` (upgrade) | Marks this as a v5 schema file. Absent = v4. |
+| `constraints` | object | No | `/naksha-remember`, `/design-system`, `/naksha-browse` | Project-level design constraints (grid, dark mode, accessibility, breakpoints, etc.) |
+| `constraints.grid` | string | No | `/naksha-remember` | Base grid unit (e.g. `"4px"`, `"8px"`) |
+| `constraints.dark_mode` | boolean | No | `/naksha-remember` | `false` = explicitly ruled out. Absent = not decided. |
+| `constraints.min_contrast_ratio` | number | No | `/naksha-remember` | Minimum WCAG contrast ratio (e.g. `4.5` for AA) |
+| `constraints.breakpoints` | number[] | No | `/design-system`, `/naksha-remember` | Target breakpoints as min-widths in px |
+| `constraints.max_content_width` | number | No | `/naksha-remember` | Max content width in px |
+| `constraints.accessibility_target` | string | No | `/naksha-remember` | WCAG target (e.g. `"WCAG AA"`) |
+| `constraints.out_of_scope` | string[] | No | `/naksha-remember` | Explicit out-of-scope decisions |
+| `constraints.notes` | string[] | No | `/naksha-remember` | Free-form constraints that don't map to a structured field |
+| `component_patterns` | array | No | `/design`, `/design-review`, `/naksha-browse` | Recurring UI patterns. Cap: 50 entries (oldest evicted). |
+| `component_patterns[].name` | string | Yes (entry) | — | Kebab-case pattern name (e.g. `"card-layout"`) |
+| `component_patterns[].description` | string | Yes (entry) | — | One-sentence description |
+| `component_patterns[].example` | string | No | — | Relative path or component name using this pattern |
+| `component_patterns[].recorded_at` | ISO 8601 | Yes (entry) | — | When this pattern was recorded |
+| `component_patterns[].source_command` | string | Yes (entry) | — | Which naksha command established this pattern |
+| `browser_findings` | array | No | `/naksha-browse`, `/design-score`, `/design` | Browser session findings. **Cap: 20 entries (FIFO). Entries older than 30 days evicted on next write. Commands prepend only the 5 most recent as context.** |
+| `browser_findings[].captured_at` | ISO 8601 | Yes (entry) | — | Capture timestamp (used for eviction) |
+| `browser_findings[].mode` | `"inspect"` \| `"research"` \| `"score"` | Yes (entry) | — | `inspect` = localhost visual capture; `research` = external reference; `score` = design-score snapshot |
+| `browser_findings[].url` | string | Yes (entry) | — | Target URL |
+| `browser_findings[].patterns` | array | No | — | Design patterns extracted (inspect/research modes) |
+| `browser_findings[].score` | object | No | — | Design score snapshot (score mode only) |
+| `browser_findings[].source_command` | string | Yes (entry) | — | Which naksha command generated this finding |
+
+### v4 → v5 Migration
+
+**`/naksha-init` on a v4 project:**
+1. Detects existing `project.json` (any valid v4 file)
+2. Adds `schema_version: "5"` and empty `constraints: {}`, `component_patterns: []`, `browser_findings: []`
+3. Updates `updatedAt` to current timestamp
+4. Preserves all existing field values unchanged
+5. Does NOT overwrite or prompt for v4 fields
+
+**`/naksha-doctor --fix` migration:**
+- Detects v4 schema (missing `schema_version` field or missing `constraints`)
+- Offers migration: adds the v5 optional fields with empty defaults
+- Reports: `[MEMORY] project.json upgraded: v4 → v5 (3 new optional fields added)`
 
 ## memory.md Format
 
@@ -159,6 +262,25 @@ The schema and files are intentionally simple and human-readable to support both
 - Execute from **project root** (where you want `.naksha/` to live)
 - Creates `.naksha/project.json` and `.naksha/memory.md` in one operation
 - Safe to re-run (updates `updatedAt`, preserves existing `createdAt` and `memory.md` entries)
+- On a v4 `project.json`: adds the v5 optional fields with empty defaults; no existing values changed
+
+### Memory Write Mechanism (v5+)
+
+v5 commands write structured updates to `project.json` via the **Claude Code Stop hook** (`hooks/hooks.json`). After a session, the hook parses the transcript for `<!-- naksha-memory-update ... -->` comment blocks:
+
+```html
+<!-- naksha-memory-update
+{
+  "type": "project_json_patch",
+  "path": "constraints.grid",
+  "value": "4px"
+}
+-->
+```
+
+The hook validates the `path` against this schema and patches `.naksha/project.json` atomically (`mktemp+mv`). Failed or malformed blocks are logged to `~/.naksha/hook-errors.log` and skipped. `memory.md` entries are still written directly via the `Write` tool and must be ≤100 characters.
+
+See [types/v5.ts](../types/v5.ts) — `MemoryUpdateBlock` type — for the full block schema.
 
 ### Design Philosophy
 
