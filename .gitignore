@@ -14,3 +14,9 @@ docs/superpowers/
 brand/
 design-lint-report.json
 REVIEW.md
+
+# Local marketing assets — generated exports, social graphics, demo files
+social/
+demos/
+*.local.png
+*-local.*
