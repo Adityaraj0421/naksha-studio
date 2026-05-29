@@ -39,7 +39,10 @@ description: >
   naksha-init, naksha-status, project memory, pipeline, run pipeline,
   competitor analysis, compare designs, competitive audit, design compare,
   extract tokens, token extraction, find my design tokens, map tokens, token audit, token coverage,
-  UX critique, 3-pass review, multi-pass audit, thorough design review, design second opinion.
+  UX critique, 3-pass review, multi-pass audit, thorough design review, design second opinion,
+  browse URL, browse design, visit site, inspect site, research design, capture design patterns,
+  naksha-browse, design patterns from URL, what does this site look like, design inspiration,
+  browser vision, screenshot design, competitive design research.
   Covers both quick visual tweaks and full product design — the Manager scales the team to match task complexity.
 
   <example>
@@ -180,6 +183,26 @@ description: >
   <example>
   user: "Rate this design"
   assistant: Routes to /design-score — quantitative 0–100 quality score across Accessibility, Usability, Visual Quality, and Token Compliance
+  </example>
+
+  <example>
+  user: "Browse stripe.com and extract design patterns"
+  assistant: Routes to /naksha-browse — visits the URL with browser vision, extracts design patterns, saves to project memory
+  </example>
+
+  <example>
+  user: "What design patterns does Linear use?"
+  assistant: Routes to /naksha-browse https://linear.app — visits with browser vision and extracts patterns
+  </example>
+
+  <example>
+  user: "Inspect my localhost and see how it looks"
+  assistant: Routes to /naksha-browse http://localhost:3000 --mode inspect — visual inspection of local UI
+  </example>
+
+  <example>
+  user: "Research competitor design patterns from Vercel's site"
+  assistant: Routes to /naksha-browse https://vercel.com — captures design patterns for competitive research
   </example>
 
   <example>

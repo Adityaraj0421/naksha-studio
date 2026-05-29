@@ -16,7 +16,7 @@
 [![Copilot](https://img.shields.io/badge/Copilot-Instructions-24292e)]()
 [![Autohand Code CLI](https://img.shields.io/badge/Autohand_Code_CLI-AGENTS.md-0A84FF)](https://github.com/autohandai/code-cli)
 [![Roles](https://img.shields.io/badge/Specialist_Roles-26-orange)]()
-[![Commands](https://img.shields.io/badge/Slash_Commands-60-green)]()
+[![Commands](https://img.shields.io/badge/Slash_Commands-61-green)]()
 [![Design Knowledge](https://img.shields.io/badge/Design_Knowledge-15000%2B_lines-E8633A)]()
 
 [Quick Start](#-quick-start) · [Commands](#-commands) · [The Team](#-the-team) · [How It Works](#-how-it-works) · [Changelog](CHANGELOG.md)
@@ -27,7 +27,7 @@
 
 ## 🚀 Quick Start
 
-### Claude Code (full plugin — 60 commands, agents, hooks)
+### Claude Code (full plugin — 61 commands, agents, hooks)
 
 ```bash
 git clone https://github.com/Adityaraj0421/naksha-studio.git
