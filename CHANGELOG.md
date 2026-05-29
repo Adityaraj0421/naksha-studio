@@ -2,6 +2,61 @@
 
 All notable changes to naksha are documented here.
 
+## v5.0.0 — Project Memory & Design Agent (2026-05-29)
+
+Naksha now remembers your project. Two new commands and a persistent memory system let you capture design constraints, browser research findings, and component patterns once — and have them flow automatically into every subsequent design command.
+
+**New commands:**
+- `/naksha-browse <url>` — Browser-vision design research. Captures a live URL via Playwright (screenshots + DOM analysis), extracts layout patterns, typography, color palette, and UX patterns, then writes structured `browser_findings` to `.naksha/project.json`. Context is automatically injected into future design commands. Skips gracefully when Playwright MCP is unavailable.
+- `/naksha-remember <constraint>` — Persist a design constraint or component pattern to project memory. Classifies input as `constraint` (grid, WCAG level, no-dark-mode) or `component_pattern` (Button variants, Card structure) and patches the relevant field in `.naksha/project.json`.
+
+**v5 memory schema (`schema_version: "5"`):**
+- `constraints: {}` — key/value design constraints (grid, accessibility level, motion policy, etc.)
+- `component_patterns: []` — named component patterns with structure and usage notes
+- `browser_findings: []` — FIFO queue (cap 20) of browser research captures with URL, mode, patterns, and timestamp
+
+**Stop hook memory processor:**
+- Rewrote the Stop hook from a one-liner to a full memory-write processor
+- Commands emit `<!-- naksha-memory-update { ... } -->` blocks during sessions
+- On session end, the hook scans for these blocks and applies them to `.naksha/project.json`
+- Two block types: `project_json_patch` (set value at dot-notation path, creates intermediate keys) and `browser_finding_write` (prepend to findings array, FIFO cap 20)
+- Errors logged with project path attribution to `~/.naksha/hook-errors.log`
+- Follow-up suggestion: if the session involved design work, the hook suggests one or two relevant naksha commands
+
+**Memory context in 5 existing commands (Track B):**
+- `/design` — injects active constraints + recent browser findings into the Design Manager's initial brief
+- `/brand-kit` — reads `brand.primary`, `brand.secondary`, `brand.voice` as seeded inputs instead of prompting
+- `/design-system` — reads preferred `tokenFormat` from memory; skips the format question when present
+- `/design-score` — Token Compliance dimension reads known component patterns and constraints
+- `/accessibility-audit` — reads WCAG level constraint (e.g. `wcag_level: AA`) and applies it to scoring
+- `/naksha-status` — displays `schema_version`, `constraints`, `component_patterns`, and `browser_findings` in addition to existing brand/framework context
+
+**Pipeline v5 (Track C):**
+- Pipeline YAML steps can now specify `type: browser` (runs `/naksha-browse`) and `type: memory_write` (runs `/naksha-remember`)
+- Two new pipeline templates: `research-and-design` (browse → design → score → handoff) and `design-score-track` (score → critique → accessibility → report)
+- `/pipeline new <name>` command: interactive pipeline wizard that generates a custom YAML
+- `docs/pipeline-failure-modes.md`: reference doc for pipeline step failure handling and fallback rendering
+
+**`/naksha-init` v4→v5 migration:**
+- Detects existing v4 projects (no `schema_version` field) on re-run
+- Adds `schema_version: "5"`, `constraints: {}`, `component_patterns: []`, `browser_findings: []` while preserving all v4 fields
+- Reports "Upgraded to v5 schema." in the Step 5 summary
+
+**`/naksha-doctor` v5 schema detection:**
+- New Step 2.6: Project Memory Check — reads `.naksha/project.json` and records `NO_PROJECT`, `V5`, or `V4`
+- Health report adds a Memory row: `✅ v5` / `⚠ v4 — run /naksha-doctor --fix` / `ℹ no project.json — run /naksha-init`
+- `--fix` guidance added for both NO_PROJECT (→ `/naksha-init`) and V4 (→ inline migration instructions)
+
+**Platform adapter updates:**
+- All 4 adapters (GEMINI.md, .windsurfrules, .cursor/rules/naksha.mdc, .github/copilot-instructions.md) now document the 4 v5 memory commands with examples and Playwright dependency note
+
+**Quality gate (guard-counts.sh):**
+- New `guard-counts.sh` script wired into `quality-check.sh` (5th gate): asserts canonical command count and knowledge-line floor across all adapters, install.sh, marketplace.json, docs, and naksha-help.md — prevents metadata drift from silently recurring
+
+**Stats:** 62 commands · 26 roles · 15,261 knowledge lines
+
+---
+
 ## v4.8.0 — Tooling & Orchestration Polish (2026-03-17)
 
 **MCP availability check in `/naksha-doctor`:**

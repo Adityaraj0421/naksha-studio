@@ -345,6 +345,11 @@ _The skill loads only the references your task actually needs_
 
 | `/design-score <file or URL>` | Quantitative 0–100 design score across 4 dimensions: Accessibility (WCAG), Usability (Nielsen), Visual Quality, Token Compliance — ASCII bar chart, A–F grade |
 
+**v5.0.0 — Project Memory & Design Agent**
+
+| `/naksha-browse <url>` | Browser-vision design research — captures a live URL, extracts layout patterns, typography, color, and UX patterns, stores findings in `.naksha/project.json` for automatic context injection into future design commands |
+| `/naksha-remember <constraint>` | Persist a design constraint or component pattern to project memory — classified as `constraint` or `component_pattern` and written to `.naksha/project.json`; context flows automatically into `/design`, `/brand-kit`, `/design-system`, and 3 other commands |
+
 <details>
 <summary><b>📖 Command details & examples</b></summary>
 
@@ -756,6 +761,24 @@ node scripts/design-lint.js src/**/*.html src/**/*.css
 
 ---
 
+## 🧠 Project Memory (v5)
+
+Naksha can remember your project's design constraints across sessions. Run `/naksha-init` once to create a `.naksha/project.json` file with your brand colors, font, voice, and framework. Commands like `/design`, `/brand-kit`, `/design-system`, `/design-score`, and `/accessibility-audit` read this file automatically — no copy-pasting context every time.
+
+**Three ways to build memory:**
+
+| Command | What It Does |
+|---------|-------------|
+| `/naksha-init` | Interactive wizard — sets brand color, font, voice, framework, token format |
+| `/naksha-browse <url>` | Capture live site patterns (layout, type, color, UX) and store as `browser_findings` |
+| `/naksha-remember <constraint>` | Persist constraints (`grid is 8px`, `no dark mode`, `WCAG AA required`) or component patterns |
+
+Memory is stored in `.naksha/project.json`. Commit it to share context with your team, or add `.naksha/` to `.gitignore` to keep it local. The Stop hook automatically applies any memory-write blocks emitted during a session — so constraints written mid-conversation are persisted without manual saves.
+
+Run `/naksha-status` to see the current context, and `/naksha-doctor` to validate the full plugin health.
+
+---
+
 ## ⚙️ How It Works
 
 When you run a command, the Design Manager reads your request and assembles the right specialist roles from `skills/design/references/`. Each role contributes its knowledge — UI Designer for color and typography, Motion Designer for animation, Design System Lead for tokens, and so on. The assembled team runs the full workflow: research, strategy, creative, build, and delivery.
@@ -830,7 +853,7 @@ Settings marked `"auto"` or left empty defer to auto-detection. The Design Manag
 
 ```
 naksha/
-├── .claude-plugin/plugin.json          # Plugin manifest (v4.8.0)
+├── .claude-plugin/plugin.json          # Plugin manifest (v5.0.0)
 ├── skills/design/
 │   ├── SKILL.md                        # Design Manager orchestration
 │   ├── settings.local.md              # User-configurable preferences
@@ -862,7 +885,7 @@ naksha/
 │       ├── conversational-designer.md  # Chatbot UI, VUI, dialog flows, persona systems
 │       ├── spatial-designer.md         # visionOS HIG, WebXR, depth layers, gaze/gesture
 │       └── compliance-designer.md      # GDPR/CCPA consent UX, HIPAA, PCI, ADA compliance
-├── commands/                           # 60 slash commands
+├── commands/                           # 62 slash commands
 ├── agents/                             # 7 specialist agents
 ├── hooks/hooks.json                    # SessionStart + PreToolUse + Stop hooks
 ├── scripts/
@@ -870,7 +893,7 @@ naksha/
 │   └── run-evals.sh                    # Eval structure validator
 ├── evals/
 │   ├── evals.json                      # 161 eval cases (prompt + assertion specs)
-│   └── fixtures/                       # 60 output fixtures for behavioral smoke tests
+│   └── fixtures/                       # 63 output fixtures for behavioral smoke tests
 ├── assets/                             # Social preview + demo images
 ├── CHANGELOG.md                       # Version history
 └── CONTRIBUTING.md                    # Contributor guide
