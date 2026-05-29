@@ -1,6 +1,6 @@
 # Naksha Design Team — Gemini CLI
 
-This file activates the Naksha virtual design team when working in Gemini CLI. It provides 26 specialist roles and 13,500+ lines of design knowledge for any design, UI/UX, visual, branding, spatial, conversational, or compliance task.
+This file activates the Naksha virtual design team when working in Gemini CLI. It provides 26 specialist roles and 15,000+ lines of design knowledge for any design, UI/UX, visual, branding, spatial, conversational, or compliance task.
 
 ## How to Use
 

@@ -18,7 +18,7 @@ Apply Naksha design expertise when you see:
 
 ## The Design Team
 
-26 specialist roles and 13,500+ lines of design knowledge — activate based on task type:
+26 specialist roles and 15,000+ lines of design knowledge — activate based on task type:
 
 **Product Designer** — Use when: scoping features, defining flows, thinking about UX strategy
 **UX Designer** — Use when: wireframing, defining IA, designing navigation patterns

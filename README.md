@@ -16,7 +16,7 @@
 [![Copilot](https://img.shields.io/badge/Copilot-Instructions-24292e)]()
 [![Roles](https://img.shields.io/badge/Specialist_Roles-26-orange)]()
 [![Commands](https://img.shields.io/badge/Slash_Commands-60-green)]()
-[![Design Knowledge](https://img.shields.io/badge/Design_Knowledge-13800%2B_lines-E8633A)]()
+[![Design Knowledge](https://img.shields.io/badge/Design_Knowledge-15000%2B_lines-E8633A)]()
 
 [Quick Start](#-quick-start) · [Commands](#-commands) · [The Team](#-the-team) · [How It Works](#-how-it-works) · [Changelog](CHANGELOG.md)
 
@@ -872,7 +872,7 @@ naksha/
 ```
 
 <details>
-<summary><b>Design knowledge breakdown (13,800+ raw lines)</b></summary>
+<summary><b>Design knowledge breakdown (15,000+ raw lines)</b></summary>
 
 | File | Lines | Covers |
 |------|-------|--------|

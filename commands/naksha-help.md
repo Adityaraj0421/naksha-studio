@@ -33,11 +33,11 @@ Display when no arguments are given:
 
 ```
 ━━━ Naksha Quick Reference ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Your virtual design team — 26 roles, 58 commands, 7 agents
+Your virtual design team — 26 roles, 60 commands, 7 agents
 
 CATEGORIES                                     Run /naksha-help <category>
 
-  design        Core design & review           10 commands
+  design        Core design & review           11 commands
   figma         Figma-native workflows          8 commands
   qa            Quality & audit                 4 commands
   social        Social media                    3 commands
@@ -46,7 +46,7 @@ CATEGORIES                                     Run /naksha-help <category>
   ai            AI visual generation            5 commands
   print         Print & PDF                     3 commands
   frontier      Conversational, Spatial, AR, Compliance   8 commands
-  memory        Project memory & pipelines      5 commands
+  memory        Project memory & pipelines      6 commands
   meta          Templates, tutorial, help       6 commands
 
 ━━━ Popular starting points ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -80,6 +80,7 @@ When `$ARGUMENTS` matches a category name, display its commands.
   /design-sprint      Run a 5-day design sprint structure
   /design-present     Create a presentation-ready design deck
   /design-handoff     Generate developer-ready specs
+  /design-score       Quantitative design quality score (0–100)
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
@@ -191,6 +192,7 @@ When `$ARGUMENTS` matches a category name, display its commands.
 
   /naksha-init        Set up project memory (brand, font, framework, tokens)
   /naksha-status      View current project context and recent decisions
+  /naksha-doctor      Run all quality checks and report plugin health
   /pipeline           Chain commands: run <name>, list, show <name>
   /design-framework   Convert HTML to React/Vue/Svelte/Next.js/Astro
   /design-template    Browse and use production-ready layout templates
