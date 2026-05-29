@@ -42,7 +42,10 @@ description: >
   UX critique, 3-pass review, multi-pass audit, thorough design review, design second opinion,
   browse URL, browse design, visit site, inspect site, research design, capture design patterns,
   naksha-browse, design patterns from URL, what does this site look like, design inspiration,
-  browser vision, screenshot design, competitive design research.
+  browser vision, screenshot design, competitive design research,
+  remember this decision, save this constraint, record decision, persist design rule,
+  naksha-remember, design constraint, grid system, breakpoints, dark mode decision,
+  out of scope, component pattern, WCAG target, max content width.
   Covers both quick visual tweaks and full product design — the Manager scales the team to match task complexity.
 
   <example>
@@ -203,6 +206,26 @@ description: >
   <example>
   user: "Research competitor design patterns from Vercel's site"
   assistant: Routes to /naksha-browse https://vercel.com — captures design patterns for competitive research
+  </example>
+
+  <example>
+  user: "Remember that our grid is 8px and we don't do dark mode"
+  assistant: Routes to /naksha-remember grid is 8px; no dark mode — classifies and saves both constraints to project memory
+  </example>
+
+  <example>
+  user: "Save this constraint: max content width is 1280px"
+  assistant: Routes to /naksha-remember max content width is 1280px — saves to constraints.max_content_width
+  </example>
+
+  <example>
+  user: "RTL support is out of scope for this project"
+  assistant: Routes to /naksha-remember RTL support is out of scope — appends to constraints.out_of_scope
+  </example>
+
+  <example>
+  user: "Cards always use white bg, 1px border, 8px radius, 16px padding"
+  assistant: Routes to /naksha-remember cards always use white bg, 1px border, 8px radius, 16px padding — creates card-layout component pattern
   </example>
 
   <example>

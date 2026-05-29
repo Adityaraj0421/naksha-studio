@@ -31,7 +31,7 @@ Use this document when submitting to the Claude Code plugin directory.
 
 **Short description (≤160 chars):**
 ```
-A virtual design team for Claude Code — 26 roles, 61 commands, 15,000+ lines of design knowledge.
+A virtual design team for Claude Code — 26 roles, 62 commands, 15,000+ lines of design knowledge.
 ```
 
 **Long description:**
@@ -81,6 +81,6 @@ Assets for the submission form:
 - [ ] GitHub release `v5.0.0` exists and is tagged `Latest`
 - [ ] README has install instructions for both methods
 - [ ] `marketplace.json` is present in `.claude-plugin/`
-- [ ] All 61 commands work in Claude Code (including /naksha-browse with Playwright MCP)
+- [ ] All 62 commands work in Claude Code (including /naksha-browse with Playwright MCP)
 - [ ] validate-structure: 5/5 checks pass (`node scripts/validate-structure.js`)
 - [ ] behavioral-smoke: PASS (`bash scripts/behavioral-smoke.sh`)

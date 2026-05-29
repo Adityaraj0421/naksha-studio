@@ -33,7 +33,7 @@ Display when no arguments are given:
 
 ```
 ━━━ Naksha Quick Reference ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Your virtual design team — 26 roles, 61 commands, 7 agents
+Your virtual design team — 26 roles, 62 commands, 7 agents
 
 CATEGORIES                                     Run /naksha-help <category>
 
@@ -46,7 +46,7 @@ CATEGORIES                                     Run /naksha-help <category>
   ai            AI visual generation            5 commands
   print         Print & PDF                     3 commands
   frontier      Conversational, Spatial, AR, Compliance   8 commands
-  memory        Project memory & pipelines      7 commands
+  memory        Project memory & pipelines      8 commands
   meta          Templates, tutorial, help       6 commands
 
 ━━━ Popular starting points ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -194,6 +194,7 @@ When `$ARGUMENTS` matches a category name, display its commands.
   /naksha-status      View current project context and recent decisions
   /naksha-doctor      Run all quality checks and report plugin health
   /naksha-browse      Browse a URL with browser vision, save design patterns to memory
+  /naksha-remember    Record a design constraint or decision to project memory
   /pipeline           Chain commands: run <name>, list, show <name>
   /design-framework   Convert HTML to React/Vue/Svelte/Next.js/Astro
   /design-template    Browse and use production-ready layout templates
