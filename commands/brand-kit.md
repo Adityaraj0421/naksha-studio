@@ -14,6 +14,25 @@ Read `${CLAUDE_PLUGIN_ROOT}/skills/design/references/design-system-lead.md` for 
 
 ## Process
 
+### 0. Load Project Context (v5)
+
+Before parsing inputs, check for `.naksha/project.json` (search up to 3 directory levels):
+
+**If found**, read v5 constraints to inform generation:
+- `constraints.grid` → use as the base unit for all generated spacing tokens. If `"8px"`, every spacing value is a multiple of 8.
+- `constraints.dark_mode` → if `false`, omit dark mode token variants. If `true`, dark mode is required. If absent, include as optional.
+- `constraints.accessibility_target` → if `"WCAG AAA"`, ensure all generated color combinations achieve ≥ 7:1 contrast. Default to WCAG AA (4.5:1).
+- `constraints.out_of_scope` → if an excluded item would normally be part of the brand kit (e.g., dark mode tokens, icon set), skip it silently and note the exclusion.
+- `component_patterns` → if named patterns exist, ensure the generated component tokens (button, card, input radii/padding) match the recorded descriptions. Note any intentional divergences.
+
+**If v5 constraints conflict with the user's explicit request** (e.g., user asks for dark mode but `dark_mode: false`): generate what the user asked for, but add a note: "⚠ Note: project memory has `dark_mode: false`. Update via `/naksha-remember` if this decision has changed."
+
+**If no project found**: continue with defaults.
+
+**After generating**, emit memory update blocks for constraints implied by brand decisions:
+- Mood `"professional"` or `"minimal"` with no existing `accessibility_target` → emit: `constraints.accessibility_target = "WCAG AA"`
+- Spacing system generated with a specific base unit → if no `constraints.grid` exists, emit: `constraints.grid = "{base unit}"`
+
 ### 1. Parse Inputs
 
 Extract from the user's request:

@@ -25,6 +25,26 @@ The user will provide one of:
 
 ---
 
+## Step 0: Load Project Constraints
+
+Search up to 3 directory levels for `.naksha/project.json`. If found, extract **v5 fields** to use as audit criteria throughout this review:
+
+- `constraints.grid` → the expected base spacing unit. Flag any spacing value in the design that is NOT a multiple of this unit (e.g., if grid is `"8px"`, flag `13px`, `22px`, `7px` margins).
+- `constraints.dark_mode` → if `false` and the design includes dark mode styles (`prefers-color-scheme: dark`, `[data-theme="dark"]`, etc.), flag as **constraint violation**: "Dark mode was explicitly ruled out."
+- `constraints.breakpoints` → the expected responsive breakpoints. Flag missing breakpoints or breakpoints at unexpected values.
+- `constraints.max_content_width` → if any layout container exceeds this value, flag it.
+- `constraints.accessibility_target` → sets the required contrast threshold. `"WCAG AAA"` requires 7:1; `"WCAG AA"` requires 4.5:1. Use instead of the default 4.5:1 if `"WCAG AAA"` is set.
+- `constraints.out_of_scope` → if the design implements something in this list (e.g., dark mode was out-of-scope but is present), flag as a scope violation.
+- `constraints.notes` → treat each note as an expected design rule. Check for violations.
+- `component_patterns` → for any component named in this list, check whether the implementation matches the recorded pattern (background, border, radius, padding, etc.). Flag mismatches as **pattern deviation**.
+- `browser_findings` (5 most recent) → use as reference context — these are research findings or prior visual captures. Reference them when relevant but do not penalize for deviating from external sites.
+
+**If constraints are loaded**, add a **Constraint Compliance** section to the report (see Report Format below) that lists each constraint and whether it passes or fails.
+
+**If no project memory found**: run the review without constraint context — this is fine, no message needed.
+
+---
+
 ## Section A: Visual AI Critique (Screenshot / Vision Mode)
 
 Use this section when the input is an image file, a Figma URL, or a captured preview screenshot.
@@ -258,6 +278,13 @@ Screenshot: [filename or source]
 
 ### Working Well
 [Positive observations — always include at least 3]
+
+### Constraint Compliance (only if project constraints loaded)
+| Constraint | Expected | Status |
+|------------|----------|--------|
+| grid | 8px multiples | ✅ PASS / ❌ FAIL — [specific violation] |
+| dark_mode | false | ✅ PASS / ❌ FAIL — "dark mode styles found in …" |
+| [etc.] | | |
 ```
 
 ### When running Code-Level Audit (Section B)

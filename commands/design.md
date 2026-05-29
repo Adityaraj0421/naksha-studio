@@ -50,6 +50,17 @@ If found:
   - Token format → use `tokenFormat` for CSS variables vs Tailwind vs Style Dictionary
 - Note: "Using project memory: {name}. Override any setting by specifying it in your request."
 
+**v5 context (read if present — all fields optional):**
+- `constraints.grid` → use this as the base spacing unit for all margin/padding values. If `"8px"`, every spacing value must be a multiple of 8.
+- `constraints.dark_mode` → if `false`, do not generate dark mode variants or `prefers-color-scheme` rules. If `true`, dark mode is required — always include it. If absent, make a reasonable default.
+- `constraints.breakpoints` → use these exact values for responsive breakpoints (instead of framework defaults).
+- `constraints.max_content_width` → cap the layout container at this width.
+- `constraints.accessibility_target` → if `"WCAG AAA"`, use contrast ratio ≥ 7:1; if `"WCAG AA"` (default), use ≥ 4.5:1.
+- `constraints.out_of_scope` → do not implement any feature listed here, even if the design task seems to call for it. Note each exclusion in the output.
+- `constraints.notes` → treat each note as a hard design rule for this session.
+- `component_patterns` → when building components named in this list, use the recorded pattern as the primary reference. Note: "Using established pattern: {name}."
+- `browser_findings` (5 most recent) → use as design reference. If a `research` finding matches the task context (e.g., building a settings page and there's a research finding for a settings page), apply relevant patterns. Cite: "Reference: {url}."
+
 If not found: continue normally (no project memory, no message).
 
 ### Step 0.75: Stitch Quick Proto

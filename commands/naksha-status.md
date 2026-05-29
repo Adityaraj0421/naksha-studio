@@ -53,6 +53,8 @@ If **found**: proceed to Step 3.
 ### Step 3: Read and Parse project.json
 
 Read the `.naksha/project.json` file. Extract:
+
+**v4 fields:**
 - `name` → project name
 - `brand.primary` → primary color (hex)
 - `brand.secondary` → secondary color (hex, may be absent)
@@ -62,6 +64,12 @@ Read the `.naksha/project.json` file. Extract:
 - `tokenFormat` → token format name
 - `createdAt` → ISO timestamp
 - `designSystemPath` → design system path (may be absent)
+
+**v5 fields (if present — all optional):**
+- `schema_version` → `"5"` if v5; absent if v4
+- `constraints` → full constraints object
+- `component_patterns` → array of recorded UI patterns
+- `browser_findings` → array of browser research captures
 
 ### Step 4: Generate Color Hints
 
@@ -106,7 +114,7 @@ Render a formatted status dashboard:
 ```
 ## Naksha Project Status
 
-**Project:** {name}
+**Project:** {name}   **Schema:** {v5 if schema_version is "5", else v4}
 **Initialized:** {createdAt date in YYYY-MM-DD format}
 
 ### Brand
@@ -124,11 +132,36 @@ Render a formatted status dashboard:
 | Token format | {tokenFormat} |
 | Design system path | {designSystemPath} or "—" if absent |
 
+{If constraints object is present AND has at least one field:}
+### Constraints
+| Constraint | Value |
+|------------|-------|
+| Grid | {constraints.grid} or — |
+| Dark mode | {constraints.dark_mode — "disabled" / "required" / "—"} |
+| Min contrast ratio | {constraints.min_contrast_ratio} or — |
+| Breakpoints | {constraints.breakpoints joined as "768 / 1024 / 1280"} or — |
+| Max content width | {constraints.max_content_width}px or — |
+| Accessibility target | {constraints.accessibility_target} or — |
+| Out of scope | {constraints.out_of_scope joined as bullet list} or — |
+| Notes | {constraints.notes joined as bullet list} or — |
+
+{If component_patterns array is present AND non-empty:}
+### Component Patterns ({count})
+{For each pattern:}
+- **{name}** — {description}
+
+{If browser_findings array is present AND non-empty:}
+### Browser Research ({count} captures)
+{For each finding, most recent first, max 5:}
+- [{mode}] {url} — {patterns.length} patterns  ({captured_at as YYYY-MM-DD})
+
 ### Recent Decisions (last 10)
 {numbered list of last 10 memory entries, with newest first}
 
 ---
-Run `/naksha-init` to update any of these settings.
+Run `/naksha-init` to update brand/framework settings.
+Run `/naksha-remember <decision>` to add constraints or component patterns.
+Run `/naksha-browse <url>` to capture design research.
 ```
 
 ### Example Output
@@ -136,7 +169,7 @@ Run `/naksha-init` to update any of these settings.
 ```
 ## Naksha Project Status
 
-**Project:** Lumina SaaS
+**Project:** Lumina SaaS   **Schema:** v5
 **Initialized:** 2026-03-17
 
 ### Brand
@@ -154,13 +187,34 @@ Run `/naksha-init` to update any of these settings.
 | Token format | css-vars |
 | Design system path | src/tokens/tokens.css |
 
+### Constraints
+| Constraint | Value |
+|------------|-------|
+| Grid | 8px |
+| Dark mode | disabled |
+| Accessibility target | WCAG AA |
+| Out of scope | RTL support · print styles |
+
+### Component Patterns (2)
+- **card-layout** — White background, 1px border, 8px radius, 16px padding.
+- **primary-button** — 40px height, full-radius pill shape, primary-500 fill.
+
+### Browser Research (3 captures)
+- [research] stripe.com — 5 patterns  (2026-05-29)
+- [inspect] localhost:3000 — 4 patterns  (2026-05-28)
+- [research] linear.app — 6 patterns  (2026-05-27)
+
 ### Recent Decisions (last 10)
-1. [2026-03-17T15:01:00Z] /design-system: Token format CSS vars, path src/tokens/tokens.css
-2. [2026-03-17T14:35:00Z] /design: Landing page — hero split layout, CTA primary-500
-3. [2026-03-17T14:22:00Z] /brand-kit: Primary #6366F1, secondary #F59E0B, font Inter
+1. [2026-05-29T15:01:00Z] /naksha-browse: research stripe.com — 5 patterns captured
+2. [2026-05-29T14:35:00Z] /naksha-remember: grid 8px, dark_mode false, WCAG AA target
+3. [2026-03-17T15:01:00Z] /design-system: Token format CSS vars, path src/tokens/tokens.css
+4. [2026-03-17T14:35:00Z] /design: Landing page — hero split layout, CTA primary-500
+5. [2026-03-17T14:22:00Z] /brand-kit: Primary #6366F1, secondary #F59E0B, font Inter
 
 ---
-Run `/naksha-init` to update any of these settings.
+Run `/naksha-init` to update brand/framework settings.
+Run `/naksha-remember <decision>` to add constraints or component patterns.
+Run `/naksha-browse <url>` to capture design research.
 ```
 
 ## Color Hint Logic

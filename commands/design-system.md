@@ -28,6 +28,19 @@ If `.naksha/project.json` has a `tokenFormat` field, look up only that format's 
 
 **Context7 Fallback**: If the tools are unavailable, proceed with built-in knowledge. The token generation will still produce correct output.
 
+## v5 Project Context
+
+Before running any mode, read `.naksha/project.json` (search up to 3 directory levels) for v5 constraints that pre-shape the token system:
+
+- `constraints.grid` → set the base spacing unit to this value. If `"4px"`, the spacing scale is `4, 8, 12, 16, 20, 24, 32, 40, 48, 64px`. If `"8px"`, scale is `8, 16, 24, 32, 40, 48, 64, 80, 96px`. Note in output: "Base grid: {value} (from project constraints)."
+- `constraints.dark_mode` → if `false`, skip dark mode token variants entirely. If `true`, dark mode variants are required. If absent, include dark mode as an optional layer.
+- `constraints.accessibility_target` → if `"WCAG AAA"`, generate semantic color tokens that achieve 7:1 contrast minimum. If `"WCAG AA"` (or absent), use 4.5:1.
+- `constraints.breakpoints` → use these as the responsive breakpoint values in the generated token set. Emit them as named breakpoint tokens (e.g., `--breakpoint-md: 768px`).
+- `constraints.max_content_width` → emit as a layout token: `--layout-max-width: {value}px`.
+- `component_patterns` → for each named pattern, ensure the generated component tokens match the recorded description. If a `card-layout` pattern exists with `"16px padding, 8px radius"`, the generated `--card-padding` and `--card-radius` tokens must match.
+
+**If no v5 fields found**: proceed using brand color and tokenFormat only (v4 behavior — unchanged).
+
 ### Mode A: Generate Tokens from Scratch
 Trigger: User provides a brand color, brand name, or says "create a design system"
 

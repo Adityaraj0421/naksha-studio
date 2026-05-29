@@ -12,7 +12,16 @@ Score a design across four dimensions: Accessibility (25pts), Usability (25pts),
 
 Read `${CLAUDE_PLUGIN_ROOT}/skills/design/references/ux-researcher.md` — focus on "Nielsen's Heuristics" and "WCAG AA Checklist" sections before scoring.
 
-Check for `.naksha/project.json` (search up to 3 directory levels). If found, read `brand.primary`, `brand.secondary`, `brand.font`, and `tokenFormat` for Token Compliance scoring context.
+Check for `.naksha/project.json` (search up to 3 directory levels). If found, read:
+- **v4 fields**: `brand.primary`, `brand.secondary`, `brand.font`, and `tokenFormat` for Token Compliance scoring context.
+- **v5 fields** (if present — all optional):
+  - `constraints.grid` → use as the expected spacing unit. In Token Compliance, check all spacing values against this grid.
+  - `constraints.min_contrast_ratio` → use as the required contrast ratio in Accessibility (overrides the default 4.5:1 if set higher).
+  - `constraints.accessibility_target` → `"WCAG AAA"` sets contrast floor to 7:1 for Accessibility scoring.
+  - `constraints.breakpoints` → in Token Compliance, verify responsive breakpoints match these values.
+  - `constraints.max_content_width` → flag if any container exceeds this.
+  - `component_patterns` → in Token Compliance, check that components named in patterns use the recorded structure (padding, radius, border matches the description).
+  - `browser_findings` (5 most recent, `mode: "inspect"` entries) → prior design-score snapshots give baseline context. If a prior score exists, note delta: "Previously {N}/100 on {date}."
 
 ### Dimension 1: Accessibility (0–25 pts)
 
@@ -74,9 +83,15 @@ Score each sub-criterion 0–5:
 |---------------|-----|-------|
 | Color values from token system — no raw hex/rgb/hsl | 5 | |
 | Typography from token system — no hardcoded font-family or arbitrary px sizes | 5 | |
-| Spacing from token system — values on 8pt scale (4/8/12/16/20/24/32/40/48/64px) | 5 | |
-| Component variants consistent — same border-radius, padding across similar components | 5 | |
+| Spacing from token system — values on expected grid scale (use `constraints.grid` if set, else 8pt default) | 5 | |
+| Component variants consistent — same border-radius, padding across similar components (cross-check against `component_patterns` if set) | 5 | |
 | Interactive states consistent — hover/focus/active applied uniformly | 5 | |
+
+**v5 scoring enhancements (apply when v5 constraints are present):**
+- If `constraints.grid` is set: the Spacing sub-criterion checks against *that* grid unit, not the default 8pt. A `4px` grid means valid values are 4/8/12/16/20/24/28/32…; flag others.
+- If `constraints.accessibility_target` is `"WCAG AAA"`: the Accessibility contrast criterion requires 7:1, not 4.5:1. Adjust the 6pt primary contrast criterion accordingly.
+- If `component_patterns` is set: for each pattern entry, check the scored component. Full 5pts only if the component matches the recorded description (bg, border, radius, padding). Partial credit for partial match.
+- If `browser_findings` has prior `score` mode entries for this URL: show score delta at the top of the output.
 
 **If no project config:** Score visual consistency instead (same patterns used for same purposes throughout the design).
 
