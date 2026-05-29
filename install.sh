@@ -2,7 +2,7 @@
 set -e
 
 PLUGIN_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-MARKETPLACE_DIR="$HOME/.claude/naksha-marketplace"
+MARKETPLACE_DIR="${CLAUDE_CONFIG_DIR:-$HOME/.claude}/naksha-marketplace"
 
 echo "Installing naksha..."
 
