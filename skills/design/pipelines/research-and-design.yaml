@@ -1,0 +1,18 @@
+name: research-and-design
+description: Browse a reference URL for design patterns, then design with those patterns as context, then review against project constraints
+version: "2"
+steps:
+  - type: browser
+    mode: research
+    url: "$INPUT_URL"
+    name: "Capture design patterns from reference URL"
+    memory_write: browser_findings
+  - command: design
+    args: "$INPUT_BRIEF"
+    description: "Design using captured research patterns as reference"
+    memory_read: ["browser_findings", "constraints", "component_patterns"]
+  - command: design-review
+    pass-output-as: context
+    description: "Review design against project constraints"
+    memory_read: ["constraints", "component_patterns"]
+on-error: stop
