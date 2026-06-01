@@ -3893,12 +3893,30 @@
       "prompt": "/design-tutorial conversational",
       "expected_output": "Design a chatbot UI, voice interface",
       "assertions": [
-        { "name": "shows-chatbot-goal", "description": "shows chatbot track goal or exercise header" },
-        { "name": "includes-exercise-1-chatbot", "description": "exercise 1 covers /design-chatbot command" },
-        { "name": "includes-dialog-flow", "description": "mentions dialog flow or intent mapping" },
-        { "name": "includes-bubble-ui", "description": "mentions message bubble UI or bubble spec" },
-        { "name": "includes-accessibility-notes", "description": "includes accessibility notes or ARIA mentions" },
-        { "name": "includes-exercise-2-voice", "description": "exercise 2 covers /design-voice-ui or voice interface" }
+        {
+          "name": "shows-chatbot-goal",
+          "description": "shows chatbot track goal or exercise header"
+        },
+        {
+          "name": "includes-exercise-1-chatbot",
+          "description": "exercise 1 covers /design-chatbot command"
+        },
+        {
+          "name": "includes-dialog-flow",
+          "description": "mentions dialog flow or intent mapping"
+        },
+        {
+          "name": "includes-bubble-ui",
+          "description": "mentions message bubble UI or bubble spec"
+        },
+        {
+          "name": "includes-accessibility-notes",
+          "description": "includes accessibility notes or ARIA mentions"
+        },
+        {
+          "name": "includes-exercise-2-voice",
+          "description": "exercise 2 covers /design-voice-ui or voice interface"
+        }
       ]
     },
     {
@@ -3907,12 +3925,30 @@
       "prompt": "/design-tutorial conversational",
       "expected_output": "Voice interface exercises",
       "assertions": [
-        { "name": "includes-wake-word-flow", "description": "includes wake word flow or wake word diagram" },
-        { "name": "includes-confirmation-patterns", "description": "describes confirmation patterns (explicit/implicit)" },
-        { "name": "includes-hybrid-layout", "description": "mentions hybrid screen layout or screen+voice combination" },
-        { "name": "includes-ssml-guidance", "description": "includes SSML guidance or audio feedback spec" },
-        { "name": "includes-earcon-spec", "description": "includes earcon frequency or audio spec" },
-        { "name": "covers-error-recovery", "description": "covers error recovery or fallback patterns for voice" }
+        {
+          "name": "includes-wake-word-flow",
+          "description": "includes wake word flow or wake word diagram"
+        },
+        {
+          "name": "includes-confirmation-patterns",
+          "description": "describes confirmation patterns (explicit/implicit)"
+        },
+        {
+          "name": "includes-hybrid-layout",
+          "description": "mentions hybrid screen layout or screen+voice combination"
+        },
+        {
+          "name": "includes-ssml-guidance",
+          "description": "includes SSML guidance or audio feedback spec"
+        },
+        {
+          "name": "includes-earcon-spec",
+          "description": "includes earcon frequency or audio spec"
+        },
+        {
+          "name": "covers-error-recovery",
+          "description": "covers error recovery or fallback patterns for voice"
+        }
       ]
     },
     {
@@ -3921,12 +3957,30 @@
       "prompt": "/design-tutorial spatial",
       "expected_output": "visionOS spatial design",
       "assertions": [
-        { "name": "shows-spatial-goal", "description": "shows spatial track goal or visionOS exercise header" },
-        { "name": "includes-depth-hierarchy", "description": "includes depth hierarchy or layer model" },
-        { "name": "includes-window-types", "description": "mentions window types: Window, Volumetric, or Immersive Space" },
-        { "name": "includes-ornament-guidance", "description": "mentions ornament placement or attachmentAnchor" },
-        { "name": "includes-spatial-typography", "description": "includes spatial typography or minimum legibility at depth" },
-        { "name": "includes-comfort-guidelines", "description": "includes comfort guidelines, session length, or field-of-view" }
+        {
+          "name": "shows-spatial-goal",
+          "description": "shows spatial track goal or visionOS exercise header"
+        },
+        {
+          "name": "includes-depth-hierarchy",
+          "description": "includes depth hierarchy or layer model"
+        },
+        {
+          "name": "includes-window-types",
+          "description": "mentions window types: Window, Volumetric, or Immersive Space"
+        },
+        {
+          "name": "includes-ornament-guidance",
+          "description": "mentions ornament placement or attachmentAnchor"
+        },
+        {
+          "name": "includes-spatial-typography",
+          "description": "includes spatial typography or minimum legibility at depth"
+        },
+        {
+          "name": "includes-comfort-guidelines",
+          "description": "includes comfort guidelines, session length, or field-of-view"
+        }
       ]
     },
     {
@@ -3935,12 +3989,30 @@
       "prompt": "/design-tutorial spatial",
       "expected_output": "AR overlay design",
       "assertions": [
-        { "name": "includes-anchor-strategy", "description": "includes anchor strategy or anchor type selection" },
-        { "name": "includes-world-tracking-states", "description": "describes world tracking states: Searching, Found, Tracking Lost" },
-        { "name": "includes-instruction-card", "description": "mentions instruction card pattern or gaze range" },
-        { "name": "includes-scan-states", "description": "describes scan state designs" },
-        { "name": "includes-occlusion-handling", "description": "mentions occlusion handling" },
-        { "name": "covers-competitive-audit-exercise", "description": "exercise 3 covers /competitive-audit command" }
+        {
+          "name": "includes-anchor-strategy",
+          "description": "includes anchor strategy or anchor type selection"
+        },
+        {
+          "name": "includes-world-tracking-states",
+          "description": "describes world tracking states: Searching, Found, Tracking Lost"
+        },
+        {
+          "name": "includes-instruction-card",
+          "description": "mentions instruction card pattern or gaze range"
+        },
+        {
+          "name": "includes-scan-states",
+          "description": "describes scan state designs"
+        },
+        {
+          "name": "includes-occlusion-handling",
+          "description": "mentions occlusion handling"
+        },
+        {
+          "name": "covers-competitive-audit-exercise",
+          "description": "exercise 3 covers /competitive-audit command"
+        }
       ]
     },
     {
@@ -3949,12 +4021,30 @@
       "prompt": "/design-tutorial compliance",
       "expected_output": "GDPR consent flow",
       "assertions": [
-        { "name": "shows-compliance-goal", "description": "shows compliance track goal or GDPR exercise header" },
-        { "name": "includes-banner-variants", "description": "describes cookie banner variants (minimal/standard/detailed)" },
-        { "name": "includes-consent-flow", "description": "includes consent flow or progressive disclosure model" },
-        { "name": "includes-privacy-control-center", "description": "mentions privacy control center or data export flow" },
-        { "name": "includes-jurisdiction-checklist", "description": "includes jurisdiction checklist or IAB TCF reference" },
-        { "name": "covers-hipaa-exercise", "description": "exercise 2 covers /design-compliance --regulation hipaa" }
+        {
+          "name": "shows-compliance-goal",
+          "description": "shows compliance track goal or GDPR exercise header"
+        },
+        {
+          "name": "includes-banner-variants",
+          "description": "describes cookie banner variants (minimal/standard/detailed)"
+        },
+        {
+          "name": "includes-consent-flow",
+          "description": "includes consent flow or progressive disclosure model"
+        },
+        {
+          "name": "includes-privacy-control-center",
+          "description": "mentions privacy control center or data export flow"
+        },
+        {
+          "name": "includes-jurisdiction-checklist",
+          "description": "includes jurisdiction checklist or IAB TCF reference"
+        },
+        {
+          "name": "covers-hipaa-exercise",
+          "description": "exercise 2 covers /design-compliance --regulation hipaa"
+        }
       ]
     },
     {
@@ -3963,12 +4053,30 @@
       "prompt": "/pipeline list",
       "expected_output": "All 7 available pipelines listed with names and descriptions",
       "assertions": [
-        { "name": "lists-launch-prep", "description": "lists launch-prep pipeline" },
-        { "name": "lists-design-tokens", "description": "lists design-tokens pipeline" },
-        { "name": "lists-email-launch", "description": "lists email-launch pipeline" },
-        { "name": "lists-ar-prototype", "description": "lists ar-prototype pipeline" },
-        { "name": "lists-brand-audit", "description": "lists brand-audit pipeline" },
-        { "name": "lists-social-launch", "description": "lists social-launch pipeline" }
+        {
+          "name": "lists-launch-prep",
+          "description": "lists launch-prep pipeline"
+        },
+        {
+          "name": "lists-design-tokens",
+          "description": "lists design-tokens pipeline"
+        },
+        {
+          "name": "lists-email-launch",
+          "description": "lists email-launch pipeline"
+        },
+        {
+          "name": "lists-ar-prototype",
+          "description": "lists ar-prototype pipeline"
+        },
+        {
+          "name": "lists-brand-audit",
+          "description": "lists brand-audit pipeline"
+        },
+        {
+          "name": "lists-social-launch",
+          "description": "lists social-launch pipeline"
+        }
       ]
     },
     {
@@ -3978,12 +4086,30 @@
       "prompt": "Extract all design tokens from our CSS files and output a coverage report",
       "expected_output": "Coverage report by category (color, spacing, typography, etc.) and token list in CSS custom property format",
       "assertions": [
-        { "name": "shows-coverage-report", "description": "shows token coverage report with categories" },
-        { "name": "lists-color-tokens", "description": "lists color tokens found" },
-        { "name": "lists-spacing-tokens", "description": "lists spacing tokens found" },
-        { "name": "identifies-gaps", "description": "identifies token gaps or hardcoded values" },
-        { "name": "outputs-css-format", "description": "outputs tokens in CSS custom property format" },
-        { "name": "shows-summary", "description": "shows summary of tokens found and recommendations" }
+        {
+          "name": "shows-coverage-report",
+          "description": "shows token coverage report with categories"
+        },
+        {
+          "name": "lists-color-tokens",
+          "description": "lists color tokens found"
+        },
+        {
+          "name": "lists-spacing-tokens",
+          "description": "lists spacing tokens found"
+        },
+        {
+          "name": "identifies-gaps",
+          "description": "identifies token gaps or hardcoded values"
+        },
+        {
+          "name": "outputs-css-format",
+          "description": "outputs tokens in CSS custom property format"
+        },
+        {
+          "name": "shows-summary",
+          "description": "shows summary of tokens found and recommendations"
+        }
       ]
     },
     {
@@ -3993,12 +4119,30 @@
       "prompt": "Extract our design tokens and output as a Tailwind config",
       "expected_output": "Token system output as tailwind.config.js theme.extend format",
       "assertions": [
-        { "name": "outputs-tailwind-format", "description": "outputs Tailwind config format with theme.extend" },
-        { "name": "includes-colors", "description": "includes colors in Tailwind config" },
-        { "name": "includes-spacing", "description": "includes spacing values in Tailwind config" },
-        { "name": "coverage-report-present", "description": "shows coverage report before config output" },
-        { "name": "flags-arbitrary-values", "description": "flags arbitrary Tailwind values that bypass tokens" },
-        { "name": "actionable-next-steps", "description": "provides actionable next steps" }
+        {
+          "name": "outputs-tailwind-format",
+          "description": "outputs Tailwind config format with theme.extend"
+        },
+        {
+          "name": "includes-colors",
+          "description": "includes colors in Tailwind config"
+        },
+        {
+          "name": "includes-spacing",
+          "description": "includes spacing values in Tailwind config"
+        },
+        {
+          "name": "coverage-report-present",
+          "description": "shows coverage report before config output"
+        },
+        {
+          "name": "flags-arbitrary-values",
+          "description": "flags arbitrary Tailwind values that bypass tokens"
+        },
+        {
+          "name": "actionable-next-steps",
+          "description": "provides actionable next steps"
+        }
       ]
     },
     {
@@ -4008,12 +4152,30 @@
       "prompt": "Run a thorough critique of this checkout flow design",
       "expected_output": "3-pass critique: heuristics table, accessibility spot-check, content quality audit, and prioritized action list",
       "assertions": [
-        { "name": "shows-heuristics-table", "description": "shows Nielsen's 10 heuristics with scores" },
-        { "name": "includes-accessibility-pass", "description": "includes accessibility spot-check" },
-        { "name": "includes-content-quality", "description": "includes content quality pass (microcopy, errors, tone)" },
-        { "name": "shows-priority-list", "description": "shows prioritized action list sorted by impact" },
-        { "name": "includes-severity-ratings", "description": "issues have severity ratings (critical/important/recommended)" },
-        { "name": "includes-strengths", "description": "includes genuine strengths section" }
+        {
+          "name": "shows-heuristics-table",
+          "description": "shows Nielsen's 10 heuristics with scores"
+        },
+        {
+          "name": "includes-accessibility-pass",
+          "description": "includes accessibility spot-check"
+        },
+        {
+          "name": "includes-content-quality",
+          "description": "includes content quality pass (microcopy, errors, tone)"
+        },
+        {
+          "name": "shows-priority-list",
+          "description": "shows prioritized action list sorted by impact"
+        },
+        {
+          "name": "includes-severity-ratings",
+          "description": "issues have severity ratings (critical/important/recommended)"
+        },
+        {
+          "name": "includes-strengths",
+          "description": "includes genuine strengths section"
+        }
       ]
     },
     {
@@ -4023,12 +4185,30 @@
       "prompt": "Critique the microcopy on this settings page",
       "expected_output": "Content quality audit covering CTA buttons, empty states, error messages, and tone consistency",
       "assertions": [
-        { "name": "evaluates-cta-buttons", "description": "evaluates CTA button text quality" },
-        { "name": "checks-empty-states", "description": "checks empty state content" },
-        { "name": "evaluates-error-messages", "description": "evaluates error message quality (specific, constructive, human)" },
-        { "name": "checks-tone-consistency", "description": "checks tone and voice consistency" },
-        { "name": "provides-rewrite-suggestions", "description": "provides specific rewrite suggestions for issues found" },
-        { "name": "includes-strengths", "description": "includes genuine content strengths" }
+        {
+          "name": "evaluates-cta-buttons",
+          "description": "evaluates CTA button text quality"
+        },
+        {
+          "name": "checks-empty-states",
+          "description": "checks empty state content"
+        },
+        {
+          "name": "evaluates-error-messages",
+          "description": "evaluates error message quality (specific, constructive, human)"
+        },
+        {
+          "name": "checks-tone-consistency",
+          "description": "checks tone and voice consistency"
+        },
+        {
+          "name": "provides-rewrite-suggestions",
+          "description": "provides specific rewrite suggestions for issues found"
+        },
+        {
+          "name": "includes-strengths",
+          "description": "includes genuine content strengths"
+        }
       ]
     },
     {
@@ -4038,12 +4218,30 @@
       "prompt": "Evaluate this navigation design against usability heuristics",
       "expected_output": "Nielsen heuristics table with severity ratings and specific fix for each failing heuristic",
       "assertions": [
-        { "name": "scores-all-10-heuristics", "description": "scores all 10 Nielsen heuristics" },
-        { "name": "provides-evidence", "description": "each rating below pass includes specific evidence" },
-        { "name": "provides-exact-fixes", "description": "each issue includes an exact UI/copy fix" },
-        { "name": "overall-score-shown", "description": "shows overall heuristics score" },
-        { "name": "quick-wins-highlighted", "description": "highlights quick wins or easy improvements" },
-        { "name": "includes-strengths", "description": "includes what is working well" }
+        {
+          "name": "scores-all-10-heuristics",
+          "description": "scores all 10 Nielsen heuristics"
+        },
+        {
+          "name": "provides-evidence",
+          "description": "each rating below pass includes specific evidence"
+        },
+        {
+          "name": "provides-exact-fixes",
+          "description": "each issue includes an exact UI/copy fix"
+        },
+        {
+          "name": "overall-score-shown",
+          "description": "shows overall heuristics score"
+        },
+        {
+          "name": "quick-wins-highlighted",
+          "description": "highlights quick wins or easy improvements"
+        },
+        {
+          "name": "includes-strengths",
+          "description": "includes what is working well"
+        }
       ]
     },
     {
@@ -4053,27 +4251,63 @@
       "prompt": "Run an accessibility audit checking the new WCAG 2.2 criteria",
       "expected_output": "Audit covering WCAG 2.2 criteria 2.5.7, 2.5.8, 3.2.6, and 3.3.7 with pass/fail and fixes",
       "assertions": [
-        { "name": "checks-2.5.7-dragging", "description": "checks WCAG 2.5.7 Dragging Movements" },
-        { "name": "checks-2.5.8-target-size", "description": "checks WCAG 2.5.8 Target Size Minimum (24px)" },
-        { "name": "checks-3.2.6-consistent-help", "description": "checks WCAG 3.2.6 Consistent Help" },
-        { "name": "checks-3.3.7-redundant-entry", "description": "checks WCAG 3.3.7 Redundant Entry" },
-        { "name": "provides-code-fixes", "description": "provides exact code fixes for failing criteria" },
-        { "name": "includes-overall-grade", "description": "includes overall accessibility grade" }
+        {
+          "name": "checks-2.5.7-dragging",
+          "description": "checks WCAG 2.5.7 Dragging Movements"
+        },
+        {
+          "name": "checks-2.5.8-target-size",
+          "description": "checks WCAG 2.5.8 Target Size Minimum (24px)"
+        },
+        {
+          "name": "checks-3.2.6-consistent-help",
+          "description": "checks WCAG 3.2.6 Consistent Help"
+        },
+        {
+          "name": "checks-3.3.7-redundant-entry",
+          "description": "checks WCAG 3.3.7 Redundant Entry"
+        },
+        {
+          "name": "provides-code-fixes",
+          "description": "provides exact code fixes for failing criteria"
+        },
+        {
+          "name": "includes-overall-grade",
+          "description": "includes overall accessibility grade"
+        }
       ]
     },
     {
       "id": 152,
       "name": "accessibility-auditor-brand-contrast",
       "description": "Brand color contrast check via project memory",
-      "prompt": "Audit accessibility for our brand colors — primary is #6366F1",
+      "prompt": "Audit accessibility for our brand colors \u2014 primary is #6366F1",
       "expected_output": "Contrast ratio report for the brand color against white, black, and common backgrounds",
       "assertions": [
-        { "name": "checks-brand-primary-contrast", "description": "checks contrast ratio for the specified brand color" },
-        { "name": "reports-contrast-ratios", "description": "reports specific contrast ratios (e.g. 4.73:1)" },
-        { "name": "checks-wcag-thresholds", "description": "evaluates against WCAG 4.5:1 and 3:1 thresholds" },
-        { "name": "suggests-accessible-alternatives", "description": "suggests accessible color alternatives if failing" },
-        { "name": "covers-text-sizes", "description": "distinguishes between normal text and large text thresholds" },
-        { "name": "actionable-fixes", "description": "provides actionable color adjustments" }
+        {
+          "name": "checks-brand-primary-contrast",
+          "description": "checks contrast ratio for the specified brand color"
+        },
+        {
+          "name": "reports-contrast-ratios",
+          "description": "reports specific contrast ratios (e.g. 4.73:1)"
+        },
+        {
+          "name": "checks-wcag-thresholds",
+          "description": "evaluates against WCAG 4.5:1 and 3:1 thresholds"
+        },
+        {
+          "name": "suggests-accessible-alternatives",
+          "description": "suggests accessible color alternatives if failing"
+        },
+        {
+          "name": "covers-text-sizes",
+          "description": "distinguishes between normal text and large text thresholds"
+        },
+        {
+          "name": "actionable-fixes",
+          "description": "provides actionable color adjustments"
+        }
       ]
     },
     {
@@ -4083,12 +4317,30 @@
       "prompt": "Run design QA on this page and test at mobile, tablet, and desktop breakpoints",
       "expected_output": "QA report with findings at 375px, 768px, and 1280px viewports plus token compliance and interactive state checks",
       "assertions": [
-        { "name": "tests-mobile-375", "description": "tests at 375px mobile breakpoint" },
-        { "name": "tests-tablet-768", "description": "tests at 768px tablet breakpoint" },
-        { "name": "tests-desktop-1280", "description": "tests at 1280px desktop breakpoint" },
-        { "name": "token-compliance-score", "description": "reports token compliance percentage" },
-        { "name": "interactive-state-check", "description": "checks hover, focus, active, disabled states" },
-        { "name": "overall-qa-score", "description": "shows overall QA score out of 100" }
+        {
+          "name": "tests-mobile-375",
+          "description": "tests at 375px mobile breakpoint"
+        },
+        {
+          "name": "tests-tablet-768",
+          "description": "tests at 768px tablet breakpoint"
+        },
+        {
+          "name": "tests-desktop-1280",
+          "description": "tests at 1280px desktop breakpoint"
+        },
+        {
+          "name": "token-compliance-score",
+          "description": "reports token compliance percentage"
+        },
+        {
+          "name": "interactive-state-check",
+          "description": "checks hover, focus, active, disabled states"
+        },
+        {
+          "name": "overall-qa-score",
+          "description": "shows overall QA score out of 100"
+        }
       ]
     },
     {
@@ -4098,12 +4350,30 @@
       "prompt": "/naksha-help",
       "expected_output": "Category overview listing all command categories with counts and popular starting points",
       "assertions": [
-        { "name": "shows-category-list", "description": "shows list of command categories" },
-        { "name": "shows-design-category", "description": "includes design category" },
-        { "name": "shows-frontier-category", "description": "includes frontier category" },
-        { "name": "shows-popular-starting-points", "description": "shows popular starting points or quick-start suggestions" },
-        { "name": "shows-command-counts", "description": "shows command counts per category" },
-        { "name": "includes-naksha-init", "description": "mentions /naksha-init or project memory" }
+        {
+          "name": "shows-category-list",
+          "description": "shows list of command categories"
+        },
+        {
+          "name": "shows-design-category",
+          "description": "includes design category"
+        },
+        {
+          "name": "shows-frontier-category",
+          "description": "includes frontier category"
+        },
+        {
+          "name": "shows-popular-starting-points",
+          "description": "shows popular starting points or quick-start suggestions"
+        },
+        {
+          "name": "shows-command-counts",
+          "description": "shows command counts per category"
+        },
+        {
+          "name": "includes-naksha-init",
+          "description": "mentions /naksha-init or project memory"
+        }
       ]
     },
     {
@@ -4113,12 +4383,30 @@
       "prompt": "/naksha-help frontier",
       "expected_output": "List of frontier commands with one-line descriptions",
       "assertions": [
-        { "name": "lists-frontier-commands", "description": "lists frontier category commands" },
-        { "name": "includes-design-chatbot", "description": "includes /design-chatbot" },
-        { "name": "includes-design-spatial", "description": "includes /design-spatial" },
-        { "name": "includes-design-gdpr", "description": "includes /design-gdpr" },
-        { "name": "includes-design-compare", "description": "includes /design-compare" },
-        { "name": "provides-one-line-descriptions", "description": "each command has a brief description" }
+        {
+          "name": "lists-frontier-commands",
+          "description": "lists frontier category commands"
+        },
+        {
+          "name": "includes-design-chatbot",
+          "description": "includes /design-chatbot"
+        },
+        {
+          "name": "includes-design-spatial",
+          "description": "includes /design-spatial"
+        },
+        {
+          "name": "includes-design-gdpr",
+          "description": "includes /design-gdpr"
+        },
+        {
+          "name": "includes-design-compare",
+          "description": "includes /design-compare"
+        },
+        {
+          "name": "provides-one-line-descriptions",
+          "description": "each command has a brief description"
+        }
       ]
     },
     {
@@ -4128,12 +4416,30 @@
       "prompt": "/naksha-help design-compare",
       "expected_output": "Reference card for /design-compare showing usage and description",
       "assertions": [
-        { "name": "shows-command-name", "description": "shows /design-compare as the command name" },
-        { "name": "shows-description", "description": "shows command description" },
-        { "name": "shows-usage-example", "description": "shows usage pattern or example" },
-        { "name": "structured-card-format", "description": "output is in a structured reference card format" },
-        { "name": "mentions-two-urls", "description": "references two URL arguments or side-by-side comparison" },
-        { "name": "actionable-output", "description": "output is actionable and ready to use" }
+        {
+          "name": "shows-command-name",
+          "description": "shows /design-compare as the command name"
+        },
+        {
+          "name": "shows-description",
+          "description": "shows command description"
+        },
+        {
+          "name": "shows-usage-example",
+          "description": "shows usage pattern or example"
+        },
+        {
+          "name": "structured-card-format",
+          "description": "output is in a structured reference card format"
+        },
+        {
+          "name": "mentions-two-urls",
+          "description": "references two URL arguments or side-by-side comparison"
+        },
+        {
+          "name": "actionable-output",
+          "description": "output is actionable and ready to use"
+        }
       ]
     },
     {
@@ -4142,14 +4448,32 @@
       "command": "/design-score",
       "role": "UX Design Critic",
       "prompt": "/design-score https://example.com",
-      "expected_output": "0–100 score card with per-dimension breakdown, grade, and top issues",
+      "expected_output": "0\u2013100 score card with per-dimension breakdown, grade, and top issues",
       "assertions": [
-        { "name": "shows-overall-score", "description": "Response includes an overall numeric score out of 100" },
-        { "name": "shows-four-dimensions", "description": "Response shows all four dimension scores: Accessibility, Usability, Visual Quality, Token Compliance" },
-        { "name": "shows-grade-label", "description": "Response includes a grade (A through F) with a plain-language label" },
-        { "name": "shows-score-bars", "description": "Response includes ASCII progress bars for each dimension score" },
-        { "name": "lists-top-issues", "description": "Response includes a prioritized list of top issues with severity indicators" },
-        { "name": "shows-score-methodology", "description": "Response includes a score methodology footer explaining each dimension" }
+        {
+          "name": "shows-overall-score",
+          "description": "Response includes an overall numeric score out of 100"
+        },
+        {
+          "name": "shows-four-dimensions",
+          "description": "Response shows all four dimension scores: Accessibility, Usability, Visual Quality, Token Compliance"
+        },
+        {
+          "name": "shows-grade-label",
+          "description": "Response includes a grade (A through F) with a plain-language label"
+        },
+        {
+          "name": "shows-score-bars",
+          "description": "Response includes ASCII progress bars for each dimension score"
+        },
+        {
+          "name": "lists-top-issues",
+          "description": "Response includes a prioritized list of top issues with severity indicators"
+        },
+        {
+          "name": "shows-score-methodology",
+          "description": "Response includes a score methodology footer explaining each dimension"
+        }
       ]
     },
     {
@@ -4160,11 +4484,26 @@
       "prompt": "/design-score --screenshot /path/to/dashboard.png",
       "expected_output": "Score card based on visual analysis of the screenshot, noting which criteria required code inspection",
       "assertions": [
-        { "name": "produces-score-from-image", "description": "Response produces a complete score card from screenshot input without erroring" },
-        { "name": "shows-four-dimensions", "description": "All four dimension scores are present in the output" },
-        { "name": "notes-code-inspection-limits", "description": "Response acknowledges that some criteria require code review and could not be fully assessed from screenshot alone" },
-        { "name": "identifies-visual-issues", "description": "Issues listed are grounded in visual observations, not generic placeholders" },
-        { "name": "shows-grade", "description": "A grade A–F is shown with a label" }
+        {
+          "name": "produces-score-from-image",
+          "description": "Response produces a complete score card from screenshot input without erroring"
+        },
+        {
+          "name": "shows-four-dimensions",
+          "description": "All four dimension scores are present in the output"
+        },
+        {
+          "name": "notes-code-inspection-limits",
+          "description": "Response acknowledges that some criteria require code review and could not be fully assessed from screenshot alone"
+        },
+        {
+          "name": "identifies-visual-issues",
+          "description": "Issues listed are grounded in visual observations, not generic placeholders"
+        },
+        {
+          "name": "shows-grade",
+          "description": "A grade A\u2013F is shown with a label"
+        }
       ]
     },
     {
@@ -4175,12 +4514,30 @@
       "prompt": "Critique the checkout flow in the current Figma file",
       "expected_output": "3-pass critique with a Design Score Summary block showing overall score and four dimension scores",
       "assertions": [
-        { "name": "shows-score-summary-block", "description": "Response includes a Design Score Summary section with an overall score out of 100" },
-        { "name": "shows-all-four-dimensions", "description": "Score summary shows Accessibility, Usability, Visual Quality, and Token Compliance sub-scores" },
-        { "name": "shows-score-bars", "description": "ASCII progress bars are shown for each dimension" },
-        { "name": "still-runs-three-passes", "description": "Response still includes all three critique passes: heuristics, accessibility, and content quality" },
-        { "name": "shows-grade", "description": "A grade A–F is included in the score summary" },
-        { "name": "ends-with-strengths", "description": "Response ends with a section on what the design does well" }
+        {
+          "name": "shows-score-summary-block",
+          "description": "Response includes a Design Score Summary section with an overall score out of 100"
+        },
+        {
+          "name": "shows-all-four-dimensions",
+          "description": "Score summary shows Accessibility, Usability, Visual Quality, and Token Compliance sub-scores"
+        },
+        {
+          "name": "shows-score-bars",
+          "description": "ASCII progress bars are shown for each dimension"
+        },
+        {
+          "name": "still-runs-three-passes",
+          "description": "Response still includes all three critique passes: heuristics, accessibility, and content quality"
+        },
+        {
+          "name": "shows-grade",
+          "description": "A grade A\u2013F is included in the score summary"
+        },
+        {
+          "name": "ends-with-strengths",
+          "description": "Response ends with a section on what the design does well"
+        }
       ]
     },
     {
@@ -4191,11 +4548,262 @@
       "prompt": "Critique this React component file for design quality",
       "expected_output": "4-pass critique including a token compliance pass, with score summary",
       "assertions": [
-        { "name": "includes-token-compliance-pass", "description": "Response includes a token compliance pass checking for hardcoded values vs. design tokens" },
-        { "name": "identifies-hardcoded-values", "description": "Token compliance pass flags specific hardcoded hex/rgb values or notes their absence" },
-        { "name": "shows-token-compliance-score", "description": "Token Compliance dimension score is shown in the score summary" },
-        { "name": "provides-token-fix-guidance", "description": "Token compliance issues include guidance on converting to CSS custom properties or Tailwind tokens" },
-        { "name": "overall-score-present", "description": "An overall 0–100 score is shown in the score summary at the top of the output" }
+        {
+          "name": "includes-token-compliance-pass",
+          "description": "Response includes a token compliance pass checking for hardcoded values vs. design tokens"
+        },
+        {
+          "name": "identifies-hardcoded-values",
+          "description": "Token compliance pass flags specific hardcoded hex/rgb values or notes their absence"
+        },
+        {
+          "name": "shows-token-compliance-score",
+          "description": "Token Compliance dimension score is shown in the score summary"
+        },
+        {
+          "name": "provides-token-fix-guidance",
+          "description": "Token compliance issues include guidance on converting to CSS custom properties or Tailwind tokens"
+        },
+        {
+          "name": "overall-score-present",
+          "description": "An overall 0\u2013100 score is shown in the score summary at the top of the output"
+        }
+      ]
+    },
+    {
+      "id": 161,
+      "name": "naksha-browse-basic",
+      "command": "/naksha-browse",
+      "prompt": "/naksha-browse https://stripe.com",
+      "expected_output": "Browser capture of stripe.com \u2014 layout grid, type scale, color palette, UX patterns extracted, browser_finding_write block emitted for project memory",
+      "assertions": [
+        {
+          "name": "shows-url-being-captured",
+          "description": "response references the URL being captured (stripe.com)"
+        },
+        {
+          "name": "extracts-layout-pattern",
+          "description": "response includes layout or grid pattern observations"
+        },
+        {
+          "name": "extracts-color-palette",
+          "description": "response includes at least one extracted color value"
+        },
+        {
+          "name": "extracts-typography",
+          "description": "response mentions font or type scale findings"
+        },
+        {
+          "name": "emits-memory-block",
+          "description": "response includes a naksha-memory-update block with type browser_finding_write"
+        },
+        {
+          "name": "lists-captured-patterns",
+          "description": "browser_finding_write block includes a patterns array with at least 3 items"
+        }
+      ]
+    },
+    {
+      "id": 162,
+      "name": "naksha-browse-writes-v5-schema",
+      "command": "/naksha-browse",
+      "prompt": "/naksha-browse https://linear.app",
+      "expected_output": "Browser capture with browser_finding_write block that includes url, mode, patterns array, and captured_at timestamp \u2014 structured for v5 project.json schema",
+      "assertions": [
+        {
+          "name": "block-has-url-field",
+          "description": "browser_finding_write JSON block contains a url field"
+        },
+        {
+          "name": "block-has-patterns-array",
+          "description": "browser_finding_write JSON block contains a non-empty patterns array"
+        },
+        {
+          "name": "block-has-captured-at",
+          "description": "browser_finding_write JSON block contains a captured_at timestamp"
+        },
+        {
+          "name": "block-type-is-correct",
+          "description": "block type field is exactly browser_finding_write (not browser_finding)"
+        },
+        {
+          "name": "explains-memory-destination",
+          "description": "response explains that findings are stored in browser_findings in project.json"
+        }
+      ]
+    },
+    {
+      "id": 163,
+      "name": "naksha-browse-no-playwright-fallback",
+      "command": "/naksha-browse",
+      "prompt": "/naksha-browse https://vercel.com",
+      "expected_output": "Graceful skip when Playwright MCP is unavailable \u2014 explains what would be captured and instructs user to install Playwright MCP, does not error out",
+      "assertions": [
+        {
+          "name": "does-not-hard-error",
+          "description": "response does not produce an unhandled error or stack trace"
+        },
+        {
+          "name": "explains-playwright-dependency",
+          "description": "response mentions Playwright MCP as the required dependency"
+        },
+        {
+          "name": "provides-setup-guidance",
+          "description": "response provides guidance on how to enable the Playwright MCP"
+        },
+        {
+          "name": "describes-what-would-be-captured",
+          "description": "response describes what the command would have captured if Playwright were available"
+        }
+      ]
+    },
+    {
+      "id": 164,
+      "name": "naksha-remember-constraint",
+      "command": "/naksha-remember",
+      "prompt": "/naksha-remember grid is 8px; no dark mode; WCAG AA required",
+      "expected_output": "Three constraints classified and written as project_json_patch blocks targeting constraints.grid_base, constraints.dark_mode, constraints.wcag_level in project.json",
+      "assertions": [
+        {
+          "name": "classifies-as-constraints",
+          "description": "all three inputs are classified as constraint type (not component_pattern)"
+        },
+        {
+          "name": "emits-patch-for-grid",
+          "description": "emits a project_json_patch block for constraints.grid_base or similar grid key"
+        },
+        {
+          "name": "emits-patch-for-dark-mode",
+          "description": "emits a project_json_patch block for constraints.dark_mode set to false"
+        },
+        {
+          "name": "emits-patch-for-wcag",
+          "description": "emits a project_json_patch block for constraints.wcag_level set to AA"
+        },
+        {
+          "name": "shows-constraints-section",
+          "description": "response shows the resulting constraints section of project.json after patches"
+        },
+        {
+          "name": "explains-downstream-impact",
+          "description": "response explains which future commands will use these constraints"
+        }
+      ]
+    },
+    {
+      "id": 165,
+      "name": "naksha-remember-component-pattern",
+      "command": "/naksha-remember",
+      "prompt": "/naksha-remember Button component: always use rounded-full, primary variant uses bg-indigo-600 text-white, secondary uses border border-indigo-600 text-indigo-600",
+      "expected_output": "Input classified as component_pattern, written as project_json_patch targeting component_patterns array with name, structure, and usage fields",
+      "assertions": [
+        {
+          "name": "classifies-as-component-pattern",
+          "description": "input is classified as component_pattern type (not constraint)"
+        },
+        {
+          "name": "extracts-component-name",
+          "description": "pattern name Button is extracted from the input"
+        },
+        {
+          "name": "captures-variant-details",
+          "description": "primary and secondary variant details are captured in the pattern structure"
+        },
+        {
+          "name": "emits-memory-block",
+          "description": "response includes a naksha-memory-update block with type project_json_patch"
+        },
+        {
+          "name": "targets-component-patterns-path",
+          "description": "patch path targets component_patterns in project.json"
+        }
+      ]
+    },
+    {
+      "id": 166,
+      "name": "naksha-remember-no-project-json",
+      "command": "/naksha-remember",
+      "prompt": "/naksha-remember spacing scale is 4/8/12/16/24/32/48/64px",
+      "expected_output": "When no .naksha/project.json exists, response prompts user to run /naksha-init first rather than silently failing",
+      "assertions": [
+        {
+          "name": "detects-missing-project-json",
+          "description": "response detects that .naksha/project.json does not exist"
+        },
+        {
+          "name": "prompts-naksha-init",
+          "description": "response instructs user to run /naksha-init to set up project memory first"
+        },
+        {
+          "name": "does-not-silently-fail",
+          "description": "response does not silently succeed without writing the constraint"
+        },
+        {
+          "name": "shows-what-would-be-saved",
+          "description": "response shows what the constraint value would be saved as"
+        }
+      ]
+    },
+    {
+      "id": 167,
+      "name": "naksha-init-v5-migration",
+      "command": "/naksha-init",
+      "prompt": "/naksha-init (re-running on an existing v4 project to upgrade schema)",
+      "expected_output": "Detects v4 schema (no schema_version field), preserves all existing v4 fields, adds schema_version: 5, constraints: {}, component_patterns: [], browser_findings: [], reports Upgraded to v5 schema",
+      "assertions": [
+        {
+          "name": "detects-v4-schema",
+          "description": "response identifies existing project as v4 schema (no schema_version field)"
+        },
+        {
+          "name": "adds-schema-version-5",
+          "description": "output JSON includes schema_version: 5 or schema_version: \"5\""
+        },
+        {
+          "name": "adds-v5-fields",
+          "description": "output JSON includes constraints, component_patterns, and browser_findings fields"
+        },
+        {
+          "name": "preserves-existing-brand-fields",
+          "description": "existing brand.primary, brand.font, framework values are preserved unchanged"
+        },
+        {
+          "name": "reports-upgrade",
+          "description": "summary confirms upgrade from v4 to v5 schema"
+        }
+      ]
+    },
+    {
+      "id": 168,
+      "name": "naksha-doctor-v5-memory-check",
+      "command": "/naksha-doctor",
+      "prompt": "/naksha-doctor",
+      "expected_output": "Health report includes a Memory row showing v5 schema status; reports healthy when project.json exists with schema_version 5",
+      "assertions": [
+        {
+          "name": "runs-all-five-quality-checks",
+          "description": "response shows results for all 5 quality gates (validate-structure, verify-metadata, behavioral-smoke, guard-legacy-branding, guard-counts)"
+        },
+        {
+          "name": "includes-memory-row",
+          "description": "health report includes a Memory row showing schema version status"
+        },
+        {
+          "name": "shows-v5-healthy",
+          "description": "Memory row shows v5 as healthy when project.json with schema_version 5 is present"
+        },
+        {
+          "name": "shows-mcp-panel",
+          "description": "response includes MCP availability panel for Playwright and Figma MCPs"
+        },
+        {
+          "name": "produces-health-summary",
+          "description": "response ends with a HEALTHY or UNHEALTHY summary box"
+        },
+        {
+          "name": "check-validates-memory-state",
+          "description": "doctor check validates project memory state and reports it as part of the health check"
+        }
       ]
     }
   ]
