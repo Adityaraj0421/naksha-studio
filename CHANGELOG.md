@@ -2,6 +2,25 @@
 
 All notable changes to naksha are documented here.
 
+## v5.1.0 — Watch the Team: `/design-reel` (2026-06-29)
+
+naksha can now record its own design team working. `/design-reel` turns a `/design` run into a share-able vertical (9:16) + landscape (16:9) video — the 26-role team redesigning a screen, captioned, live. The team is the hook: no single-voice AI design tool can show a Creative Director, UX Designer, and UI Designer each making a distinct, visible change to the page you just designed.
+
+**New command:**
+- `/design-reel <task> [--url <page>]` — runs `/design`, then renders the result as a reel. Outputs `reel-9x16.mp4` + `reel-16x9.mp4`, ready to post, with a "produced by naksha · a re-enactment" honesty end card. `--url` captures a live page for a real before/after wipe; without it, the reel shows the freshly built page (auto-detect mode).
+
+**Architecture (spiked before building):**
+- **Extract, don't emit.** Passive in-run beat emission appended to `/design` proved unreliable (38% across 8 page types, fails by *omission* — 3/8 emitted zero). A dedicated, schema-forced extraction pass run *after* `/design` is 100% reliable (5/5, avg 5.4 roles). Contract: `docs/reel-beats.md`.
+- **Local committed renderer.** `packages/naksha-reel` (`@naksha/reel`) is an image-driven Remotion composition invoked with local `node` — no `npx`, no network at render time. naksha core stays zero-build; the toolchain is opt-in and installs on first use.
+- **Guardrails:** role normalization to a canonical set, caption clamp (≤95 chars), dedupe-by-role, and a **≥3 min-beat gate** that refuses to ship a thin clip.
+
+**Supporting changes:**
+- `/naksha-doctor` gains a reel-toolchain probe (node / ffmpeg / package) with a status row.
+- `docs/reel-beats.md` (data contract) and `docs/reel-setup.md` (toolchain + troubleshooting).
+- `scripts/reel-render-smoke.sh` — CI-safe smoke test (unit tests + render + gate rejection); skips cleanly when the opt-in package isn't installed.
+- Capability notes added to all platform adapters (Cursor, Windsurf, Gemini, Copilot).
+- **63 commands** (was 62).
+
 ## v5.0.0 — Project Memory & Design Agent (2026-05-29)
 
 Naksha now remembers your project. Two new commands and a persistent memory system let you capture design constraints, browser research findings, and component patterns once — and have them flow automatically into every subsequent design command.

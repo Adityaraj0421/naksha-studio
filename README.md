@@ -39,6 +39,8 @@ Then restart Claude Code and try:
 /design Build a landing page for a SaaS analytics product
 ```
 
+> **✨ New in v5.1 — `/design-reel`:** record the design team working and render a share-able video of it (9:16 + 16:9). `/design-reel Design a pricing page for a SaaS analytics product` → a post-ready clip of your screen being designed, live. [Learn more ↓](#design-reel-task--watch-the-team-new-in-v51)
+
 > **Updates:** Just `git pull` inside the repo — no reinstall needed. The plugin is a live symlink to your local clone.
 
 ### Cursor
@@ -364,6 +366,17 @@ Assembles the right specialists and runs the complete workflow:
 /design Redesign the onboarding flow for better conversion
 /design Build a real-time analytics dashboard
 ```
+
+### `/design-reel <task>` — Watch the Team _(new in v5.1)_
+
+Runs `/design`, then renders the result as a share-able video of the design team working — vertical (9:16) + landscape (16:9), captioned, with each specialist's contribution narrated over the page they built:
+
+```
+/design-reel Design a pricing page for a SaaS analytics product
+/design-reel Redesign the settings page --url http://localhost:3000/settings
+```
+
+Outputs `reel-9x16.mp4` + `reel-16x9.mp4`, ready to post. `--url` captures a live page for a real before/after wipe; without it, the reel shows the freshly built page. Requires a one-time Node render toolchain (`packages/naksha-reel`, installs on first use) — run `/naksha-doctor` to check, or see [docs/reel-setup.md](docs/reel-setup.md). The clip is a produced re-enactment, end-carded as such.
 
 ### `/design-review <file>` — Quality Audit
 
