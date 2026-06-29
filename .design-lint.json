@@ -5,6 +5,7 @@
     "demos/**",
     "assets/**",
     "brand/**",
-    "packages/**"
+    "packages/**",
+    "site/**"
   ]
 }
