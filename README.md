@@ -16,7 +16,7 @@
 [![Copilot](https://img.shields.io/badge/Copilot-Instructions-24292e)]()
 [![Autohand Code CLI](https://img.shields.io/badge/Autohand_Code_CLI-AGENTS.md-0A84FF)](https://github.com/autohandai/code-cli)
 [![Roles](https://img.shields.io/badge/Specialist_Roles-26-orange)]()
-[![Commands](https://img.shields.io/badge/Slash_Commands-62-green)]()
+[![Commands](https://img.shields.io/badge/Slash_Commands-63-green)]()
 [![Design Knowledge](https://img.shields.io/badge/Design_Knowledge-15000%2B_lines-E8633A)]()
 
 [Quick Start](#-quick-start) · [Commands](#-commands) · [The Team](#-the-team) · [How It Works](#-how-it-works) · [Changelog](CHANGELOG.md)
@@ -27,7 +27,7 @@
 
 ## 🚀 Quick Start
 
-### Claude Code (full plugin — 62 commands, agents, hooks)
+### Claude Code (full plugin — 63 commands, agents, hooks)
 
 ```bash
 git clone https://github.com/Adityaraj0421/naksha-studio.git
@@ -885,7 +885,7 @@ naksha/
 │       ├── conversational-designer.md  # Chatbot UI, VUI, dialog flows, persona systems
 │       ├── spatial-designer.md         # visionOS HIG, WebXR, depth layers, gaze/gesture
 │       └── compliance-designer.md      # GDPR/CCPA consent UX, HIPAA, PCI, ADA compliance
-├── commands/                           # 62 slash commands
+├── commands/                           # 63 slash commands
 ├── agents/                             # 7 specialist agents
 ├── hooks/hooks.json                    # SessionStart + PreToolUse + Stop hooks
 ├── scripts/

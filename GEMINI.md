@@ -149,6 +149,8 @@ Components reference Tier 3 only. Theme changes override Tier 2.
 
 **Video/Presentation** → Structured script/slide content with visual direction notes
 
+**Video Reel** → `/design-reel` records the design team working and renders a shareable 9:16 + 16:9 reel; requires Node + `packages/naksha-reel` (degrades to docs-only where that toolchain is absent)
+
 ## Platform Specs Reference
 
 ### Social Media Dimensions

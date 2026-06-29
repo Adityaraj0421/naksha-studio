@@ -68,6 +68,25 @@ Look for `.naksha/project.json` in the current directory and up to 3 parent dire
 
 Record this result for the health report. This check is **informational** — v4 projects are valid, they just lack v5 memory features.
 
+## Step 2.7: Reel Toolchain Check
+
+Probe the toolchain `/design-reel` needs to render video. **Informational** — its absence
+does not make the plugin unhealthy; it means `/design-reel` is unavailable until set up.
+
+```bash
+command -v node >/dev/null 2>&1 && echo "node $(node -v)" || echo "node MISSING"
+command -v ffmpeg >/dev/null 2>&1 && echo "ffmpeg OK" || echo "ffmpeg MISSING"
+[ -d packages/naksha-reel/node_modules ] && echo "reel-deps INSTALLED" || echo "reel-deps NOT_INSTALLED"
+```
+
+- All present → record `READY`.
+- node or ffmpeg missing → record `UNAVAILABLE` (cannot render).
+- node + ffmpeg present but `reel-deps NOT_INSTALLED` → record `SETUP_NEEDED` (one-time
+  `npm install` in `packages/naksha-reel`, done automatically on first `/design-reel` run).
+
+When not `READY`, add this line to the report's Note section:
+`Note: /design-reel requires Node + ffmpeg + packages/naksha-reel. See docs/reel-setup.md.`
+
 ## Step 3: Build the health report
 
 Parse each script's output and exit code. Present results in this format when all quality checks pass:
@@ -89,11 +108,17 @@ Parse each script's output and exit code. Present results in this format when al
   ──────────────────────────────────────
   Memory       schema      ✅ v5 (project.json found)
   ──────────────────────────────────────
+  Reel         toolchain   ✅ READY (/design-reel)
+  ──────────────────────────────────────
 
   ══════════════════════════════════════
   Status: HEALTHY — 4/4 checks passed
   ══════════════════════════════════════
 ```
+
+Show the Reel row from the Step 2.7 result: `READY` → `✅ READY (/design-reel)`;
+`SETUP_NEEDED` → `⚠  setup needed — npm install runs on first /design-reel`;
+`UNAVAILABLE` → `❌ UNAVAILABLE — node/ffmpeg missing (see docs/reel-setup.md)`.
 
 Show the Memory row based on Step 2.6 result:
 - `V5` → `✅ v5 (project.json found)`

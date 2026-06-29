@@ -139,3 +139,4 @@ Naksha v5 adds persistent project context across sessions. These commands build 
 - **`/naksha-init`** — set up or update project context; re-running on an existing project upgrades it to v5 schema.
 
 Commands `/design`, `/design-review`, `/design-score`, `/design-system`, and `/brand-kit` all read project memory automatically.
+- **`/design-reel`** — records the design team working and renders a shareable 9:16 + 16:9 video reel. Requires Node + `packages/naksha-reel`; degrades to docs-only where that toolchain is absent.

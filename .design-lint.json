@@ -4,6 +4,7 @@
     "social/**",
     "demos/**",
     "assets/**",
-    "brand/**"
+    "brand/**",
+    "packages/**"
   ]
 }

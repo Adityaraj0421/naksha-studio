@@ -1,0 +1,21 @@
+{
+  "beats": [
+    {"role": "Product/UX strategy", "fn": "", "caption": "I sequenced the screen so identity comes first, proof next, the one action last.", "focus": "layout"},
+    {"role": "UI visual", "fn": "Visual", "caption": "Inter in, muted labels, one filled button — the eye lands on Save changes.", "focus": "type"},
+    {"role": "Design system", "fn": "Tokens", "caption": "Every gap and color reads from a token on the 8px grid.", "focus": "tokens"},
+    {"role": "Content", "fn": "Copy", "caption": "'Save' becomes 'Save changes' so the click is never a gamble.", "focus": "button label"},
+    {"role": "Motion", "fn": "", "caption": "One hover-lift and press-scale so the whole card speaks one language.", "focus": "interactions"}
+  ],
+  "framing": {
+    "hookTitle": "26 specialists. One settings page.",
+    "hookSub": "Not one AI voice — watch the whole design team work.",
+    "beforeTag": "BEFORE",
+    "briefCaption": "Times New Roman. No spacing. One flat gray Save button, lost.",
+    "revealCaption": "Same page. The whole team later.",
+    "endHeadline": "Your turn to run the team.",
+    "endSub": "26 roles redesign your screen, live. One command.",
+    "endCommand": "/design-reel"
+  },
+  "beforeImage": "fixtures/before.png",
+  "afterImage": "fixtures/after.png"
+}

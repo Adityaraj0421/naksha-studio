@@ -1,0 +1,24 @@
+{
+  "name": "@naksha/reel",
+  "version": "0.1.0",
+  "description": "naksha — Watch the Team. Renders a /design run into a share-able reel (Remotion).",
+  "type": "module",
+  "bin": {
+    "naksha-reel": "bin/render.mjs"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "studio": "remotion studio src/index.ts",
+    "render": "node bin/render.mjs"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@remotion/bundler": "4.0.483",
+    "@remotion/cli": "4.0.483",
+    "@remotion/google-fonts": "4.0.483",
+    "@remotion/renderer": "4.0.483",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "remotion": "4.0.483"
+  }
+}

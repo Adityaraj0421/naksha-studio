@@ -247,3 +247,4 @@ Naksha v5 stores project context in `.naksha/project.json` and makes it availabl
 - **`/naksha-init`** — set up project context for the first time, or update it; re-running on a v4 project upgrades it to v5 schema automatically.
 
 The saved context is injected automatically into `/design`, `/design-review`, `/design-score`, `/design-system`, and `/brand-kit` so constraints and patterns are applied consistently without repeating them each time.
+- **`/design-reel`** — records the design team working and renders a shareable 9:16 + 16:9 video reel. Requires Node + `packages/naksha-reel`; degrades to docs-only where that toolchain is absent.
