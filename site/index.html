@@ -7,6 +7,18 @@
 <meta name="description" content="A virtual design agency in your terminal. 26 specialist roles, 63 commands, inside Claude Code, Cursor, Windsurf, Gemini CLI, and Copilot.">
 <meta property="og:title" content="naksha-studio — a virtual design agency in your terminal">
 <meta property="og:description" content="26 specialist roles. 63 commands. One command and the whole design agency shows up.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://adityaraj0421.github.io/naksha-studio/">
+<meta property="og:image" content="https://adityaraj0421.github.io/naksha-studio/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="naksha-studio — a virtual design agency in your terminal">
+<meta name="twitter:description" content="26 specialist roles. 63 commands. One command and the whole design agency shows up.">
+<meta name="twitter:image" content="https://adityaraj0421.github.io/naksha-studio/og.png">
+<meta name="theme-color" content="#070810">
+<link rel="canonical" href="https://adityaraj0421.github.io/naksha-studio/">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -15,7 +27,7 @@
   :root{
     --bg:#070810; --bg2:#0C0E18; --panel:#10131F; --card:#11141E; --term:#0A0B12;
     --line:rgba(243,244,250,.10); --line-2:rgba(243,244,250,.17);
-    --ink:#F3F4FA; --ink-soft:#9094A6; --ink-dim:#5E627A;
+    --ink:#F3F4FA; --ink-soft:#9094A6; --ink-dim:#777E9C;
     --accent:#5C50E8; --accent-soft:#8E86F4; --accent-deep:#3A30B8;
     --grid:rgba(150,160,220,.05); --tick:rgba(150,160,220,.16);
     --serif:"Newsreader",Georgia,serif; --mono:"JetBrains Mono",ui-monospace,monospace; --sans:"Inter",system-ui,sans-serif;
@@ -25,11 +37,15 @@
   html[data-theme="light"]{
     --bg:#ECEEF5; --bg2:#F5F6FB; --panel:#FFFFFF; --card:#FFFFFF; --term:#0A0B12;
     --line:rgba(20,22,44,.10); --line-2:rgba(20,22,44,.17);
-    --ink:#14162A; --ink-soft:#585C72; --ink-dim:#9094A6;
+    --ink:#14162A; --ink-soft:#585C72; --ink-dim:#6C7088;
     --grid:rgba(60,70,150,.06); --tick:rgba(60,70,150,.20); --accent-soft:#5247DE;
   }
   *{box-sizing:border-box;margin:0}
   html{scroll-behavior:smooth}
+  /* sticky-nav clearance so anchor jumps don't bury headings under the 66px bar */
+  section[id],#install{scroll-margin-top:84px}
+  /* one visible focus ring for every control (none existed before) */
+  a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent-soft);outline-offset:3px;border-radius:5px}
   body{font-family:var(--sans);color:var(--ink);background:var(--bg);line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden;transition:background .4s,color .4s}
   body::before{content:"";position:fixed;inset:0;z-index:-2;
     background-image:
@@ -93,7 +109,8 @@
 
   /* ---------- install widget ---------- */
   .install{max-width:770px;margin:42px auto 0;border:1px solid var(--line-2);border-radius:14px;background:linear-gradient(180deg,var(--panel),var(--bg2));overflow:hidden;box-shadow:0 30px 70px -40px rgba(0,0,0,.85)}
-  .tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);background:rgba(0,0,0,.18);overflow-x:auto}
+  .tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);background:rgba(0,0,0,.18);overflow-x:auto;scrollbar-width:none}
+  .tabs::-webkit-scrollbar{display:none}
   .tabs button{font-family:var(--mono);font-size:12px;letter-spacing:.04em;text-transform:uppercase;font-weight:500;border:0;background:transparent;color:var(--ink-soft);padding:13px 17px;cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .15s}
   .tabs button.on{color:var(--ink);border-bottom-color:var(--accent)}
   .tabs button:hover{color:var(--ink)}
@@ -103,6 +120,7 @@
   .cmd code .dim{color:var(--accent-soft)}
   .copy{font-family:var(--mono);font-size:11px;letter-spacing:.08em;font-weight:600;border:1px solid var(--line-2);background:rgba(0,0,0,.12);color:var(--ink-soft);border-radius:7px;padding:8px 13px;cursor:pointer;transition:.15s}
   .copy:hover{color:var(--accent-soft);border-color:var(--accent)}
+  .copy.copied{color:#5FD08A;border-color:#5FD08A}
   .stat-row{display:flex;gap:34px;justify-content:center;margin:38px 0 0;flex-wrap:wrap}
   .stat{font-family:var(--mono);font-size:12px;letter-spacing:.03em;color:var(--ink-soft)}
   .stat b{font-family:var(--sans);font-weight:800;font-size:22px;color:var(--ink);display:block;letter-spacing:-.01em}
@@ -180,7 +198,7 @@
   .closing p{color:var(--ink-soft);margin:16px auto 0;max-width:520px}
   .cta{display:inline-block;font-family:var(--mono);font-size:15px;font-weight:600;background:var(--accent);color:#fff;border-radius:11px;padding:16px 28px;margin-top:28px;text-decoration:none;box-shadow:0 14px 40px -16px rgba(92,80,232,.9);transition:.15s}
   .cta:hover{transform:translateY(-2px);box-shadow:0 18px 48px -16px rgba(92,80,232,1)}
-  .cta-note{font-family:var(--mono);font-size:12px;color:var(--ink-dim);margin-top:16px}
+  .cta-note{font-family:var(--mono);font-size:12px;color:var(--ink-soft);margin-top:16px}
   footer{border-top:1px solid var(--line);padding:30px 0;font-size:13px;color:var(--ink-soft)}
   .foot-inner{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;align-items:center}
   .foot-inner a{text-decoration:none;color:var(--ink-soft)}.foot-inner a:hover{color:var(--ink)}
@@ -193,7 +211,54 @@
   .crooked-callout button{font:inherit;font-weight:600;color:var(--ink);background:transparent;border:1px solid var(--line-2);border-radius:7px;padding:5px 11px;cursor:pointer}
   .crooked-callout button:hover{border-color:var(--accent);color:var(--accent-soft)}
 
-  @media(prefers-reduced-motion:reduce){*{animation:none!important}.tilt-layer{transition:none}}
+  .section-head code{font-family:var(--mono);color:var(--accent-soft);font-size:.9em}
+
+  /* ---------- before/after showcase ---------- */
+  .showcase{margin:34px auto 0;max-width:430px}
+  .ba{position:relative;width:100%;border:1px solid var(--line-2);border-radius:16px;overflow:hidden;aspect-ratio:900/1340;box-shadow:0 34px 90px -50px rgba(0,0,0,.95);touch-action:none;background:var(--term)}
+  .ba img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;display:block;user-select:none;-webkit-user-drag:none}
+  .ba .after{clip-path:inset(0 0 0 var(--x,52%))}
+  .ba-div{position:absolute;top:0;bottom:0;left:var(--x,52%);width:2px;background:var(--accent-soft);transform:translateX(-1px);pointer-events:none;box-shadow:0 0 16px var(--accent)}
+  .ba-grip{position:absolute;top:50%;left:var(--x,52%);width:34px;height:34px;border-radius:50%;background:var(--accent);color:#fff;font-size:14px;transform:translate(-50%,-50%);pointer-events:none;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(0,0,0,.55)}
+  .ba-tag{position:absolute;top:12px;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.08em;padding:5px 10px;border-radius:6px;pointer-events:none}
+  .ba-tag.bl{left:12px;background:#fff;color:#111}
+  .ba-tag.ar{right:12px;background:var(--accent);color:#fff}
+  .ba-range{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:ew-resize}
+  .ba-range:focus-visible+.ba-grip,.ba-range:focus-visible~.ba-grip{outline:2px solid var(--accent-soft);outline-offset:3px}
+  .ba-cap{text-align:center;font-family:var(--mono);font-size:12px;color:var(--ink-soft);margin-top:16px}
+
+  /* ---------- command index ---------- */
+  .cmd-index{margin-top:46px}
+  .cmd-group{margin-top:26px}
+  .cmd-group h4{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-soft);margin-bottom:13px;display:flex;align-items:center;gap:12px}
+  .cmd-group h4 .n{color:var(--ink-dim);font-weight:400}
+  .cmd-group h4::after{content:"";flex:1;height:1px;background:var(--line)}
+  .cmd-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(248px,1fr));gap:9px}
+  .cmd-item{border:1px solid var(--line);border-radius:9px;padding:11px 13px;background:var(--bg2);transition:border-color .15s,transform .15s}
+  .cmd-item:hover{border-color:var(--accent);transform:translateY(-1px)}
+  .cmd-item .cn{font-family:var(--mono);font-size:13px;color:var(--ink);font-weight:500}
+  .cmd-item .cd{font-size:12px;color:var(--ink-soft);margin-top:3px;line-height:1.42}
+
+  /* ---------- team roster (grouped + explained) ---------- */
+  .team-groups{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:26px 30px;margin-top:40px;text-align:left}
+  .team-col h4{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-soft);margin-bottom:8px;display:flex;align-items:center;gap:10px}
+  .team-col h4::after{content:"";flex:1;height:1px;background:var(--line)}
+  .role{padding:9px 0;border-bottom:1px dashed var(--line)}
+  .role:last-child{border-bottom:0}
+  .role .rn{font-family:var(--mono);font-size:13px;color:var(--ink)}
+  .role .rd{font-size:12.5px;color:var(--ink-soft);margin-top:2px;line-height:1.4}
+
+  /* ---------- FAQ ---------- */
+  .faq{max-width:760px;margin:40px auto 0}
+  .faq details{border:1px solid var(--line);border-radius:11px;background:var(--bg2);margin-top:10px}
+  .faq summary{cursor:pointer;padding:16px 20px;font-weight:600;font-size:15.5px;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:14px}
+  .faq summary::-webkit-details-marker{display:none}
+  .faq summary::after{content:"+";font-family:var(--mono);color:var(--accent-soft);font-size:19px;line-height:1}
+  .faq details[open] summary::after{content:"\2013"}
+  .faq details p{padding:0 20px 18px;color:var(--ink-soft);font-size:14.5px;line-height:1.6}
+  .faq code{font-family:var(--mono);font-size:.88em;color:var(--accent-soft)}
+
+  @media(prefers-reduced-motion:reduce){*{animation:none!important}.tilt-layer{transition:none}body.crooked .tilt-layer{transform:none}}
 </style>
 </head>
 <body>
@@ -205,12 +270,12 @@
     <a href="#stage">How it works</a>
     <a href="#commands">Commands</a>
     <a href="#team">The team</a>
-    <div class="theme" id="theme">
-      <button data-t="light" title="Light">☀</button>
-      <button data-t="auto" title="Auto">A</button>
-      <button data-t="dark" class="on" title="Dark">☾</button>
+    <div class="theme" id="theme" role="group" aria-label="Color theme">
+      <button data-t="light" title="Light" aria-label="Light theme">☀</button>
+      <button data-t="auto" title="Auto" aria-label="Auto theme">A</button>
+      <button data-t="dark" class="on" title="Dark" aria-label="Dark theme" aria-pressed="true">☾</button>
     </div>
-    <a href="https://github.com/Adityaraj0421/naksha-studio" class="nav-cta">Get naksha</a>
+    <a href="#install" class="nav-cta">Get naksha</a>
   </div>
 </div></nav>
 
@@ -234,7 +299,7 @@
     </div>
     <div class="cmd">
       <code id="cmdtext"><span class="dim">/plugin marketplace add</span> Adityaraj0421/naksha-studio</code>
-      <button class="copy" id="copy">[ COPY ]</button>
+      <button class="copy" id="copy" aria-live="polite" aria-label="Copy install command">[ COPY ]</button>
     </div>
   </div>
 
@@ -274,6 +339,27 @@
       <h3>It keeps your project in mind</h3>
       <p>Constraints, tokens, brand voice, and browser research persist and seed every command you run next.</p>
     </div>
+  </div>
+</div></section>
+
+<!-- before/after showcase -->
+<section class="brief" id="showcase"><div class="wrap">
+  <div class="section-head">
+    <span class="eyebrow">Brief in. Built out.</span>
+    <h2>From a raw form to a shipped screen</h2>
+    <p class="sub">A real <code>/design</code> pass — drag to compare the unstyled brief with the production HTML the team handed back.</p>
+  </div>
+  <div class="showcase">
+    <div class="ba" id="ba" style="--x:52%">
+      <img class="before" src="before.png" alt="Raw, unstyled Account Settings form — the starting brief" draggable="false">
+      <img class="after" src="after.png" alt="naksha's redesigned dark Account Settings screen — the built result" draggable="false">
+      <div class="ba-div"></div>
+      <div class="ba-grip">⇆</div>
+      <span class="ba-tag bl">BEFORE</span>
+      <span class="ba-tag ar">AFTER</span>
+      <input class="ba-range" id="baRange" type="range" min="2" max="98" value="52" aria-label="Drag to compare the before and after design">
+    </div>
+    <p class="ba-cap">drag the handle ↔ · or use arrow keys</p>
   </div>
 </div></section>
 
@@ -319,9 +405,16 @@
       <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
       <div class="cap">Fig. 06 — Live</div><h3>Move your cursor. It's a blueprint.</h3>
       <p>Everything here is drawn, not pasted — including this. naksha thinks in grids, ticks, and guides.</p>
-      <canvas class="toy" id="toy"></canvas>
+      <canvas class="toy" id="toy" aria-hidden="true"></canvas>
     </div>
   </div>
+
+  <div class="section-head" style="margin-top:92px">
+    <span class="eyebrow">The full surface</span>
+    <h2>All 63 commands</h2>
+    <p class="sub">Every command is a real workflow with its own specialists — grouped by what you're making.</p>
+  </div>
+  <div class="cmd-index" id="cmdindex"></div>
 </div></section>
 
 <!-- manipulate / crooked trigger -->
@@ -339,11 +432,25 @@
     <h2>The whole agency, assembled per task</h2>
     <p class="sub">naksha staffs every role you'd hire a design agency for — and pulls in exactly the ones your task needs.</p>
   </div>
-  <div class="roster">
-    <span>Creative Director</span><span>Art Director</span><span>UX Designer</span><span>UX Researcher</span><span>UI Designer</span><span>Visual Designer</span><span>Interaction Designer</span><span>Product Designer</span><span>Content Designer</span><span>UX Copywriter</span><span>Design System Lead</span><span>Design Technologist</span><span>Figma Expert</span><span>Prototyper</span><span>Data Viz Designer</span><span>Motion Designer</span><span>Illustrator</span><span>Brand Strategist</span><span>Email Designer</span><span>Social Designer</span><span>Presentation Designer</span><span>Video Designer</span><span>Conversational Designer</span><span>Spatial Designer</span><span>Accessibility Specialist</span><span>Compliance Reviewer</span>
-  </div>
+  <div class="team-groups" id="teamroster"></div>
   <div class="platforms">
     <span>Claude Code</span><span>Cursor</span><span>Windsurf</span><span>Gemini CLI</span><span>Copilot</span>
+  </div>
+</div></section>
+
+<!-- faq -->
+<section id="faq"><div class="wrap">
+  <div class="section-head">
+    <span class="eyebrow">Before you install</span>
+    <h2>Questions, answered</h2>
+  </div>
+  <div class="faq">
+    <details><summary>Is it really free?</summary><p>Yes — naksha-studio is MIT-licensed and free. There's no naksha account and no separate API key; it runs on whatever AI coding tool you already use.</p></details>
+    <details><summary>Which tools does it work in?</summary><p>Claude Code gets the full plugin — all 63 slash-commands. Cursor, Windsurf, Gemini CLI, and Copilot load the same design-team rules so the agency activates automatically on your design files. The install box up top gives the exact command for each.</p></details>
+    <details><summary>What's the difference between the Claude Code install and the others?</summary><p>Claude Code installs as a marketplace plugin (<code>/plugin marketplace add …</code>) with every command available. The others drop a single rules file (<code>.cursor/rules</code>, <code>.windsurfrules</code>, <code>GEMINI.md</code>, or <code>copilot-instructions.md</code>) so the same 26-role team guides design work inline.</p></details>
+    <details><summary>Does it send my code anywhere?</summary><p>No. naksha is just commands and skills that run inside your AI tool — there's no naksha server and no telemetry. The only time it reaches the network is when you point <code>/naksha-browse</code> or an audit command at a URL you choose.</p></details>
+    <details><summary>What does it cost to run?</summary><p>naksha itself is free; it spends the tokens of the AI tool you're already paying for. No extra subscription.</p></details>
+    <details><summary>How do I update it?</summary><p>For the Claude Code plugin, <code>git pull</code> — it's a live symlink, no reinstall. For the rules-file installs, re-run the one-line <code>curl</code> from the install box.</p></details>
   </div>
 </div></section>
 
@@ -357,7 +464,7 @@
 
 <footer><div class="wrap foot-inner">
   <span class="wordmark" style="font-size:13px">naksha<span class="hy">-</span>studio</span>
-  <span><a href="https://github.com/Adityaraj0421/naksha-studio">GitHub</a> · <a href="https://github.com/Adityaraj0421/naksha-studio/blob/main/CHANGELOG.md">Changelog</a> · <a href="#commands">Commands</a> · MIT</span>
+  <span><a href="https://github.com/Adityaraj0421/naksha-studio#readme">Docs</a> · <a href="https://github.com/Adityaraj0421/naksha-studio">GitHub</a> · <a href="https://github.com/Adityaraj0421/naksha-studio/blob/main/CHANGELOG.md">Changelog</a> · <a href="#commands">Commands</a> · <a href="https://github.com/Adityaraj0421/naksha-studio/blob/main/LICENSE">MIT</a></span>
 </div></footer>
 
 </div><!-- /tilt-layer -->
@@ -383,33 +490,75 @@
   document.querySelectorAll('.mark').forEach(m=>{
     const big = m.dataset.mark==='lg';
     m.innerHTML = markSVG(big?76:28, big);
-    if(m.classList.contains('mark--replay'))
-      m.addEventListener('click',()=>{ m.innerHTML=markSVG(76,true); });
+    m.setAttribute('aria-hidden','true');           // decorative; wordmark beside it carries the brand
+    if(m.classList.contains('mark--replay')){
+      const replay=()=>{ m.innerHTML=markSVG(76,true); };
+      m.setAttribute('role','button');
+      m.setAttribute('tabindex','0');
+      m.setAttribute('aria-label','Replay logo animation');
+      m.removeAttribute('aria-hidden');             // now it's an interactive control, keep it in the a11y tree
+      m.addEventListener('click',replay);
+      m.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); replay(); } });
+    }
   });
 
   // ---- theme toggle (light / auto / dark) ----
   const themeBox=document.getElementById('theme'), mq=matchMedia('(prefers-color-scheme: light)');
+  let themePref='dark';
   function applyTheme(t){
+    themePref=t;
     document.documentElement.dataset.theme = (t==='auto') ? (mq.matches?'light':'dark') : t;
-    [...themeBox.children].forEach(b=>b.classList.toggle('on', b.dataset.t===t));
+    [...themeBox.children].forEach(b=>{const on=b.dataset.t===t; b.classList.toggle('on',on); b.setAttribute('aria-pressed',on);});
   }
   themeBox.addEventListener('click',e=>{const b=e.target.closest('button'); if(b) applyTheme(b.dataset.t);});
+  mq.addEventListener('change',()=>{ if(themePref==='auto') applyTheme('auto'); });  // live-follow OS theme on Auto
 
   // ---- install command per platform ----
+  // Real per-platform installs. Claude = marketplace plugin; the rest drop naksha's
+  // rules file into the project from the repo (matches README's documented setup).
+  const RAW='https://raw.githubusercontent.com/Adityaraj0421/naksha-studio/main';
   const CMDS={
     claude:'<span class="dim">/plugin marketplace add</span> Adityaraj0421/naksha-studio',
-    cursor:'<span class="dim">git clone</span> github.com/Adityaraj0421/naksha-studio <span class="dim">~/.naksha</span>',
-    windsurf:'<span class="dim">git clone</span> github.com/Adityaraj0421/naksha-studio <span class="dim">~/.naksha</span>',
-    gemini:'<span class="dim">git clone</span> github.com/Adityaraj0421/naksha-studio <span class="dim">~/.naksha</span>',
-    copilot:'<span class="dim">git clone</span> github.com/Adityaraj0421/naksha-studio <span class="dim">~/.naksha</span>',
+    cursor:`<span class="dim">mkdir -p .cursor/rules &amp;&amp; curl -sL</span> ${RAW}/.cursor/rules/naksha.mdc <span class="dim">-o</span> .cursor/rules/naksha.mdc`,
+    windsurf:`<span class="dim">curl -sL</span> ${RAW}/.windsurfrules <span class="dim">-o</span> .windsurfrules`,
+    gemini:`<span class="dim">curl -sL</span> ${RAW}/GEMINI.md <span class="dim">-o</span> GEMINI.md`,
+    copilot:`<span class="dim">mkdir -p .github &amp;&amp; curl -sL</span> ${RAW}/.github/copilot-instructions.md <span class="dim">-o</span> .github/copilot-instructions.md`,
   };
   const tabs=document.getElementById('tabs'), cmd=document.getElementById('cmdtext');
   tabs.addEventListener('click',e=>{const b=e.target.closest('button'); if(!b)return;
     [...tabs.children].forEach(x=>x.classList.toggle('on',x===b)); cmd.innerHTML=CMDS[b.dataset.cmd];});
-  document.getElementById('copy').addEventListener('click',async e=>{
-    try{await navigator.clipboard.writeText(cmd.textContent);e.target.textContent='[ COPIED ]';setTimeout(()=>e.target.textContent='[ COPY ]',1200);}
-    catch{e.target.textContent='[ ⌘C ]';}
+  const copyBtn=document.getElementById('copy');
+  function selectCmd(){ const r=document.createRange(); r.selectNodeContents(cmd); const s=getSelection(); s.removeAllRanges(); s.addRange(r); }
+  copyBtn.addEventListener('click',async e=>{
+    const btn=e.currentTarget;
+    try{
+      if(!navigator.clipboard) throw 0;
+      await navigator.clipboard.writeText(cmd.textContent);
+      btn.textContent='[ COPIED ]'; btn.classList.add('copied');
+      setTimeout(()=>{ btn.textContent='[ COPY ]'; btn.classList.remove('copied'); },1400);
+    }catch{ selectCmd(); btn.textContent='[ PRESS ⌘C ]'; setTimeout(()=>btn.textContent='[ COPY ]',2200); }
   });
+
+  // ---- command index + team roster (data-driven; data pulled from commands/*.md + SKILL.md) ----
+  const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+  const COMMANDS = [{"cat":"Design & build","items":[{"n":"/design","d":"Design anything"},{"n":"/design-template","d":"Generate a production-ready web page from a curated template…"},{"n":"/design-framework","d":"Convert HTML/CSS design output to framework-specific component…"},{"n":"/design-system","d":"Generate design tokens, theme configuration, or extract a…"},{"n":"/design-sprint","d":"Guided design sprint methodology"},{"n":"/design-tutorial","d":"Interactive guided tour of Naksha"}]},{"cat":"Figma & handoff","items":[{"n":"/figma","d":"Convert a Figma design to production code"},{"n":"/figma-create","d":"Create designs directly in Figma"},{"n":"/figma-component-library","d":"Generate a complete component library in Figma from a design…"},{"n":"/figma-prototype","d":"Create interactive prototype connections between Figma frames"},{"n":"/figma-responsive","d":"Generate mobile and tablet variants from a desktop Figma wireframe"},{"n":"/figma-sync","d":"Detect drift between Figma designs and code implementation"},{"n":"/site-to-figma","d":"Capture a live website and recreate its layout in Figma as…"},{"n":"/design-handoff","d":"Generate a developer handoff document from a Figma file"},{"n":"/design-present","d":"Generate an interactive HTML presentation from Figma screens"},{"n":"/component-docs","d":"Auto-generate component documentation from Figma"}]},{"cat":"Review & audit","items":[{"n":"/design-review","d":"Review an existing design for quality"},{"n":"/design-critique","d":"UX heuristic review of Figma screens"},{"n":"/design-qa","d":"Visual QA on an HTML/CSS implementation"},{"n":"/design-score","d":"Quantitative 0–100 design quality score across Accessibility,…"},{"n":"/ux-audit","d":"Audit a Figma file against a design brief"},{"n":"/accessibility-audit","d":"Full WCAG AA accessibility audit on an HTML file"},{"n":"/lint-design","d":"Scan a Figma file for design quality issues"},{"n":"/design-compare","d":"Capture two websites with Playwright and produce a structured…"},{"n":"/competitive-audit","d":"Capture a competitor website with Playwright and extract its…"},{"n":"/ab-variants","d":"Generate A/B test design variants from an existing Figma screen"}]},{"cat":"Brand","items":[{"n":"/brand-strategy","d":"Define or audit a brand"},{"n":"/brand-kit","d":"Generate a complete brand kit from a logo and 1-2 brand colors"}]},{"cat":"Social","items":[{"n":"/social-content","d":"Design social media visual content"},{"n":"/social-campaign","d":"Plan a social media campaign"},{"n":"/social-analytics","d":"Design a social media analytics dashboard, generate a…"}]},{"cat":"Email","items":[{"n":"/email-template","d":"Generate a production-ready HTML email template"},{"n":"/email-campaign","d":"Plan and write a complete multi-email campaign sequence"},{"n":"/email-audit","d":"Full-spectrum email audit"}]},{"cat":"Data viz","items":[{"n":"/chart-design","d":"Design a chart or data visualization"},{"n":"/dashboard-layout","d":"Design and build a complete dashboard layout"},{"n":"/data-viz-audit","d":"Audit a data visualization for chart type selection,…"}]},{"cat":"Motion, video & decks","items":[{"n":"/motion-design","d":"Design micro-interactions, transitions, and animation systems…"},{"n":"/illustration-system","d":"Design an illustration style guide, icon system, or SVG asset…"},{"n":"/presentation-design","d":"Design a complete presentation deck"},{"n":"/video-script","d":"Write a video script, storyboard, or content series plan for…"},{"n":"/design-reel","d":"Record naksha's design team working"}]},{"cat":"AI generation","items":[{"n":"/gen-image","d":"Generate a brand-aligned AI image"},{"n":"/gen-video","d":"Generate video output in one of three modes: Remotion…"},{"n":"/gen-audio","d":"Generate an AI audio brief"},{"n":"/gen-moodboard","d":"Generate 3 AI moodboard directions for a concept or campaign"},{"n":"/prompt-refine","d":"Diagnose and optimize any AI gen prompt"}]},{"cat":"Print","items":[{"n":"/print-layout","d":"Design a single print artifact (business card, flyer,…"},{"n":"/pdf-report","d":"Generate a multi-page print-ready report or document layout…"},{"n":"/print-audit","d":"Audit a print layout for bleed, safe zone, color mode, font…"}]},{"cat":"Conversational & spatial","items":[{"n":"/design-chatbot","d":"Design a complete chatbot or conversational assistant UI"},{"n":"/design-voice-ui","d":"Design a voice interface"},{"n":"/design-spatial","d":"Design a spatial computing interface for visionOS, Vision Pro,…"},{"n":"/design-ar-overlay","d":"Design an AR overlay interface"}]},{"cat":"Compliance","items":[{"n":"/design-compliance","d":"Audit or generate regulation-specific UI patterns for HIPAA,…"},{"n":"/design-gdpr","d":"Design GDPR/CCPA-compliant consent flows"}]},{"cat":"Project & memory","items":[{"n":"/naksha-init","d":"Initialize Naksha project memory"},{"n":"/naksha-remember","d":"Record a design constraint, component pattern, or decision to…"},{"n":"/naksha-status","d":"Show current Naksha project memory"},{"n":"/naksha-browse","d":"Browse any URL with browser vision"},{"n":"/naksha-doctor","d":"Run all naksha quality checks and report the plugin's health…"},{"n":"/naksha-help","d":"Quick-reference for any Naksha command"},{"n":"/pipeline","d":"Run multi-command design pipelines"}]}];
+  const ci=document.getElementById('cmdindex');
+  if(ci) ci.innerHTML=COMMANDS.map(g=>`<div class="cmd-group"><h4>${esc(g.cat)} <span class="n">${g.items.length}</span></h4><div class="cmd-grid">${g.items.map(c=>`<div class="cmd-item"><div class="cn">${esc(c.n)}</div><div class="cd">${esc(c.d)}</div></div>`).join('')}</div></div>`).join('');
+
+  const ROLES=[
+    {group:'Leadership',items:[{r:'Creative Director',d:'Sets the visual vision, mood, and creative direction'},{r:'Design Manager',d:'Reads the brief, assembles the team, ensures delivery'}]},
+    {group:'Core craft',items:[{r:'Product Designer',d:'End-to-end UX, feature scoping, business outcomes'},{r:'UX Designer',d:'User journeys, wireframes, information architecture'},{r:'UI Designer',d:'Typography, color, layout — the polished surface'},{r:'UX Researcher',d:'Usability heuristics, user validation, a11y audit'},{r:'Content Designer',d:'Microcopy, labels, error states, tone of voice'},{r:'Design System Lead',d:'Tokens, components, theming, dark-mode consistency'},{r:'Motion Designer',d:'Transitions, micro-interactions, state changes'},{r:'Framework Specialist',d:'Ships React, Vue, Svelte, Next.js, Astro code'}]},
+    {group:'Social',items:[{r:'Social Media Designer',d:'Stories, reels, carousels, ad creative, safe zones'},{r:'Social Media Strategist',d:'Campaigns, content calendars, platform strategy'},{r:'Social Media Copywriter',d:'Captions, hooks, CTAs, platform voice'},{r:'Growth / Analytics',d:'KPIs, funnels, A/B tests, conversion tracking'}]},
+    {group:'Email & data',items:[{r:'Email Designer',d:'Cross-client HTML email, responsive, dark mode'},{r:'Email Copywriter',d:'Subject lines, sequences, deliverability-safe copy'},{r:'Data Viz Designer',d:'Chart type, accessible palettes, chart ARIA'},{r:'Dashboard Architect',d:'KPI cards, information hierarchy, filter bars'}]},
+    {group:'Brand & production',items:[{r:'Brand Strategist',d:'Positioning, identity systems, voice and tone'},{r:'Illustration Director',d:'Icon systems, spot illustration, SVG style'},{r:'Presentation Designer',d:'Decks, slide systems, visual hierarchy'},{r:'Print Designer',d:'Bleed, CMYK, preflight-ready print layouts'}]},
+    {group:'AI & frontier',items:[{r:'AI Image Director',d:'Brand-aligned image-gen prompts and seeds'},{r:'AI Video Director',d:'Shot prompts for Runway, Kling, Sora, Pika'},{r:'Spatial Designer',d:'visionOS, WebXR, AR overlays, depth UI'},{r:'Compliance Designer',d:'GDPR, HIPAA, PCI, ADA-compliant flows'}]},
+  ];
+  const tr=document.getElementById('teamroster');
+  if(tr) tr.innerHTML=ROLES.map(g=>`<div class="team-col"><h4>${esc(g.group)}</h4>${g.items.map(r=>`<div class="role"><div class="rn">${esc(r.r)}</div><div class="rd">${esc(r.d)}</div></div>`).join('')}</div>`).join('');
+
+  // ---- before/after compare slider ----
+  (()=>{ const ba=document.getElementById('ba'), range=document.getElementById('baRange');
+    if(ba&&range) range.addEventListener('input',()=>ba.style.setProperty('--x',range.value+'%')); })();
 
   // ---- pinned demo panel (left) driven by the scrolling copy blocks (right) ----
   const STEPS=[
@@ -457,12 +606,17 @@
   blocks.forEach(b=>sio.observe(b));
 
   // ---- crooked mode: naksha tilts its own page ----
-  const cio=new IntersectionObserver(es=>{es.forEach(en=>{
-    if(en.isIntersecting && !document.body.classList.contains('reverted')) document.body.classList.add('crooked');
-  });},{threshold:.5});
-  cio.observe(document.getElementById('manip'));
+  const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(localStorage.getItem('naksha-reverted')) document.body.classList.add('reverted');
+  if(!reduceMotion){                                  // motion-sensitive users never get the tilt
+    const cio=new IntersectionObserver(es=>{es.forEach(en=>{
+      if(en.isIntersecting && !document.body.classList.contains('reverted')) document.body.classList.add('crooked');
+    });},{threshold:.5});
+    cio.observe(document.getElementById('manip'));
+  }
   document.getElementById('revert').addEventListener('click',()=>{
     document.body.classList.remove('crooked'); document.body.classList.add('reverted');
+    try{ localStorage.setItem('naksha-reverted','1'); }catch{}   // stay reverted on return visits
   });
 
   // ---- Fig.06: interactive blueprint canvas (cursor-reactive grid) ----
@@ -472,7 +626,7 @@
   size(); addEventListener('resize',size);
   cv.addEventListener('pointermove',e=>{const r=cv.getBoundingClientRect();mx=e.clientX-r.left;my=e.clientY-r.top;});
   cv.addEventListener('pointerleave',()=>{mx=my=-999;});
-  function tick(){
+  function draw(){
     const w=cv.width/devicePixelRatio,h=cv.height/devicePixelRatio,g=22;
     ctx.clearRect(0,0,w,h);
     for(let x=g;x<w;x+=g)for(let y=g;y<h;y+=g){
@@ -482,9 +636,16 @@
     }
     if(mx>0){ctx.strokeStyle='rgba(142,134,244,.5)';ctx.lineWidth=1;
       ctx.beginPath();ctx.moveTo(mx-9,my);ctx.lineTo(mx+9,my);ctx.moveTo(mx,my-9);ctx.lineTo(mx,my+9);ctx.stroke();}
-    requestAnimationFrame(tick);
   }
-  tick();
+  let raf=0;
+  function tick(){ draw(); raf=requestAnimationFrame(tick); }
+  // loop only while the canvas is visible and motion is allowed; else hold a single static frame
+  new IntersectionObserver(es=>{
+    const vis=es[0].isIntersecting;
+    if(vis && !reduceMotion && !raf) raf=requestAnimationFrame(tick);
+    else if((!vis||reduceMotion) && raf){ cancelAnimationFrame(raf); raf=0; }
+  }).observe(cv);
+  draw();
 </script>
 </body>
 </html>
