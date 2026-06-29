@@ -1,6 +1,6 @@
 {
   "name": "naksha",
-  "version": "5.1.0",
+  "version": "5.1.1",
   "description": "A virtual design team for Claude Code, Cursor, Windsurf, Gemini CLI, and Copilot — powered by Naksha. Assembles specialist roles — UI designer, UX researcher, content designer, Figma expert, data viz, email, social, motion, presentation, brand strategy, illustration, video, conversational, spatial, compliance, and more — for any design task. 26 roles, 63 commands, 15,000+ lines of expert design knowledge. Your agency's design brain, inside your terminal.",
   "author": {
     "name": "adityaraj0421"

@@ -2,6 +2,10 @@
 
 All notable changes to naksha are documented here.
 
+## v5.1.1 — `/design-reel` wipe fix (2026-06-29)
+
+**Fixed:** the before/after wipe in redesign mode (`--url`) had its sides inverted — the BEFORE label sat over the redesigned page and AFTER over the original. The wipe now keeps BEFORE on the left and reveals AFTER in from the right, matching the labels. Caught by an end-to-end redesign run (a live dashboard) that the fixture test couldn't expose. Added a code comment so the clip direction can't be silently re-inverted.
+
 ## v5.1.0 — Watch the Team: `/design-reel` (2026-06-29)
 
 naksha can now record its own design team working. `/design-reel` turns a `/design` run into a share-able vertical (9:16) + landscape (16:9) video — the 26-role team redesigning a screen, captioned, live. The team is the hook: no single-voice AI design tool can show a Creative Director, UX Designer, and UI Designer each making a distinct, visible change to the page you just designed.

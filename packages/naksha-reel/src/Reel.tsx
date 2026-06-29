@@ -105,12 +105,16 @@ const Reveal: React.FC<{spec: Spec; before: string; after: string; layout: Retur
   return (
     <AbsoluteFill>
       {hasBefore ? (
+        // Wipe: BEFORE stays on the LEFT, AFTER reveals in from the RIGHT (labels below
+        // match these sides). clipPath insets the LEFT by (1-p)% so `after` shows on the
+        // right p% — do NOT flip to `inset(0 (1-p)% 0 0)`, that puts AFTER on the left and
+        // inverts the BEFORE/AFTER tags.
         <>
           <PageCard box={layout.pageBox} src={before} />
-          <div style={{position: 'absolute', left: layout.pageBox.x, top: layout.pageBox.y, width: layout.pageBox.w, height: layout.pageBox.h, clipPath: `inset(0 ${(1 - p) * 100}% 0 0)`}}>
+          <div style={{position: 'absolute', left: layout.pageBox.x, top: layout.pageBox.y, width: layout.pageBox.w, height: layout.pageBox.h, clipPath: `inset(0 0 0 ${(1 - p) * 100}%)`}}>
             <PageCard box={{x: 0, y: 0, w: layout.pageBox.w, h: layout.pageBox.h}} src={after} />
           </div>
-          <div style={{position: 'absolute', left: layout.pageBox.x + layout.pageBox.w * p, top: layout.pageBox.y, width: 5, height: layout.pageBox.h, background: '#fff', boxShadow: '0 0 26px #fff', transform: 'translateX(-2px)'}} />
+          <div style={{position: 'absolute', left: layout.pageBox.x + layout.pageBox.w * (1 - p), top: layout.pageBox.y, width: 5, height: layout.pageBox.h, background: '#fff', boxShadow: '0 0 26px #fff', transform: 'translateX(-2px)'}} />
           <div style={{position: 'absolute', left: layout.pageBox.x + 12, top: layout.pageBox.y + 12, fontFamily: JBMONO, fontSize: 20, fontWeight: 700, color: '#111', background: '#fff', borderRadius: 6, padding: '5px 11px', opacity: 1 - p}}>BEFORE</div>
           <div style={{position: 'absolute', left: layout.pageBox.x + layout.pageBox.w - 96, top: layout.pageBox.y + 12, fontFamily: JBMONO, fontSize: 20, fontWeight: 700, color: '#fff', background: C.orange500, borderRadius: 6, padding: '5px 11px', opacity: p}}>AFTER</div>
         </>
