@@ -33,7 +33,7 @@ Display when no arguments are given:
 
 ```
 ━━━ Naksha Quick Reference ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Your virtual design team — 26 roles, 62 commands, 7 agents
+Your virtual design team — 26 roles, 63 commands, 7 agents
 
 CATEGORIES                                     Run /naksha-help <category>
 

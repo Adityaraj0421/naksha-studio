@@ -325,6 +325,7 @@ This skill is part of the **naksha** plugin. For focused workflows, use these co
 | Command | Use when |
 |---------|----------|
 | `/design <task>` | Full design workflow with team assembly |
+| `/design-reel <task> [--url <page>]` | Record the design team working — render a /design run into a share-able video reel (9:16 + 16:9) |
 | `/design-review <file or screenshot>` | Audit an existing design — accepts HTML files, Figma URLs, screenshots (visual AI critique), or preview servers |
 | `/design-system` | Generate or extract design tokens |
 | `/figma <URL>` | Convert a Figma design to production code |

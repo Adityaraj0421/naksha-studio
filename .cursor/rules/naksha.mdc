@@ -91,3 +91,4 @@ Naksha v5 adds persistent project context that design commands read automaticall
 - **`/naksha-init`** — initialize or update project settings; upgrades v4 projects to v5 automatically.
 
 The context in `.naksha/project.json` is injected automatically into `/design`, `/design-review`, `/design-score`, `/design-system`, and `/brand-kit`.
+- **`/design-reel`** — records the design team working and renders a shareable 9:16 + 16:9 video reel. Requires Node + `packages/naksha-reel`; degrades to docs-only where that toolchain is absent.
