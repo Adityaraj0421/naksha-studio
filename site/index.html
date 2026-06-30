@@ -46,6 +46,17 @@
   section[id],#install{scroll-margin-top:84px}
   /* one visible focus ring for every control (none existed before) */
   a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent-soft);outline-offset:3px;border-radius:5px}
+  /* a11y: screen-reader-only utility + skip link */
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  .skip{position:fixed;top:10px;left:10px;z-index:200;transform:translateY(-180%);background:var(--accent);color:#fff;font-family:var(--mono);font-size:13px;padding:11px 16px;border-radius:8px;text-decoration:none;transition:transform .18s}
+  .skip:focus{transform:translateY(0)}
+  /* touch: guarantee ≥44px hit areas on touch devices (skill §2) */
+  @media(pointer:coarse){
+    .theme button{min-height:44px}
+    .copy{min-height:44px}
+    .nav-cta{min-height:44px;display:inline-flex;align-items:center}
+    .foot-inner a{display:inline-flex;align-items:center;min-height:44px;padding:0 4px}
+  }
   body{font-family:var(--sans);color:var(--ink);background:var(--bg);line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden;transition:background .4s,color .4s}
   body::before{content:"";position:fixed;inset:0;z-index:-2;
     background-image:
@@ -152,9 +163,15 @@
   .stage-block h3{font-family:var(--serif);font-style:italic;font-weight:500;font-size:clamp(25px,2.9vw,35px);line-height:1.08;margin-bottom:12px}
   .stage-block p{color:var(--ink-soft);font-size:16px;line-height:1.55}
   .stage-block code{font-family:var(--mono);font-size:.85em;color:var(--accent-soft)}
-  /* mobile: panel stacks above the (un-dimmed) copy, no pin */
-  @media(max-width:860px){.stage-grid{grid-template-columns:1fr;gap:12px}.stage{position:relative;top:0}
-    .stage-block,.stage-block:first-child,.stage-block:last-child{min-height:auto;padding:22px 0;opacity:1;justify-content:flex-start}}
+  /* mobile: the big panel can't pin on a phone — hide it, give each block its own inline terminal */
+  .stage-mini{display:none}
+  @media(max-width:860px){.stage-grid{grid-template-columns:1fr;gap:0}.stage{display:none}
+    .stage-block,.stage-block:first-child,.stage-block:last-child{min-height:auto;padding:30px 0;opacity:1;justify-content:flex-start}
+    .stage-mini{display:block;margin-top:18px;border:1px solid var(--line-2);border-radius:12px;background:var(--term);overflow:hidden}
+    .sm-bar{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid rgba(255,255,255,.08);font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:#9aa0b4}
+    .sm-body{font-family:var(--mono);font-size:12.5px;line-height:1.85;padding:14px;color:#D7DAE6}
+    .sm-body .role{color:#8E86F4}.sm-body .ok{color:#5FD08A}.sm-body .you{color:#6FA0F0}.sm-body .dim{color:#6C7088}
+    .sm-foot{border-top:1px solid rgba(255,255,255,.08);padding:11px 14px;font-family:var(--mono);font-size:11.5px;color:#8B90A6}}
 
   /* ---------- section heads ---------- */
   .section-head{text-align:center;margin:104px 0 8px}
@@ -215,7 +232,7 @@
 
   /* ---------- before/after showcase ---------- */
   .showcase{margin:34px auto 0;max-width:430px}
-  .ba{position:relative;width:100%;border:1px solid var(--line-2);border-radius:16px;overflow:hidden;aspect-ratio:900/1340;box-shadow:0 34px 90px -50px rgba(0,0,0,.95);touch-action:none;background:var(--term)}
+  .ba{position:relative;width:100%;border:1px solid var(--line-2);border-radius:16px;overflow:hidden;aspect-ratio:900/1340;box-shadow:0 34px 90px -50px rgba(0,0,0,.95);touch-action:pan-y;background:var(--term)}
   .ba img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;display:block;user-select:none;-webkit-user-drag:none}
   .ba .after{clip-path:inset(0 0 0 var(--x,52%))}
   .ba-div{position:absolute;top:0;bottom:0;left:var(--x,52%);width:2px;background:var(--accent-soft);transform:translateX(-1px);pointer-events:none;box-shadow:0 0 16px var(--accent)}
@@ -262,6 +279,7 @@
 </style>
 </head>
 <body>
+<a class="skip" href="#install">Skip to install</a>
 <div class="tilt-layer">
 
 <nav><div class="wrap nav-inner">
@@ -312,7 +330,7 @@
 </div></header>
 
 <!-- pi.dev stage: pinned demo panel (left) + scrolling editorial copy (right) -->
-<section class="stage-wrap" id="stage"><div class="wrap stage-grid">
+<section class="stage-wrap" id="stage"><h2 class="sr-only">How it works — naksha runs the team</h2><div class="wrap stage-grid">
   <div class="stage">
     <div class="stage-bar"><span class="live"></span> <span id="stagecap">NAKSHA — RUN THE TEAM</span></div>
     <div class="stage-body" id="stagebody"></div>
@@ -351,8 +369,8 @@
   </div>
   <div class="showcase">
     <div class="ba" id="ba" style="--x:52%">
-      <img class="before" src="before.png" alt="Raw, unstyled Account Settings form — the starting brief" draggable="false">
-      <img class="after" src="after.png" alt="naksha's redesigned dark Account Settings screen — the built result" draggable="false">
+      <img class="before" src="before.png" alt="Raw, unstyled Account Settings form — the starting brief" draggable="false" loading="lazy" decoding="async">
+      <img class="after" src="after.png" alt="naksha's redesigned dark Account Settings screen — the built result" draggable="false" loading="lazy" decoding="async">
       <div class="ba-div"></div>
       <div class="ba-grip">⇆</div>
       <span class="ba-tag bl">BEFORE</span>
@@ -599,11 +617,22 @@
       + `<div style="animation-delay:${s.lines.length*0.1}s"><span class="cur">▋</span></div>`;
     blocks.forEach((b,k)=>b.classList.toggle('active',k===i));
   }
-  renderStage(0);
-  // each copy block is ~one viewport tall; whichever crosses center is active and drives the panel
-  const sio=new IntersectionObserver(es=>{es.forEach(en=>{ if(en.isIntersecting) renderStage(+en.target.dataset.step); });},
-    {rootMargin:'-45% 0px -45% 0px'});
-  blocks.forEach(b=>sio.observe(b));
+  if(matchMedia('(max-width:860px)').matches){
+    // phone: the shared panel can't pin, so render each step's terminal inline under its own block
+    blocks.forEach((b,i)=>{ const s=STEPS[i]; if(!s) return;
+      const t=document.createElement('div'); t.className='stage-mini';
+      t.innerHTML=`<div class="sm-bar"><span class="live"></span> ${s.cap}</div>`+
+        `<div class="sm-body">${s.lines.map(l=>`<div>${l}</div>`).join('')}</div>`+
+        `<div class="sm-foot">${s.foot}</div>`;
+      b.appendChild(t);
+    });
+  } else {
+    renderStage(0);
+    // each copy block is ~one viewport tall; whichever crosses center is active and drives the panel
+    const sio=new IntersectionObserver(es=>{es.forEach(en=>{ if(en.isIntersecting) renderStage(+en.target.dataset.step); });},
+      {rootMargin:'-45% 0px -45% 0px'});
+    blocks.forEach(b=>sio.observe(b));
+  }
 
   // ---- crooked mode: naksha tilts its own page ----
   const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
