@@ -33,6 +33,7 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 const { spawnSync } = require('child_process');
+const pricing = require('./lib/pricing');
 
 const ROOT = path.join(__dirname, '..');
 const TIERS = ['structural', 'e2e', 'judge'];
@@ -456,10 +457,18 @@ function estimateTokens(text, charsPerToken) {
   return Math.ceil(text.length / (charsPerToken || 4));
 }
 
+// Model prices live in one place, meta/model-prices.json (shared with
+// /naksha-stats via scripts/lib/pricing.js). A --prices file may still carry its
+// own `models` (e.g. for tests); otherwise the shared table is used, with its
+// model-id normalisation and aliases.
 function priceFor(prices, model) {
-  const p = prices && prices.models && prices.models[model];
+  let p = prices && prices.models && prices.models[model];
+  if (!p && prices && prices.modelTable) {
+    const hit = pricing.resolveModel(prices.modelTable, model);
+    p = hit && hit.price;
+  }
   if (!p || !isNum(p.input) || !isNum(p.output)) {
-    throw new Error(`no price for model "${model}" in evals/prices.json — add it (with source and as_of) or pick another --model`);
+    throw new Error(`no price for model "${model}" in meta/model-prices.json — add it (with source and as_of) or pick another --model`);
   }
   return p;
 }
@@ -579,6 +588,43 @@ function buildJudgeInvocation(ev, candidate, opts) {
   return { cmd: claudeBin(opts.env), args, stdin: buildJudgePrompt(ev, candidate), cwd: opts.cwd };
 }
 
+// ─── Sandbox ─────────────────────────────────────────────────────────────────
+// Every paid call goes through scripts/lib/sandboxed-run.sh (profile:
+// evals/sandbox.json): under srt when it is installed; without srt only when
+// NAKSHA_ALLOW_UNSANDBOXED=1, and then still with CLAUDE_CONFIG_DIR and TMPDIR
+// contained in the eval's temp dir. Otherwise the run refuses before spending.
+
+const SANDBOX_SCRIPT = path.join(ROOT, 'scripts', 'lib', 'sandboxed-run.sh');
+const SANDBOX_EXIT = { USAGE: 64, NO_SRT: 69, PROFILE: 70, NOT_FOUND: 127 };
+
+function hasSrt(env) {
+  const dirs = String((env && env.PATH) || process.env.PATH || '').split(path.delimiter).filter(Boolean);
+  return dirs.some((d) => {
+    try {
+      fs.accessSync(path.join(d, 'srt'), fs.constants.X_OK);
+      return true;
+    } catch {
+      return false;
+    }
+  });
+}
+
+/** 'srt', 'unsandboxed' (explicitly allowed), or null (a paid run must refuse). */
+function sandboxMode(env) {
+  if (hasSrt(env)) return 'srt';
+  return (env && env.NAKSHA_ALLOW_UNSANDBOXED) === '1' ? 'unsandboxed' : null;
+}
+
+function sandboxed(inv, mode) {
+  return {
+    ...inv,
+    cmd: 'bash',
+    args: [SANDBOX_SCRIPT, '--eval-dir', inv.cwd, '--', inv.cmd, ...inv.args],
+    env: mode === 'unsandboxed' ? { NAKSHA_ALLOW_UNSANDBOXED: '1' } : {},
+    wrapped: true,
+  };
+}
+
 function describeInvocation(inv) {
   return `${[inv.cmd, ...inv.args].map(shellQuote).join(' ')} < <prompt: ${inv.stdin.length} chars>`;
 }
@@ -619,8 +665,14 @@ function invoke(inv) {
     encoding: 'utf-8',
     maxBuffer: 64 * 1024 * 1024,
     timeout: 20 * 60 * 1000,
+    env: inv.env ? { ...process.env, ...inv.env } : undefined,
   });
   if (res.error && !res.stdout) return { ok: false, spawned: res.error.code !== 'ENOENT', error: res.error.message };
+  // The sandbox wrapper's own failures mean claude never started, so nothing is charged.
+  if (inv.wrapped && Object.values(SANDBOX_EXIT).includes(res.status)) {
+    const why = res.status === SANDBOX_EXIT.NOT_FOUND ? `${inv.args[inv.args.indexOf('--') + 1]} not found` : (res.stderr || '').trim().slice(0, 400);
+    return { ok: false, spawned: false, error: `sandbox: ${why}` };
+  }
   const parsed = parseClaudeJson(res.stdout || '');
   if (res.error) return { ok: false, spawned: true, error: res.error.message, parsed };
   if (res.status !== 0) {
@@ -776,7 +828,7 @@ function runPaidEval(entry, ev, tier, ctx, remainingBudget) {
     const gen = entry.steps.find((s) => s.kind === 'generate');
     out.workdir = fs.mkdtempSync(path.join(os.tmpdir(), `naksha-eval-${ev.id}-`));
     const inv = buildE2EInvocation(ev, { model: gen.model, root: ctx.root, cwd: out.workdir, env: ctx.env, maxBudgetUsd: capLeft() });
-    const res = invoke(inv);
+    const res = invoke(sandboxed(inv, ctx.sandbox));
     out.spent += charge(res, gen.usd);
     if (!res.ok) {
       out.error = `generation failed: ${res.error}`;
@@ -803,7 +855,7 @@ function runPaidEval(entry, ev, tier, ctx, remainingBudget) {
   }
   if (!out.workdir) out.workdir = fs.mkdtempSync(path.join(os.tmpdir(), `naksha-judge-${ev.id}-`));
   const inv = buildJudgeInvocation(ev, candidate, { model: judgeStep.model, cwd: out.workdir, env: ctx.env, maxBudgetUsd: capLeft() });
-  const res = invoke(inv);
+  const res = invoke(sandboxed(inv, ctx.sandbox));
   out.spent += charge(res, judgeStep.usd);
   if (!res.ok) {
     out.error = `judge failed: ${res.error}`;
@@ -835,10 +887,11 @@ const USAGE = `Usage: node scripts/eval-runner.js [options]
   --filter <terms>  comma-separated: eval id, command (/design or design), or name substring
   --dry-run         list what would run and the estimated cost; never executes
   --budget <usd>    run budget; refuse (exit 3) when the estimate exceeds it
-  --model <id>      model for the tier (e2e generation or judge); must be in evals/prices.json
+  --model <id>      model for the tier (e2e generation or judge); must be in meta/model-prices.json
   --json            print one JSON report instead of text
   --evals <path>    eval spec file (default evals/evals.json)
-  --prices <path>   price table (default evals/prices.json)
+  --prices <path>   eval defaults + token heuristics (default evals/prices.json); model
+                    prices come from meta/model-prices.json unless this file has "models"
   --keep-workdirs   keep paid-tier temp dirs for inspection
   -h, --help        show this help
 
@@ -983,6 +1036,15 @@ function main(argv, env, io) {
       return finish(EXIT.USAGE);
     }
   }
+  if (prices && !(prices.models && Object.keys(prices.models).length)) {
+    try {
+      prices.modelTable = pricing.loadPrices();
+    } catch (e) {
+      report.errors.push(e.message);
+      say(`  FAIL  ${e.message}`);
+      return finish(EXIT.USAGE);
+    }
+  }
   const ctx = { root, prices: prices || { defaults: {}, models: {} }, model: opts.model, env };
 
   let plan;
@@ -1043,7 +1105,10 @@ function main(argv, env, io) {
   say('');
   say(`  estimate: ${usdString(total)} for ${plan.length} eval(s)${isNum(runBudget) ? ` (run budget ${usdString(runBudget)})` : ''}`);
   if (opts.tier !== 'structural') {
-    say(`  prices: evals/prices.json as of ${prices.as_of}; token heuristics are ${est.status || 'unverified'} (chars/token ${est.chars_per_token}, ${est.e2e_turns} e2e turn(s))`);
+    const priceSrc = prices.modelTable
+      ? `${path.relative(ROOT, prices.modelTable.__path) || prices.modelTable.__path} as of ${prices.modelTable.as_of}`
+      : `${path.basename(pricesPath)} as of ${prices.as_of}`;
+    say(`  prices: ${priceSrc}; token heuristics are ${est.status || 'unverified'} (chars/token ${est.chars_per_token}, ${est.e2e_turns} e2e turn(s))`);
   }
 
   const violations = budgetViolations(plan, runBudget);
@@ -1056,7 +1121,8 @@ function main(argv, env, io) {
       say('dry run: REFUSED — the estimate exceeds a budget (raise --budget or narrow --filter)');
       return finish(EXIT.BUDGET);
     }
-    say(`dry run: OK — nothing was executed${opts.tier !== 'structural' && !gate.allowed ? `; a real run also needs: ${gate.reasons.join('; ')}` : ''}`);
+    const needs = opts.tier === 'structural' ? [] : [...gate.reasons, ...(sandboxMode(env) ? [] : ['srt installed (or NAKSHA_ALLOW_UNSANDBOXED=1)'])];
+    say(`dry run: OK — nothing was executed${needs.length ? `; a real run also needs: ${needs.join('; ')}` : ''}`);
     return finish(EXIT.OK);
   }
 
@@ -1076,7 +1142,8 @@ function main(argv, env, io) {
       }
     }
     if (violations.length) say('\nnote: a real run would refuse (exit 3) because the estimate exceeds a budget.');
-    say('\nSet NAKSHA_EVALS_PAID=1 and ANTHROPIC_API_KEY to execute.');
+    say(`\nEach call runs through scripts/lib/sandboxed-run.sh; ${hasSrt(env) ? 'srt is installed' : 'srt is not installed, so a real run refuses unless NAKSHA_ALLOW_UNSANDBOXED=1'}.`);
+    say('Set NAKSHA_EVALS_PAID=1 and ANTHROPIC_API_KEY to execute.');
     return finish(EXIT.OK);
   }
 
@@ -1084,6 +1151,18 @@ function main(argv, env, io) {
     say('\nREFUSED — the estimate exceeds a budget (raise --budget or narrow --filter)');
     return finish(EXIT.BUDGET);
   }
+
+  ctx.sandbox = sandboxMode(env);
+  if (!ctx.sandbox) {
+    report.errors.push('srt (Anthropic sandbox-runtime) is not installed; paid evals run only sandboxed');
+    say('\nREFUSED — paid evals run only inside the sandbox (scripts/lib/sandboxed-run.sh, evals/sandbox.json), and srt is not installed.');
+    say('  Install it:  npm install -g @anthropic-ai/sandbox-runtime  (Linux also needs bubblewrap, socat, ripgrep; macOS needs ripgrep)');
+    say('  Or accept the risk for this run:  NAKSHA_ALLOW_UNSANDBOXED=1');
+    return finish(EXIT.USAGE);
+  }
+  say(ctx.sandbox === 'srt'
+    ? '  sandbox: srt with evals/sandbox.json (network: api.anthropic.com only; writes: the eval temp dir)'
+    : '  sandbox: WARNING — NAKSHA_ALLOW_UNSANDBOXED=1 and srt is missing; only CLAUDE_CONFIG_DIR and TMPDIR are contained');
 
   // ── Paid execution ──
   let spent = 0;
@@ -1119,6 +1198,8 @@ function main(argv, env, io) {
 }
 
 module.exports = {
+  sandboxMode,
+  sandboxed,
   TIERS,
   CHECK_TYPES,
   EXIT,

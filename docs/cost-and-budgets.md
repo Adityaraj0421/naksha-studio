@@ -35,7 +35,7 @@ Claude Code writes one line per content block, so one API response can appear on
 
 ## Prices
 
-Prices come from `meta/model-prices.json` (format `naksha-model-prices/1`, loaded by `scripts/lib/pricing.js`):
+Prices come from `meta/model-prices.json` (format `naksha-model-prices/1`, loaded by `scripts/lib/pricing.js`). It is the only price table in naksha: the eval runner (`scripts/eval-runner.js`) reads the same file.
 
 ```json
 {

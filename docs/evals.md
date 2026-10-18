@@ -85,7 +85,7 @@ Fixtures that are empty or still begin with the `# FIXTURE NEEDED` sentinel are 
 
 ## Costs and budgets
 
-`evals/prices.json` pins per-model $/MTok input and output prices. Each price records its `source` and `as_of` date and is marked `sourced` or `placeholder`. The runner never fetches prices. Picking a model with `--model` that is not in the table is an error (exit 2), not a guess.
+Model prices come from `meta/model-prices.json`, the one pinned $/MTok table naksha uses for evals and for `/naksha-stats` (see [cost-and-budgets.md](cost-and-budgets.md#prices)). Each price records its `source` and `as_of` date; values nobody could verify are marked `placeholder`. The runner never fetches prices. Picking a model with `--model` that is not in the table is an error (exit 2), not a guess. `evals/prices.json` holds only the eval settings: default models, the run budget and the token heuristics.
 
 Estimates (`--dry-run`, and the check before any paid run):
 
@@ -116,9 +116,9 @@ node scripts/eval-runner.js --tier judge --dry-run --json    # machine-readable 
 | `--filter` | Comma-separated eval ids, commands (`/design` or `design`), or name substrings |
 | `--dry-run` | List what would run and its estimated cost. Never executes |
 | `--budget <usd>` | Run budget |
-| `--model <id>` | Model for the tier: generation for e2e, grader for judge. Must be in `prices.json` |
+| `--model <id>` | Model for the tier: generation for e2e, grader for judge. Must be in `meta/model-prices.json` |
 | `--json` | One JSON report on stdout |
-| `--evals`, `--prices` | Alternative spec or price files. A `prices.json` next to the spec is picked up automatically |
+| `--evals`, `--prices` | Alternative spec or eval-settings files. A `prices.json` next to the spec is picked up automatically; it may carry its own `models` prices to override the shared table |
 | `--keep-workdirs` | Keep the paid-tier temp dirs for inspection |
 
 Exit codes: `0` pass or nothing to do, `1` an eval or the spec failed, `2` usage error, `3` refused or stopped by a budget.
@@ -129,6 +129,8 @@ Exit codes: `0` pass or nothing to do, `1` an eval or the spec failed, `2` usage
 | `ANTHROPIC_API_KEY` | Required for paid tiers. Judge calls use `claude --bare`, which reads only this key |
 | `NAKSHA_EVALS_BUDGET` | Default run budget in USD |
 | `NAKSHA_EVALS_CLAUDE_BIN` | Path to the `claude` binary. Tests point this at a stub |
+| `NAKSHA_ALLOW_UNSANDBOXED=1` | Run paid calls without `srt` (see Sandbox below). Only `CLAUDE_CONFIG_DIR` and `TMPDIR` are contained |
+| `NAKSHA_SANDBOX_EXTRA_DOMAINS` | Comma-separated hosts to add to the sandbox's network allowlist, logged on each run |
 
 ### What the paid tiers invoke
 
@@ -138,6 +140,16 @@ Exit codes: `0` pass or nothing to do, `1` an eval or the spec failed, `2` usage
   `claude -p --bare --output-format json --model <m> --tools "" --no-session-persistence --json-schema <verdict schema> [--max-budget-usd <cap>]`
 
   The grader returns `{"assertions":[{"name","pass","reason"}]}`. An assertion with no verdict counts as failing.
+
+### Sandbox
+
+Every paid call runs through `scripts/lib/sandboxed-run.sh --eval-dir <temp dir> -- claude …`, using the profile in `evals/sandbox.json`:
+
+- With `srt` (Anthropic's sandbox runtime, npm package `@anthropic-ai/sandbox-runtime`) installed, the call runs under it: network only to `api.anthropic.com` (plus the host of `ANTHROPIC_BASE_URL` and any `NAKSHA_SANDBOX_EXTRA_DOMAINS`), writes only inside the eval's temp dir, and common credential stores (`~/.ssh`, `~/.aws`, …) unreadable.
+- `CLAUDE_CONFIG_DIR` and `TMPDIR` point inside the temp dir and Claude Code's non-essential traffic is off. Because the config dir is fresh, stored logins are not visible: `ANTHROPIC_API_KEY` must be set.
+- Without `srt`, the runner refuses (exit 2) before any paid call, unless `NAKSHA_ALLOW_UNSANDBOXED=1`. Then it warns and runs with only the env containment above.
+
+Install: `npm install -g @anthropic-ai/sandbox-runtime` (Linux also needs bubblewrap, socat and ripgrep; macOS needs ripgrep).
 
 ## Example
 

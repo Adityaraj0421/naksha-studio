@@ -254,6 +254,21 @@ test('cost math uses the pinned price table', () => {
   assert.equal(runner.estimateTokens('abcdefghi', 4), 3);
 });
 
+test('priceFor: without its own models, uses the shared meta/model-prices.json (with aliases)', () => {
+  const shared = require('../lib/pricing').loadPrices();
+  const prices = { defaults: {}, modelTable: shared };
+  assert.equal(runner.priceFor(prices, 'claude-sonnet-5-5').input, shared.models['claude-sonnet-5-5'].input);
+  assert.equal(runner.priceFor(prices, 'claude-opus-4-0').output, shared.models['claude-opus-4'].output, 'alias resolves');
+  assert.throws(() => runner.priceFor(prices, 'not-a-model'), /meta\/model-prices\.json/);
+});
+
+test('evals/prices.json no longer duplicates model prices', () => {
+  const evalSettings = JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', 'evals', 'prices.json'), 'utf8'));
+  assert.equal(evalSettings.models, undefined);
+  const shared = require('../lib/pricing').loadPrices();
+  for (const m of [evalSettings.defaults.e2e_model, evalSettings.defaults.judge_model]) assert.ok(shared.models[m], `${m} is priced in the shared table`);
+});
+
 test('dry run estimates tokens and $ per eval', () => {
   const root = makeRoot(baseEvals());
   const ctx = { root, prices: PRICES };
@@ -356,7 +371,7 @@ for (const tier of ['e2e', 'judge']) {
 test('dry run never executes even with the env set', () => {
   const root = makeRoot(baseEvals());
   const fake = makeFakeClaude(root);
-  const env = { NAKSHA_EVALS_PAID: '1', ANTHROPIC_API_KEY: 'k', NAKSHA_EVALS_CLAUDE_BIN: fake.bin };
+  const env = { NAKSHA_EVALS_PAID: '1', ANTHROPIC_API_KEY: 'k', NAKSHA_ALLOW_UNSANDBOXED: '1', NAKSHA_EVALS_CLAUDE_BIN: fake.bin };
   assert.equal(run(['--evals', path.join(root, 'evals', 'evals.json'), '--tier', 'judge', '--dry-run'], env).code, 0);
   assert.deepEqual(readCalls(fake.log), []);
 });
@@ -364,7 +379,7 @@ test('dry run never executes even with the env set', () => {
 test('gated-open run refuses before executing when over budget', () => {
   const root = makeRoot(baseEvals());
   const fake = makeFakeClaude(root);
-  const env = { NAKSHA_EVALS_PAID: '1', ANTHROPIC_API_KEY: 'k', NAKSHA_EVALS_CLAUDE_BIN: fake.bin };
+  const env = { NAKSHA_EVALS_PAID: '1', ANTHROPIC_API_KEY: 'k', NAKSHA_ALLOW_UNSANDBOXED: '1', NAKSHA_EVALS_CLAUDE_BIN: fake.bin };
   assert.equal(run(['--evals', path.join(root, 'evals', 'evals.json'), '--tier', 'judge', '--budget', '0.0001'], env).code, 3);
   assert.deepEqual(readCalls(fake.log), []);
 });
@@ -381,7 +396,7 @@ test('e2e tier: runs claude -p in a temp dir and applies checks to output and fi
   ];
   const root = makeRoot(evals);
   const fake = makeFakeClaude(root);
-  const env = { NAKSHA_EVALS_PAID: '1', ANTHROPIC_API_KEY: 'k', NAKSHA_EVALS_CLAUDE_BIN: fake.bin };
+  const env = { NAKSHA_EVALS_PAID: '1', ANTHROPIC_API_KEY: 'k', NAKSHA_ALLOW_UNSANDBOXED: '1', NAKSHA_EVALS_CLAUDE_BIN: fake.bin };
   const r = runJson(['--evals', path.join(root, 'evals', 'evals.json'), '--tier', 'e2e', '--budget', '2'], env);
   assert.equal(r.code, 0, JSON.stringify(r.report, null, 2));
   assert.equal(r.report.evals.length, 1, 'only evals with e2e checks run');
@@ -408,7 +423,7 @@ test('judge tier: grades fixture with a judge prompt and scores verdicts', () =>
   evals[0].threshold = 0.75;
   const root = makeRoot(evals);
   const fake = makeFakeClaude(root, { judgeFail: ['has-footer', 'has-card'] });
-  const env = { NAKSHA_EVALS_PAID: '1', ANTHROPIC_API_KEY: 'k', NAKSHA_EVALS_CLAUDE_BIN: fake.bin };
+  const env = { NAKSHA_EVALS_PAID: '1', ANTHROPIC_API_KEY: 'k', NAKSHA_ALLOW_UNSANDBOXED: '1', NAKSHA_EVALS_CLAUDE_BIN: fake.bin };
   const r = runJson(['--evals', path.join(root, 'evals', 'evals.json'), '--tier', 'judge', '--budget', '2'], env);
   const foo = r.report.evals.find((e) => e.id === 0);
   const bar = r.report.evals.find((e) => e.id === 1);
@@ -454,7 +469,7 @@ test('validateSpec: a missing explicit fixture is an error', () => {
 test('run stops with exit 3 once reported spend exhausts the run budget', () => {
   const root = makeRoot(baseEvals());
   const fake = makeFakeClaude(root, { judgeCost: 9 });
-  const env = { NAKSHA_EVALS_PAID: '1', ANTHROPIC_API_KEY: 'k', NAKSHA_EVALS_CLAUDE_BIN: fake.bin };
+  const env = { NAKSHA_EVALS_PAID: '1', ANTHROPIC_API_KEY: 'k', NAKSHA_ALLOW_UNSANDBOXED: '1', NAKSHA_EVALS_CLAUDE_BIN: fake.bin };
   const r = runJson(['--evals', path.join(root, 'evals', 'evals.json'), '--tier', 'judge', '--budget', '5'], env);
   assert.equal(r.code, 3);
   assert.equal(r.report.evals[1].skipped, 'run budget exhausted');
@@ -463,11 +478,45 @@ test('run stops with exit 3 once reported spend exhausts the run budget', () => 
 
 test('a missing claude binary fails the eval without charging the estimate', () => {
   const root = makeRoot(baseEvals());
-  const env = { NAKSHA_EVALS_PAID: '1', ANTHROPIC_API_KEY: 'k', NAKSHA_EVALS_CLAUDE_BIN: path.join(root, 'no-such-claude') };
+  const env = { NAKSHA_EVALS_PAID: '1', ANTHROPIC_API_KEY: 'k', NAKSHA_ALLOW_UNSANDBOXED: '1', NAKSHA_EVALS_CLAUDE_BIN: path.join(root, 'no-such-claude') };
   const r = runJson(['--evals', path.join(root, 'evals', 'evals.json'), '--tier', 'judge', '--filter', '0'], env);
   assert.equal(r.code, 1);
   assert.match(r.report.evals[0].error, /judge failed/);
   assert.equal(r.report.spent_usd, 0);
+});
+
+test('paid run refuses before calling claude when srt is missing and unsandboxed is not allowed', () => {
+  const root = makeRoot(baseEvals());
+  const fake = makeFakeClaude(root);
+  const noSrt = fs.mkdtempSync(path.join(os.tmpdir(), 'naksha-nosrt-'));
+  const env = { NAKSHA_EVALS_PAID: '1', ANTHROPIC_API_KEY: 'k', NAKSHA_EVALS_CLAUDE_BIN: fake.bin, PATH: noSrt };
+  const r = run(['--evals', path.join(root, 'evals', 'evals.json'), '--tier', 'judge'], env);
+  assert.equal(r.code, 2);
+  assert.match(r.out, /REFUSED — paid evals run only inside the sandbox/);
+  assert.match(r.out, /NAKSHA_ALLOW_UNSANDBOXED=1/);
+  assert.deepEqual(readCalls(fake.log), []);
+  fs.rmSync(noSrt, { recursive: true, force: true });
+});
+
+test('paid calls go through sandboxed-run.sh, which contains config and temp dirs in the eval dir', () => {
+  const inv = runner.sandboxed({ cmd: 'claude', args: ['-p', 'x y'], stdin: '', cwd: '/tmp/e' }, 'srt');
+  assert.equal(inv.cmd, 'bash');
+  assert.match(inv.args[0], /scripts[\\/]lib[\\/]sandboxed-run\.sh$/);
+  assert.deepEqual(inv.args.slice(1), ['--eval-dir', '/tmp/e', '--', 'claude', '-p', 'x y']);
+  assert.deepEqual(inv.env, {}, 'srt mode does not grant the unsandboxed escape hatch');
+  assert.deepEqual(runner.sandboxed(inv, 'unsandboxed').env, { NAKSHA_ALLOW_UNSANDBOXED: '1' });
+  assert.equal(runner.sandboxMode({ PATH: '/nonexistent' }), null);
+  assert.equal(runner.sandboxMode({ PATH: '/nonexistent', NAKSHA_ALLOW_UNSANDBOXED: '1' }), 'unsandboxed');
+
+  // End to end with the fake claude: it runs with CLAUDE_CONFIG_DIR inside its own eval dir.
+  const root = makeRoot(baseEvals());
+  const fake = makeFakeClaude(root);
+  const env = { NAKSHA_EVALS_PAID: '1', ANTHROPIC_API_KEY: 'k', NAKSHA_ALLOW_UNSANDBOXED: '1', NAKSHA_EVALS_CLAUDE_BIN: fake.bin };
+  const r = runJson(['--evals', path.join(root, 'evals', 'evals.json'), '--tier', 'e2e', '--filter', '0', '--keep-workdirs'], env);
+  const wd = r.report.evals[0].workdir;
+  assert.ok(wd && fs.existsSync(path.join(wd, '.claude-config')), 'CLAUDE_CONFIG_DIR was created inside the eval dir');
+  assert.ok(fs.existsSync(path.join(wd, '.naksha-sandbox', 'srt-settings.json')), 'the srt profile was rendered');
+  fs.rmSync(wd, { recursive: true, force: true });
 });
 
 test('judge prompt lists only judge-tier assertions and fences the candidate', () => {
