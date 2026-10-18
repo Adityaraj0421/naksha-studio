@@ -1,6 +1,6 @@
 ---
-description: "Generate design tokens, theme configuration, or extract a design system from existing code or Figma files."
-argument-hint: "[brand color, Figma URL, or 'extract from project']"
+description: "Generate design tokens, theme configuration, or extract a design system from existing code, Figma files, or a DESIGN.md — and persist it as .naksha/design-system/MASTER.md."
+argument-hint: "[brand color, Figma URL, 'extract from project', or path/to/DESIGN.md] [--export design-md|dtcg]"
 allowed-tools: ["Read", "Write", "Edit", "Bash", "Glob", "Grep", "mcp__*"]
 ---
 
@@ -40,6 +40,8 @@ Before running any mode, read `.naksha/project.json` (search up to 3 directory l
 - `component_patterns` → for each named pattern, ensure the generated component tokens match the recorded description. If a `card-layout` pattern exists with `"16px padding, 8px radius"`, the generated `--card-padding` and `--card-radius` tokens must match.
 
 **If no v5 fields found**: proceed using brand color and tokenFormat only (v4 behavior — unchanged).
+
+**Existing design system:** if `.naksha/design-system/MASTER.md` exists, it is the project's current system. Modes A–D extend or revise it instead of starting from nothing. Say which tokens you changed.
 
 ### Mode A: Generate Tokens from Scratch
 Trigger: User provides a brand color, brand name, or says "create a design system"
@@ -96,6 +98,24 @@ Trigger: User asks for components, component library, or variants
 2. Each component documented with HTML examples and token usage
 3. All components use the token system — no hardcoded values
 
+### Mode E: Import a DESIGN.md
+Trigger: User passes a path to a `DESIGN.md` file, or says "import DESIGN.md" / "use our DESIGN.md". (If you only notice a `DESIGN.md` at the project root, mention it in the output and offer this mode; do not switch modes on your own.)
+
+[DESIGN.md](https://github.com/google-labs-code/design.md) is an open format that pairs YAML design tokens with prose rationale. Treat its tokens as the token source instead of generating new values:
+
+1. Validate it first:
+   ```bash
+   node ${CLAUDE_PLUGIN_ROOT}/scripts/design-md.js lint path/to/DESIGN.md
+   ```
+   Exit 1 means errors such as broken `{token}` references, invalid colours, or text/background pairs below WCAG AA. List them and ask whether to fix them in the file or carry on.
+2. Generate the CSS custom properties from it, without retyping values by hand:
+   ```bash
+   node ${CLAUDE_PLUGIN_ROOT}/scripts/design-md.js export --to css path/to/DESIGN.md > tokens.css
+   ```
+   Use `--to tailwind` (Tailwind v4 `@theme`) or `--to tailwind-v3` when `tokenFormat` is `tailwind`.
+3. Read the DESIGN.md prose (Overview, Do's and Don'ts and the rest) and carry its rules into the component guidance. The tokens are normative; the prose explains how to apply them.
+4. Fill gaps the file doesn't cover (dark mode, states, breakpoints) with the 3-tier approach from Mode A, and label those tokens as additions rather than imports.
+
 ## Stitch Design System Export (Optional)
 
 After token generation (any mode), if `$ARGUMENTS` contains `--stitch` OR the user says "push to Stitch" / "sync to Stitch":
@@ -146,6 +166,35 @@ After token generation (any mode), if `$ARGUMENTS` contains `--stitch` OR the us
 
 If Stitch MCP is unavailable, skip silently.
 
+## Persist as MASTER.md (DESIGN.md format)
+
+After any mode, if the project has a `.naksha/` directory, save the design system as `.naksha/design-system/MASTER.md`. It is a standard DESIGN.md file, so other agent tools can read it as well. `/design` reads it on every run.
+
+1. Convert the generated tokens, or copy the imported DESIGN.md (Mode E):
+   ```bash
+   node ${CLAUDE_PLUGIN_ROOT}/scripts/design-md.js from-tokens tokens.css --name "[project name]" --out .naksha/design-system/MASTER.md
+   ```
+   `from-tokens` also accepts a DTCG `tokens.json`. It imports the top-level `:root` variables only and reports anything it skipped, such as dark-mode overrides or shadows. Put skipped decisions into the prose.
+2. Replace the generated placeholder notes with real rationale: the Creative Director's direction under Overview, palette roles under Colors, and the rules under Do's and Don'ts.
+3. Run `node ${CLAUDE_PLUGIN_ROOT}/scripts/design-md.js lint .naksha/design-system/MASTER.md` and fix any errors before finishing. Keep MASTER.md valid on its own, with no references that only resolve through brand defaults.
+4. If MASTER.md already exists, do not overwrite it silently. Summarize which tokens change and update it only after the user confirms.
+
+**Per-page overrides.** When a page needs to deviate (for example, a calmer checkout or a denser dashboard), write only the differences to `.naksha/design-system/pages/<page>.md`, using the same DESIGN.md format. A partial token set is fine. A `null` value removes a master token, and component properties merge one at a time. Page names are lowercase slugs (`checkout`, `pricing`, `settings-billing`).
+
+**Precedence:** page override > MASTER.md > brand defaults (`brand.primary`, `brand.secondary` in `.naksha/project.json`). Check the effective system for a page with:
+```bash
+node ${CLAUDE_PLUGIN_ROOT}/scripts/design-md.js resolve --page checkout          # JSON with per-token provenance
+node ${CLAUDE_PLUGIN_ROOT}/scripts/design-md.js lint --page checkout             # contrast and references after merging
+```
+
+## Export (optional)
+
+If `$ARGUMENTS` contains `--export design-md`, or the user asks for a DESIGN.md, write `DESIGN.md` at the project root. Copy MASTER.md, or run `resolve --format md` to bake in a page override. If it contains `--export dtcg`, or the user asks for W3C/DTCG tokens, run:
+```bash
+node ${CLAUDE_PLUGIN_ROOT}/scripts/design-md.js export --to dtcg .naksha/design-system/MASTER.md > tokens.json
+```
+The output follows the DTCG Format Module 2025.10. Anything DTCG cannot express, such as multi-value padding or `em` letter-spacing without a font size, is preserved under `$extensions["naksha.design-md"]`. See `${CLAUDE_PLUGIN_ROOT}/docs/design-md.md` for the supported subset.
+
 ## Output
 
 Always output tokens as CSS custom properties. Include a usage example showing how to apply them.
@@ -158,12 +207,14 @@ If `.naksha/memory.md` exists: append:
 ```
 [{ISO timestamp}] /design-system: {token format used}, design system path: {output file path if written}
 ```
+If MASTER.md or a page override was written, add a second line, for example: `[{ISO timestamp}] /design-system: MASTER.md updated (12 colors, 6 type levels)`.
 If `.naksha/project.json` exists: update `tokenFormat`, `designSystemPath`, and `updatedAt` fields.
 
 ## What's Next
 
 After generating a design system:
 - `/brand-kit` — generate a complete brand kit with visual reference page
-- `/design` — build a page using the new token system
+- `/design` — build a page using the new token system (it reads MASTER.md and any matching page override automatically)
+- `/design-md` — lint, import, or export DESIGN.md files and manage page overrides
 - `/figma-create` — create the design system as Figma styles and variables
 - `/figma-sync` — keep code tokens in sync with Figma over time

@@ -1,0 +1,27 @@
+/* Lumen Desk tokens — CSS custom properties fixture */
+:root {
+  --color-brand: #4f46e5;
+  --color-ink: #111827;
+  --color-paper: #ffffff;
+  --text-primary: var(--color-ink);
+  --space-2: 0.5rem;
+  --space-4: 1rem;
+  --space-0: 0;
+  --radius-md: 6px;
+  --font-sans: Inter, system-ui, sans-serif;
+  --text-sm: 0.875rem;
+  --line-height-sm: 1.25;
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.05);
+  --btn-primary-bg: var(--color-brand);
+  --btn-primary-text: var(--color-paper);
+  --btn-padding-x: var(--space-4);
+  --btn-padding-y: var(--space-2);
+  --card-radius: var(--radius-md);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-paper: #0b0f19;
+    --color-ink: #f3f4f6;
+  }
+}
