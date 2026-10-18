@@ -37,7 +37,9 @@ const TARGETS = [
   { file: 'README.md', roles: 'readme-grid' },
 ];
 
-const read = (p) => fs.readFileSync(path.join(ROOT, p), 'utf-8');
+// Normalised to LF so a CRLF checkout (Git for Windows, core.autocrlf) matches the same regions.
+const readRaw = (p) => fs.readFileSync(path.join(ROOT, p), 'utf-8');
+const read = (p) => readRaw(p).replace(/\r\n/g, '\n');
 const roster = JSON.parse(read('adapters/roles.json')).roles;
 const stats = JSON.parse(read('meta/stats.json'));
 const knowledgeFloor = (Math.floor(stats.knowledge_lines / 1000) * 1000).toLocaleString('en-US');
@@ -155,7 +157,9 @@ for (const adapter of TARGETS) {
   }
   if (after !== before) {
     stale.push(adapter.file);
-    if (!CHECK) fs.writeFileSync(path.join(ROOT, adapter.file), after);
+    // Keep the file's own line endings so a Windows checkout doesn't show every line as changed.
+    const crlf = readRaw(adapter.file).includes('\r\n');
+    if (!CHECK) fs.writeFileSync(path.join(ROOT, adapter.file), crlf ? after.replace(/\n/g, '\r\n') : after);
   }
 }
 

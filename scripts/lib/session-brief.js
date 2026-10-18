@@ -213,7 +213,8 @@ function recentDesignFiles(root, limit) {
   const add = (abs) => {
     try {
       const st = fs.lstatSync(abs);
-      if (st.isFile()) found.push({ rel: path.relative(root, abs), mtime: st.mtimeMs });
+      // Forward slashes on every OS: the brief is read back by Claude, not opened from here.
+      if (st.isFile()) found.push({ rel: path.relative(root, abs).split(path.sep).join('/'), mtime: st.mtimeMs });
     } catch (_) { /* skip */ }
   };
   add(path.join(root, 'design-output.html'));

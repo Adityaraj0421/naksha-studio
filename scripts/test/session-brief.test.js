@@ -151,7 +151,13 @@ test('PreCompact: replaces a planted symlink instead of writing through it', (t)
   writeNaksha(dir, PROJECT, MEMORY);
   const victim = path.join(path.dirname(dir), 'victim.txt');
   fs.writeFileSync(victim, 'untouched');
-  fs.symlinkSync(victim, path.join(dir, '.naksha', 'session-brief.md'));
+  try {
+    fs.symlinkSync(victim, path.join(dir, '.naksha', 'session-brief.md'));
+  } catch (e) {
+    // Windows without Developer Mode or admin rights can't create symlinks.
+    if (e.code === 'EPERM') return t.skip('symlinks need Developer Mode or admin rights on Windows');
+    throw e;
+  }
   runHook(PRECOMPACT, dir, { hook_event_name: 'PreCompact' });
   assert.equal(fs.readFileSync(victim, 'utf8'), 'untouched');
   assert.equal(fs.lstatSync(path.join(dir, '.naksha', 'session-brief.md')).isSymbolicLink(), false);
@@ -256,7 +262,11 @@ test('SessionStart: memory found from a subdirectory via the hook cwd field', (t
   assert.match(ctx, /Naksha project memory: Lumina/);
 });
 
-test('Both hooks degrade gracefully when node is not on PATH', (t) => {
+// The PATH is built by symlinking the system's coreutils, which on Windows are MSYS paths
+// (/usr/bin/bash) that Node can't link.
+test('Both hooks degrade gracefully when node is not on PATH', {
+  skip: process.platform === 'win32' && 'needs a POSIX PATH of symlinked coreutils',
+}, (t) => {
   const dir = tempProject(t);
   writeNaksha(dir, PROJECT, MEMORY);
   // A PATH holding only the coreutils the scripts use, without node.

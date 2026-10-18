@@ -115,6 +115,12 @@ test('fast mode, long-context tiers, placeholders, synthetic and unknown models'
 // ─── parsing ──────────────────────────────────────────────────────────────────
 
 test('encodes project paths the way Claude Code names transcript folders', () => {
+  if (process.platform === 'win32') {
+    // e.g. ~/.claude/projects/C--Users-me-Desktop-naksha-studio
+    assert.equal(stats.encodeProjectPath('C:\\Users\\me\\Desktop\\naksha-studio'), 'C--Users-me-Desktop-naksha-studio');
+    assert.equal(stats.encodeProjectPath('C:\\a\\b.c_d e'), 'C--a-b-c-d-e');
+    return;
+  }
   assert.equal(stats.encodeProjectPath('/home/user/naksha-studio'), '-home-user-naksha-studio');
   assert.equal(stats.encodeProjectPath('/a/b.c_d e'), '-a-b-c-d-e');
 });

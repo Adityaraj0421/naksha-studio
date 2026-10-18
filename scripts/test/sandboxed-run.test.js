@@ -14,6 +14,11 @@ const REPO = path.resolve(__dirname, '..', '..');
 const RUN = path.join(REPO, 'scripts', 'lib', 'sandboxed-run.sh');
 const PROFILE = path.join(REPO, 'evals', 'sandbox.json');
 
+// setup() builds a PATH by symlinking the system's bash and coreutils. On Windows those are
+// MSYS paths (/usr/bin/bash) that Node can't link, and srt itself runs only on macOS/Linux.
+const POSIX_ONLY = process.platform === 'win32' && 'needs a POSIX PATH of symlinked tools; the eval sandbox runs on macOS/Linux only';
+const posixTest = (name, fn) => test(name, { skip: POSIX_ONLY }, fn);
+
 // A temp area with an eval dir (path has spaces) and a PATH that holds only
 // the tools the helper needs, so a real srt on the machine can't leak in.
 function setup(t, { withStubSrt = false } = {}) {
@@ -55,7 +60,7 @@ test('profile: srt block has the keys srt requires and only the Anthropic API', 
   assert.equal(p.env.CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC, '1');
 });
 
-test('refuses to run when srt is missing and unsandboxed runs are not allowed', (t) => {
+posixTest('refuses to run when srt is missing and unsandboxed runs are not allowed', (t) => {
   const s = setup(t);
   const marker = path.join(s.base, 'ran');
   const res = run(['--eval-dir', s.evalDir, '--', 'bash', '-c', `echo > "${marker}"`], s.env);
@@ -65,7 +70,7 @@ test('refuses to run when srt is missing and unsandboxed runs are not allowed', 
   assert.equal(fs.existsSync(marker), false, 'command must not run');
 });
 
-test('NAKSHA_ALLOW_UNSANDBOXED=1 runs the command with contained env and a warning', (t) => {
+posixTest('NAKSHA_ALLOW_UNSANDBOXED=1 runs the command with contained env and a warning', (t) => {
   const s = setup(t);
   const res = run(['--eval-dir', s.evalDir, '--', 'bash', '-c', 'printf "%s|%s|%s" "$CLAUDE_CONFIG_DIR" "$TMPDIR" "$1"; exit 7', '_', 'arg with spaces'],
     s.env, { NAKSHA_ALLOW_UNSANDBOXED: '1' });
@@ -76,7 +81,7 @@ test('NAKSHA_ALLOW_UNSANDBOXED=1 runs the command with contained env and a warni
   assert.ok(fs.statSync(path.join(real, 'tmp')).isDirectory());
 });
 
-test('uses srt with a rendered settings file when srt is on PATH', (t) => {
+posixTest('uses srt with a rendered settings file when srt is on PATH', (t) => {
   const s = setup(t, { withStubSrt: true });
   const res = run(['--eval-dir', s.evalDir, '--', 'bash', '-c', 'echo sandboxed "$1"', '_', 'a b'], s.env);
   assert.equal(res.status, 0, res.stderr);
@@ -94,7 +99,7 @@ test('uses srt with a rendered settings file when srt is on PATH', (t) => {
   assert.deepEqual(settings.network.allowedDomains, ['api.anthropic.com']);
 });
 
-test('allowlist additions come only from ANTHROPIC_BASE_URL and NAKSHA_SANDBOX_EXTRA_DOMAINS', (t) => {
+posixTest('allowlist additions come only from ANTHROPIC_BASE_URL and NAKSHA_SANDBOX_EXTRA_DOMAINS', (t) => {
   const s = setup(t);
   const res = run(['--eval-dir', s.evalDir, '--print-settings'], s.env, {
     ANTHROPIC_BASE_URL: 'https://llm-gateway.example.com:8443/v1',
@@ -108,7 +113,7 @@ test('allowlist additions come only from ANTHROPIC_BASE_URL and NAKSHA_SANDBOX_E
   assert.match(res.stderr, /\+ fonts\.googleapis\.com/);
 });
 
-test('refuses overly broad eval dirs', (t) => {
+posixTest('refuses overly broad eval dirs', (t) => {
   const s = setup(t);
   for (const dir of ['/', s.env.HOME, REPO, path.dirname(REPO)]) {
     const res = run(['--eval-dir', dir, '--', 'true'], s.env, { NAKSHA_ALLOW_UNSANDBOXED: '1' });
@@ -117,7 +122,7 @@ test('refuses overly broad eval dirs', (t) => {
   }
 });
 
-test('usage errors exit 64', (t) => {
+posixTest('usage errors exit 64', (t) => {
   const s = setup(t);
   assert.equal(run(['--', 'true'], s.env).status, 64);
   assert.equal(run(['--eval-dir', s.evalDir], s.env).status, 64);

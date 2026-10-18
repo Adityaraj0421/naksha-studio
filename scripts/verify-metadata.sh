@@ -15,11 +15,11 @@ echo "════════════════════════�
 echo ""
 
 # Load stats.json values
-STATS_VERSION=$(python3 -c "import json; print(json.load(open('$STATS'))['version'])")
-STATS_ROLES=$(python3 -c "import json; print(json.load(open('$STATS'))['roles'])")
-STATS_COMMANDS=$(python3 -c "import json; print(json.load(open('$STATS'))['commands'])")
-STATS_LINES=$(python3 -c "import json; print(json.load(open('$STATS'))['knowledge_lines'])")
-STATS_REFS=$(python3 -c "import json; print(json.load(open('$STATS'))['reference_files'])")
+STATS_VERSION=$(node -p 'require(process.argv[1]).version' "$STATS")
+STATS_ROLES=$(node -p 'require(process.argv[1]).roles' "$STATS")
+STATS_COMMANDS=$(node -p 'require(process.argv[1]).commands' "$STATS")
+STATS_LINES=$(node -p 'require(process.argv[1]).knowledge_lines' "$STATS")
+STATS_REFS=$(node -p 'require(process.argv[1]).reference_files' "$STATS")
 
 # ── Check 1: Filesystem counts ──────────────────────────────────────────────
 echo "Check 1 — Filesystem counts"
@@ -27,7 +27,7 @@ echo "Check 1 — Filesystem counts"
 ACTUAL_COMMANDS=$(find "$REPO/commands" -maxdepth 1 -name '*.md' | wc -l | tr -d ' ')
 ACTUAL_REFS=$(find "$REPO/skills/design/references" -maxdepth 1 -name '*.md' | wc -l | tr -d ' ')
 ACTUAL_LINES=$(cat "$REPO/skills/design/references/"*.md | wc -l | tr -d ' ')
-ACTUAL_VERSION=$(python3 -c "import json; print(json.load(open('$REPO/.claude-plugin/plugin.json'))['version'])")
+ACTUAL_VERSION=$(node -p 'require(process.argv[1]).version' "$REPO/.claude-plugin/plugin.json")
 
 # roles: stats.json-authoritative — no filesystem check
 # echo "  SKIP  roles: stats.json-authoritative, verified via README badge in Check 2"
