@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0",
+  "target": { "kind": "screenshot", "location": "shots/checkout.png" },
+  "generated_at": "2026-10-18T10:00:00+05:30",
+  "coverage": {
+    "accessibility": { "status": "checked" },
+    "visual_hierarchy": { "status": "checked" },
+    "typography": { "status": "checked" },
+    "color": { "status": "checked" },
+    "spacing": { "status": "checked" },
+    "content": { "status": "checked" },
+    "interaction_states": { "status": "skipped", "reason": "A static screenshot shows only one state" },
+    "responsive": { "status": "skipped", "reason": "Single viewport supplied" },
+    "tokens": { "status": "skipped", "reason": "No source code available" }
+  },
+  "verification": { "mode": "not-run" },
+  "findings": []
+}
