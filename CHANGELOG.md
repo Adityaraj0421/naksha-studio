@@ -2,6 +2,14 @@
 
 All notable changes to naksha are documented here.
 
+## v5.1.2 — SessionStart hook fix (2026-10-18)
+
+**Fixed:** the `SessionStart` hook that detects project design context failed silently on every session for many installs, so naksha never picked up your project's stack or `.naksha/project.json` memory at startup. There were two causes, and either one was enough to break it:
+- **Paths with spaces.** The hook command ran `${CLAUDE_PLUGIN_ROOT}/scripts/detect-design-context.sh` unquoted, so it broke on Claude Desktop's macOS install path (`~/Library/Application Support/...`).
+- **Script not executable.** `scripts/detect-design-context.sh` shipped without the executable bit, so the hook failed even on paths without spaces (for example, CLI installs under `~/.claude/plugins/`).
+
+The hook now runs `bash "${CLAUDE_PLUGIN_ROOT}/scripts/detect-design-context.sh"`, which works whatever the path or file mode, and the script is marked executable. Reported by @yonasa2026, with the second cause found by @alvaromuir ([#17](https://github.com/Adityaraj0421/naksha-studio/issues/17), [#18](https://github.com/Adityaraj0421/naksha-studio/pull/18)).
+
 ## v5.1.1 — `/design-reel` wipe fix (2026-06-29)
 
 **Fixed:** the before/after wipe in redesign mode (`--url`) had its sides inverted — the BEFORE label sat over the redesigned page and AFTER over the original. The wipe now keeps BEFORE on the left and reveals AFTER in from the right, matching the labels. Caught by an end-to-end redesign run (a live dashboard) that the fixture test couldn't expose. Added a code comment so the clip direction can't be silently re-inverted.
