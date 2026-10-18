@@ -362,7 +362,8 @@ for (const tier of ['e2e', 'judge']) {
       const r = run(['--evals', path.join(root, 'evals', 'evals.json'), '--tier', tier], { ...env, NAKSHA_EVALS_CLAUDE_BIN: fake.bin });
       assert.equal(r.code, 0);
       assert.match(r.out, /paid tier not executed/);
-      assert.match(r.out, /fake-claude\.js -p --/);
+      // The binary path is shell-quoted when it has special characters (always on Windows).
+      assert.match(r.out, /fake-claude\.js'? -p --/);
     }
     assert.deepEqual(readCalls(fake.log), []);
   });

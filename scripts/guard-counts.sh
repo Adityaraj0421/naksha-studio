@@ -15,8 +15,8 @@ echo "  guard-counts"
 echo "═══════════════════════════════════════"
 echo ""
 
-STATS_COMMANDS=$(python3 -c "import json; print(json.load(open('$STATS'))['commands'])")
-STATS_LINES=$(python3 -c "import json; print(json.load(open('$STATS'))['knowledge_lines'])")
+STATS_COMMANDS=$(node -p 'require(process.argv[1]).commands' "$STATS")
+STATS_LINES=$(node -p 'require(process.argv[1]).knowledge_lines' "$STATS")
 FLOOR=$(( (STATS_LINES / 1000) * 1000 ))
 
 echo "Canonical: ${STATS_COMMANDS} commands · ${STATS_LINES} knowledge lines"
@@ -73,15 +73,11 @@ for f in "${KNOWLEDGE_FILES[@]}"; do
     continue
   fi
   # Extract largest "NN,NNN+ lines" / "NNNNN+ lines" claim from the file
-  CLAIM=$(python3 - "$path" <<'PYEOF'
-import sys, re
-content = open(sys.argv[1]).read()
-matches = re.findall(r'([\d,]+)\+\s*lines', content)
-if not matches:
-    print("0")
-else:
-    print(max(int(m.replace(',', '')) for m in matches))
-PYEOF
+  CLAIM=$(node - "$path" <<'JSEOF'
+const content = require('fs').readFileSync(process.argv[2], 'utf8');
+const matches = [...content.matchAll(/([\d,]+)\+\s*lines/g)].map(m => parseInt(m[1].replace(/,/g, ''), 10));
+console.log(matches.length ? Math.max(...matches) : 0);
+JSEOF
 )
   if [ "$CLAIM" = "0" ]; then
     echo "  WARN  $f: no 'NN+ lines' claim found"
@@ -104,7 +100,7 @@ echo ""
 # ── Check 3: Headline role count must match stats.json everywhere it is stated ─
 echo "Check 3 — Role count in prose files"
 
-STATS_ROLES=$(python3 -c "import json; print(json.load(open('$STATS'))['roles'])")
+STATS_ROLES=$(node -p 'require(process.argv[1]).roles' "$STATS")
 ROLE_FILES=(
   "README.md"
   "CONTRIBUTING.md"
@@ -128,13 +124,14 @@ for f in "${ROLE_FILES[@]}"; do
     continue
   fi
   # Two-digit "NN roles" / "NN specialist roles" / "NN specialists" / "NN-role" / "Roles-NN" badge claims
-  STALE=$(python3 - "$path" "$STATS_ROLES" <<'PYEOF'
-import re, sys
-text, want = open(sys.argv[1]).read(), sys.argv[2]
-pat = r'\b(\d{2})(?:</\w+>)?(?:\s+specialist)?(?:\s+roles?\b|\s+specialists\b|-role\b)|Roles-(\d{2})\b'
-bad = sorted({a or b for a, b in re.findall(pat, text)} - {want})
-print(",".join(bad))
-PYEOF
+  STALE=$(node - "$path" "$STATS_ROLES" <<'JSEOF'
+const [file, want] = process.argv.slice(2);
+const text = require('fs').readFileSync(file, 'utf8');
+const pat = /\b(\d{2})(?:<\/\w+>)?(?:\s+specialist)?(?:\s+roles?\b|\s+specialists\b|-role\b)|Roles-(\d{2})\b/g;
+const found = new Set([...text.matchAll(pat)].map(m => m[1] || m[2]));
+found.delete(want);
+console.log([...found].sort().join(','));
+JSEOF
 )
   if [ -n "$STALE" ]; then
     echo "  FAIL  $f: role count ${STALE} found, expected ${STATS_ROLES}"

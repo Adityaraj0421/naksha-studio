@@ -49,15 +49,13 @@ for extra in dashboard adapters commands; do
 done
 
 # One line per command hook: <event>\t<timeout>\t<command>
-HOOK_LINES=$(python3 - "$HOOKS" <<'PYEOF'
-import json, sys
-data = json.load(open(sys.argv[1]))
-for event, groups in data.get("hooks", {}).items():
-    for group in groups:
-        for hook in group.get("hooks", []):
-            if hook.get("type") == "command":
-                print(f"{event}\t{hook.get('timeout', 60)}\t{hook['command']}")
-PYEOF
+HOOK_LINES=$(node - "$HOOKS" <<'JSEOF'
+const data = JSON.parse(require('fs').readFileSync(process.argv[2], 'utf8'));
+for (const [event, groups] of Object.entries(data.hooks || {}))
+  for (const group of groups)
+    for (const hook of group.hooks || [])
+      if (hook.type === 'command') console.log(`${event}\t${hook.timeout ?? 60}\t${hook.command}`);
+JSEOF
 )
 
 if [ -z "$HOOK_LINES" ]; then
@@ -79,7 +77,7 @@ run_hooks() {
       echo "  FAIL  $event ($label): exited $rc"
       printf '%s\n' "$out" | head -5 | sed 's/^/        /' || true
       FAILED=$((FAILED + 1))
-    elif ! printf '%s' "$out" | python3 -c "import json, sys; json.load(sys.stdin)" 2>/dev/null; then
+    elif ! printf '%s' "$out" | node -e 'JSON.parse(require("fs").readFileSync(0, "utf8"))' 2>/dev/null; then
       echo "  FAIL  $event ($label): output is not valid JSON"
       printf '%s\n' "$out" | head -5 | sed 's/^/        /' || true
       FAILED=$((FAILED + 1))

@@ -17,20 +17,21 @@ if [ ! -f "$EVALS_FILE" ]; then
   exit 1
 fi
 
-if ! python3 -m json.tool "$EVALS_FILE" > /dev/null 2>&1; then
+# node, not python3: the rest of the tooling already needs it, and Windows often has no python3
+if ! command -v node > /dev/null 2>&1; then
+  echo "❌ node is required to validate evals (https://nodejs.org)"
+  exit 1
+fi
+
+if ! node -e 'JSON.parse(require("fs").readFileSync(process.argv[1], "utf8"))' "$EVALS_FILE" > /dev/null 2>&1; then
   echo "❌ evals/evals.json is not valid JSON"
   exit 1
 fi
 echo "✅ evals.json is valid JSON"
 
 # 2. Count evals and assertions
-EVAL_COUNT=$(python3 -c "import json; data=json.load(open('$EVALS_FILE')); print(len(data['evals']))")
-ASSERTION_COUNT=$(python3 -c "
-import json
-data = json.load(open('$EVALS_FILE'))
-total = sum(len(e['assertions']) for e in data['evals'])
-print(total)
-")
+EVAL_COUNT=$(node -e 'console.log(require(process.argv[1]).evals.length)' "$EVALS_FILE")
+ASSERTION_COUNT=$(node -e 'console.log(require(process.argv[1]).evals.reduce((n, e) => n + e.assertions.length, 0))' "$EVALS_FILE")
 echo "📋 $EVAL_COUNT eval cases with $ASSERTION_COUNT total assertions"
 
 # 3. Check for referenced fixture files
@@ -48,19 +49,15 @@ while IFS= read -r path; do
     echo "  ❌ $path (file not found)"
     MISSING=$((MISSING + 1))
   fi
-done < <(python3 -c "
-import json, re
-data = json.load(open('$EVALS_FILE'))
-for e in data['evals']:
-    # Check prompt for file references
-    matches = re.findall(r'\./[\w/.-]+\.\w+', e['prompt'])
-    for m in matches:
-        print(m)
-    # Check files array
-    for f in e.get('files', []):
-        if f:
-            print(f)
-")
+done < <(node - "$EVALS_FILE" <<'JSEOF'
+for (const e of require(process.argv[2]).evals) {
+  // Check prompt for file references
+  for (const m of e.prompt.match(/\.\/[\w/.-]+\.\w+/g) || []) console.log(m);
+  // Check files array
+  for (const f of e.files || []) if (f) console.log(f);
+}
+JSEOF
+)
 
 if [ "$MISSING" -gt 0 ]; then
   echo ""
@@ -72,23 +69,20 @@ fi
 # 4. Every command has at least one eval (a matching "command" field, or a prompt starting with /<command>)
 echo ""
 echo "Checking command coverage..."
-UNCOVERED=$(python3 - "$EVALS_FILE" "$PLUGIN_ROOT/commands" <<'PYEOF'
-import json, os, re, sys
-evals = json.load(open(sys.argv[1]))['evals']
-commands = sorted(f[:-3] for f in os.listdir(sys.argv[2]) if f.endswith('.md'))
-covered = set()
-for e in evals:
-    if e.get('command'):
-        covered.add(e['command'].strip().lstrip('/').split()[0])
-    m = re.match(r'\s*/([\w-]+)', e.get('prompt', ''))
-    if m:
-        covered.add(m.group(1))
-for c in commands:
-    if c not in covered:
-        print(c)
-for c in sorted(covered - set(commands)):
-    print(f"WARN {c}")
-PYEOF
+UNCOVERED=$(node - "$EVALS_FILE" "$PLUGIN_ROOT/commands" <<'JSEOF'
+const fs = require('fs');
+const [evalsFile, commandsDir] = process.argv.slice(2);
+const evals = JSON.parse(fs.readFileSync(evalsFile, 'utf8')).evals;
+const commands = fs.readdirSync(commandsDir).filter(f => f.endsWith('.md')).map(f => f.slice(0, -3)).sort();
+const covered = new Set();
+for (const e of evals) {
+  if (e.command) covered.add(e.command.trim().replace(/^\/+/, '').split(/\s+/)[0]);
+  const m = /^\s*\/([\w-]+)/.exec(e.prompt || '');
+  if (m) covered.add(m[1]);
+}
+for (const c of commands) if (!covered.has(c)) console.log(c);
+for (const c of [...covered].filter(c => !commands.includes(c)).sort()) console.log(`WARN ${c}`);
+JSEOF
 )
 COVERAGE_FAILED=0
 while IFS= read -r line; do
@@ -107,12 +101,10 @@ echo ""
 echo "───────────────────────────────────────"
 printf "%-4s %-30s %s\n" "ID" "Name" "Assertions"
 echo "───────────────────────────────────────"
-python3 -c "
-import json
-data = json.load(open('$EVALS_FILE'))
-for e in data['evals']:
-    print(f\"{e['id']:<4} {e['name']:<30} {len(e['assertions'])}\")
-"
+node - "$EVALS_FILE" <<'JSEOF'
+for (const e of require(process.argv[2]).evals)
+  console.log(`${String(e.id).padEnd(4)} ${String(e.name).padEnd(30)} ${e.assertions.length}`);
+JSEOF
 echo "───────────────────────────────────────"
 echo ""
 

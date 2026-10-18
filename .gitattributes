@@ -1,0 +1,18 @@
+# Check text out with LF on every platform. With Git for Windows' default
+# core.autocrlf=true, hook scripts and generated adapter regions otherwise get
+# CRLF, which breaks bash outside Git Bash and the build-adapters region match.
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.otf binary
+*.mp4 binary
+*.mp3 binary
+*.pdf binary
