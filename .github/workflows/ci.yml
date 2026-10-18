@@ -1,0 +1,47 @@
+name: CI
+
+# Always-on gate: runs every local quality check on every PR and push to main.
+# The path-filtered workflows (validate-structure, quality-check, design-check)
+# still post their PR comments; this one makes sure nothing slips past them.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: Plugin checks
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # metadata, behavioral smoke, design lint, branding, count drift, hook smoke
+      - name: Quality check
+        run: bash scripts/quality-check.sh
+
+      - name: Validate structure
+        if: success() || failure()
+        run: node scripts/validate-structure.js
+
+      - name: Validate evals
+        if: success() || failure()
+        run: bash scripts/run-evals.sh
+
+      - name: Reel unit tests
+        if: success() || failure()
+        working-directory: packages/naksha-reel
+        run: node --test test/*.test.mjs

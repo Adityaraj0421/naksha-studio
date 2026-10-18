@@ -31,6 +31,7 @@ COMMAND_FILES=(
   ".claude-plugin/plugin.json"
   ".claude-plugin/marketplace.json"
   "install.sh"
+  "CONTRIBUTING.md"
 )
 
 for f in "${COMMAND_FILES[@]}"; do

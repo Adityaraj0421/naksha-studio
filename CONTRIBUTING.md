@@ -131,6 +131,7 @@ Before marking your PR ready, confirm all of the following apply to your contrib
 **All PRs:**
 - Tested locally end-to-end in Claude Code
 - `validate-structure` CI passes (checks file counts, version consistency, and command frontmatter)
+- `bash scripts/quality-check.sh` passes — the same checks the `CI` workflow runs on every PR
 - No hardcoded paths — use `${CLAUDE_PLUGIN_ROOT}/` for all plugin-relative references
 
 **New command:**
@@ -151,7 +152,18 @@ Before marking your PR ready, confirm all of the following apply to your contrib
 
 ## Testing
 
-Run the evals to verify:
+Run the full local suite — this is what the `CI` workflow runs on every PR:
+
+```bash
+bash scripts/quality-check.sh        # metadata, behavioral smoke, design lint, branding, count drift, hook smoke
+node scripts/validate-structure.js   # file counts, version consistency, command frontmatter
+bash scripts/run-evals.sh            # eval structure and fixture references
+(cd packages/naksha-reel && node --test test/*.test.mjs)   # reel unit tests
+```
+
+If you touch `hooks/hooks.json` or a hook script, `bash scripts/hook-smoke.sh` runs every command hook from a plugin path containing spaces, with and without the executable bit, and checks every `.sh` file is tracked as executable. New shell scripts need `git update-index --chmod=+x <file>`.
+
+Spot checks:
 
 ```bash
 # Validate JSON
@@ -172,7 +184,7 @@ Naksha runs on multiple AI coding tools. The knowledge lives in the same role re
 
 | Tool | Adapter File | How It Loads |
 |------|-------------|-------------|
-| **Claude Code** | `.claude-plugin/plugin.json` + `skills/design/` | Plugin system — full 39 commands, agents, hooks |
+| **Claude Code** | `.claude-plugin/plugin.json` + `skills/design/` | Plugin system — full 63 commands, agents, hooks |
 | **Cursor** | `.cursor/rules/naksha.mdc` | Glob-matched rules — activates on CSS/HTML/TSX/SVG |
 | **Windsurf** | `.windsurfrules` | Read at session start for entire project |
 | **Gemini CLI** | `GEMINI.md` | Read at session start for entire project |
