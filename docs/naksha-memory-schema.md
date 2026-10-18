@@ -12,7 +12,10 @@ This document is the single source of truth for the `.naksha/` schema specificat
 {project-root}/
 ├── .naksha/
 │   ├── project.json          # Project configuration (created by /naksha-init)
-│   └── memory.md             # Append-only decision log
+│   ├── memory.md             # Append-only decision log
+│   └── design-system/        # Optional (v6): design system in DESIGN.md format
+│       ├── MASTER.md         #   project-wide system (written by /design-system, /design-md)
+│       └── pages/<page>.md   #   optional per-page overrides
 ├── .gitignore                # Consider: commit .naksha/ or keep local-only
 └── [other project files]
 ```
@@ -186,6 +189,19 @@ Learned design taste, written by `/naksha-taste` and by verdicts given during `/
 
 **Applying taste:** sum the weights per trait, separately for approved and rejected signals. The strongest approved traits become defaults; the strongest rejected traits are avoided. A trait in both lists is *conflicted*: the newer verdict wins, unless the signals have different `context` values (context-dependent taste is legitimate). No migration is needed: `taste` is optional and absent on older files.
 
+### v6 Addition: Design System Files (optional)
+
+`.naksha/design-system/` stores the project's design system as [DESIGN.md](design-md.md) files: YAML design tokens plus prose. It is a directory next to `project.json`, not a `project.json` field, so no schema migration is needed and older projects simply don't have it.
+
+| Path | Written by | Read by | Content |
+|------|-----------|---------|---------|
+| `.naksha/design-system/MASTER.md` | `/design-system`, `/design-md import` | `/design` (Step 0.6), `/design-md`, `/design-system` | A complete, standalone-valid DESIGN.md (spec `alpha`): `name`, `colors` (incl. `primary`), `typography`, `rounded`, `spacing`, `components`, plus prose sections |
+| `.naksha/design-system/pages/<page>.md` | `/design-md page <page>` | `/design` when designing that page | A partial DESIGN.md holding only the tokens and prose that differ for one page. `<page>` is a lowercase slug (`[a-z0-9][a-z0-9-]*`) |
+
+**Precedence:** page override > MASTER.md > brand defaults (`brand.primary` and `brand.secondary` in `project.json`, used only when MASTER.md doesn't define `colors.primary` / `colors.secondary`). In a page override, `null` removes a master token, and `typography`/`components` entries merge one property at a time.
+
+**Validation:** `node scripts/design-md.js lint .naksha/design-system/MASTER.md` checks one file. `node scripts/design-md.js lint --page <page>` checks the merged system. `node scripts/design-md.js resolve --page <page>` prints the effective tokens with per-token provenance. `designSystemPath` in `project.json` keeps pointing at the code token file (e.g. `tokens.css`); MASTER.md is always found at the fixed path above.
+
 ### v4 → v5 Migration
 
 **`/naksha-init` on a v4 project:**
@@ -250,7 +266,8 @@ The `.naksha/memory.md` file is an **append-only decision log**. It begins with 
 Commands that benefit from persistent context read from the two files:
 
 1. **`project.json` readers**: Commands like `/design-audit`, `/brand-check`, and `/design-system` read the project config (name, brand colors, framework, token format) to provide tailored output.
-2. **`memory.md` readers**: Context-aware commands (e.g., `/design-next`, `/gen-image`, `/design-audit`) read the memory log to understand prior decisions and avoid redundant suggestions.
+2. **`design-system/` readers** (v6, optional): `/design` loads `MASTER.md` and the matching `pages/<page>.md` override (see [v6 Addition](#v6-addition-design-system-files-optional)).
+3. **`memory.md` readers**: Context-aware commands (e.g., `/design-next`, `/gen-image`, `/design-audit`) read the memory log to understand prior decisions and avoid redundant suggestions.
 
 ### How Commands Write To `.naksha/`
 

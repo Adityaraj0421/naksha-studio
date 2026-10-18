@@ -1,0 +1,61 @@
+{
+  "$schema": "https://www.designtokens.org/schemas/2025.10/format.json",
+  "$description": "Orchard Kit tokens",
+  "color": {
+    "$type": "color",
+    "brand": {
+      "500": {
+        "$value": { "colorSpace": "srgb", "components": [0.133, 0.4, 0.267], "hex": "#226644" }
+      },
+      "100": {
+        "$value": { "colorSpace": "srgb", "components": [0.902, 0.957, 0.925], "hex": "#e6f4ec" }
+      }
+    },
+    "scrim": {
+      "$value": { "colorSpace": "srgb", "components": [0, 0, 0], "alpha": 0.5, "hex": "#000000" }
+    },
+    "highlight": {
+      "$value": { "colorSpace": "oklch", "components": [0.8, 0.12, 95] }
+    },
+    "text": {
+      "$value": "{color.brand.500}"
+    }
+  },
+  "radius": {
+    "$type": "dimension",
+    "small": { "$value": { "value": 4, "unit": "px" } },
+    "pill": { "$value": { "value": 999, "unit": "px" } }
+  },
+  "space": {
+    "$type": "dimension",
+    "base": { "$value": { "value": 1, "unit": "rem" } },
+    "inset": {
+      "$root": { "$value": { "value": 12, "unit": "px" } },
+      "wide": { "$value": { "value": 24, "unit": "px" } }
+    }
+  },
+  "type": {
+    "body": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": ["Work Sans", "Helvetica", "sans-serif"],
+        "fontSize": { "value": 16, "unit": "px" },
+        "fontWeight": "semi-bold",
+        "letterSpacing": { "value": 0, "unit": "px" },
+        "lineHeight": 1.5
+      }
+    }
+  },
+  "shadow": {
+    "card": {
+      "$type": "shadow",
+      "$value": {
+        "color": "{color.scrim}",
+        "offsetX": { "value": 0, "unit": "px" },
+        "offsetY": { "value": 2, "unit": "px" },
+        "blur": { "value": 8, "unit": "px" },
+        "spread": { "value": 0, "unit": "px" }
+      }
+    }
+  }
+}

@@ -64,6 +64,16 @@ If found:
 
 If not found: continue normally (no project memory, no message).
 
+### Step 0.6: Load the Design System (MASTER.md + page override)
+
+If `.naksha/design-system/MASTER.md` exists (next to the `project.json` found above), it is the project's design system in DESIGN.md format (see `${CLAUDE_PLUGIN_ROOT}/docs/design-md.md`). Name the page being designed as a lowercase slug (`checkout`, `pricing`). If `.naksha/design-system/pages/<slug>.md` exists, load the merged system:
+
+```bash
+node ${CLAUDE_PLUGIN_ROOT}/scripts/design-md.js resolve --page <slug> --format md
+```
+
+(Leave out `--page` when there is no override.) **Precedence: page override > MASTER.md > brand defaults from `project.json`.** Use the resolved tokens as the exact values for colours, type, spacing, radii and component styles, and follow its prose (especially Do's and Don'ts) as design rules. An explicit request in `$ARGUMENTS` still wins. Note: "Using design system: MASTER.md{ + pages/<slug>.md}." Skip silently if MASTER.md is absent.
+
 ### Step 0.75: Stitch Quick Proto
 
 If `$ARGUMENTS` contains `--stitch`, `quick proto`, `stitch it`, or `fast visual`:
