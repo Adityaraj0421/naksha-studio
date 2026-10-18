@@ -1,0 +1,6 @@
+.body { color: #333333; background: #ffffff; }
+.edge { color: #767676; background: #fff; }
+.large-heading { color: #949494; background: #fff; font-size: 24px; }
+.hero { color: #fff; background: linear-gradient(90deg, #111, #333); }
+.unknown { color: currentColor; background: #fff; }
+.inverse { color: hsl(0 0% 100%); background: rgb(20 20 20); }

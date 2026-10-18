@@ -1,6 +1,6 @@
 ---
-description: "Record which design directions you approved or rejected — naksha learns your taste and applies it to future /design and /design-variants runs. With no arguments, shows your current taste profile."
-argument-hint: "[approve|reject] <direction> [because <reason>] [; ...]"
+description: "Record which design directions you approved or rejected — naksha learns your taste and applies it to future /design and /design-variants runs. With no arguments, shows your current taste profile, including what naksha has learned from your Helpful / Needs-work votes."
+argument-hint: "[approve|reject] <direction> [because <reason>] [; ...] | consolidate"
 allowed-tools: ["Read", "Write", "Bash", "Glob"]
 ---
 
@@ -15,6 +15,8 @@ Input: **$ARGUMENTS**
 ## Step 0: Parse Input
 
 **No arguments** → go to Step 6 (show the taste profile) and stop.
+
+**`consolidate`** → go to Step 7 (fold votes and signals into observations) and stop.
 
 Otherwise split `$ARGUMENTS` on semicolons (`;`). Each part is one signal:
 
@@ -143,17 +145,42 @@ Sum weights per trait for approved and rejected signals separately. Then show:
   Steers away    {trait} ({weight})  ·  {trait} ({weight})  ·  …
   Conflicted     {trait} — newer verdict: {verdict} ({date})
 
+  Learned from votes and verdicts (taste.observations)
+    prefers {trait} ({helpful} helpful, {needs_work} needs work)   confidence {c}
+    avoids  {trait} ({helpful} helpful, {needs_work} needs work)   confidence {c}
+    mixed on {trait} (…)
+    … (top 6 with any active weight)
+
   Recent signals
     ✓ {date}  {direction}
     ✗ {date}  {direction}
     … (last 5)
 ```
 
+**Observations.** Get a fresh view with `node ${CLAUDE_PLUGIN_ROOT}/scripts/votes.js consolidate --json` (a preview — it writes nothing) and show its `observations`; if the script is unavailable, show the stored `taste.observations` instead. Format each line as `{prefers|avoids|mixed on} {trait} ({helpful} helpful, {needs_work} needs work)` — e.g. "prefers serif display (5 helpful, 1 needs work)" — where `prefers` means helpful > needs work. Counts are age-weighted (≤ 90 days = 1, 91–180 = 0.5), so a half shows as `.5`. Hide traits whose counts are both 0. If the preview differs from what is stored, add: "Run `/naksha-taste consolidate` to save the latest." If there are no observations, say: "Vote on designs and variants with `/naksha-vote` or the dashboard — naksha turns them into observations."
+
 If there are no signals: "No taste recorded yet. Run `/design-variants <task>` to compare directions, then tell naksha which ones you like with `/naksha-taste`."
+
+## Step 7: Consolidate (`/naksha-taste consolidate`)
+
+Fold Helpful / Needs-work votes on designs and variants (`.naksha/votes.jsonl`) and the existing `taste.signals` into evidence-backed `taste.observations`:
+
+```bash
+node ${CLAUDE_PLUGIN_ROOT}/scripts/votes.js consolidate
+```
+
+1. Requires `.naksha/project.json` (same guard as Step 1).
+2. The script **refines** the stored observations rather than replacing them: new vote and signal ids are merged into each trait's `evidence`, a vote you changed your mind on is dropped, and the counts are recomputed with the usual age decay. Evidence is kept even after old votes rotate out or signals fall off the 30-signal cap.
+3. Show one line per observation (top 10), as in Step 6, plus any note about votes that had no traits.
+4. Emit the `taste.observations` and `updatedAt` memory-update blocks **exactly as the script printed them**, at the end of the response. Don't hand-edit the numbers or evidence ids.
+5. If `.naksha/memory.md` exists, append: `[{ISO}] /naksha-taste: consolidated {N} observations`.
+
+Signals recorded earlier in the *same* session are not in `project.json` yet (the Stop hook applies them at the end), so run `consolidate` in a later turn or session to include them.
 
 ## Notes
 
-- **How taste is applied.** `/design` and `/design-variants` read active signals (weight > 0) and treat leaning traits as defaults and steering-away traits as things to avoid — unless the current request, a constraint, or the brand says otherwise. Explicit instructions always beat taste.
+- **How taste is applied.** `/design` and `/design-variants` read active signals (weight > 0) and treat leaning traits as defaults and steering-away traits as things to avoid — unless the current request, a constraint, or the brand says otherwise. Explicit instructions always beat taste. Observations with confidence ≥ 0.5 add to the leaning (helpful > needs work) or avoided (needs work > helpful) lists; weaker ones are hints only.
 - **Never fabricate taste.** Only record verdicts the user actually gave. Don't infer approval from silence or from the user accepting a single design.
 - **Forgetting.** To drop a signal, the user can say "forget the dark-first rejection"; remove matching signals and emit the updated array. To reset, "clear my taste" → emit an empty array, after confirming.
-- **Privacy.** Taste lives in the project's own `.naksha/project.json`; nothing is sent anywhere.
+- **Votes.** `/naksha-vote` and the dashboard Votes panel record Helpful / Needs-work reactions to concrete artifacts in `.naksha/votes.jsonl`; this command turns them into observations. Schema: `docs/naksha-memory-schema.md` → "v6 Field Additions: Taste Observations" and "v6 Votes".
+- **Privacy.** Taste lives in the project's own `.naksha/project.json` and votes in `.naksha/votes.jsonl`; nothing is sent anywhere.

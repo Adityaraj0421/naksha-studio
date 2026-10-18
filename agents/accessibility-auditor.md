@@ -120,3 +120,5 @@ Check for `.naksha/project.json` in the project root (search up to 3 directory l
 ```
 
 Always provide the exact code fix for every issue. Do not just describe the problem — show the solution.
+
+**Structured findings (only when the caller asks, e.g. `/design-review`):** also return each issue in the finding format of `${CLAUDE_PLUGIN_ROOT}/schemas/design-findings.schema.json` (see `${CLAUDE_PLUGIN_ROOT}/docs/design-findings.md`). Map Critical → `critical`, Important → `major`, Recommendations → `minor`; use dimension `accessibility` (`interaction_states` for focus and state issues) and `owner_role` "UX Researcher"; give every contrast or size claim a `measurement` with its method. Set every verdict to `needs_validation`: confirming a finding is an independent verifier's job, not the auditor's.

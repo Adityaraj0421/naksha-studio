@@ -219,3 +219,30 @@ When the first generation doesn't hit the brief, adjust one variable at a time:
 
 - FTC increasingly requires disclosure of AI-generated content in advertising, including synthetic voices. The standard is "clear and conspicuous" disclosure — not buried in fine print.
 - For video ads: disclosure in the video itself (end card or opening card) is more conspicuous than description text alone.
+
+---
+
+## Quality Contract
+
+### Red flags
+
+- The voice brief only says "friendly" or "professional", with no pace, emotion or context.
+- The music bed under the voiceover has prominent vocals or a busy mid-range.
+- A synthetic voice is delivered with no disclosure note.
+- Commercial music rights are assumed from the plan tier without checking current terms.
+- Loudness doesn't match the platform (e.g. a broadcast mix delivered for TikTok).
+
+### Excuses to reject
+
+| Excuse | Rebuttal |
+|---|---|
+| "Disclosure isn't needed for a short ad." | FTC guidance and the EU AI Act don't exempt short ads. Include the note. |
+| "The platform normalizes loudness anyway." | Normalization changes the perceived balance. Master to the target LUFS yourself. |
+| "We'll sync to video later." | Without a cue sheet, the voiceover and the cuts drift apart. Produce the timing now. |
+
+### Evidence of done
+
+- A completed voice or music brief (every template field filled), with the voice ID and settings recorded.
+- A timing cue sheet matched to video timestamps when the audio is paired with picture.
+- The disclosure note text and where it goes, plus the license status and the date it was checked.
+- An export spec: target LUFS, sample rate and bit depth, and file format.

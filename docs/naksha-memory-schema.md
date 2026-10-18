@@ -12,7 +12,11 @@ This document is the single source of truth for the `.naksha/` schema specificat
 {project-root}/
 ├── .naksha/
 │   ├── project.json          # Project configuration (created by /naksha-init)
-│   └── memory.md             # Append-only decision log
+│   ├── memory.md             # Append-only decision log
+│   ├── session-brief.md      # Generated ≤ 2 KB brief (PreCompact hook) — safe to gitignore
+│   └── design-system/        # Optional (v6): design system in DESIGN.md format
+│       ├── MASTER.md         #   project-wide system (written by /design-system, /design-md)
+│       └── pages/<page>.md   #   optional per-page overrides
 ├── .gitignore                # Consider: commit .naksha/ or keep local-only
 └── [other project files]
 ```
@@ -183,8 +187,129 @@ Learned design taste, written by `/naksha-taste` and by verdicts given during `/
 | `taste.signals[].reason` | string | No | — | The user's reason, ≤ 140 chars; never invented |
 | `taste.signals[].recorded_at` | ISO 8601 | Yes (entry) | — | Drives decay: ≤ 90 days weight 1, 91–180 days 0.5, older 0 (kept, ignored) |
 | `taste.signals[].source_command` | string | Yes (entry) | — | `/naksha-taste` or `/design-variants` |
+| `taste.signals[].vote_id` | string | No | `/design-variants` | v6: id of the vote recorded for the same reaction in `.naksha/votes.jsonl`. Consolidation counts the vote and skips the signal, so one reaction never counts twice. |
 
 **Applying taste:** sum the weights per trait, separately for approved and rejected signals. The strongest approved traits become defaults; the strongest rejected traits are avoided. A trait in both lists is *conflicted*: the newer verdict wins, unless the signals have different `context` values (context-dependent taste is legitimate). No migration is needed: `taste` is optional and absent on older files.
+
+### v6 Field Additions: Budgets (optional)
+
+Spending limits for naksha runs, written by `/naksha-stats budget`. Read by `scripts/naksha-stats.js` (used by `/naksha-stats` and by the pre-flight checks in `/design-reel` and `/pipeline`). Budgets only produce warnings; they never block a command. Spend is estimated from local Claude Code transcripts at API list prices (see [cost-and-budgets.md](cost-and-budgets.md)).
+
+```json
+"budgets": {
+  "monthly_usd": 20,
+  "per_command_usd": { "/design-reel": 1.5, "/pipeline": 3 },
+  "warn_at": 0.8
+}
+```
+
+| Field | Type | Required | Written by | Description |
+|-------|------|----------|------------|-------------|
+| `budgets` | object | No | `/naksha-stats budget` | Absent or `{}` = no budgets. |
+| `budgets.monthly_usd` | number > 0 | No | — | Estimated USD for this project per calendar month (UTC). |
+| `budgets.per_command_usd` | object | No | — | Map of `"/command"` → the most one run of it should cost, in USD (number > 0). Keys without a leading `/` are accepted. Always written as the full object. |
+| `budgets.warn_at` | number in (0, 1] | No | — | Fraction of a budget at which to warn. Default `0.8`. |
+
+**Evaluation:** month-to-date spend in the current project is compared with `monthly_usd`: at or above `warn_at` → `WARN`; above 100% → `OVER BUDGET`. For `per_command_usd`, the most expensive run of that command this month is compared with its limit in the same way. Invalid values are ignored and reported (e.g. a negative amount, or `warn_at` outside 0–1, which falls back to `0.8`). No migration is needed: `budgets` is optional and absent on older files.
+
+### v6 Field Additions: Taste Observations (optional)
+
+Evidence-backed summaries of taste, one per trait, produced by `node scripts/votes.js consolidate` from Helpful / Needs-work votes on designs and variants (see [v6 Votes](#v6-votes-nakshavotesjsonl)) plus `taste.signals`. Written through the usual `taste.observations` memory-update block by `/naksha-taste consolidate` and `/naksha-vote`; read by `/naksha-taste` (profile view) and `/design-variants`.
+
+```json
+"taste": {
+  "signals": [ … ],
+  "observations": [
+    {
+      "trait": "serif display",
+      "helpful": 5,
+      "needs_work": 1,
+      "confidence": 0.5,
+      "first_seen": "2026-07-02T09:14:00Z",
+      "updated_at": "2026-10-18T12:00:00Z",
+      "evidence": ["v_20261018T115812Z_h_3fa9c1", "s_20260702T091400Z_a_9c0e11d2", "…"]
+    }
+  ]
+}
+```
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `taste.observations` | array | No | One entry per trait. **Cap: 40** (lowest active weight dropped first). |
+| `trait` | string | Yes (entry) | Lowercase trait tag from the `/naksha-taste` vocabulary |
+| `helpful` | number | Yes (entry) | Σ age weight of Helpful votes and approved signals in `evidence` (multiples of 0.5) |
+| `needs_work` | number | Yes (entry) | Σ age weight of Needs-work votes and rejected signals in `evidence` |
+| `confidence` | number 0–1 | Yes (entry) | `|helpful − needs_work| / (helpful + needs_work + 2)`. One vote = 0.33; 5 helpful vs 1 needs work = 0.5; 0 when nothing is active. |
+| `first_seen` | ISO 8601 | Yes (entry) | Earliest evidence ever seen for this trait (kept across consolidations) |
+| `updated_at` | ISO 8601 | Yes (entry) | When the evidence set last changed (unchanged if a consolidation adds nothing) |
+| `evidence` | string[] | Yes (entry) | Vote and signal ids, newest first. **Cap: 50.** |
+
+**Refined, not overwritten.** Consolidation starts from the existing observations and merges new evidence into them, so evidence survives after the raw vote rotates out of `votes.jsonl` or the signal is evicted by the 30-signal cap. Ids are self-describing so counts can always be recomputed from `evidence` alone:
+
+- vote ids: `v_<UTC yyyymmddThhmmssZ>_<h|n>_<6 hex>` (`h` = helpful, `n` = needs work)
+- signal ids: `s_<recorded_at as yyyymmddThhmmssZ>_<a|r>_<8-hex FNV-1a of direction + traits>` (deterministic, so re-running never double counts)
+
+**Decay** is the same as for signals: ≤ 90 days weight 1, 91–180 days 0.5, older 0 (kept as history, ignored). Counts are recomputed from evidence timestamps on every run, so an observation fades on its own as its evidence ages.
+
+**What counts.** Only votes on `design` and `variant` subjects that carry traits (on the vote, or resolved from `naksha-variants/variants.json` by variant letter and `run_id`). The latest vote per subject wins; a superseded vote is removed from evidence. A signal with a `vote_id` that matches a stored vote is skipped. Findings and command runs never feed taste.
+
+**Applying observations:** a trait with `helpful > needs_work` and `confidence ≥ 0.5` is a leaning trait; `needs_work > helpful` with `confidence ≥ 0.5` is an avoided trait. Below 0.5 it is a hint only. Observations sit alongside the per-signal profile; explicit requests, `constraints` and brand still win.
+
+**Why a memory block and not a direct write.** Inside a Claude session the Stop hook stays the single writer of `project.json`, so the observations block cannot race the `taste.signals` block emitted in the same turn. `votes.js consolidate --write` exists for terminal use outside a session; it writes atomically (temp file + rename).
+
+## v6 Votes (`.naksha/votes.jsonl`)
+
+Helpful / Needs-work votes on designs, variants, review findings and command runs. Written by `/naksha-vote`, `/design-variants` (when you react to a variant) and the dashboard Votes panel, all through `scripts/votes.js`. One JSON object per line, append-only, local only — **nothing is ever sent anywhere.** Sharing is opt-in via `votes.js export --redact`, which writes a file you can send yourself.
+
+```json
+{"id":"v_20261018T120501Z_n_9b1c55","ts":"2026-10-18T12:05:01Z","verdict":"needs_work","reason":"B and C feel too similar","subject":{"kind":"variant","ref":"C@vr-20261018T1150Z","command":"/design-variants","traits":["glassmorphism","vivid palette"]},"source":"command"}
+```
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `id` | string | Yes | `v_<UTC yyyymmddThhmmssZ>_<h\|n>_<6 hex>`, assigned by the script (never taken from input) |
+| `ts` | ISO 8601 | Yes | UTC, second precision, assigned by the script |
+| `verdict` | `"helpful"` \| `"needs_work"` | Yes | `needs-work` is accepted on input and normalised |
+| `reason` | string | No | ≤ 280 chars, whitespace and control characters collapsed. Never invented. |
+| `subject.kind` | `"design"` \| `"variant"` \| `"finding"` \| `"command_run"` | Yes | What was voted on |
+| `subject.ref` | string | Yes | ≤ 200 chars. Unique per artifact version: variants `"{letter}@{run_id}"` (from `variants.json`), designs `"design-output.html@{mtime}"`, findings their `id` from `naksha-review/findings.json`, command runs a run id |
+| `subject.command` | string | No | e.g. `"/design-review"` |
+| `subject.role` | string | No | Owning role, e.g. a finding's `owner_role` |
+| `subject.eval` | string | No | Eval name this vote calibrates (letters, digits, `. _ : / -`, ≤ 120) |
+| `subject.traits` | string[] | No | 1–6 lowercase trait tags; feeds taste consolidation |
+| `source` | `"command"` \| `"dashboard"` \| `"cli"` | Yes | Where the vote came from |
+
+**Rules**
+
+- **Latest vote per subject wins** (`kind` + `ref`, case-insensitive ref; calibration also keys on `eval`). Changing your mind or double-clicking never counts twice; earlier lines stay in the file for history.
+- **Rotation:** when `votes.jsonl` reaches **1,000** lines it is renamed to `votes.1.jsonl` (replacing the previous archive) and a fresh file starts. Readers use both, so 1,000–2,000 votes are retained. Observations keep their evidence after rotation.
+- **Malformed lines** are skipped and counted, never fatal.
+- **Git:** if you commit `.naksha/`, consider adding `.naksha/votes*.jsonl` and `.naksha/votes-export-*.json` to `.gitignore` — votes are personal by default.
+
+**Variant manifest.** `/design-variants` writes `naksha-variants/variants.json` so votes can find a variant's traits: `{ "run_id", "task", "created_at", "variants": [{ "letter", "name", "file", "rationale", "traits", "dimensions", "wildcard" }] }`. Each variant file also carries `<meta name="naksha-traits" content="…">`. Both are read defensively; without them, variant votes need explicit traits.
+
+**Judge calibration.** `votes.js calibrate --results <file>` compares votes that carry `subject.eval` with LLM-judge verdicts. Minimal results shape (a top-level array, or an object with a `results` array; `pass`/`passed` booleans are accepted in place of `judge_verdict`):
+
+```json
+[{ "eval": "design-variants-distinct-directions", "assertion": "pairwise-distinctness", "judge_verdict": "pass", "run_id": "run-42" }]
+```
+
+An eval (or one run of it) counts as *pass* only if none of its rows failed. A vote whose `subject.ref` equals a `run_id` is compared with that run; otherwise with the whole file. The report gives the disagreement rate, the evals where people said **Needs work but the judge passed** (tighten these), the reverse (check for over-strict or flaky assertions), and evals voted on but missing from the results.
+
+**Redacted export.** `votes.js export --redact` writes `.naksha/votes-export-<date>-redacted.json` with emails → `[email]`, URLs → `[url]`, absolute, home and Windows paths and relative file paths → `[path]`, token-like strings (mixed letters and digits, 32+ chars, or `sk-`/`ghp_`-style prefixes) → `[secret]`, and `+`-prefixed phone numbers → `[phone]`, in reasons, refs and roles. **Limits:** it cannot recognise names, company or product names, street addresses, or phone numbers without a leading `+`; read the file before sharing it.
+
+### v6 Addition: Design System Files (optional)
+
+`.naksha/design-system/` stores the project's design system as [DESIGN.md](design-md.md) files: YAML design tokens plus prose. It is a directory next to `project.json`, not a `project.json` field, so no schema migration is needed and older projects simply don't have it.
+
+| Path | Written by | Read by | Content |
+|------|-----------|---------|---------|
+| `.naksha/design-system/MASTER.md` | `/design-system`, `/design-md import` | `/design` (Step 0.6), `/design-md`, `/design-system` | A complete, standalone-valid DESIGN.md (spec `alpha`): `name`, `colors` (incl. `primary`), `typography`, `rounded`, `spacing`, `components`, plus prose sections |
+| `.naksha/design-system/pages/<page>.md` | `/design-md page <page>` | `/design` when designing that page | A partial DESIGN.md holding only the tokens and prose that differ for one page. `<page>` is a lowercase slug (`[a-z0-9][a-z0-9-]*`) |
+
+**Precedence:** page override > MASTER.md > brand defaults (`brand.primary` and `brand.secondary` in `project.json`, used only when MASTER.md doesn't define `colors.primary` / `colors.secondary`). In a page override, `null` removes a master token, and `typography`/`components` entries merge one property at a time.
+
+**Validation:** `node scripts/design-md.js lint .naksha/design-system/MASTER.md` checks one file. `node scripts/design-md.js lint --page <page>` checks the merged system. `node scripts/design-md.js resolve --page <page>` prints the effective tokens with per-token provenance. `designSystemPath` in `project.json` keeps pointing at the code token file (e.g. `tokens.css`); MASTER.md is always found at the fixed path above.
 
 ### v4 → v5 Migration
 
@@ -199,6 +324,12 @@ Learned design taste, written by `/naksha-taste` and by verdicts given during `/
 - Detects v4 schema (missing `schema_version` field or missing `constraints`)
 - Offers migration: adds the v5 optional fields with empty defaults
 - Reports: `[MEMORY] project.json upgraded: v4 → v5 (3 new optional fields added)`
+
+## session-brief.md (generated)
+
+`.naksha/session-brief.md` is written by the PreCompact hook (`scripts/precompact-brief.sh` → `scripts/lib/session-brief.js`) just before Claude Code compacts a conversation. It summarises what can be derived deterministically from disk: project name, brand tokens, stack, constraints, taste leanings (age-weighted as in the taste section above), the last 5 `memory.md` entries, and the 5 most recently modified design files (`design-output.html`, `naksha-variants/`, `naksha-review/`). It is hard-capped at **2048 bytes**.
+
+The SessionStart hook injects a compact index (≤ 600 chars: project name, brand, framework, and counts of constraints, patterns, taste signals, browser findings, and memory entries). When the session `source` is `compact` or `resume` and the brief is less than 24 hours old (by file mtime), the hook also injects the brief. Commands never write this file. It is overwritten wholesale on every compaction, so it is safe to gitignore.
 
 ## memory.md Format
 
@@ -250,7 +381,8 @@ The `.naksha/memory.md` file is an **append-only decision log**. It begins with 
 Commands that benefit from persistent context read from the two files:
 
 1. **`project.json` readers**: Commands like `/design-audit`, `/brand-check`, and `/design-system` read the project config (name, brand colors, framework, token format) to provide tailored output.
-2. **`memory.md` readers**: Context-aware commands (e.g., `/design-next`, `/gen-image`, `/design-audit`) read the memory log to understand prior decisions and avoid redundant suggestions.
+2. **`design-system/` readers** (v6, optional): `/design` loads `MASTER.md` and the matching `pages/<page>.md` override (see [v6 Addition](#v6-addition-design-system-files-optional)).
+3. **`memory.md` readers**: Context-aware commands (e.g., `/design-next`, `/gen-image`, `/design-audit`) read the memory log to understand prior decisions and avoid redundant suggestions.
 
 ### How Commands Write To `.naksha/`
 

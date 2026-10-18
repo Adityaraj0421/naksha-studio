@@ -452,3 +452,28 @@ By default, browsers omit background colors and images from print to save ink. `
 3mm bleed is the de facto standard for commercial offset printing worldwide (ISO 12647-2). Some printers require 5mm for large-format or packaging. Always confirm with the print vendor before finalizing. The safe zone is not a formal standard but an industry convention — 3mm inside trim is universal; some vendors recommend 5mm for business cards (where cutting machines are less precise). File submission formats: PDF/X-1a is the safest cross-vendor format (eliminates transparency issues, embeds all fonts, restricts to CMYK). PDF/X-4 is preferred when designs use transparency or ICC color profiles.
 
 ---
+
+## Quality Contract
+
+### Red flags
+
+- Print dimensions are in px or rem instead of mm or pt.
+- Backgrounds stop at the trim line instead of extending into the 3mm bleed.
+- Brand colors are given only as hex, with no CMYK breakdown.
+- Fonts are named by system font only, with no `@font-face`, so the PDF may not embed them.
+- Tables, figures or headings break across pages.
+
+### Excuses to reject
+
+| Excuse | Rebuttal |
+|---|---|
+| "It'll mostly be viewed as a PDF." | Then mark bleed as N/A in the preflight on purpose, not by leaving it out. |
+| "The printer will convert the colors." | Conversion at the press shifts brand colors unpredictably. Specify CMYK up front. |
+| "Arial is on every machine." | A font being installed doesn't mean it's embedded. Declare fonts so the PDF carries them. |
+
+### Evidence of done
+
+- A preflight block at the end of the artifact covering bleed, safe zone, color mode, fonts and minimum sizes.
+- An `@page` rule with the physical page size and margins, plus named pages where they're used.
+- CMYK values commented next to every brand color.
+- A print preview or PDF check showing no split tables or figures and no live content in the trim zone.

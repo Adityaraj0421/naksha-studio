@@ -29,7 +29,7 @@ jobs:
         with:
           node-version: '22'
 
-      # metadata, behavioral smoke, design lint, branding, count drift, hook smoke, adapter sync
+      # metadata, behavioral smoke, design lint, branding, count drift, hook smoke, adapter sync, procedures, unit tests
       - name: Quality check
         run: bash scripts/quality-check.sh
 
@@ -40,6 +40,14 @@ jobs:
       - name: Validate evals
         if: success() || failure()
         run: bash scripts/run-evals.sh
+
+      - name: Script unit tests
+        if: success() || failure()
+        run: node --test scripts/test/
+
+      - name: Dashboard unit tests
+        if: success() || failure()
+        run: node --test dashboard/test/
 
       - name: Reel unit tests
         if: success() || failure()

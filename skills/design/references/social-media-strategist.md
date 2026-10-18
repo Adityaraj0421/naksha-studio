@@ -338,3 +338,30 @@ After each campaign cycle:
 
 - Content batching = creating multiple pieces of content in one session. For video-heavy strategies, batch filming days (with outfit changes) rather than filming daily. Reserve separate days for editing, community engagement, and idea generation.
 - Systematize your workflow: list every step to create a post → divide days by type of work → enter deep work mode per day. Motivation is not a reliable production system; batching is.
+
+---
+
+## Quality Contract
+
+### Red flags
+
+- The objective is "awareness" or "engagement" with no business goal or number attached.
+- Platforms are chosen out of habit, with no audience reason given.
+- More than 20% of the calendar is promotional, or the posting frequency is more than the team can keep up.
+- There are no phases, so the same content repeats from launch to close.
+- KPIs haven't been agreed with Growth/Analytics before launch.
+
+### Excuses to reject
+
+| Excuse | Rebuttal |
+|---|---|
+| "We need to be on every platform." | Being present without the capacity to post leaves dead accounts. Pick the 2–3 platforms where the audience is. |
+| "Virality can't be planned." | Reach can't be guaranteed, but the objective, audience and cadence can be planned. Plan those. |
+| "Metrics come later." | Without targets set before launch, you can't tell success from noise. |
+
+### Evidence of done
+
+- An objective → KPI → target table (e.g. "500 demo signups, 3% CTR from LinkedIn").
+- The reason for each platform choice, backed by audience evidence.
+- A content calendar for at least 2 weeks, showing the pillar mix as percentages.
+- A phase plan (tease → launch → sustain) with different content for each phase.

@@ -33,7 +33,7 @@ Display when no arguments are given:
 
 ```
 ━━━ Naksha Quick Reference ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Your virtual design team — 30 roles, 65 commands, 7 agents
+Your virtual design team — 30 roles, 70 commands, 7 agents
 
 CATEGORIES                                     Run /naksha-help <category>
 
@@ -75,12 +75,14 @@ When `$ARGUMENTS` matches a category name, display its commands.
   /design-critique    Heuristic UX review of a design or screenshot
   /design-qa          Visual QA across breakpoints, tokens, states
   /design-system      Extract or build a design token system
+  /design-md          Lint, import and export DESIGN.md; MASTER.md + page overrides
   /brand-kit          Build a full brand identity from a color
   /brand-strategy     Develop brand positioning and voice
   /design-sprint      Run a 5-day design sprint structure
   /design-present     Create a presentation-ready design deck
   /design-handoff     Generate developer-ready specs
   /design-score       Quantitative design quality score (0–100)
+  /design-detect      Free no-AI lint: contrast, spacing grid, type scale, focus, clichés
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
@@ -192,11 +194,14 @@ When `$ARGUMENTS` matches a category name, display its commands.
 
   /naksha-init        Set up project memory (brand, font, framework, tokens)
   /naksha-status      View current project context and recent decisions
-  /naksha-doctor      Run all quality checks and report plugin health
+  /naksha-doctor      Run all quality checks and report plugin health (--transcripts: find misrouted roles)
   /naksha-browse      Browse a URL with browser vision, save design patterns to memory
   /naksha-remember    Record a design constraint or decision to project memory
   /naksha-taste       Record approved/rejected directions; show your taste profile
   /design-variants    Build 2–5 distinct directions side by side, learn from your pick
+  /naksha-stats       Token and cost usage per command, with budget warnings
+  /naksha-dashboard   Naksha Live: watch the team work in a local dashboard (opt-in)
+  /naksha-vote        Vote Helpful / Needs work; consolidate taste, calibrate judges
   /pipeline           Chain commands: run <name>, list, show <name>
   /design-framework   Convert HTML to React/Vue/Svelte/Next.js/Astro
   /design-template    Browse and use production-ready layout templates

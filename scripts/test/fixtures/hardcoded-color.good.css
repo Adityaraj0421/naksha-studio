@@ -1,0 +1,4 @@
+:root { --color-brand: #3b82f6; --color-text: #111827; }
+[data-theme="dark"] { --color-brand: #60a5fa; }
+.btn { background: var(--color-brand); color: var(--color-on-brand, #fff); }
+.title { color: var(--color-text); }

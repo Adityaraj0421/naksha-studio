@@ -1,0 +1,4 @@
+.btn { color: #fff; background: #1d4ed8; }
+.btn:hover,
+.btn:focus-visible { background: #1e40af; }
+.card:hover { transform: translateY(-2px); }

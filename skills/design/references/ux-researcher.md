@@ -543,3 +543,30 @@ The most consequential research decision: are you measuring what people *say* or
 - Late / summative: benchmarking, unmoderated testing, A/B testing, clickstream analytics, surveys
 
 **Diary studies:** Participants self-record over days or weeks using their own device. Captures naturally occurring behavior that labs can't — how real users encounter your product in their actual context. High cost (participant burden, analysis time). Use when: you need longitudinal behavior data, or when in-lab observation would distort the behavior you're studying.
+
+---
+
+## Quality Contract
+
+### Red flags
+
+- Findings are opinions ("the layout feels busy") with no heuristic, observation or quote behind them.
+- Every issue has the same severity, or no issue has a severity at all.
+- Accessibility is marked as passing with no measured contrast and no keyboard walk-through.
+- Interview or survey questions are leading ("Wouldn't it be easier if…?") or ask two things at once.
+- Results from 5 qualitative sessions are reported as percentages of the user base.
+
+### Excuses to reject
+
+| Excuse | Rebuttal |
+|---|---|
+| "It's obvious users will struggle here." | What's obvious to you is a hypothesis. Cite the heuristic it breaks, or the behaviour you observed. |
+| "No time for testing, a heuristic review is enough." | Fine, but label it an expert review, not user evidence, and list what it can't tell you. |
+| "Accessibility is a separate audit." | Contrast, keyboard access and labels belong in every review. Skipping them misses the worst failures. |
+
+### Evidence of done
+
+- A findings table: issue → heuristic or WCAG criterion → severity (Critical/Major/Minor) → recommendation.
+- Measured contrast ratios and the result of a keyboard-only walk-through (Tab order, traps, focus visibility).
+- Each recommendation written as insight → implication → recommendation, naming its evidence (quote, clip or metric).
+- The method and sample size (e.g. "heuristic review, 1 evaluator" or "moderated test, n=5"), with its limitations.

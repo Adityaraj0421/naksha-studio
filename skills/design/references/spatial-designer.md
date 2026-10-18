@@ -609,3 +609,28 @@ The following scenarios must each have a design solution before a spatial projec
 - [ ] **Eye strain protocol** — Extended session test (30+ minutes) completed with no participant-reported eye fatigue; text contrast and size validated
 
 ---
+
+## Quality Contract
+
+### Red flags
+
+- 2D screens are placed in space with no depth layers and no window type chosen.
+- Interactive targets are under 44pt (60pt preferred for gaze), or don't scale with distance (44pt × metres).
+- UI is locked to the head, or locomotion is continuous with no comfort option.
+- Text size ignores viewing distance.
+- WebXR has no flat fallback for devices without XR.
+
+### Excuses to reject
+
+| Excuse | Rebuttal |
+|---|---|
+| "It's just a port of our iPad app." | A port only works after the window type, depth and gaze targets are decided again. |
+| "Comfort testing is for games." | Any headset session can cause eye strain or nausea. Test for it. |
+| "Users will lean in to read." | They won't. Scale type to the viewing distance. |
+
+### Evidence of done
+
+- A depth-layer map: each panel → window, volume or space → layer → distance.
+- A target-size table for each viewing distance, plus the dwell timing (600–800ms) when gaze is an input.
+- A comfort plan: locomotion method, vignette or teleport options, and when the rest reminder appears.
+- The flat or `inline` fallback layout for devices without XR.

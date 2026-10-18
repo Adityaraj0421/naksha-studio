@@ -1,0 +1,13 @@
+{
+  "name": "Copperline Studio",
+  "brand": {
+    "primary": "#7C2D12",
+    "secondary": "#F59E0B",
+    "font": "Inter",
+    "voice": "warm and precise"
+  },
+  "framework": "html",
+  "tokenFormat": "css-vars",
+  "createdAt": "2026-10-18T00:00:00Z",
+  "updatedAt": "2026-10-18T00:00:00Z"
+}

@@ -115,10 +115,23 @@ for e in data['evals']:
 "
 echo "───────────────────────────────────────"
 echo ""
-echo "Done. These are structural checks only — eval execution requires Claude Code."
+
+# 6. Tiered schema (tier/weight/check/threshold/budget_usd) and deterministic
+#    checks against fixtures — the $0 structural tier of scripts/eval-runner.js
+RUNNER_FAILED=0
+if ! node "$PLUGIN_ROOT/scripts/eval-runner.js" --tier structural; then
+  RUNNER_FAILED=1
+fi
+echo ""
+echo "Done. Paid tiers (e2e, judge) run separately: node scripts/eval-runner.js --tier judge --dry-run (see docs/evals.md)."
 
 if [ "$COVERAGE_FAILED" -gt 0 ]; then
   echo ""
   echo "❌ $COVERAGE_FAILED command(s) have no eval case — add one to evals/evals.json"
+  exit 1
+fi
+if [ "$RUNNER_FAILED" -gt 0 ]; then
+  echo ""
+  echo "❌ eval-runner structural tier failed — see docs/evals.md"
   exit 1
 fi

@@ -326,8 +326,10 @@ This skill is part of the **naksha** plugin. For focused workflows, use these co
 |---------|----------|
 | `/design <task>` | Full design workflow with team assembly |
 | `/design-reel <task> [--url <page>]` | Record the design team working — render a /design run into a share-able video reel (9:16 + 16:9) |
+| `/design-detect [files]` | Fast, free, no-AI check of HTML/CSS/components — contrast, spacing grid, type scale, focus and motion, AI-design clichés — grouped by the role that owns each fix |
 | `/design-review <file or screenshot>` | Audit an existing design — accepts HTML files, Figma URLs, screenshots (visual AI critique), or preview servers |
 | `/design-system` | Generate or extract design tokens |
+| `/design-md [lint\|import\|export\|page\|show]` | User has or wants a DESIGN.md file, asks to lint/convert one to DTCG, CSS or Tailwind, or wants page-specific overrides of the project design system (`.naksha/design-system/`) |
 | `/figma <URL>` | Convert a Figma design to production code |
 | `/figma-create <task>` | Create designs directly in Figma (pages, components, styles) |
 | `/ux-audit <brief>` | Audit a Figma file against a design brief |
@@ -366,8 +368,11 @@ This skill is part of the **naksha** plugin. For focused workflows, use these co
 | `/naksha-init` | Set up project memory — stores brand colors, font, framework, token format in `.naksha/project.json` |
 | `/naksha-status` | Display current project context and last 10 design decisions from `.naksha/memory.md` |
 | `/design-variants <task> [--count 2-5]` | User wants options, alternatives, or "a few directions" to compare — builds 2–5 distinct directions side by side and records which ones they like |
+| `/naksha-stats [--since <date>] [--all]` | User asks what naksha costs, which commands are expensive, or wants to set or check a budget |
+| `/naksha-dashboard [setup\|start\|stop\|status\|disable]` | User wants to watch the design team work live, see the org chart, or asks about Naksha Live; suggest `setup` once when it isn't set up |
+| `/naksha-vote helpful\|needs-work <subject> [because …]` | User says a result, variant, review finding or command run was helpful or needs work, or asks how naksha's judges compare with their own verdicts (list, stats, consolidate, calibrate, export --redact) |
 | `/naksha-taste [approve\|reject <direction>]` | User reacts to a direction ("I like this one", "not that") or asks what naksha has learned about their taste |
-| `/naksha-doctor` | Run all naksha quality checks and report the plugin's health status — structural validation, metadata consistency, behavioral smoke, legacy branding guard |
+| `/naksha-doctor [--transcripts]` | Run all naksha quality checks and report the plugin's health status — structural validation, metadata consistency, behavioral smoke, legacy branding guard. `--transcripts` scans local session transcripts for misrouted roles and proposes regression evals |
 | `/naksha-help` | Quick-reference for all commands — browse by category or look up a specific command |
 | `/pipeline <action>` | Run a multi-step design pipeline: `run <name>`, `list` available pipelines, `show <name>` to preview steps |
 | **Vision & Intelligence** | |
@@ -654,6 +659,7 @@ Before delivering, the Design Manager checks:
 - [ ] Is the copy clear and helpful?
 - [ ] Are animations purposeful and smooth?
 - [ ] Does it use consistent tokens/patterns?
+- [ ] For every activated role, does the output show the **Evidence of done** from the `## Quality Contract` at the end of its reference file, with none of that contract's **Red flags** present? If an item doesn't apply, say why instead of skipping it silently.
 - [ ] Would a real design team be proud of this?
 
 ---

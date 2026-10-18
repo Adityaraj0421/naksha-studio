@@ -116,8 +116,28 @@ Every specialist role has its own reference file, and `adapters/roles.json` is t
 3. Add it to the team tables and routing in `SKILL.md`, with team assembly examples showing when it activates
 4. Bump `roles` in `meta/stats.json`, then update the headline count in prose (`bash scripts/guard-counts.sh` lists every file that still states the old number)
 5. Run `node scripts/build-adapters.js` to regenerate the adapters
+6. End the reference file with a `## Quality Contract` section (see the Wing File Checklist below); `node scripts/validate-structure.js` fails without it
 
 `build-adapters.js` fails if a role reference file is missing from `roles.json`, if a roster entry points at a missing file, or if `stats.json` disagrees with the roster.
+
+## Adding a Design Lint Rule
+
+`scripts/design-lint.js` is naksha's free eval tier: deterministic rules with no network and no model calls. The same rules run from the CLI, in the `design-check` workflow, in the PostToolUse hook (`scripts/design-lint-hook.sh`) and behind `/design-detect`. To add one:
+
+1. **Check it is deterministic.** The rule must give the same answer from the file text alone. If it needs a rendered page or taste, it belongs in a command or agent instead.
+2. **Add a `rule({ … })` block** in the Rules section of `scripts/design-lint.js`, with a comment above it saying why the pattern is a problem (cite the WCAG criterion where there is one). Fields:
+   - `id`: kebab-case, unique, stable (users reference it in `.design-lint.json` and `--rules`)
+   - `label`, `category` (`accessibility`, `tokens`, `typography`, `motion`, `responsive`, `structure`, `slop`) and `role`: the Naksha role that owns the fix, as named in `adapters/roles.json`. `/design-detect` groups findings by it.
+   - `severity`: `error` only for clear accessibility or rendering failures, since errors fail CI. Everything else is a `warning`.
+   - `configKey`: the group toggle it belongs to (`checkContrast`, `checkSlop`, …)
+   - `applies(ctx)`: usually `hasMarkup`, `hasCss` or `isHtml`
+   - `fix`: one actionable sentence
+   - `run(ctx)`: return `null` when clean, or `{ message, locations }`, where `locations` are character indices (from `ctx.decls[].index`, `ctx.rules[].index` or `ctx.allTags[].index`) that the runner turns into line numbers. Use the parsed context (`ctx.rules`, `ctx.decls`, `ctx.allTags`, `ctx.tokens`, `ctx.settings.grid`) rather than new regexes over raw text where you can.
+3. **Add two fixtures**: `scripts/test/fixtures/<id>.bad.<ext>` must trigger the rule and `<id>.good.<ext>` must not, including the closest legitimate pattern you can think of. The test suite fails if a rule has no fixture pair.
+4. **Run** `node --test scripts/test/` and `node scripts/design-lint.js --list-rules`.
+5. **Document it** in the rules table in `commands/design-detect.md`.
+
+Keep rule text original. Do not copy rule lists or wording from other linters.
 
 ## Code Style
 
@@ -133,9 +153,10 @@ Before marking your PR ready, confirm all of the following apply to your contrib
 
 **All PRs:**
 - Tested locally end-to-end in Claude Code
-- `validate-structure` CI passes (checks file counts, version consistency, and command frontmatter)
+- `validate-structure` CI passes (checks file counts, version consistency, command frontmatter, and role Quality Contracts)
 - `bash scripts/quality-check.sh` passes — the same checks the `CI` workflow runs on every PR
 - No hardcoded paths — use `${CLAUDE_PLUGIN_ROOT}/` for all plugin-relative references
+- No telemetry and no network calls from hooks or scripts; project data stays in `.naksha/`. See [docs/privacy.md](docs/privacy.md)
 
 **New command:**
 - Command `.md` file is in `commands/`
@@ -158,11 +179,14 @@ Before marking your PR ready, confirm all of the following apply to your contrib
 Run the full local suite — this is what the `CI` workflow runs on every PR:
 
 ```bash
-bash scripts/quality-check.sh        # metadata, behavioral smoke, design lint, branding, count drift, hook smoke, adapter sync
-node scripts/validate-structure.js   # file counts, version consistency, command frontmatter
-bash scripts/run-evals.sh            # eval structure and fixture references
+bash scripts/quality-check.sh        # metadata, behavioral smoke, design lint, branding, count drift, hook smoke, adapter sync, procedures, unit tests
+node scripts/validate-structure.js   # file counts, version consistency, command frontmatter, role Quality Contracts
+bash scripts/run-evals.sh            # eval structure, fixture references, and the $0 structural eval tier
 (cd packages/naksha-reel && node --test test/*.test.mjs)   # reel unit tests
+node --test scripts/test/            # script unit tests (linter + hooks, eval runner, findings, session brief, sandbox, cost stats); also check 9 of quality-check
 ```
+
+Evals are tiered (see [docs/evals.md](docs/evals.md)). `node scripts/eval-runner.js` runs the free structural tier; `--tier e2e` and `--tier judge` drive headless `claude -p` and only execute with `NAKSHA_EVALS_PAID=1` and `ANTHROPIC_API_KEY` set. Before any paid run, check the estimate with `--dry-run --budget <usd>`; it exits 3 when the estimate exceeds the budget. Assertions with a deterministic `check` and an explicit `fixture` are graded for free on every PR.
 
 If you touch `hooks/hooks.json` or a hook script, `bash scripts/hook-smoke.sh` runs every command hook from a plugin path containing spaces, with and without the executable bit, and checks every `.sh` file is tracked as executable. New shell scripts need `git update-index --chmod=+x <file>`.
 
@@ -187,7 +211,7 @@ Naksha runs on multiple AI coding tools. The knowledge lives in the same role re
 
 | Tool | Adapter File | How It Loads |
 |------|-------------|-------------|
-| **Claude Code** | `.claude-plugin/plugin.json` + `skills/design/` | Plugin system — full 65 commands, agents, hooks |
+| **Claude Code** | `.claude-plugin/plugin.json` + `skills/design/` | Plugin system — full 70 commands, agents, hooks |
 | **Cursor** | `.cursor/rules/naksha.mdc` | Glob-matched rules — activates on CSS/HTML/TSX/SVG |
 | **Windsurf** | `.windsurfrules` | Read at session start for entire project |
 | **Gemini CLI** | `GEMINI.md` | Read at session start for entire project |
@@ -251,6 +275,7 @@ Follow the established pattern from any existing reference file:
 - `## Handoffs` — one sub-section per stakeholder with `Deliver:` line
 - `## Advanced Patterns` — 3–5 sophisticated patterns not obvious from the basics
 - `## Full Coverage` — pre-handoff verification checklist with `- [ ]` items
+- `## Quality Contract` — the last section, with `### Red flags` (3–5 role-specific signs the work is wrong), `### Excuses to reject` (2–4 shortcuts an agent might take, each with a one-line rebuttal) and `### Evidence of done` (3–5 checkable artifacts, e.g. "contrast ratio listed for every text/background pair"). Point to the checklists above it instead of repeating them. `node scripts/check-role-contracts.js` enforces it, and validate-structure runs that check too
 
 Target: 500–700 lines. Read an existing file in full before writing yours.
 

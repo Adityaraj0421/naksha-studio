@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Self-check fixture: seeded defects</title>
+  <style>
+    body { margin: 0; font: 16px/1.5 system-ui, sans-serif; color: #1a1a1a; background: #fff; }
+    .hero { width: 900px; padding: 16px; }            /* overflows at 375 and 768 */
+    .faint { color: #b0b0b0; }                         /* contrast about 2.1:1 on white */
+    .icon-btn { width: 16px; height: 16px; padding: 0; border: 0; background: #333; }
+    .icon-btn:focus { outline: none; }                 /* no focus indicator */
+    .row { display: flex; flex-direction: row-reverse; gap: 2px; }
+    .drawer { position: absolute; top: 0; left: 100%; width: 280px; }
+  </style>
+</head>
+<body>
+  <div class="hero">
+    <h1>Seeded defects</h1>
+    <h3>Skipped a heading level</h3>
+    <p class="faint">This grey text fails contrast on white.</p>
+    <div class="row">
+      <button class="icon-btn" type="button" aria-label="Close"></button>
+      <button class="icon-btn" type="button" aria-label="Menu"></button>
+    </div>
+    <a href="#top" tabindex="3">Jump with a positive tabindex</a>
+    <div aria-hidden="true"><a href="#hidden">Focusable but hidden from assistive tech</a></div>
+  </div>
+  <nav class="drawer"><a href="#off">Off-canvas link</a></nav>
+</body>
+</html>

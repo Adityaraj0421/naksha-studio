@@ -1,6 +1,6 @@
 ---
 description: "Design anything — pages, components, apps, dashboards, presentations. Assembles the right design specialists for the task."
-argument-hint: "[design task description]"
+argument-hint: "[design task description] [--no-check] [--visual]"
 allowed-tools: ["Read", "Write", "Edit", "Bash", "Glob", "Grep", "mcp__*"]
 ---
 
@@ -63,6 +63,16 @@ If found:
 - `taste.signals` (v5.3) → the user's learned taste from `/naksha-taste`. Weight each signal by age (≤ 90 days = 1, 91–180 days = 0.5, older = ignore) and sum per trait. Use the strongest approved traits as defaults for the Creative Director's direction, and avoid the strongest rejected traits. When signals have a `context` matching the current task, weight them higher. Taste is a preference, not a rule: the request, `constraints`, and brand always win. Note: "Applying your taste: leaning {traits}, avoiding {traits}." Skip silently if there are no active signals.
 
 If not found: continue normally (no project memory, no message).
+
+### Step 0.6: Load the Design System (MASTER.md + page override)
+
+If `.naksha/design-system/MASTER.md` exists (next to the `project.json` found above), it is the project's design system in DESIGN.md format (see `${CLAUDE_PLUGIN_ROOT}/docs/design-md.md`). Name the page being designed as a lowercase slug (`checkout`, `pricing`). If `.naksha/design-system/pages/<slug>.md` exists, load the merged system:
+
+```bash
+node ${CLAUDE_PLUGIN_ROOT}/scripts/design-md.js resolve --page <slug> --format md
+```
+
+(Leave out `--page` when there is no override.) **Precedence: page override > MASTER.md > brand defaults from `project.json`.** Use the resolved tokens as the exact values for colours, type, spacing, radii and component styles, and follow its prose (especially Do's and Don'ts) as design rules. An explicit request in `$ARGUMENTS` still wins. Note: "Using design system: MASTER.md{ + pages/<slug>.md}." Skip silently if MASTER.md is absent.
 
 ### Step 0.75: Stitch Quick Proto
 
@@ -155,6 +165,9 @@ Write the final HTML to **`design-output.html`** in the current working director
 This is the canonical handoff artifact — used by `/design-framework` and `/design-review`.
 
 ### 6. Preview & Verify
+
+**Browser self-check** (default; skip it when `$ARGUMENTS` has `--no-check`, and strip `--no-check` / `--visual` from the task like `--framework`):
+Read and follow `${CLAUDE_PLUGIN_ROOT}/skills/design/procedures/browser-self-check.md` with `TARGET=design-output.html`, `CALLER=/design`, `FIX=apply`, `VISUAL=true` only if `--visual` was passed. Put its result block in the final summary. When it ran with a browser, only step 4 below (interactive states) is still needed.
 
 Use the Preview MCP tools to show live results:
 1. Start preview server

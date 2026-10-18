@@ -1,0 +1,4 @@
+button:focus:not(:focus-visible) { outline: none; }
+button:focus-visible { outline: 2px solid #1d4ed8; outline-offset: 2px; }
+.link { outline: 0; }
+.link:focus-visible { box-shadow: 0 0 0 3px #1d4ed8; }

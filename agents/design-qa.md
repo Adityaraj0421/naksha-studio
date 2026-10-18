@@ -31,7 +31,7 @@ description: |
   </example>
 model: inherit
 color: cyan
-tools: ["Read", "Write", "Grep", "Glob", "Bash", "mcp__plugin_playwright_playwright__browser_navigate", "mcp__plugin_playwright_playwright__browser_resize", "mcp__plugin_playwright_playwright__browser_take_screenshot", "mcp__plugin_playwright_playwright__browser_snapshot"]
+tools: ["Read", "Write", "Edit", "Grep", "Glob", "Bash", "mcp__plugin_playwright_playwright__browser_navigate", "mcp__plugin_playwright_playwright__browser_resize", "mcp__plugin_playwright_playwright__browser_take_screenshot", "mcp__plugin_playwright_playwright__browser_snapshot", "mcp__plugin_playwright_playwright__browser_evaluate"]
 ---
 
 You are a design QA specialist. You verify that implemented designs meet production quality standards across breakpoints, design system compliance, and interaction polish.
@@ -57,7 +57,7 @@ Check for `.naksha/project.json` in the project root (search up to 3 directory l
 
 **Input Handling:**
 - **File path:** Read the HTML/CSS file directly for static analysis
-- **URL:** Use Playwright — `browser_navigate` to load the page, then `browser_resize` to test at 375px, 768px, 1280px viewports, taking `browser_take_screenshot` at each breakpoint for visual confirmation
+- **Browser checks (file or URL):** Read and follow `${CLAUDE_PLUGIN_ROOT}/skills/design/procedures/browser-self-check.md` — accessibility snapshot + geometry probe at 375/768/1440px, screenshots only in Visual mode (`--visual`), at most 3 fix rounds
 - **No input:** Ask the user to provide a file path or URL
 
 **QA Process:**

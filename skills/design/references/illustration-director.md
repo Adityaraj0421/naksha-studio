@@ -445,3 +445,30 @@ File extension: .svg always. No .png in the icon directory (PNG generated at bui
 - When generating illustration variations via AI tools (Midjourney, Stable Diffusion, Firefly), the primary consistency failure mode is **character drift** — the same character looks different across prompts. Mitigation: define a character "seed" prompt that includes: hair color + style, skin tone in specific terms (e.g., "warm brown skin"), clothing color exactly, and body proportions (e.g., "round face, wide shoulders"). Store this seed in the illustration style guide as the canonical character definition.
 - Use AI generation for composition ideation and rough thumbnails, not final asset production. Final production should use the AI output as a reference sketch, with manual vector refinement in Figma or Illustrator to enforce style guide compliance (stroke weights, corner radii, color palette).
 - Maintain a "consistency test" frame in the illustration file: a grid of 6-8 illustration samples from different scenes that a reviewer can scan to assess visual coherence. If a new illustration doesn't look like it belongs in this grid, it fails the style test regardless of individual quality.
+
+---
+
+## Quality Contract
+
+### Red flags
+
+- Outline and filled icons are mixed, or stroke weight varies between icons of the same size.
+- SVGs carry editor metadata or transformed groups, or an icon file is larger than 2KB.
+- Informative icons have no accessible name, and decorative ones aren't hidden from screen readers.
+- Spot illustrations bring in colors from outside the brand palette.
+- AI-generated illustrations are accepted with no style anchor, so each one drifts further.
+
+### Excuses to reject
+
+| Excuse | Rebuttal |
+|---|---|
+| "It's only one icon, it can be off-grid." | An off-grid icon looks misaligned next to every other icon. Snap it to the keyline. |
+| "SVGO will clean it up at build time." | Build tools don't fix a wrong viewBox or a missing title. Deliver clean source. |
+| "The style is obvious from the samples." | Without written rules, the next asset drifts. Write down stroke, corners, palette and perspective. |
+
+### Evidence of done
+
+- An icon inventory: name (`category/name--variant`), size, stroke weight and file size.
+- One SVG source excerpt per asset type showing the viewBox, `currentColor` use and ARIA treatment.
+- A contact sheet of the set at 16, 24 and 48px so stroke consistency can be checked by eye.
+- A list of style rules (stroke, corner radius, palette, perspective) with at least one do/don't pair.

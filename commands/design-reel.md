@@ -28,6 +28,11 @@ command -v node >/dev/null && command -v ffmpeg >/dev/null && echo "OK" || echo 
 - `MISSING_TOOLS` → stop. Tell the user to install Node 18+ and ffmpeg; point to `docs/reel-setup.md` and `/naksha-doctor`.
 - `DEPS_MISSING` → run once: `(cd packages/naksha-reel && npm install)`. This is the one-time, opt-in install; naksha core stays zero-build.
 
+**Budget pre-check:** if `.naksha/project.json` has a `budgets` object, run
+`node "${CLAUDE_PLUGIN_ROOT}/scripts/naksha-stats.js" --budget-check --command /design-reel`.
+If any line says `WARN` or `OVER BUDGET`, show those lines (a reel is one of the most expensive
+naksha runs) and ask whether to continue before Step 1. No budget, or only `OK` lines: continue without mentioning it.
+
 ## Step 1: Parse the request
 
 - **Task**: the design brief (strip flags).

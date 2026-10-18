@@ -1,7 +1,7 @@
 ---
-description: "Run all naksha quality checks and report the plugin's health status."
-argument-hint: "[--fix]"
-allowed-tools: ["Bash", "Read", "Glob", "mcp__plugin_playwright_playwright__browser_navigate", "mcp__figma-console__figma_get_status", "mcp__stitch__list_projects"]
+description: "Run all naksha quality checks and report the plugin's health status, or diagnose misrouted roles from local session transcripts with --transcripts."
+argument-hint: "[--fix] [--transcripts [path]]"
+allowed-tools: ["Bash", "Read", "Glob", "Grep", "Write", "mcp__plugin_playwright_playwright__browser_navigate", "mcp__figma-console__figma_get_status", "mcp__stitch__list_projects"]
 ---
 
 # /naksha-doctor
@@ -12,6 +12,7 @@ Run a full health check of the naksha plugin — structural validation, metadata
 
 - No argument: run all checks and show the status report
 - `--fix`: after showing failures, output step-by-step remediation instructions for each failed check
+- `--transcripts [path]`: skip the health checks and run **Transcript Mode** (see the end of this file). It reads recent Claude Code session transcripts, finds naksha runs that misfired, and proposes regression evals in `.naksha/proposed-evals.json`. `path` is a transcript `.jsonl` file or a folder of them; without it, the current project's folder under `~/.claude/projects/` is used.
 
 ## Step 1: Locate the plugin root
 
@@ -96,7 +97,7 @@ Parse each script's output and exit code. Present results in this format when al
 ║       naksha doctor                   ║
 ╚═══════════════════════════════════════╝
 
-  ✅  validate-structure    8/8 checks passed
+  ✅  validate-structure    9/9 checks passed
   ✅  verify-metadata       all counts consistent
   ✅  behavioral-smoke      fixtures passing
   ✅  guard-legacy-branding no banned strings found
@@ -132,7 +133,7 @@ When any quality check fails, show ❌ and a one-line summary. The HEALTHY/UNHEA
 ║       naksha doctor                   ║
 ╚═══════════════════════════════════════╝
 
-  ✅  validate-structure    8/8 checks passed
+  ✅  validate-structure    9/9 checks passed
   ❌  verify-metadata       FAIL — commands count mismatch
   ✅  behavioral-smoke      fixtures passing
   ✅  guard-legacy-branding no banned strings found
@@ -178,6 +179,7 @@ When `--fix` is present, after the report add a numbered remediation checklist f
 - `pipeline-yaml-structure`: open each listed YAML file, add the missing `name:`, `description:`, `steps:`, or `command:` field
 - `skill-command-sync`: open `skills/design/SKILL.md`, find the Plugin Commands table, add a row for each unlisted command
 - `command-allowed-tools`: open each listed command file, add `allowed-tools: ["Read"]` to the frontmatter
+- `role-quality-contracts`: run `node scripts/check-role-contracts.js` for the list. Each named role reference needs a `## Quality Contract` section with `### Red flags` (3–5 items), `### Excuses to reject` (2–4 excuses, each with a rebuttal) and `### Evidence of done` (3–5 items). Copy the layout from any complete reference, such as `skills/design/references/ui-designer.md`, and write content specific to that role
 
 **verify-metadata failures:**
 - commands count mismatch: run `ls commands/*.md | wc -l` → update `meta/stats.json`
@@ -222,9 +224,125 @@ When `--fix` is present, after the report add a numbered remediation checklist f
   ```
 - Alternatively, re-run `/naksha-init` — it now upgrades automatically while keeping all brand and framework values.
 
+## Transcript Mode (`--transcripts [path]`)
+
+Find naksha runs that went wrong in past sessions, so each one becomes a regression eval. This mode skips Steps 2–4.
+
+`PLUGIN_ROOT` below means `${CLAUDE_PLUGIN_ROOT}` when it is set, or the root found in Step 1 otherwise. Unlike Step 1, **stay in the user's project directory**: the default transcript folder is worked out from the current directory, and `.naksha/` belongs to the project.
+
+**Privacy: transcript content stays on this machine.** Transcripts hold everything said and done in a session. In this mode:
+- Read transcripts only with the local scanner below. Never upload, fetch, or send transcript content anywhere, and never call an MCP or web tool with it.
+- Show the user only short excerpts (the scanner caps them and masks emails, API keys and long tokens).
+- Write only `.naksha/proposed-evals.json`, with eval prompts rewritten so they hold no names, emails, URLs, file paths, customer data or secrets.
+
+### T1. Scan the transcripts
+
+```bash
+node "$PLUGIN_ROOT/scripts/scan-transcripts.js" [path] --limit 20
+```
+
+- Without `path`, the scanner reads `~/.claude/projects/<project>/`, where `<project>` is the current directory with every character that isn't a letter or digit replaced by `-` (`/Users/me/app` → `-Users-me-app`).
+- Add `--subagents` to include subagent transcripts (`<session>/subagents/*.jsonl`).
+- Turns that look like work on naksha itself (editing `skills/design/` or `commands/`, or reading naksha's files from inside the working directory) are skipped and counted as `devTurnsSkipped`. Add `--include-dev` only if the user asks for them.
+- Exit code 2 with an `error` field, or `counts.files` of 0, means no transcripts were found. Tell the user where you looked, ask for a path, and stop.
+
+The output is JSON with `counts` and `invocations`. Each invocation has the `task` (redacted and capped), the `command` used (if any), `rolesLoaded` (role references read), `rolesNamed` (roles mentioned in the reply, with counts), `keywordRoles` and `keywordRolesNotLoaded` (roles whose routing keywords appear in the task), `filesWritten`, and an `output` excerpt.
+
+The transcript format is not a published contract. The scanner skips lines it can't parse and records without a recognisable message, and counts both. Always report the counts. If `unparseable` is more than 10% of `lines`, warn that the format may have changed and that the results may be incomplete.
+
+### T2. Load what "right" looks like
+
+- Routing rules: the team assembly table and **Rules** in Step 3 of `$PLUGIN_ROOT/skills/design/SKILL.md`.
+- Each role's `activate` text: `$PLUGIN_ROOT/adapters/roles.json`.
+- Each role's Quality Contract: `node "$PLUGIN_ROOT/scripts/check-role-contracts.js" --json`. If this exits non-zero, a contract is broken. Say so, suggest plain `/naksha-doctor`, and skip check M3 below.
+
+### T3. Classify each invocation
+
+Check each invocation against the three misfire types. `keywordRoles` is a keyword hint, not a verdict, so confirm every flag against the routing rules and the task's actual intent. A task that mentions "email" in passing ("add an email field to the signup form") doesn't need the Email Designer.
+
+| Type | Flag it when | Typical evidence |
+|---|---|---|
+| **M1 Misrouted** | A role the routing rules call for was never activated, or an activated role has no connection to the task (its `activate` text doesn't match anything asked), or a standard task was staffed with more than 4 roles for no stated reason | `keywordRolesNotLoaded` confirmed by a Step 3 rule; e.g. a "welcome email" task that loaded only the UI Designer |
+| **M2 Silent role** | A role was activated (in `rolesLoaded`, or named in the team line of the reply) but the output contains nothing from its domain | Motion Designer named, but no durations, easing or transitions anywhere in the output or written files |
+| **M3 Missing evidence** | For an activated role, 2 or more of its **Evidence of done** items appear neither in the output nor in `filesWritten` | UI Designer activated, but no contrast ratios and no previews at 375/768/1440 |
+
+For M2 and M3, read the files in `filesWritten` that still exist locally before deciding. Evidence often lives in the written HTML, CSS or docs rather than in the reply. An item counts as present only if the artifact itself is there ("contrast 4.6:1 for body text"), not just a mention ("checked contrast").
+
+Don't flag an invocation when:
+- the user explicitly narrowed the scope ("just the copy", "quick sketch, skip the specs"),
+- the turn was cut off, errored, or has an empty output (count it as **incomplete** instead), or
+- the task was a question about naksha rather than design work.
+
+### T4. Propose one regression eval per misfire
+
+Use the `evals/evals.json` entry shape, **without `id`** (ids are assigned when a maintainer merges):
+
+```json
+{
+  "name": "regression-email-routing-welcome-email",
+  "role": "skills/design/references/email-designer.md",
+  "prompt": "Design a welcome email for new signups to a project management app",
+  "expected_output": "Routes to the Email Designer and Email Copywriter and delivers a table-based HTML email with subject line and preheader",
+  "assertions": [
+    { "name": "activates-email-designer", "description": "Reads email-designer.md or names the Email Designer in the team" },
+    { "name": "activates-email-copywriter", "description": "Subject line, preview text and body copy come from the Email Copywriter" },
+    { "name": "table-layout", "description": "HTML uses table layout with inline styles, not flexbox or grid" },
+    { "name": "client-test-evidence", "description": "Includes a client test matrix or names the clients checked" }
+  ]
+}
+```
+
+- `name`: `regression-<area>-<short-slug>`, kebab-case, unique within the file.
+- `command`: include only when the invocation used a command; use the bare command name (`/design-review`).
+- `role`: the reference of the role at the centre of the misfire (the one that should have activated, stayed silent, or lacked evidence).
+- `prompt`: a **generalized rewrite** of the task, never a verbatim copy. Keep the design intent and the keywords that should trigger routing; replace names, brands, URLs, paths and data with neutral stand-ins.
+- `assertions`: 4–6 checkable items. For M1, assert the right roles activate (and, if relevant, that the wrong one doesn't). For M2, assert the silent role produces a concrete artifact in its domain. For M3, turn the missing **Evidence of done** items into assertions.
+
+### T5. Write `.naksha/proposed-evals.json`
+
+Create `.naksha/` in the current project directory if needed. If the file already exists, read it first and append: skip any eval whose `name` or `prompt` already appears, and never remove or rewrite existing entries. Write this shape:
+
+```json
+{
+  "skill_name": "design",
+  "generated_by": "/naksha-doctor --transcripts",
+  "generated_at": "<ISO 8601 timestamp>",
+  "source": { "transcripts": "<folder or file scanned>", "files_scanned": 0, "invocations": 0 },
+  "evals": [],
+  "misfires": [
+    { "eval": "<eval name>", "type": "M1|M2|M3", "session": "<session id>", "timestamp": "<when it ran>", "detail": "<one line, no transcript quotes>" }
+  ]
+}
+```
+
+**Never edit `evals/evals.json`.** The proposals are for the user to review. To adopt one, a maintainer copies it into `evals/evals.json`, gives it the next free `id`, and runs `bash scripts/run-evals.sh`. If nothing misfired, don't create or touch the file.
+
+### T6. Report
+
+```
+╔═══════════════════════════════════════╗
+║       naksha doctor — transcripts     ║
+╚═══════════════════════════════════════╝
+
+  Scanned    20 transcript files · 4,717 lines (0 unparseable, 2,248 non-message records skipped)
+  Found      6 naksha runs in 4 sessions · 2 development turns skipped
+
+  ❌ M1 misrouted        1   "welcome email" task never reached the Email Designer
+  ❌ M2 silent role      1   Motion Designer named, no motion spec produced
+  ❌ M3 missing evidence 2   UI Designer: no contrast ratios, no 375/768/1440 previews
+  ✅ clean               2
+  ⚠  incomplete          0
+
+  Proposed 4 regression evals → .naksha/proposed-evals.json (review before merging)
+  Transcript content stayed on this machine.
+```
+
+List each misfire as one line: date, command (or "design skill"), type, role, and the reason. Don't quote more than a short phrase of the original task.
+
 ## Notes
 
 - Run from the project directory — the plugin root is where `meta/stats.json` lives
-- The doctor does not auto-fix anything — it diagnoses and guides
+- The doctor does not auto-fix anything — it diagnoses and guides. The only file it writes is `.naksha/proposed-evals.json`, and only in Transcript Mode
 - For a fast structural check only: `node scripts/validate-structure.js`
 - For a full local quality sweep: `bash scripts/quality-check.sh`
+- Transcript Mode reads local files only. The scanner's options are listed in the header comment of `scripts/scan-transcripts.js`

@@ -350,3 +350,30 @@ The canonical pitch deck slide order and design intent per slide:
 - **Sequoia Capital's framework** is the most widely validated investor-deck structure: purpose/problem, problem (deeper), solution, why now (market timing), market size, competition, product, business model, team, financials. Use it as the default unless there's a specific reason to deviate.
 - **Buffer's deck** (one of the most cited examples) led with data visualization — showing user growth and engagement metrics early established credibility before any narrative claims. For products with strong quantitative traction, front-load the numbers.
 - **Uber's deck** succeeded despite unimpressive design because the solution resonated so clearly with a universally understood problem. Design lesson: no amount of visual polish compensates for a weak solution framing. The clearest articulation of the problem-solution fit always wins over beautiful but vague decks.
+
+---
+
+## Quality Contract
+
+### Red flags
+
+- Headlines name a topic ("Market") instead of making a claim ("Our market grows 34% a year").
+- Slides go over the word limit for their type, or body text is smaller than 20pt.
+- Charts have no callout telling the audience what to look at.
+- A slide can be removed without losing anything from the story.
+- Aspect ratios are mixed, or text sits inside the projection safe-zone margin.
+
+### Excuses to reject
+
+| Excuse | Rebuttal |
+|---|---|
+| "Investors will read it later, so more text is fine." | Then make a separate leave-behind. Text on a slide you present competes with the speaker. |
+| "The data speaks for itself." | It doesn't. Without a callout, each viewer draws their own conclusion. |
+| "It's internal, polish doesn't matter." | Internal decks drive decisions too. The clarity rules still apply, even if polish can be lighter. |
+
+### Evidence of done
+
+- A slide outline: number → slide type → headline claim → word count against the limit.
+- A map of slides to story beats (problem → solution → traction → ask, or the arc chosen).
+- Contrast ratios for text on every background used (at least 5:1 for projection).
+- Rendered previews or an export at 1920×1080, noting that fonts are embedded.

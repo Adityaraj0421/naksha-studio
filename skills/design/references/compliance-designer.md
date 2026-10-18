@@ -717,3 +717,28 @@ To continue using [feature], please review and confirm your preferences.
 - [ ] Tested with NVDA + Firefox and VoiceOver + Safari
 
 ---
+
+## Quality Contract
+
+### Red flags
+
+- "Accept all" is visually stronger than "Reject all", or rejecting takes more clicks than accepting.
+- Consent boxes are pre-ticked, or consent is bundled ("By using this site you agree…").
+- Card fields are rendered in the merchant page DOM instead of the payment processor's iframe.
+- PHI is shown with no indicator, or a "remember me" option bypasses the session timeout.
+- A design is called "GDPR-compliant" without naming the article or requirement each pattern satisfies.
+
+### Excuses to reject
+
+| Excuse | Rebuttal |
+|---|---|
+| "Legal will review it anyway." | Legal reviews the wording, not the interaction design. Dark patterns get through legal review all the time. |
+| "Everyone else uses a nudge banner." | Regulators fine common patterns too. Equal prominence is the requirement. |
+| "We're too small for HIPAA or PCI to matter." | Scope depends on the data handled, not on company size. |
+
+### Evidence of done
+
+- A requirement trace table: pattern → clause (e.g. GDPR Art. 7(3), a PCI DSS v4.0 requirement, a WCAG success criterion) → how the design meets it.
+- Click counts for accepting vs rejecting consent, and for withdrawing consent.
+- Contrast ratios for text and UI components (SC 1.4.3 and 1.4.11), plus the result of a keyboard and focus walk-through.
+- A list of items that need legal sign-off, stating that this is design guidance, not legal advice.

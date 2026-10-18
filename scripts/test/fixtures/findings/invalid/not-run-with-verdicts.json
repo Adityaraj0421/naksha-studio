@@ -1,0 +1,69 @@
+{
+  "schema_version": "1.0",
+  "target": {
+    "kind": "file",
+    "location": "evals/fixtures/test-page.html",
+    "viewports": [
+      "1440x900"
+    ]
+  },
+  "generated_at": "2026-10-18T09:30:00Z",
+  "generator": "/design-review",
+  "coverage": {
+    "accessibility": {
+      "status": "checked",
+      "notes": "Contrast on 6 text pairs, focus styles, alt text, lang, landmarks"
+    },
+    "visual_hierarchy": {
+      "status": "checked"
+    },
+    "typography": {
+      "status": "checked"
+    },
+    "color": {
+      "status": "checked"
+    },
+    "spacing": {
+      "status": "checked"
+    },
+    "content": {
+      "status": "checked"
+    },
+    "interaction_states": {
+      "status": "checked",
+      "notes": "Focus, hover, reduced motion"
+    },
+    "responsive": {
+      "status": "skipped",
+      "reason": "Static file reviewed without a browser; viewport behavior could not be rendered"
+    },
+    "tokens": {
+      "status": "checked"
+    }
+  },
+  "verification": {
+    "mode": "not-run"
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "dimension": "interaction_states",
+      "severity": "critical",
+      "title": "Primary CTA removes its focus outline with no replacement",
+      "criterion": "WCAG 2.4.7 Focus Visible",
+      "evidence": {
+        "locator": ".cta-btn:focus",
+        "file": "evals/fixtures/test-page.html",
+        "line": 27,
+        "snippet": ".cta-btn:focus { outline: none; }"
+      },
+      "recommendation": "Replace with .cta-btn:focus-visible { outline: 2px solid #ffffff; outline-offset: 3px; }",
+      "owner_role": "UX Researcher",
+      "verdict": "confirmed",
+      "verification": {
+        "reproduced": true,
+        "note": "Line 27 contains the rule. Searched the whole file for :focus-visible, box-shadow and border changes on .cta-btn; none exist, so keyboard focus is invisible."
+      }
+    }
+  ]
+}

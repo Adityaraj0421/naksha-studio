@@ -136,6 +136,17 @@ check('command-allowed-tools', () => {
   return true;
 });
 
+// --- Check 9: role-quality-contracts ---
+// Every specialist reference in adapters/roles.json needs a complete
+// "## Quality Contract" (Red flags, Excuses to reject, Evidence of done).
+// Details: node scripts/check-role-contracts.js
+check('role-quality-contracts', () => {
+  const { checkRoleContracts } = require('./check-role-contracts.js');
+  const { problems } = checkRoleContracts(ROOT);
+  if (problems.length > 0) return problems.join(' | ');
+  return true;
+});
+
 // --- Result ---
 if (failed === 0) {
   console.log(`✅ validate-structure: ${passed} checks passed`);

@@ -11,9 +11,14 @@ Naksha keeps persistent project context in `.naksha/project.json`. These command
 
 `/design`, `/design-review`, `/design-score`, `/design-system`, and `/brand-kit` read project memory automatically, so saved constraints and patterns apply without repeating them.
 
+**Design system files (v6)** — `.naksha/design-system/MASTER.md` holds the project design system in the open [DESIGN.md](https://github.com/google-labs-code/design.md) format (YAML tokens plus prose), with optional `pages/<page>.md` overrides. Precedence: page override > MASTER.md > brand defaults. `/design-md` lints, imports (DTCG JSON or CSS variables) and exports (DTCG, CSS, Tailwind) them; `/design` reads them before building.
+
+**Naksha Live (v6, optional, recommended)** — `/naksha-dashboard setup` starts a local dashboard (127.0.0.1 only, token-protected) with a live org chart of the 30 roles, an activity stream, project memory, findings and cost. Off by default; when enabled, Claude Code hooks append compact events to `.naksha/events.jsonl` (no prompt text, nothing leaves your machine). Claude Code only.
+
 **Taste memory (v5.3)** — naksha learns which design directions you like:
 
 - **`/design-variants <task> [--count 2-5]`** — build 2–5 clearly different directions for the same brief (default 3), side by side in `naksha-variants/index.html`. When you have a taste profile, most directions lean into it and one "Wildcard" deliberately doesn't.
 - **`/naksha-taste approve|reject <direction> [because …]`** — record your verdicts; with no arguments, show your taste profile. `/design` and `/design-variants` then default to the traits you approve and avoid the ones you reject. Taste is a preference: your request, constraints, and brand always win. Older signals fade (half weight after 90 days, ignored after 180).
+- **`/naksha-vote helpful|needs-work <subject> [because …]`** (v6) — vote on a variant, design, review finding or command run. Votes stay in `.naksha/votes.jsonl` and are never sent anywhere; `/naksha-vote consolidate` turns them into taste observations with counts and evidence, and `/naksha-vote calibrate` shows where eval judges passed work you said needs work. Share only with `/naksha-vote export --redact`.
 
 **Also:** `/design-reel` records the design team working and renders a shareable 9:16 + 16:9 video reel. It needs Node and `packages/naksha-reel`; where that toolchain is absent, the command is documentation only.

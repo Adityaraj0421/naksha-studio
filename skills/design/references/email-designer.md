@@ -541,3 +541,30 @@ When including data numbers in email (receipts, reports, summaries):
 - Round to meaningful precision — showing conversion rate to 3 decimal places when you only care about whole-number changes adds noise
 - Show units clearly: `$84K` not `$84,231.47` for executive summaries; use full precision only in transactional/receipt emails where the exact amount matters
 - Trend indicators: show context ("vs last month") not just the number — "↑ 12%" means nothing without the baseline
+
+---
+
+## Quality Contract
+
+### Red flags
+
+- The layout uses flexbox, grid or `<div>` columns instead of tables.
+- Styles live in a `<style>` block or an external stylesheet, and nothing is inlined.
+- Essential content (headline, price, CTA) exists only inside images.
+- Buttons are images, or links with no VML fallback for Outlook.
+- The unsubscribe link, physical address or preheader is missing.
+
+### Excuses to reject
+
+| Excuse | Rebuttal |
+|---|---|
+| "Nobody uses Outlook anymore." | Outlook is still common in work inboxes. A broken layout there costs real clicks. |
+| "It renders in my browser preview." | Browsers aren't email clients. Test in client previews (Litmus or Email on Acid) or with a real test send. |
+| "Web fonts make it on-brand." | Most clients ignore web fonts. Specify the fallback stack and judge the design with it. |
+
+### Evidence of done
+
+- A client test matrix (Gmail web and app, Outlook desktop, Apple Mail, mobile) with pass/fail results from a preview tool or a test send.
+- A screenshot at 375px showing stacked columns and full-width buttons.
+- An images-off render showing the alt text still carries the message and CTA.
+- A compliance footer with the unsubscribe link and physical address, and the preheader text set.
