@@ -23,7 +23,7 @@ Then, for each feature still marked **not on integration** below, give Claude it
 | 5 | DESIGN.md compatibility | 1 | `v6/design-md` | building |
 | 3 | Bounded browser self-check | 2 | `v6/browser-self-check` | ✅ on integration |
 | 6 | Cost tracking + budgets (`/naksha-stats`) | 2 | `v6/cost-budgets` | building |
-| 10 | Lean, safe runtime (PreCompact brief, compact SessionStart, sandbox, privacy) | 2 | `v6/lean-runtime` | building |
+| 10 | Lean, safe runtime (PreCompact brief, compact SessionStart, sandbox, privacy) | 2 | `v6/lean-runtime` | ✅ on integration |
 | 7 | Naksha Live dashboard + event stream + org chart (optional, recommended) | 3 | `v6/live-dashboard` | building |
 | 8 | Votes → judge calibration + evidence-backed taste | 3 | `v6/votes` | building |
 
