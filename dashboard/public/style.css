@@ -20,7 +20,7 @@
   --surface-2: #F5F6FB;
   --ink: #14162A;
   --ink-2: #585C72;
-  --ink-3: #5F6380; /* the site's --ink-dim (#6C7088) is 4.20:1 on --bg: too faint for small text */
+  --ink-3: #5F6380; /* the site's --ink-dim: 4.5:1 or better on --bg, --surface and --surface-2 */
   --line: rgba(20, 22, 44, 0.10);
   --line-strong: rgba(20, 22, 44, 0.22);
   --accent: var(--brand-iris);
