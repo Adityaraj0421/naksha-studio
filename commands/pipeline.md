@@ -164,6 +164,11 @@ Steps to run:
 Input: "<user brief>"
 ```
 
+   **Budget pre-check:** if `.naksha/project.json` has a `budgets` object, run
+   `node "${CLAUDE_PLUGIN_ROOT}/scripts/naksha-stats.js" --budget-check --command /pipeline`.
+   If any line says `WARN` or `OVER BUDGET`, show those lines under the plan (each step is a full
+   command run). No budget, or only `OK` lines: show nothing.
+
 4. Ask the user for confirmation:
 
 > Ready to run this pipeline? Reply **yes** to proceed, or provide a revised brief.
