@@ -1,0 +1,32 @@
+{
+  "_comment": "Pinned price table for scripts/eval-runner.js cost estimates. Prices are USD per million tokens (MTok), standard tier: base input and output, no prompt caching, no Batch discount. Update by hand; never fetched at runtime. 'status' is 'sourced' when the value was copied from the cited page on as_of, and 'placeholder' when it is an assumption nobody has verified.",
+  "currency": "USD",
+  "unit": "per_million_tokens",
+  "source": "https://platform.claude.com/docs/en/about-claude/pricing (Model pricing table, 'Base input tokens' and 'Output tokens' columns)",
+  "as_of": "2026-10-18",
+  "models": {
+    "claude-opus-5-5": { "input": 4.0, "output": 20.0, "status": "sourced", "source": "https://platform.claude.com/docs/en/about-claude/pricing", "as_of": "2026-10-18" },
+    "claude-opus-5": { "input": 5.0, "output": 25.0, "status": "sourced", "source": "https://platform.claude.com/docs/en/about-claude/pricing", "as_of": "2026-10-18" },
+    "claude-sonnet-5-5": { "input": 2.0, "output": 10.0, "status": "sourced", "source": "https://platform.claude.com/docs/en/about-claude/pricing", "as_of": "2026-10-18" },
+    "claude-sonnet-5": { "input": 2.0, "output": 10.0, "status": "sourced", "source": "https://platform.claude.com/docs/en/about-claude/pricing (footnote 3: the $2/$10 launch price is now the standard price)", "as_of": "2026-10-18" },
+    "claude-haiku-5-5": { "input": 0.1, "output": 0.5, "status": "sourced", "source": "https://platform.claude.com/docs/en/about-claude/pricing (prompts up to 100,000 tokens; $0.50/$2.50 above that, which the estimator does not model)", "as_of": "2026-10-18" },
+    "claude-haiku-4-5": { "input": 1.0, "output": 5.0, "status": "sourced", "source": "https://platform.claude.com/docs/en/about-claude/pricing", "as_of": "2026-10-18" },
+    "claude-fable-5-1": { "input": 10.0, "output": 50.0, "status": "sourced", "source": "https://platform.claude.com/docs/en/about-claude/pricing", "as_of": "2026-10-18" }
+  },
+  "defaults": {
+    "e2e_model": "claude-opus-5-5",
+    "judge_model": "claude-sonnet-5-5",
+    "run_budget_usd": 5
+  },
+  "estimates": {
+    "_comment": "Heuristics used to turn eval specs into token counts. All values here are PLACEHOLDERS (unmeasured assumptions). Replace them with numbers from a real run's usage when you have one.",
+    "status": "placeholder",
+    "chars_per_token": 4,
+    "e2e_overhead_tokens": 20000,
+    "e2e_turns": 3,
+    "judge_overhead_tokens": 1500,
+    "default_output_tokens": 4000,
+    "judge_output_tokens_base": 200,
+    "judge_output_tokens_per_assertion": 80
+  }
+}
