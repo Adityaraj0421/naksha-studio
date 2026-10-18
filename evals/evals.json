@@ -2068,6 +2068,7 @@
     {
       "id": 72,
       "name": "email-audit technical",
+      "command": "/email-audit",
       "prompt": "Audit this email HTML for Lumina Beauty \u2014 it's a promotional email for the Glow Serum launch: <!DOCTYPE html><html><head><title>Email</title></head><body><table width='600'><tr><td><h1>Introducing version 2 of our Glow Serum</h1><p>We've improved the formula.</p><a href='#' style='background-color:#c9a96e;color:#fff;padding:12px 24px;'>Click here</a></td></tr></table></body></html>",
       "expected_output": "Phase 1 technical audit with at least 2 critical issues: missing bulletproof VML button and missing preheader. Corrected HTML provided for critical issues. Phase 2 copy audit flags feature-first headline and weak CTA text, provides rewrites.",
       "files": [
@@ -2101,6 +2102,7 @@
     {
       "id": 73,
       "name": "email-audit-copy",
+      "command": "/email-audit",
       "prompt": "Audit the copy of this email for a re-engagement campaign targeting lapsed Lumina Beauty customers. Subject: 'Update from Lumina Beauty'. Preview text: none. Headline: 'We have some news to share with you'. Body: 'We have been busy at Lumina Beauty HQ. We wanted to reach out because we noticed you haven't visited us in a while. We have a new serum. We hope you like it.' CTA: 'Submit'.",
       "expected_output": "Phase 2 copy audit scoring the subject line low on specificity, flagging missing preview text, identifying brand-first and passive body copy, flagging 'Submit' as the weakest possible CTA. Provides rewrites for subject, preview text, headline, body copy, and CTA.",
       "files": [
@@ -4803,6 +4805,204 @@
         {
           "name": "check-validates-memory-state",
           "description": "doctor check validates project memory state and reports it as part of the health check"
+        }
+      ]
+    },
+    {
+      "id": 169,
+      "name": "chart-design-revenue-trend",
+      "command": "/chart-design",
+      "prompt": "/chart-design monthly revenue trend for 2025 for a B2B SaaS company, against a $1M annual revenue target",
+      "expected_output": "Self-contained Chart.js line chart in a figure with figcaption, accessible data-table fallback, a target reference line annotation, and responsive configuration",
+      "assertions": [
+        {
+          "name": "selects-line-chart",
+          "description": "chooses a line chart for a continuous trend over time, citing the data relationship"
+        },
+        {
+          "name": "has-axis-labels-and-units",
+          "description": "chart has a title, labelled axes, and currency units on the value axis"
+        },
+        {
+          "name": "annotates-target",
+          "description": "includes at least one annotation explaining the key insight, such as a reference line for the revenue target"
+        },
+        {
+          "name": "accessible-canvas-fallback",
+          "description": "canvas uses aria-labelledby pointing to a figcaption, plus a <details> data table fallback"
+        },
+        {
+          "name": "responsive-config",
+          "description": "uses responsive: true and maintainAspectRatio: false, with legend and tick density adjusted below 600px"
+        },
+        {
+          "name": "palette-as-custom-properties",
+          "description": "series colors come from the data palette defined as CSS custom properties, not ad-hoc hex values"
+        }
+      ]
+    },
+    {
+      "id": 170,
+      "name": "chart-design-pie-antipattern",
+      "command": "/chart-design",
+      "prompt": "/chart-design pie chart of new signups by acquisition channel: organic, paid search, social, referral, email, partners, events, and direct",
+      "expected_output": "Flags the 8-slice pie as an anti-pattern, recommends and builds a better chart (horizontal bar or stacked bar), with a colorblind-safe categorical palette and an accessible fallback",
+      "assertions": [
+        {
+          "name": "flags-pie-antipattern",
+          "description": "explicitly flags a pie chart with more than 5 slices as an anti-pattern"
+        },
+        {
+          "name": "recommends-alternative",
+          "description": "recommends an appropriate alternative such as a horizontal bar (ranking) or stacked bar (part-to-whole with many categories)"
+        },
+        {
+          "name": "builds-recommended-chart",
+          "description": "the delivered chart uses the recommended alternative rather than an 8-slice pie"
+        },
+        {
+          "name": "colorblind-safe-categorical",
+          "description": "uses the categorical palette and avoids a red-green pair without redundant encoding"
+        },
+        {
+          "name": "accessible-fallback",
+          "description": "includes figcaption plus data-table fallback, or role=img with title and desc for SVG"
+        },
+        {
+          "name": "annotates-key-insight",
+          "description": "includes at least one annotation, such as a callout for the largest channel"
+        }
+      ]
+    },
+    {
+      "id": 171,
+      "name": "dashboard-layout-saas-analytics",
+      "command": "/dashboard-layout",
+      "prompt": "/dashboard-layout SaaS analytics dashboard with MRR, churn, active users, and trial conversions",
+      "expected_output": "Complete responsive analytics dashboard: sidebar and topbar app shell, filter bar, KPI row with trends, primary and secondary chart areas, and a sortable data table with realistic data",
+      "assertions": [
+        {
+          "name": "app-shell-landmarks",
+          "description": "uses an aside sidebar with aria-label, a header topbar, and a main content landmark in a grid app shell"
+        },
+        {
+          "name": "kpi-cards-with-trends",
+          "description": "shows 3-5 KPI cards, each with label, formatted value, unit, and +/- trend versus the previous period"
+        },
+        {
+          "name": "filter-bar-date-first",
+          "description": "filter bar sits above the charts, starts with a date range selector (7d / 30d / 90d / Custom), and includes a dimension filter and a reset button"
+        },
+        {
+          "name": "chart-areas-with-placeholders",
+          "description": "has a primary (about 2/3 width) and secondary (about 1/3 width) chart area, with placeholders pointing to /chart-design"
+        },
+        {
+          "name": "realistic-sortable-table",
+          "description": "data table has 5-8 rows of realistic SaaS data, right-aligned numeric columns, and sortable headers"
+        },
+        {
+          "name": "responsive-and-tokenized",
+          "description": "sidebar collapses at 1024px and becomes a toggled drawer at 768px, the KPI grid steps 4 to 2 to 1 columns, and colors use CSS custom properties with tabular-nums on numbers"
+        }
+      ]
+    },
+    {
+      "id": 172,
+      "name": "dashboard-layout-executive-dark",
+      "command": "/dashboard-layout",
+      "prompt": "/dashboard-layout --type executive weekly business review for the C-suite of a 40-store retail chain --dark",
+      "expected_output": "Spacious, dark-first executive dashboard with large headline KPIs, sparklines and trend arrows, realistic retail figures, and correct directional color use",
+      "assertions": [
+        {
+          "name": "executive-density",
+          "description": "applies the executive pattern: low density, generous spacing, and large typography for headline KPIs"
+        },
+        {
+          "name": "sparklines-and-trend-arrows",
+          "description": "headline KPIs include sparklines or trend arrows with percentage change versus the prior week"
+        },
+        {
+          "name": "dark-first-contrast",
+          "description": "renders dark-first with no invisible text or lost contrast"
+        },
+        {
+          "name": "directional-color-correct",
+          "description": "green/red trend colors are used only where direction is unambiguous; a rising cost metric is not shown as positive green"
+        },
+        {
+          "name": "realistic-formatted-data",
+          "description": "uses realistic retail figures with proper formatting (for example $84,231) and no Lorem Ipsum"
+        },
+        {
+          "name": "loading-and-mobile-states",
+          "description": "includes skeleton loaders matching loaded dimensions and a working mobile hamburger toggle"
+        }
+      ]
+    },
+    {
+      "id": 173,
+      "name": "design-reel-create-mode",
+      "command": "/design-reel",
+      "prompt": "/design-reel Design a pricing page for a SaaS analytics product",
+      "expected_output": "Gates on the toolchain, runs /design inline, captures the built page over http, extracts 3-6 role beats in a separate pass, writes reel.json, renders, and delivers both mp4 aspect ratios",
+      "assertions": [
+        {
+          "name": "toolchain-gate-first",
+          "description": "probes for node, ffmpeg, and the naksha-reel package dependencies before rendering, and stops with a pointer to docs/reel-setup.md if tools are missing"
+        },
+        {
+          "name": "runs-design-without-beats",
+          "description": "runs /design inline as normal and does not ask it to emit beats"
+        },
+        {
+          "name": "create-mode-after-only",
+          "description": "treats the run as create mode: captures only after.png from design-output.html served over http (not file://), with beforeImage set to null"
+        },
+        {
+          "name": "extracts-beats-separately",
+          "description": "extracts 3-6 beats in a separate pass, one per distinct role, with first-person captions of 95 characters or fewer, no emoji, in workflow order"
+        },
+        {
+          "name": "writes-reel-json-and-renders",
+          "description": "writes reel.json with beats and framing, then renders with node packages/naksha-reel/bin/render.mjs"
+        },
+        {
+          "name": "delivers-both-formats",
+          "description": "reports both reel-9x16.mp4 and reel-16x9.mp4 paths and notes the re-enactment end card"
+        }
+      ]
+    },
+    {
+      "id": 174,
+      "name": "design-reel-redesign-no-capture-tool",
+      "command": "/design-reel",
+      "prompt": "/design-reel Redesign the settings page --url http://localhost:3000/settings (Playwright MCP is not connected and headless Chrome is not installed)",
+      "expected_output": "Recognises redesign mode, finds no screenshot tool, and stops with a clear error asking for before/after screenshots instead of silently rendering an after-only clip",
+      "assertions": [
+        {
+          "name": "detects-redesign-mode",
+          "description": "recognises --url as redesign mode, which needs a real before and after"
+        },
+        {
+          "name": "checks-capture-tools",
+          "description": "checks for Playwright MCP and the headless Chrome fallback before relying on them"
+        },
+        {
+          "name": "stops-with-clear-error",
+          "description": "stops with a clear error explaining that no screenshot tool is available"
+        },
+        {
+          "name": "no-silent-downgrade",
+          "description": "does not silently downgrade to an after-only reel"
+        },
+        {
+          "name": "asks-for-screenshots",
+          "description": "asks the user to provide before and after screenshots, or to install a capture tool"
+        },
+        {
+          "name": "does-not-render",
+          "description": "does not invoke the renderer or claim an mp4 was produced"
         }
       ]
     }
