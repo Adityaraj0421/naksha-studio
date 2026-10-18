@@ -27,7 +27,7 @@ Then, for each feature still marked **not on integration** below, give Claude it
 | 7 | Naksha Live dashboard + event stream + org chart (optional, recommended) | 3 | `v6/live-dashboard` | ✅ on integration |
 | 8 | Votes → judge calibration + evidence-backed taste | 3 | `v6/votes` | ✅ on integration |
 
-All ten features are on `v6/integration`. Remaining before v6.0.0-beta: CHANGELOG, hands-on test in a real Claude Code session.
+All ten features are on `v6/integration`, versioned 6.0.0-beta. Remaining: merge PR #27, publish the v6.0.0-beta pre-release, hands-on test in a real Claude Code session, then v6.0.0.
 
 ## Rules for every feature
 

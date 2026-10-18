@@ -2,7 +2,7 @@
 
 All notable changes to naksha are documented here.
 
-## v6.0.0-beta — Naksha Live (unreleased)
+## v6.0.0-beta — Naksha Live (2026-10-18, pre-release)
 
 naksha v6 makes the design team observable, measurable and cheaper to trust. You can watch the team work in a local dashboard, see what each command costs, get free instant design lint after every edit, keep your design system in the open DESIGN.md format, and teach naksha with Helpful / Needs-work votes. Review findings are now verified before you see them. All of it runs locally: no telemetry, and nothing leaves your machine unless a command you run calls a service.
 

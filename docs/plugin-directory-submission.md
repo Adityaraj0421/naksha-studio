@@ -14,7 +14,7 @@ Use this document when submitting to the Claude Code plugin directory.
 |-------|-------|
 | Plugin name (slug) | `naksha` |
 | Display name | Naksha — Design Team |
-| Version | 5.3.0 |
+| Version | 6.0.0-beta |
 | License | MIT |
 | Author | Aditya Raj |
 | Author GitHub | https://github.com/Adityaraj0421 |

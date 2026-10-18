@@ -48,6 +48,8 @@ Then restart Claude Code and try:
 /design Build a landing page for a SaaS analytics product
 ```
 
+> **✨ New in v6 (beta) — Naksha Live:** watch your design team work in a local dashboard (`/naksha-dashboard setup`), get free instant design lint after every edit (`/design-detect`), see what each command costs (`/naksha-stats`), keep your design system in the open DESIGN.md format (`/design-md`), and teach naksha with `/naksha-vote`. Optional, local-only, no telemetry. See the [CHANGELOG](CHANGELOG.md).
+
 > **✨ New in v5.3 — taste memory:** `/design-variants Design a pricing page` builds three genuinely different directions side by side; tell naksha which you like with `/naksha-taste approve A`, and every later `/design` starts from your taste.
 
 > **✨ New in v5.1 — `/design-reel`:** record the design team working and render a share-able video of it (9:16 + 16:9). `/design-reel Design a pricing page for a SaaS analytics product` → a post-ready clip of your screen being designed, live. [Learn more ↓](#design-reel-task--watch-the-team-new-in-v51)
@@ -397,11 +399,14 @@ _The skill loads only the references your task actually needs_
 **v5.3.0 — Taste Memory**
 
 | `/design-variants <task> [--count 2-5]` | Build 2–5 genuinely different directions for the same brief (each pair differs on at least two of layout, type, color, density, ornament), side by side in `naksha-variants/index.html`. Leans into your taste profile, with one deliberate "Wildcard" |
+| `/naksha-taste [approve\|reject <direction> …]` | Record which directions you approved or rejected; with no arguments, show your taste profile. `/design` and `/design-variants` default to approved traits and avoid rejected ones; signals fade after 90 days |
+
+**v6.0.0-beta — Naksha Live**
+
 | `/design-detect [files]` | Free, no-AI design lint (22 rules: WCAG contrast, spacing grid, type scale, focus-visible, reduced motion, alt text, clickable divs, hardcoded colors, AI-design clichés) with `--json` and CI exit codes; also runs as a hook after UI edits (v6) |
 | `/naksha-stats [--since <date>]` | Tokens and estimated cost per naksha command from your local Claude Code usage, compared against optional budgets in `.naksha/project.json` (v6) |
 | `/naksha-dashboard [setup\|start\|stop\|status\|disable]` | Naksha Live (optional, recommended): a local dashboard with a live org chart of the 30 roles, activity stream, project memory, findings and cost. Zero dependencies, 127.0.0.1 only, token-protected; off until you run `setup` (v6) |
 | `/naksha-vote helpful\|needs-work <subject> [because …]` | Vote on a design, variant, review finding or command run. Votes stay local in `.naksha/votes.jsonl`, consolidate into evidence-backed taste observations, and calibrate eval judges against what you actually thought (v6) |
-| `/naksha-taste [approve\|reject <direction> …]` | Record which directions you approved or rejected; with no arguments, show your taste profile. `/design` and `/design-variants` default to approved traits and avoid rejected ones; signals fade after 90 days |
 
 <details>
 <summary><b>📖 Command details & examples</b></summary>
