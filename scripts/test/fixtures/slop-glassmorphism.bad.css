@@ -1,0 +1,3 @@
+.card-a { background: rgba(255,255,255,.1); backdrop-filter: blur(12px); }
+.card-b { -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+.card-c { backdrop-filter: blur(8px) saturate(1.4); }

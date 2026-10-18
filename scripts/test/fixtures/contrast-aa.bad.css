@@ -1,0 +1,5 @@
+:root { --fg-muted: #aaaaaa; --bg: #ffffff; }
+.muted { color: #999; background: #fff; }
+.caption { color: var(--fg-muted); background-color: var(--bg); }
+.small-heading { color: #949494; background: #fff; font-size: 16px; }
+.ghost { color: rgba(0, 0, 0, 0.3); background: white; }

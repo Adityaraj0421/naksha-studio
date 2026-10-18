@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # quality-check.sh — runs all naksha-studio quality gates in sequence.
 # Fail-at-end: all checks run regardless of individual failures.
-# All 7 checks count toward FAILED.
+# All 8 checks count toward FAILED.
 # Usage: bash scripts/quality-check.sh
-# Exit: 0 if all 7 checks pass, 1 if any fail
+# Exit: 0 if all 8 checks pass, 1 if any fail
 
 set -uo pipefail
 REPO="$(cd "$(dirname "$0")/.." && pwd)"
@@ -51,15 +51,23 @@ echo ""
 node "$REPO/scripts/build-adapters.js" --check || FAILED=$((FAILED + 1))
 echo ""
 
+# ── 8. Unit tests (design linter + lint hook) ──────────────────────────────
+echo "═══════════════════════════════════════"
+echo "  unit tests (node --test scripts/test/)"
+echo "═══════════════════════════════════════"
+echo ""
+(cd "$REPO" && node --test --test-reporter=dot scripts/test/) || FAILED=$((FAILED + 1))
+echo ""
+
 # ── Summary ───────────────────────────────────────────────────────────────
 echo "╔═══════════════════════════════════════╗"
 if [ "$FAILED" -gt 0 ]; then
-  echo "║  quality-check: FAIL ($FAILED of 7 failed) ║"
+  echo "║  quality-check: FAIL ($FAILED of 8 failed) ║"
   echo "╚═══════════════════════════════════════╝"
   echo ""
   exit 1
 else
-  echo "║  quality-check: PASS (all 7 passed)   ║"
+  echo "║  quality-check: PASS (all 8 passed)   ║"
   echo "╚═══════════════════════════════════════╝"
   echo ""
   exit 0

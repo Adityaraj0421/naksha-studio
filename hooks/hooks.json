@@ -1,5 +1,5 @@
 {
-  "description": "Naksha hooks — detect project context, validate HTML output, suggest follow-up commands",
+  "description": "Naksha hooks — detect project context, validate HTML output, lint edited UI files, suggest follow-up commands",
   "hooks": {
     "SessionStart": [
       {
@@ -31,6 +31,18 @@
           {
             "type": "prompt",
             "prompt": "If the file being written is an HTML file, check: (1) the <html> tag has a lang attribute, (2) semantic elements are used (<nav>, <main>, <section>, <article>, <header>, <footer>) instead of only <div>, (3) all <img> tags have alt attributes, (4) interactive elements use <button> or <a> not <div onclick>. If any of these are missing, suggest adding them but allow the write to proceed."
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/design-lint-hook.sh\"",
+            "timeout": 10
           }
         ]
       }

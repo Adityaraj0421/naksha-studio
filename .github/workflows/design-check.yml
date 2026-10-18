@@ -33,7 +33,7 @@ jobs:
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
         run: |
-          files=$(git diff --name-only --diff-filter=ACMRT "$BASE_SHA"...HEAD -- '*.html' '*.css' '*.scss' | tr '\n' ' ')
+          files=$(git diff --name-only --diff-filter=ACMRT "$BASE_SHA"...HEAD -- '*.html' '*.htm' '*.css' '*.scss' '*.jsx' '*.tsx' '*.vue' '*.svelte' | tr '\n' ' ')
           if [ -n "${files// /}" ]; then echo "any_changed=true" >> "$GITHUB_OUTPUT"; else echo "any_changed=false" >> "$GITHUB_OUTPUT"; fi
           echo "all_changed_files=${files% }" >> "$GITHUB_OUTPUT"
 
@@ -65,32 +65,40 @@ jobs:
 
             if (!report) return;
 
+            const esc = s => String(s ?? '').replace(/[<>&"|]/g, c => `&#${c.charCodeAt(0)};`).replace(/\r?\n/g, ' ');
             const { score, issues, passed, failed, warnings } = report;
-            const emoji = score >= 90 ? '✅' : score >= 70 ? '⚠️' : '❌';
-            const scoreColor = score >= 90 ? 'brightgreen' : score >= 70 ? 'yellow' : 'red';
+            let body;
 
-            let body = `## ${emoji} Design Quality Check — Score: ${score}/100\n\n`;
-            body += `![score](https://img.shields.io/badge/Design_Score-${score}%2F100-${scoreColor})\n\n`;
-
-            if (issues.length === 0) {
-              body += `All design checks passed.\n`;
+            if (report.status === 'nothing-to-lint' || report.files === 0) {
+              // No score: an empty run is not a perfect run.
+              body = `## ➖ Design Quality Check — nothing to lint\n\n`;
+              body += `None of the changed files were lintable (all are ignored by \`.design-lint.json\` or not HTML/CSS/component files), so no score was computed.\n`;
             } else {
-              body += `| Severity | File | Check | Issue |\n`;
-              body += `|----------|------|-------|-------|\n`;
-              for (const issue of issues) {
-                const sev = issue.severity === 'error' ? '🔴 Error' : '🟡 Warning';
-                const safeFile = issue.file.replace(/[<>&"]/g, c => `&#${c.charCodeAt(0)};`);
-                const safeMsg = issue.message.replace(/[<>&"]/g, c => `&#${c.charCodeAt(0)};`);
-                body += `| ${sev} | \`${safeFile}\` | ${issue.check} | ${safeMsg} |\n`;
-              }
-              body += `\n`;
-            }
+              const emoji = score >= 90 ? '✅' : score >= 70 ? '⚠️' : '❌';
+              const scoreColor = score >= 90 ? 'brightgreen' : score >= 70 ? 'yellow' : 'red';
 
-            body += `<details><summary>Summary</summary>\n\n`;
-            body += `- ✅ **${passed}** checks passed\n`;
-            body += `- ⚠️ **${warnings}** warnings\n`;
-            body += `- ❌ **${failed}** errors\n`;
-            body += `\n*Run locally: \`node scripts/design-lint.js\`*\n</details>\n`;
+              body = `## ${emoji} Design Quality Check — Score: ${score}/100\n\n`;
+              body += `![score](https://img.shields.io/badge/Design_Score-${score}%2F100-${scoreColor})\n\n`;
+
+              if (issues.length === 0) {
+                body += `All design checks passed on ${report.files} file(s).\n`;
+              } else {
+                body += `| Severity | File | Rule | Issue | Fix |\n`;
+                body += `|----------|------|------|-------|-----|\n`;
+                for (const issue of issues) {
+                  const sev = issue.severity === 'error' ? '🔴 Error' : '🟡 Warning';
+                  const where = issue.line ? `${issue.file}:${issue.line}` : issue.file;
+                  body += `| ${sev} | \`${esc(where)}\` | ${esc(issue.rule || issue.check)} | ${esc(issue.message)} | ${esc(issue.fix)} |\n`;
+                }
+                body += `\n`;
+              }
+
+              body += `<details><summary>Summary</summary>\n\n`;
+              body += `- ✅ **${passed}** checks passed\n`;
+              body += `- ⚠️ **${warnings}** warnings\n`;
+              body += `- ❌ **${failed}** errors\n`;
+              body += `\n*Run locally: \`node scripts/design-lint.js <files>\` · in Claude Code: \`/design-detect\`*\n</details>\n`;
+            }
             body += `\n> Powered by [Naksha](https://github.com/Adityaraj0421/naksha-studio) · [Configure](.design-lint.json)`;
 
             // Find existing bot comment to update rather than creating duplicates
