@@ -48,7 +48,7 @@ Then restart Claude Code and try:
 /design Build a landing page for a SaaS analytics product
 ```
 
-> **✨ New in v6 (beta) — Naksha Live:** watch your design team work in a local dashboard (`/naksha-dashboard setup`), get free instant design lint after every edit (`/design-detect`), see what each command costs (`/naksha-stats`), keep your design system in the open DESIGN.md format (`/design-md`), and teach naksha with `/naksha-vote`. Optional, local-only, no telemetry. See the [CHANGELOG](CHANGELOG.md).
+> **✨ New in v6 — Naksha Live:** watch your design team work in a local dashboard (`/naksha-dashboard setup`), get free instant design lint after every edit (`/design-detect`), see what each command costs (`/naksha-stats`), keep your design system in the open DESIGN.md format (`/design-md`), and teach naksha with `/naksha-vote`. Optional, local-only, no telemetry. See the [CHANGELOG](CHANGELOG.md).
 
 > **✨ New in v5.3 — taste memory:** `/design-variants Design a pricing page` builds three genuinely different directions side by side; tell naksha which you like with `/naksha-taste approve A`, and every later `/design` starts from your taste.
 
@@ -401,7 +401,7 @@ _The skill loads only the references your task actually needs_
 | `/design-variants <task> [--count 2-5]` | Build 2–5 genuinely different directions for the same brief (each pair differs on at least two of layout, type, color, density, ornament), side by side in `naksha-variants/index.html`. Leans into your taste profile, with one deliberate "Wildcard" |
 | `/naksha-taste [approve\|reject <direction> …]` | Record which directions you approved or rejected; with no arguments, show your taste profile. `/design` and `/design-variants` default to approved traits and avoid rejected ones; signals fade after 90 days |
 
-**v6.0.0-beta — Naksha Live**
+**v6.0.0 — Naksha Live**
 
 | `/design-detect [files]` | Free, no-AI design lint (22 rules: WCAG contrast, spacing grid, type scale, focus-visible, reduced motion, alt text, clickable divs, hardcoded colors, AI-design clichés) with `--json` and CI exit codes; also runs as a hook after UI edits (v6) |
 | `/naksha-stats [--since <date>]` | Tokens and estimated cost per naksha command from your local Claude Code usage, compared against optional budgets in `.naksha/project.json` (v6) |
