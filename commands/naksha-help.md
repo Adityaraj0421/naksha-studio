@@ -192,7 +192,7 @@ When `$ARGUMENTS` matches a category name, display its commands.
 
   /naksha-init        Set up project memory (brand, font, framework, tokens)
   /naksha-status      View current project context and recent decisions
-  /naksha-doctor      Run all quality checks and report plugin health
+  /naksha-doctor      Run all quality checks and report plugin health (--transcripts: find misrouted roles)
   /naksha-browse      Browse a URL with browser vision, save design patterns to memory
   /naksha-remember    Record a design constraint or decision to project memory
   /naksha-taste       Record approved/rejected directions; show your taste profile

@@ -368,7 +368,7 @@ This skill is part of the **naksha** plugin. For focused workflows, use these co
 | `/design-variants <task> [--count 2-5]` | User wants options, alternatives, or "a few directions" to compare — builds 2–5 distinct directions side by side and records which ones they like |
 | `/naksha-stats [--since <date>] [--all]` | User asks what naksha costs, which commands are expensive, or wants to set or check a budget |
 | `/naksha-taste [approve\|reject <direction>]` | User reacts to a direction ("I like this one", "not that") or asks what naksha has learned about their taste |
-| `/naksha-doctor` | Run all naksha quality checks and report the plugin's health status — structural validation, metadata consistency, behavioral smoke, legacy branding guard |
+| `/naksha-doctor [--transcripts]` | Run all naksha quality checks and report the plugin's health status — structural validation, metadata consistency, behavioral smoke, legacy branding guard. `--transcripts` scans local session transcripts for misrouted roles and proposes regression evals |
 | `/naksha-help` | Quick-reference for all commands — browse by category or look up a specific command |
 | `/pipeline <action>` | Run a multi-step design pipeline: `run <name>`, `list` available pipelines, `show <name>` to preview steps |
 | **Vision & Intelligence** | |

@@ -31,7 +31,7 @@ Use this document when submitting to the Claude Code plugin directory.
 
 **Short description (≤160 chars):**
 ```
-A virtual design team for Claude Code — 30 roles, 66 commands, 15,000+ lines of design knowledge.
+A virtual design team for Claude Code — 30 roles, 66 commands, 16,000+ lines of design knowledge.
 ```
 
 **Long description:**
@@ -40,7 +40,7 @@ Naksha assembles specialist roles automatically based on what you're designing. 
 
 66 slash commands cover the full design-to-code pipeline: /design builds pages and components, /design-review audits for accessibility and usability, /design-system extracts tokens, /design-framework converts HTML to React/Vue/Svelte/Next.js/Astro, /figma-create builds Figma frames, /email-template generates production HTML emails, /chart-design produces accessible data visualizations, /design-chatbot designs chatbot UIs, /design-voice-ui designs voice interfaces, /design-spatial builds visionOS/WebXR specs, /design-gdpr generates GDPR consent flows, /design-compliance audits for HIPAA/PCI/ADA, and more.
 
-Over 15,000 lines of expert design knowledge, source-attributed from authoritative references (WCAG, Nielsen heuristics, Refactoring UI, MJML docs, Apple HIG, GDPR Art. 7/12/17, etc.).
+Over 16,000 lines of expert design knowledge, source-attributed from authoritative references (WCAG, Nielsen heuristics, Refactoring UI, MJML docs, Apple HIG, GDPR Art. 7/12/17, etc.).
 
 v5 adds persistent project memory (/naksha-init, /naksha-remember, and /naksha-browse capture brand, constraints, component patterns, and live-site research once and feed them into every design command), /design-reel, which renders a /design run into a share-able 9:16 + 16:9 video of the team at work, and taste memory (/design-variants compares distinct directions side by side; /naksha-taste remembers which ones you like and applies that to every later design). Earlier releases added agentic pipelines (/pipeline chains multiple commands automatically), vision-powered reviews (/design-compare and /competitive-audit capture and analyze any URL), and three frontier wings (Conversational, Spatial/AR, Compliance).
 
