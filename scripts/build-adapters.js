@@ -58,6 +58,12 @@ for (const ref of roleRefs) {
 if (stats.roles !== roster.length) {
   errors.push(`meta/stats.json roles=${stats.roles} but adapters/roles.json has ${roster.length}`);
 }
+// The landing page's team roster is hand-written JS (its own groupings and blurbs),
+// so check it lists every role rather than generating it.
+const site = read('site/index.html');
+for (const r of roster) {
+  if (!site.includes(`{r:'${r.name}'`)) errors.push(`site/index.html: team roster is missing ${r.name}`);
+}
 // Never write adapters from an invalid roster
 if (errors.length) {
   for (const e of errors) console.log(`❌ ${e}`);
