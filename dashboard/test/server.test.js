@@ -33,7 +33,10 @@ test('rejects missing or wrong token, accepts the right one', async () => {
   await withApp(none, async ({ port, token }) => {
     assert.equal((await request(port, '/api/state')).status, 401);
     assert.equal((await request(port, '/api/state', { headers: { 'X-Naksha-Token': 'nope' } })).status, 401);
-    assert.equal((await request(port, '/api/state?token=' + token.slice(0, -1) + 'x')).status, 401);
+    // Change the last character to one it is guaranteed not to be (a fixed 'x'
+    // collides with the random base64url token 1 time in 64).
+    const wrong = token.slice(0, -1) + (token.endsWith('x') ? 'y' : 'x');
+    assert.equal((await request(port, '/api/state?token=' + wrong)).status, 401);
     assert.equal((await request(port, '/api/state', { headers: { 'X-Naksha-Token': token } })).status, 200);
     assert.equal((await request(port, '/api/state?token=' + token)).status, 200);
     // The page itself needs the token; static assets carry no data and do not.
