@@ -951,7 +951,7 @@ naksha/
 │       └── compliance-designer.md      # GDPR/CCPA consent UX, HIPAA, PCI, ADA compliance
 ├── commands/                           # 68 slash commands
 ├── agents/                             # 7 specialist agents
-├── hooks/hooks.json                    # SessionStart + PreToolUse + Stop hooks
+├── hooks/hooks.json                    # SessionStart, PreCompact, Stop, PostToolUse lint hooks
 ├── scripts/
 │   ├── detect-design-context.sh        # Project stack detection
 │   └── run-evals.sh                    # Eval structure validator
