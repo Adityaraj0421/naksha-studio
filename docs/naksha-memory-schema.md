@@ -187,6 +187,27 @@ Learned design taste, written by `/naksha-taste` and by verdicts given during `/
 
 **Applying taste:** sum the weights per trait, separately for approved and rejected signals. The strongest approved traits become defaults; the strongest rejected traits are avoided. A trait in both lists is *conflicted*: the newer verdict wins, unless the signals have different `context` values (context-dependent taste is legitimate). No migration is needed: `taste` is optional and absent on older files.
 
+### v6 Field Additions: Budgets (optional)
+
+Spending limits for naksha runs, written by `/naksha-stats budget`. Read by `scripts/naksha-stats.js` (used by `/naksha-stats` and by the pre-flight checks in `/design-reel` and `/pipeline`). Budgets only produce warnings; they never block a command. Spend is estimated from local Claude Code transcripts at API list prices (see [cost-and-budgets.md](cost-and-budgets.md)).
+
+```json
+"budgets": {
+  "monthly_usd": 20,
+  "per_command_usd": { "/design-reel": 1.5, "/pipeline": 3 },
+  "warn_at": 0.8
+}
+```
+
+| Field | Type | Required | Written by | Description |
+|-------|------|----------|------------|-------------|
+| `budgets` | object | No | `/naksha-stats budget` | Absent or `{}` = no budgets. |
+| `budgets.monthly_usd` | number > 0 | No | — | Estimated USD for this project per calendar month (UTC). |
+| `budgets.per_command_usd` | object | No | — | Map of `"/command"` → the most one run of it should cost, in USD (number > 0). Keys without a leading `/` are accepted. Always written as the full object. |
+| `budgets.warn_at` | number in (0, 1] | No | — | Fraction of a budget at which to warn. Default `0.8`. |
+
+**Evaluation:** month-to-date spend in the current project is compared with `monthly_usd`: at or above `warn_at` → `WARN`; above 100% → `OVER BUDGET`. For `per_command_usd`, the most expensive run of that command this month is compared with its limit in the same way. Invalid values are ignored and reported (e.g. a negative amount, or `warn_at` outside 0–1, which falls back to `0.8`). No migration is needed: `budgets` is optional and absent on older files.
+
 ### v4 → v5 Migration
 
 **`/naksha-init` on a v4 project:**

@@ -1,0 +1,43 @@
+{
+  "format": "naksha-model-prices/1",
+  "currency": "USD",
+  "unit": "per_million_tokens",
+  "source": "https://platform.claude.com/docs/en/about-claude/pricing",
+  "as_of": "2026-10-18",
+  "notes": [
+    "Anthropic first-party API list prices, copied from the source URL on as_of. Bedrock and Vertex AI are priced separately by those platforms and are not covered.",
+    "Every model entry: input, output, cache_read, cache_write (5-minute cache write) in USD per million tokens. Optional: cache_write_1h, fast_multiplier, long_context, source, as_of, placeholder.",
+    "A model-level source/as_of overrides the top-level one. Set placeholder: true on any value you could not verify; naksha-stats labels costs computed from placeholders.",
+    "Not modelled: the 1.1x inference_geo 'us' multiplier, Batch API discounts, and tool fees (web search, code execution). Estimates, not invoices."
+  ],
+  "models": {
+    "claude-fable-5-1": { "input": 10, "output": 50, "cache_write": 12.5, "cache_write_1h": 20, "cache_read": 0.25 },
+    "claude-mythos-5-1": { "input": 10, "output": 50, "cache_write": 12.5, "cache_write_1h": 20, "cache_read": 0.25 },
+    "claude-fable-5": { "input": 10, "output": 50, "cache_write": 12.5, "cache_write_1h": 20, "cache_read": 1 },
+    "claude-mythos-5": { "input": 10, "output": 50, "cache_write": 12.5, "cache_write_1h": 20, "cache_read": 1 },
+    "claude-opus-5-5": { "input": 4, "output": 20, "cache_write": 5, "cache_write_1h": 8, "cache_read": 0.2, "fast_multiplier": 2 },
+    "claude-opus-5": { "input": 5, "output": 25, "cache_write": 6.25, "cache_write_1h": 10, "cache_read": 0.5, "fast_multiplier": 2 },
+    "claude-opus-4-8": { "input": 5, "output": 25, "cache_write": 6.25, "cache_write_1h": 10, "cache_read": 0.5, "fast_multiplier": 2 },
+    "claude-opus-4-7": { "input": 5, "output": 25, "cache_write": 6.25, "cache_write_1h": 10, "cache_read": 0.5 },
+    "claude-opus-4-6": { "input": 5, "output": 25, "cache_write": 6.25, "cache_write_1h": 10, "cache_read": 0.5 },
+    "claude-opus-4-5": { "input": 5, "output": 25, "cache_write": 6.25, "cache_write_1h": 10, "cache_read": 0.5 },
+    "claude-opus-4-1": { "input": 15, "output": 75, "cache_write": 18.75, "cache_write_1h": 30, "cache_read": 1.5 },
+    "claude-opus-4": { "input": 15, "output": 75, "cache_write": 18.75, "cache_write_1h": 30, "cache_read": 1.5 },
+    "claude-sonnet-5-5": { "input": 2, "output": 10, "cache_write": 2.5, "cache_write_1h": 4, "cache_read": 0.1 },
+    "claude-sonnet-5": { "input": 2, "output": 10, "cache_write": 2.5, "cache_write_1h": 4, "cache_read": 0.2 },
+    "claude-sonnet-4-6": { "input": 3, "output": 15, "cache_write": 3.75, "cache_write_1h": 6, "cache_read": 0.3 },
+    "claude-sonnet-4-5": { "input": 3, "output": 15, "cache_write": 3.75, "cache_write_1h": 6, "cache_read": 0.3 },
+    "claude-sonnet-4": { "input": 3, "output": 15, "cache_write": 3.75, "cache_write_1h": 6, "cache_read": 0.3 },
+    "claude-haiku-5-5": {
+      "input": 0.1, "output": 0.5, "cache_write": 0.125, "cache_write_1h": 0.2, "cache_read": 0.01,
+      "long_context": { "threshold_tokens": 100000, "input": 0.5, "output": 2.5, "cache_write": 0.625, "cache_write_1h": 1, "cache_read": 0.05 }
+    },
+    "claude-haiku-4-5": { "input": 1, "output": 5, "cache_write": 1.25, "cache_write_1h": 2, "cache_read": 0.1 },
+    "claude-3-5-haiku": { "input": 0.8, "output": 4, "cache_write": 1, "cache_write_1h": 1.6, "cache_read": 0.08 }
+  },
+  "aliases": {
+    "claude-opus-4-0": "claude-opus-4",
+    "claude-sonnet-4-0": "claude-sonnet-4",
+    "claude-haiku-3-5": "claude-3-5-haiku"
+  }
+}

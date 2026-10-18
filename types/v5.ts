@@ -224,6 +224,12 @@ export interface ProjectBrain {
   taste?: Taste;
 
   /**
+   * Spending limits (v6+), written by /naksha-stats budget. Warnings only, never blocking.
+   * Spec: docs/naksha-memory-schema.md → "v6 Field Additions: Budgets".
+   */
+  budgets?: Budgets;
+
+  /**
    * v5 schema version marker. Absent = v4. "5" = this schema.
    * Used by /naksha-doctor to detect and offer migration.
    */
@@ -255,6 +261,27 @@ export interface Taste {
   /** Cap: 30 signals; oldest by recorded_at evicted. */
   signals: TasteSignal[];
 }
+
+// ─── Budgets (v6) ─────────────────────────────────────────────────────────────
+
+/**
+ * Optional cost budgets, compared by scripts/naksha-stats.js with spend estimated
+ * from local Claude Code transcripts at API list prices (meta/model-prices.json).
+ *
+ * Written by: /naksha-stats budget
+ * Read by: /naksha-stats, and the pre-flight checks in /design-reel and /pipeline
+ */
+export interface Budgets {
+  /** Estimated USD per calendar month (UTC) for this project. Must be > 0. */
+  monthly_usd?: number;
+  /** "/command" → max USD for one run of that command. Values must be > 0. */
+  per_command_usd?: Record<string, number>;
+  /** Fraction (0, 1] of a budget at which to warn. Default 0.8. Above 1.0 → "over budget". */
+  warn_at?: number;
+}
+
+/** Default Budgets.warn_at. */
+export const BUDGET_WARN_AT_DEFAULT = 0.8 as const;
 
 // ─── NakshaContext — the runtime context object ───────────────────────────────
 
