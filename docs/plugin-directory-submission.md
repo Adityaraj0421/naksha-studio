@@ -14,7 +14,7 @@ Use this document when submitting to the Claude Code plugin directory.
 |-------|-------|
 | Plugin name (slug) | `naksha` |
 | Display name | Naksha — Design Team |
-| Version | 5.2.0 |
+| Version | 5.3.0 |
 | License | MIT |
 | Author | Aditya Raj |
 | Author GitHub | https://github.com/Adityaraj0421 |
@@ -42,7 +42,7 @@ Naksha assembles specialist roles automatically based on what you're designing. 
 
 Over 15,000 lines of expert design knowledge, source-attributed from authoritative references (WCAG, Nielsen heuristics, Refactoring UI, MJML docs, Apple HIG, GDPR Art. 7/12/17, etc.).
 
-v5 adds persistent project memory (/naksha-init, /naksha-remember, and /naksha-browse capture brand, constraints, component patterns, and live-site research once and feed them into every design command) and /design-reel, which renders a /design run into a share-able 9:16 + 16:9 video of the team at work. Earlier releases added agentic pipelines (/pipeline chains multiple commands automatically), vision-powered reviews (/design-compare and /competitive-audit capture and analyze any URL), and three frontier wings (Conversational, Spatial/AR, Compliance).
+v5 adds persistent project memory (/naksha-init, /naksha-remember, and /naksha-browse capture brand, constraints, component patterns, and live-site research once and feed them into every design command), /design-reel, which renders a /design run into a share-able 9:16 + 16:9 video of the team at work, and taste memory (/design-variants compares distinct directions side by side; /naksha-taste remembers which ones you like and applies that to every later design). Earlier releases added agentic pipelines (/pipeline chains multiple commands automatically), vision-powered reviews (/design-compare and /competitive-audit capture and analyze any URL), and three frontier wings (Conversational, Spatial/AR, Compliance).
 
 Also works in Cursor, Windsurf, Gemini CLI, VS Code Copilot, and Autohand Code CLI.
 ```
