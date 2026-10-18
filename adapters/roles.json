@@ -1,0 +1,245 @@
+{
+  "_comment": "Canonical naksha role roster. scripts/build-adapters.js renders it into every platform adapter; meta/stats.json 'roles' must equal its length. Every specialist must have its own reference file.",
+  "roles": [
+    {
+      "name": "Design Manager",
+      "group": "Leadership",
+      "label": "Orchestrates",
+      "focus": "Analyzes the task, assembles the right specialists, orchestrates the workflow, ensures delivery",
+      "activate": "every task — staffs the team automatically",
+      "reference": "skills/design/SKILL.md"
+    },
+    {
+      "name": "Creative Director",
+      "group": "Leadership",
+      "label": "Vision",
+      "focus": "Visual and conceptual vision, mood, tone, creative direction, brand adherence",
+      "activate": "setting the creative direction for any visual work",
+      "reference": "skills/design/SKILL.md"
+    },
+    {
+      "name": "Product Designer",
+      "group": "Core Design",
+      "label": "Strategy",
+      "focus": "UX strategy, feature scoping, user flows, JTBD framework",
+      "activate": "scoping features, defining flows, thinking about UX strategy",
+      "reference": "skills/design/references/product-designer.md"
+    },
+    {
+      "name": "UX Designer",
+      "group": "Core Design",
+      "label": "Flows",
+      "focus": "Wireframes, IA, navigation, journey maps, usability heuristics",
+      "activate": "wireframing, defining IA, designing navigation patterns",
+      "reference": "skills/design/references/ux-designer.md"
+    },
+    {
+      "name": "UI Designer",
+      "group": "Core Design",
+      "label": "Visual",
+      "focus": "Visual design, color systems, typography, layout, components",
+      "activate": "building visual components, choosing colors, setting typography",
+      "reference": "skills/design/references/ui-designer.md"
+    },
+    {
+      "name": "UX Researcher",
+      "group": "Core Design",
+      "label": "Insights",
+      "focus": "Heuristic evaluation, accessibility, edge cases, cognitive load",
+      "activate": "auditing for accessibility, applying heuristics, finding edge cases",
+      "reference": "skills/design/references/ux-researcher.md"
+    },
+    {
+      "name": "Content Designer",
+      "group": "Core Design",
+      "label": "Copy",
+      "focus": "Microcopy, error messages, onboarding copy, tone of voice",
+      "activate": "writing microcopy, error messages, empty states, button labels",
+      "reference": "skills/design/references/content-designer.md"
+    },
+    {
+      "name": "Design System Lead",
+      "group": "Core Design",
+      "label": "Tokens",
+      "focus": "Design tokens, theming, dark mode, component APIs, Figma styles",
+      "activate": "creating tokens, building design systems, handling theming/dark mode",
+      "reference": "skills/design/references/design-system-lead.md"
+    },
+    {
+      "name": "Motion Designer",
+      "group": "Visual Production",
+      "label": "Animation",
+      "focus": "Micro-interactions, transitions, CSS animations, duration/easing systems, FLIP",
+      "activate": "adding animations, defining transitions, creating micro-interactions",
+      "reference": "skills/design/references/motion-designer.md"
+    },
+    {
+      "name": "Illustration Director",
+      "group": "Visual Production",
+      "label": "Icons & Art",
+      "focus": "Icon systems, SVG standards, spot illustrations, style taxonomy",
+      "activate": "creating icon systems, SVGs, illustration guidelines",
+      "reference": "skills/design/references/illustration-director.md"
+    },
+    {
+      "name": "Presentation Designer",
+      "group": "Visual Production",
+      "label": "Decks",
+      "focus": "Slide systems, pitch decks, assertion-evidence pattern, 10-slide framework",
+      "activate": "creating slides, pitch decks, structured visual content",
+      "reference": "skills/design/references/presentation-designer.md"
+    },
+    {
+      "name": "Brand Strategist",
+      "group": "Visual Production",
+      "label": "Positioning",
+      "focus": "Positioning, visual identity, brand architecture, voice/tone spectrum",
+      "activate": "defining positioning, visual identity, brand system",
+      "reference": "skills/design/references/brand-strategist.md"
+    },
+    {
+      "name": "Print Designer",
+      "group": "Visual Production",
+      "label": "Print & PDF",
+      "focus": "Print-ready layouts, @page and @media print, bleed and safe zones, CMYK, print typography",
+      "activate": "designing reports, certificates, invoices, brochures, business cards, packaging",
+      "reference": "skills/design/references/print-designer.md"
+    },
+    {
+      "name": "Video/Content Producer",
+      "group": "Visual Production",
+      "label": "Scripts",
+      "focus": "Scripts, storyboards, hook formulas, short-form pacing, repurposing",
+      "activate": "writing video scripts, storyboards, content series",
+      "reference": "skills/design/references/video-content-producer.md"
+    },
+    {
+      "name": "Social Media Designer",
+      "group": "Digital Marketing",
+      "label": "Social Visuals",
+      "focus": "Platform specs, safe zones, carousel layouts, visual systems",
+      "activate": "creating social visuals, sizing for platforms, carousels/stories",
+      "reference": "skills/design/references/social-media-designer.md"
+    },
+    {
+      "name": "Social Media Strategist",
+      "group": "Digital Marketing",
+      "label": "Campaigns",
+      "focus": "Campaign planning, content calendars, KPI targets, funnel strategy",
+      "activate": "planning campaigns, content calendars, strategy",
+      "reference": "skills/design/references/social-media-strategist.md"
+    },
+    {
+      "name": "Social Media Copywriter",
+      "group": "Digital Marketing",
+      "label": "Captions",
+      "focus": "Captions, hooks, hashtag strategy, platform-specific tone",
+      "activate": "writing captions, hooks, CTAs for social",
+      "reference": "skills/design/references/social-media-copywriter.md"
+    },
+    {
+      "name": "Growth/Analytics Specialist",
+      "group": "Digital Marketing",
+      "label": "Metrics",
+      "focus": "Analytics dashboards, A/B test design, metrics frameworks",
+      "activate": "building dashboards, designing A/B tests, analytics UI",
+      "reference": "skills/design/references/growth-analytics-specialist.md"
+    },
+    {
+      "name": "Email Designer",
+      "group": "Digital Marketing",
+      "label": "HTML Email",
+      "focus": "Responsive HTML email, dark mode, cross-client, ESP compatibility",
+      "activate": "building HTML email templates, cross-client compatibility",
+      "reference": "skills/design/references/email-designer.md"
+    },
+    {
+      "name": "Email Copywriter",
+      "group": "Digital Marketing",
+      "label": "Subject Lines",
+      "focus": "Subject lines, preview text, drip sequences, deliverability",
+      "activate": "writing subject lines, email body copy, sequences",
+      "reference": "skills/design/references/email-copywriter.md"
+    },
+    {
+      "name": "Data Viz Designer",
+      "group": "Data & Frameworks",
+      "label": "Charts",
+      "focus": "Chart type selection, colorblind-safe palettes, annotation patterns",
+      "activate": "choosing chart types, building charts, data accessibility",
+      "reference": "skills/design/references/data-viz-designer.md"
+    },
+    {
+      "name": "Dashboard Architect",
+      "group": "Data & Frameworks",
+      "label": "Layouts",
+      "focus": "KPI layouts, filter systems, data table design, information hierarchy",
+      "activate": "designing KPI layouts, admin panels, data-heavy interfaces",
+      "reference": "skills/design/references/dashboard-architect.md"
+    },
+    {
+      "name": "Framework Specialist",
+      "group": "Data & Frameworks",
+      "label": "Components",
+      "focus": "Idiomatic React/Tailwind, Vue, Svelte 5, Next.js App Router, and Astro component code",
+      "activate": "converting design output to framework components, or a specific framework is requested",
+      "reference": "skills/design/references/framework-specialist.md"
+    },
+    {
+      "name": "AI Image Director",
+      "group": "AI Visual Gen",
+      "label": "Image Gen",
+      "focus": "Image-gen tool selection, prompt architecture, brand consistency across assets, iteration loops",
+      "activate": "generating brand-aligned images with Midjourney, DALL-E, Ideogram, Firefly, or Stable Diffusion",
+      "reference": "skills/design/references/ai-image-director.md"
+    },
+    {
+      "name": "AI Video Director",
+      "group": "AI Visual Gen",
+      "label": "Video Gen",
+      "focus": "Video-gen tool selection, shot-by-shot prompt packs, multi-shot consistency, transitions",
+      "activate": "generating video with Runway, Kling, Sora, Pika, or Luma",
+      "reference": "skills/design/references/ai-video-director.md"
+    },
+    {
+      "name": "AI Audio & Voice Producer",
+      "group": "AI Visual Gen",
+      "label": "Voiceover & Music",
+      "focus": "Voiceover and music direction, voice and music briefs, video sync, licensing",
+      "activate": "producing voiceover (ElevenLabs, Murf) or music and jingles (Suno)",
+      "reference": "skills/design/references/ai-audio-voice-producer.md"
+    },
+    {
+      "name": "AI Prompt Engineer",
+      "group": "AI Visual Gen",
+      "label": "Prompt Systems",
+      "focus": "Modular prompt systems, brand prompt libraries, cross-tool translation, seed management",
+      "activate": "standardizing prompts so AI output stays consistent and reproducible across tools",
+      "reference": "skills/design/references/ai-prompt-engineer.md"
+    },
+    {
+      "name": "Conversational Designer",
+      "group": "Frontier Wings",
+      "label": "Chat & Voice UI",
+      "focus": "Chatbot UI, dialog flow design, VUI principles, persona systems, multi-modal (voice+screen)",
+      "activate": "designing chatbot UI, dialog flows, voice interfaces, chat widgets",
+      "reference": "skills/design/references/conversational-designer.md"
+    },
+    {
+      "name": "Spatial Designer",
+      "group": "Frontier Wings",
+      "label": "Spatial & AR",
+      "focus": "visionOS/Vision Pro HIG, WebXR, depth layers, gaze/gesture input, spatial typography, AR anchoring",
+      "activate": "designing for visionOS, Vision Pro, WebXR, AR overlays, spatial computing",
+      "reference": "skills/design/references/spatial-designer.md"
+    },
+    {
+      "name": "Compliance Designer",
+      "group": "Frontier Wings",
+      "label": "Regulated UX",
+      "focus": "GDPR/CCPA consent UX, HIPAA healthcare UI, PCI payment forms, ADA/Section 508 compliance",
+      "activate": "building consent flows, PHI fields, payment forms, or accessibility-regulated UI",
+      "reference": "skills/design/references/compliance-designer.md"
+    }
+  ]
+}

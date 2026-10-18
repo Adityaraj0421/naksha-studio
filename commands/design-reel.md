@@ -1,5 +1,5 @@
 ---
-description: "Record naksha's design team working — turn a /design run into a share-able vertical + landscape video reel (the 26-role team redesigning a screen, live)."
+description: "Record naksha's design team working — turn a /design run into a share-able vertical + landscape video reel (the 30-role team redesigning a screen, live)."
 argument-hint: "[design task] [--url <live page to redesign>] [--out <dir>]"
 allowed-tools: ["Read", "Write", "Edit", "Bash", "Glob", "Grep", "mcp__*"]
 ---
@@ -90,7 +90,7 @@ the ≥3 min-beat gate — you do not need to pre-clean):
     "briefCaption": "<one line over the before page>",
     "revealCaption": "<one line over the before/after>",
     "endHeadline": "Your turn to run the team.",
-    "endSub": "26 roles redesign your screen, live. One command.",
+    "endSub": "30 roles redesign your screen, live. One command.",
     "endCommand": "/design-reel"
   },
   "beforeImage": "<out>/before.png or null",

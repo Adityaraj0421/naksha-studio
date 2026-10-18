@@ -109,12 +109,15 @@ tools: ["Read", "Grep", "Glob", "mcp__figma-console__*"]
 
 ## Adding a New Role
 
-Roles are virtual — they're defined in `SKILL.md`, not in separate files. To add a role:
+Every specialist role has its own reference file, and `adapters/roles.json` is the canonical roster (specialists plus the two leadership roles, Design Manager and Creative Director, which live in `SKILL.md`). To add a role:
 
-1. Add the role to the Core Makers table in `SKILL.md`
-2. Create a reference file with the role's expertise
-3. Add team assembly examples showing when the role activates
-4. Update `README.md` team table and role count badge
+1. Create the role's reference file in `skills/design/references/`
+2. Add the role to `adapters/roles.json` (name, group, label, focus, activate, reference)
+3. Add it to the team tables and routing in `SKILL.md`, with team assembly examples showing when it activates
+4. Bump `roles` in `meta/stats.json`, then update the headline count in prose (`bash scripts/guard-counts.sh` lists every file that still states the old number)
+5. Run `node scripts/build-adapters.js` to regenerate the adapters
+
+`build-adapters.js` fails if a role reference file is missing from `roles.json`, if a roster entry points at a missing file, or if `stats.json` disagrees with the roster.
 
 ## Code Style
 
@@ -155,7 +158,7 @@ Before marking your PR ready, confirm all of the following apply to your contrib
 Run the full local suite — this is what the `CI` workflow runs on every PR:
 
 ```bash
-bash scripts/quality-check.sh        # metadata, behavioral smoke, design lint, branding, count drift, hook smoke
+bash scripts/quality-check.sh        # metadata, behavioral smoke, design lint, branding, count drift, hook smoke, adapter sync
 node scripts/validate-structure.js   # file counts, version consistency, command frontmatter
 bash scripts/run-evals.sh            # eval structure and fixture references
 (cd packages/naksha-reel && node --test test/*.test.mjs)   # reel unit tests
@@ -193,13 +196,17 @@ Naksha runs on multiple AI coding tools. The knowledge lives in the same role re
 
 ### Updating Adapters
 
-When adding a new role or significant design rule:
-1. Update the role reference file in `skills/design/references/`
-2. Update `skills/design/SKILL.md` routing
-3. Add a summary row to the role table in each adapter file
-4. Key design rules (new token patterns, new platform specs) should be reflected in adapter files too
+The role roster and the Project Memory section of the Cursor, Windsurf, Gemini, and Copilot adapters, and the team grid in `README.md`, are **generated**. They sit between `<!-- naksha:generated … -->` markers. Don't edit inside the markers; edit the source and regenerate:
 
-Adapters are condensed representations — they don't need to include the full depth of role files, just the actionable rules and role descriptions.
+- Roles → `adapters/roles.json`
+- Shared sections → `adapters/blocks/<name>.md` (a marker named `<name>` renders that file)
+
+```bash
+node scripts/build-adapters.js          # regenerate
+node scripts/build-adapters.js --check  # what CI runs; fails if an adapter is stale
+```
+
+Everything outside the markers is hand-written per tool. Key design rules (new token patterns, new platform specs) should still be reflected there by hand. Adapters are condensed representations — they don't need the full depth of role files, just the actionable rules and role descriptions.
 
 ## Sync to Plugin Install
 
@@ -297,13 +304,7 @@ Add `check_fixture` rows to `scripts/behavioral-smoke.sh`:
 check_fixture "<command>-output.md" "<keyword1>,<keyword2>,<keyword3>" <min_h2_headers> <min_chars>
 ```
 
-**6. Platform adapters** — update all 4
-
-Add the new role row to each:
-- `GEMINI.md`
-- `.cursor/rules/naksha.mdc`
-- `.windsurfrules`
-- `.github/copilot-instructions.md`
+**6. Platform adapters** — add each new role to `adapters/roles.json` and run `node scripts/build-adapters.js`. This regenerates the role lists in `GEMINI.md`, `.cursor/rules/naksha.mdc`, `.windsurfrules`, `.github/copilot-instructions.md`, and the `README.md` team grid; don't edit those by hand.
 
 **7. Stats** — `meta/stats.json` and `.claude-plugin/plugin.json`
 

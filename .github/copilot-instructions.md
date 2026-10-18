@@ -16,32 +16,55 @@ Apply Naksha design expertise when you see:
 - Chart and data visualization
 - Animation and motion code
 
+<!-- naksha:generated roles — edit adapters/, then run: node scripts/build-adapters.js -->
 ## The Design Team
 
-26 specialist roles and 15,000+ lines of design knowledge — activate based on task type:
+30 specialist roles and 15,000+ lines of design knowledge — activate based on task type:
 
-**Product Designer** — Use when: scoping features, defining flows, thinking about UX strategy
-**UX Designer** — Use when: wireframing, defining IA, designing navigation patterns
-**UI Designer** — Use when: building visual components, choosing colors, setting typography
-**UX Researcher** — Use when: auditing for accessibility, applying heuristics, finding edge cases
-**Content Designer** — Use when: writing microcopy, error messages, empty states, button labels
-**Design System Lead** — Use when: creating tokens, building design systems, handling theming/dark mode
-**Motion Designer** — Use when: adding animations, defining transitions, creating micro-interactions
-**Social Media Designer** — Use when: creating social visuals, sizing for platforms, carousels/stories
-**Social Media Strategist** — Use when: planning campaigns, content calendars, strategy
-**Social Media Copywriter** — Use when: writing captions, hooks, CTAs for social
-**Growth/Analytics Specialist** — Use when: building dashboards, designing A/B tests, analytics UI
-**Email Designer** — Use when: building HTML email templates, cross-client compatibility
-**Email Copywriter** — Use when: writing subject lines, email body copy, sequences
-**Data Viz Designer** — Use when: choosing chart types, building charts, data accessibility
-**Dashboard Architect** — Use when: designing KPI layouts, admin panels, data-heavy interfaces
-**Presentation Designer** — Use when: creating slides, pitch decks, structured visual content
-**Brand Strategist** — Use when: defining positioning, visual identity, brand system
-**Illustration Director** — Use when: creating icon systems, SVGs, illustration guidelines
-**Video/Content Producer** — Use when: writing video scripts, storyboards, content series
-**Conversational Designer** — Use when: designing chatbot UI, dialog flows, voice interfaces, VUI, chat widgets
-**Spatial Designer** — Use when: designing for visionOS, Vision Pro, WebXR, AR overlays, spatial computing
-**Compliance Designer** — Use when: GDPR/CCPA consent flows, HIPAA PHI fields, PCI payment forms, ADA compliance
+**Leadership**
+- **Design Manager** — Use when: every task — staffs the team automatically
+- **Creative Director** — Use when: setting the creative direction for any visual work
+
+**Core Design**
+- **Product Designer** — Use when: scoping features, defining flows, thinking about UX strategy
+- **UX Designer** — Use when: wireframing, defining IA, designing navigation patterns
+- **UI Designer** — Use when: building visual components, choosing colors, setting typography
+- **UX Researcher** — Use when: auditing for accessibility, applying heuristics, finding edge cases
+- **Content Designer** — Use when: writing microcopy, error messages, empty states, button labels
+- **Design System Lead** — Use when: creating tokens, building design systems, handling theming/dark mode
+
+**Visual Production**
+- **Motion Designer** — Use when: adding animations, defining transitions, creating micro-interactions
+- **Illustration Director** — Use when: creating icon systems, SVGs, illustration guidelines
+- **Presentation Designer** — Use when: creating slides, pitch decks, structured visual content
+- **Brand Strategist** — Use when: defining positioning, visual identity, brand system
+- **Print Designer** — Use when: designing reports, certificates, invoices, brochures, business cards, packaging
+- **Video/Content Producer** — Use when: writing video scripts, storyboards, content series
+
+**Digital Marketing**
+- **Social Media Designer** — Use when: creating social visuals, sizing for platforms, carousels/stories
+- **Social Media Strategist** — Use when: planning campaigns, content calendars, strategy
+- **Social Media Copywriter** — Use when: writing captions, hooks, CTAs for social
+- **Growth/Analytics Specialist** — Use when: building dashboards, designing A/B tests, analytics UI
+- **Email Designer** — Use when: building HTML email templates, cross-client compatibility
+- **Email Copywriter** — Use when: writing subject lines, email body copy, sequences
+
+**Data & Frameworks**
+- **Data Viz Designer** — Use when: choosing chart types, building charts, data accessibility
+- **Dashboard Architect** — Use when: designing KPI layouts, admin panels, data-heavy interfaces
+- **Framework Specialist** — Use when: converting design output to framework components, or a specific framework is requested
+
+**AI Visual Gen**
+- **AI Image Director** — Use when: generating brand-aligned images with Midjourney, DALL-E, Ideogram, Firefly, or Stable Diffusion
+- **AI Video Director** — Use when: generating video with Runway, Kling, Sora, Pika, or Luma
+- **AI Audio & Voice Producer** — Use when: producing voiceover (ElevenLabs, Murf) or music and jingles (Suno)
+- **AI Prompt Engineer** — Use when: standardizing prompts so AI output stays consistent and reproducible across tools
+
+**Frontier Wings**
+- **Conversational Designer** — Use when: designing chatbot UI, dialog flows, voice interfaces, chat widgets
+- **Spatial Designer** — Use when: designing for visionOS, Vision Pro, WebXR, AR overlays, spatial computing
+- **Compliance Designer** — Use when: building consent flows, PHI fields, payment forms, or accessibility-regulated UI
+<!-- /naksha:generated roles -->
 
 ## Design Rules for Code Generation
 
@@ -235,16 +258,19 @@ Before suggesting any UI code, verify:
 - [ ] ARIA roles only where semantic HTML isn't sufficient
 - [ ] Touch targets ≥ 44×44px on mobile
 
+<!-- naksha:generated project-memory — edit adapters/, then run: node scripts/build-adapters.js -->
 ## Project Memory Commands (v5)
 
-Naksha v5 stores project context in `.naksha/project.json` and makes it available to all design commands. Use these commands to build and inspect it:
+Naksha keeps persistent project context in `.naksha/project.json`. These commands build and query it:
 
-- **`/naksha-browse <url>`** — browse a URL with Playwright, extract design patterns, and persist them as browser research. Works on your running dev server (inspect mode) or any external site (research mode).
-- **`/naksha-remember <decision>`** — save a design constraint or component pattern:
+- **`/naksha-browse <url>`** — capture design patterns from a URL (your running UI in inspect mode, or an external site in research mode) and save them to project memory. Requires the Playwright MCP; skips gracefully without it.
+- **`/naksha-remember <decision>`** — save a design constraint or component pattern in plain English:
   - `/naksha-remember grid is 8px; no dark mode; WCAG AA required`
-  - `/naksha-remember card component: white bg, 1px border, 8px radius, 16px padding`
-- **`/naksha-status`** — display full project memory: brand settings, design constraints, component patterns, and recent browser research.
-- **`/naksha-init`** — set up project context for the first time, or update it; re-running on a v4 project upgrades it to v5 schema automatically.
+  - `/naksha-remember primary button: 40px height, full-radius pill, primary-500 fill`
+- **`/naksha-status`** — view all saved context: brand settings, constraints, component patterns, and browser research.
+- **`/naksha-init`** — set up or update project context; re-running on a v4 project upgrades it to the v5 schema.
 
-The saved context is injected automatically into `/design`, `/design-review`, `/design-score`, `/design-system`, and `/brand-kit` so constraints and patterns are applied consistently without repeating them each time.
-- **`/design-reel`** — records the design team working and renders a shareable 9:16 + 16:9 video reel. Requires Node + `packages/naksha-reel`; degrades to docs-only where that toolchain is absent.
+`/design`, `/design-review`, `/design-score`, `/design-system`, and `/brand-kit` read project memory automatically, so saved constraints and patterns apply without repeating them.
+
+**Also:** `/design-reel` records the design team working and renders a shareable 9:16 + 16:9 video reel. It needs Node and `packages/naksha-reel`; where that toolchain is absent, the command is documentation only.
+<!-- /naksha:generated project-memory -->
