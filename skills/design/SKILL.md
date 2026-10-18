@@ -369,6 +369,7 @@ This skill is part of the **naksha** plugin. For focused workflows, use these co
 | `/naksha-status` | Display current project context and last 10 design decisions from `.naksha/memory.md` |
 | `/design-variants <task> [--count 2-5]` | User wants options, alternatives, or "a few directions" to compare — builds 2–5 distinct directions side by side and records which ones they like |
 | `/naksha-stats [--since <date>] [--all]` | User asks what naksha costs, which commands are expensive, or wants to set or check a budget |
+| `/naksha-dashboard [setup\|start\|stop\|status\|disable]` | User wants to watch the design team work live, see the org chart, or asks about Naksha Live; suggest `setup` once when it isn't set up |
 | `/naksha-vote helpful\|needs-work <subject> [because …]` | User says a result, variant, review finding or command run was helpful or needs work, or asks how naksha's judges compare with their own verdicts (list, stats, consolidate, calibrate, export --redact) |
 | `/naksha-taste [approve\|reject <direction>]` | User reacts to a direction ("I like this one", "not that") or asks what naksha has learned about their taste |
 | `/naksha-doctor [--transcripts]` | Run all naksha quality checks and report the plugin's health status — structural validation, metadata consistency, behavioral smoke, legacy branding guard. `--transcripts` scans local session transcripts for misrouted roles and proposes regression evals |

@@ -24,10 +24,10 @@ Then, for each feature still marked **not on integration** below, give Claude it
 | 3 | Bounded browser self-check | 2 | `v6/browser-self-check` | ✅ on integration |
 | 6 | Cost tracking + budgets (`/naksha-stats`) | 2 | `v6/cost-budgets` | ✅ on integration |
 | 10 | Lean, safe runtime (PreCompact brief, compact SessionStart, sandbox, privacy) | 2 | `v6/lean-runtime` | ✅ on integration |
-| 7 | Naksha Live dashboard + event stream + org chart (optional, recommended) | 3 | `v6/live-dashboard` | building |
+| 7 | Naksha Live dashboard + event stream + org chart (optional, recommended) | 3 | `v6/live-dashboard` | ✅ on integration |
 | 8 | Votes → judge calibration + evidence-backed taste | 3 | `v6/votes` | ✅ on integration |
 
-"building" branches live only in the cloud session until they land here; if that session ends first, rebuild them locally from their briefs.
+All ten features are on `v6/integration`. Remaining before v6.0.0-beta: unify the price tables, wire `scripts/lib/sandboxed-run.sh` into the eval runner, CHANGELOG, hands-on test in a real Claude Code session.
 
 ## Rules for every feature
 

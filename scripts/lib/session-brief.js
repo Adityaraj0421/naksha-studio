@@ -355,7 +355,15 @@ function buildIndex(root, opts) {
     index = `${head.join(' · ')}.\nIndex: ${counts.join(', ')}.\n` +
       'Run /naksha-status for details; read .naksha/project.json only when a task needs the full entries.';
   }
-  if (index.length > INDEX_MAX_CHARS) index = index.slice(0, INDEX_MAX_CHARS - 1) + '…';
+  // Naksha Live is optional but recommended: suggest it once per session (startup
+  // only), and never after the user ran `/naksha-dashboard disable`, which leaves
+  // dashboard.json in place with enabled: false. The hint counts toward the cap.
+  const hint = project && String(opts.source || '') === 'startup' && !fs.existsSync(path.join(nakshaDir, 'dashboard.json'))
+    ? '\nOptional: Naksha Live is not set up. If the user does design work, mention once that /naksha-dashboard setup shows the team working live.'
+    : '';
+  const max = INDEX_MAX_CHARS - hint.length;
+  if (index.length > max) index = index.slice(0, max - 1) + '…';
+  index += hint;
 
   const source = String(opts.source || '');
   if (source === 'compact' || source === 'resume') {

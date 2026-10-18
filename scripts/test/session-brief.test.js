@@ -197,7 +197,18 @@ test('SessionStart: compact index with counts, capped at ~600 chars', (t) => {
   assert.match(ctx, /run \/naksha-status for details/i);
   assert.doesNotMatch(ctx, /professional and approachable/, 'index must not dump memory');
   assert.doesNotMatch(ctx, /Session brief/, 'startup never restores a brief');
-  assert.ok(ctx.length <= 700, `context is ${ctx.length} chars`);
+  assert.ok(ctx.length <= 850, `context is ${ctx.length} chars`);
+});
+
+test('SessionStart: suggests Naksha Live once, on startup, until set up or disabled', (t) => {
+  const dir = tempProject(t);
+  writeNaksha(dir, PROJECT, MEMORY);
+  const hint = /\/naksha-dashboard setup/;
+  assert.match(context(runHook(DETECT, dir, { source: 'startup' })), hint);
+  assert.doesNotMatch(context(runHook(DETECT, dir, { source: 'resume' })), hint, 'resume is the same session');
+  assert.doesNotMatch(context(runHook(DETECT, dir, { source: 'compact' })), hint, 'compact is the same session');
+  fs.writeFileSync(path.join(dir, '.naksha', 'dashboard.json'), JSON.stringify({ enabled: false }));
+  assert.doesNotMatch(context(runHook(DETECT, dir, { source: 'startup' })), hint, 'disabled means stop suggesting');
 });
 
 test('SessionStart: index stays capped with huge project data', (t) => {

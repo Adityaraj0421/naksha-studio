@@ -8,7 +8,7 @@
     {
       "name": "naksha",
       "source": "./",
-      "description": "A virtual design team for Claude Code — 30 roles, 69 commands, 16,000+ lines of expert design knowledge. Your agency's design brain, inside your terminal.",
+      "description": "A virtual design team for Claude Code — 30 roles, 70 commands, 16,000+ lines of expert design knowledge. Your agency's design brain, inside your terminal.",
       "version": "5.3.0",
       "author": {
         "name": "Aditya Raj"
