@@ -224,6 +224,28 @@ function newTurn(file, rec, text, vocab) {
 
 const WRITE_TOOLS = ['Write', 'Edit', 'MultiEdit', 'NotebookEdit'];
 
+// A Skill call that runs a naksha command ("naksha:design-review" → "/design-review").
+// "naksha:design" is the orchestrator skill, not a separate command run.
+function skillCommand(b, vocab) {
+  if (!b || b.type !== 'tool_use' || b.name !== 'Skill' || !b.input || typeof b.input !== 'object') return null;
+  const s = String(b.input.skill || b.input.name || b.input.command || '');
+  const m = s.match(/^\/?(?:naksha(?:-studio)?:)?([\w-]+)$/);
+  if (!m || m[1] === 'design' || !vocab.commands.has(m[1])) return null;
+  return '/' + m[1];
+}
+
+// Split an assistant record's blocks at each Skill call that runs a naksha command,
+// so Claude chaining /naksha-init → /design → /design-review files each under its own command.
+function segments(blocks, vocab) {
+  const out = [{ cmd: null, blocks: [] }];
+  for (const b of blocks) {
+    const cmd = skillCommand(b, vocab);
+    if (cmd) out.push({ cmd, input: b.input, blocks: [] });
+    out[out.length - 1].blocks.push(b);
+  }
+  return out;
+}
+
 function absorb(turn, blocks, vocab) {
   for (const b of blocks) {
     if (b.type === 'text' && typeof b.text === 'string') turn.assistantText.push(b.text);
@@ -234,9 +256,9 @@ function absorb(turn, blocks, vocab) {
     if (name === 'Skill') {
       const s = String(input.skill || input.name || input.command || '');
       if (/(^|:)design$|naksha/i.test(s)) turn.skillInvoked = true;
-      // "naksha:design" is the orchestrator skill; any other naksha name is a command run through Skill
-      const sub = s.split(':').pop();
-      if (sub !== 'design' && vocab.commands.has(sub)) turn.command = turn.command || '/' + sub;
+      // scanFile starts a new turn for every other naksha command run through Skill
+      const cmd = skillCommand(b, vocab);
+      if (cmd) turn.command = turn.command || cmd;
     }
     if (name === 'Task' || name === 'Agent') {
       const t = String(input.subagent_type || input.agent || '').split(':').pop();
@@ -318,7 +340,16 @@ function scanFile(file, vocab, opts, counts) {
       close();
       turn = newTurn(file, rec, textOf(blocks), vocab);
     } else if (turn && role === 'assistant') {
-      absorb(turn, blocks, vocab);
+      for (const seg of segments(blocks, vocab)) {
+        if (seg.cmd && turn.command && turn.command !== seg.cmd && !rec.isSidechain) {
+          const cwd = turn.cwd;
+          close();
+          const args = typeof seg.input.args === 'string' ? seg.input.args : '';
+          turn = newTurn(file, rec, `${seg.cmd} ${args}`.trim(), vocab);
+          turn.cwd = turn.cwd || cwd;
+        }
+        absorb(turn, seg.blocks, vocab);
+      }
     } else if (turn && role === 'user') {
       const t = textOf(blocks);
       if (rec.isMeta && t && !turn.command) turn.command = commandIn(t, vocab.commands);
@@ -347,6 +378,6 @@ function main() {
   process.stdout.write(JSON.stringify(report, null, 2) + '\n');
 }
 
-module.exports = { scanFile, loadVocabulary, keywordRoles, cleanTask, redact };
+module.exports = { scanFile, loadVocabulary, keywordRoles, cleanTask, redact, skillCommand };
 
 if (require.main === module) main();

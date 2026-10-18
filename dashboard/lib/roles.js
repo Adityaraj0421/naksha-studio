@@ -117,6 +117,34 @@ function rolesForAgent(agentType, roles) {
   return rolesInText(agent, roles);
 }
 
+// Default owner role per findings dimension (commands/design-review.md, C1 owner_role).
+const DIMENSION_ROLES = {
+  accessibility: 'UX Researcher',
+  visual_hierarchy: 'UI Designer',
+  typography: 'UI Designer',
+  color: 'UI Designer',
+  responsive: 'UI Designer',
+  spacing: 'Design System Lead',
+  tokens: 'Design System Lead',
+  content: 'Content Designer',
+  interaction_states: 'UX Designer',
+};
+
+/**
+ * Roles for a /design-review verifier, from its brief: the owner roles of the
+ * dimensions of the findings it re-checks. Empty for any other agent prompt.
+ */
+function verifierRoles(prompt, roles) {
+  if (typeof prompt !== 'string' || !/design-review verifier/i.test(prompt)) return [];
+  const known = new Set(roles.map((r) => r.name));
+  const found = new Set();
+  for (const m of prompt.matchAll(/"?dimension"?\s*:\s*"?([a-z_]+)/g)) {
+    const role = DIMENSION_ROLES[m[1]];
+    if (role && known.has(role)) found.add(role);
+  }
+  return [...found];
+}
+
 const commandRoleCache = new Map();
 
 /**
@@ -151,6 +179,8 @@ module.exports = {
   normalizeAgent,
   rolesInText,
   rolesForAgent,
+  verifierRoles,
+  DIMENSION_ROLES,
   commandRoles,
   slug,
 };

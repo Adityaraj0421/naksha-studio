@@ -30,13 +30,29 @@
         onclick: function () { n.focusRole(f.owner_role); },
       }));
     }
-    if (f.verdict) meta.appendChild(document.createTextNode(' · ' + f.verdict));
+    if (f.verdict) meta.appendChild(document.createTextNode(' · ' + f.verdict.replace(/_/g, ' ')));
     body.appendChild(meta);
     return h('li', null, h('details', { class: 'finding' },
       h('summary', null,
         h('span', { class: 'nk-badge', 'data-tone': tone(f.severity), text: f.severity }),
-        h('span', { class: 'finding-title', text: f.title })),
+        h('span', { class: 'finding-title', text: f.title }),
+        f.verdict === 'needs_validation' ? h('span', { class: 'nk-meta', text: ' · needs validation' }) : null),
       body));
+  }
+
+  // "3 issues · 1 needs validation · 1 rejected" — rejected findings are counted, not listed.
+  function summary(data) {
+    var parts = [];
+    if (data.target) parts.push(data.target);
+    var confirmed = typeof data.confirmed === 'number' ? data.confirmed : data.total;
+    var pending = data.needsValidation || 0;
+    var unverified = Math.max(0, data.total - confirmed - pending);
+    parts.push(confirmed + (confirmed === 1 ? ' issue' : ' issues'));
+    if (pending) parts.push(pending + (pending === 1 ? ' needs' : ' need') + ' validation');
+    if (unverified) parts.push(unverified + ' unverified');
+    if (data.rejected) parts.push(data.rejected + ' rejected');
+    if (data.generated_at) parts.push(n.fmt.relTime(data.generated_at));
+    return parts.join(' · ');
   }
 
   function render(el, data, expanded) {
@@ -49,9 +65,7 @@
       return;
     }
     var head = h('div', { class: 'nk-section' });
-    head.appendChild(h('p', { class: 'nk-meta' },
-      (data.target ? data.target + ' · ' : '') + data.total + (data.total === 1 ? ' finding' : ' findings') +
-      (data.generated_at ? ' · ' + n.fmt.relTime(data.generated_at) : '')));
+    head.appendChild(h('p', { class: 'nk-meta' }, summary(data)));
     if (data.total) {
       var strip = h('div', { class: 'sev-strip', role: 'img', 'aria-label': Object.keys(data.bySeverity).map(function (k) { return data.bySeverity[k] + ' ' + k; }).join(', ') });
       (data.severityOrder || []).concat(Object.keys(data.bySeverity)).forEach(function (k, i, all) {
@@ -67,7 +81,7 @@
     }
     el.appendChild(head);
     if (!data.total) {
-      el.appendChild(h('p', { class: 'nk-meta', text: 'The last review found nothing to fix.' }));
+      el.appendChild(h('p', { class: 'nk-meta', text: data.rejected ? 'Verification rejected every finding from the last review.' : 'The last review found nothing to fix.' }));
       return;
     }
     var shown = expanded ? data.findings : data.findings.slice(0, COLLAPSED);

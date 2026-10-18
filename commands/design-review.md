@@ -325,7 +325,7 @@ Rules for each finding:
 
 The reviewer is the worst judge of its own findings, so a verifier that has not seen your reasoning tries to disprove each one.
 
-1. Use the Agent tool (named Task in older Claude Code versions) with a general-purpose subagent. Launch one verifier per finding, in parallel. With more than 10 findings, give each verifier up to 5 findings from the same dimension and tell it to judge each one on its own.
+1. Use the Agent tool (named Task in older Claude Code versions) with a general-purpose subagent. Launch one verifier per finding, in parallel, with the description `Verify F-00x (<owner_role>)` so the Naksha Live org chart can show which role's finding is being checked. With more than 10 findings, give each verifier up to 5 findings from the same dimension and tell it to judge each one on its own.
 2. Give each verifier **only**: the target (`kind`, `location`, `viewports`), the contrast threshold in force (4.5:1, or 7:1 when `constraints.accessibility_target` is WCAG AAA), and the finding's `id`, `dimension`, `severity`, `title`, `criterion` and `evidence`. Do **not** pass the recommendation, the scores, other findings, or your own reasoning, and do not say which verdict you expect.
 3. Use this prompt, filling in the brackets:
 

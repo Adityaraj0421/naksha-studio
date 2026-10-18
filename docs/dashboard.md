@@ -85,7 +85,9 @@ Third-party and future naksha features add panels with two optional files. Both 
 
 ```js
 // dashboard/routes/votes.js
-exports.register = ({ route, projectDir, naksha }) => {
+exports.register = ({ route, projectDir, naksha, onClose }) => {
+  // onClose(fn): fn runs (and may return a promise) when the dashboard shuts down,
+  // e.g. to stop a child process the route started.
   route('GET', '/votes', async (req, res, { query, json }) => {
     const project = naksha.readProject() || {};
     json(200, { signals: (project.taste && project.taste.signals) || [] });
@@ -165,7 +167,7 @@ exports.register = ({ route, projectDir, naksha }) => {
 
 ## Cost panel input (`scripts/naksha-stats.js --json`)
 
-The cost route runs the script, if it exists, with an 8 s timeout and a 1 MB output cap, with `cwd` set to the project and `NAKSHA_PROJECT_DIR` set. Results are cached for 30 s.
+The cost route runs the script, if it exists, with a 4 MB output cap, with `cwd` set to the project and `NAKSHA_PROJECT_DIR` set. Results are cached for 30 s. The script caches its per-transcript parse in `~/.naksha/cache/`, so only its first run reads the whole history; that run can take longer than a request should wait. The route waits 8 s, then answers `{ pending: true }` (or the last good result with `stale: true`) and lets the run finish in the background, for up to 3 minutes. The panel retries every 5 s until fresh data arrives.
 
 naksha's own report (`"schema": "naksha-stats/1"`, see [cost-and-budgets.md](cost-and-budgets.md)) is mapped exactly: spend is `totals.cost_usd` (all time) and `budgets.month_spend_usd`; budgets are `budgets.monthly` and each `budgets.per_command` entry (max run vs per-run limit), with the script's own `status` so a custom `warn_at` is respected; top commands come from `commands[].cost_usd`.
 
@@ -192,7 +194,7 @@ Budgets show *ok* below 80 %, *warn* from 80 %, and *over* from 100 %. If the sc
 
 ## Findings panel input
 
-`naksha-review/findings.json` at the project root: `{ target, generated_at, coverage, findings: [{ id, dimension, severity, title, evidence, recommendation, owner_role, verdict }] }`. Strings are clipped and unknown fields dropped. Findings are sorted by severity (critical → info). Each `owner_role` links to that role in the org chart.
+`naksha-review/findings.json` at the project root: `{ target, generated_at, coverage, findings: [{ id, dimension, severity, title, evidence, recommendation, owner_role, verdict }] }`. Strings are clipped and unknown fields dropped. As in the `/design-review` report, only confirmed and needs-validation findings are listed (confirmed first, each group by severity, critical → info); rejected findings are only counted, in the panel's summary line (`3 issues · 1 needs validation · 1 rejected`) and as `rejected` in the API response. Each `owner_role` links to that role in the org chart.
 
 ## Tests
 

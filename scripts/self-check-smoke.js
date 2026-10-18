@@ -86,6 +86,24 @@ async function main() {
     expect('low contrast caught', m.contrast.fail.some((c) => c.el === 'p.faint' && c.ratio < 4.5), JSON.stringify(m.contrast));
     expect('heading skip and missing main caught', m.semantics.headingSkips.includes('1→3') && m.semantics.main === 0, JSON.stringify(m.semantics));
 
+    expect('page-level overflow is not reported as clipping', m.overflow.clipped.length === 0, JSON.stringify(m.overflow.clipped));
+
+    // traps.html: patterns the probe used to misread (TEST-RESULTS R5–R7).
+    const t = await run('traps.html', WIDTHS[0]); // probed at once, mid-way through a 2 s colour fade
+    console.log('▸ traps.html @ 375px (no false positives, no missed clipping)');
+    expect('contrast read at the end of the theme transition', t.contrast.failCount === 0 && t.contrast.checked > 0, JSON.stringify(t.contrast));
+    expect('transitions were disabled while probing', t.motion.transitionsDisabled === true, JSON.stringify(t.motion));
+    expect('probe removes its temporary style', await page.evaluate(() => document.querySelectorAll('style').length) === 1);
+    expect('stat clipped inside overflow: hidden is caught', t.overflow.clipped.some((c) => c.text === '16,000+' && c.axis === 'x' && !c.ellipsis), JSON.stringify(t.overflow));
+    expect('deliberate ellipsis is marked as such', t.overflow.clipped.some((c) => c.ellipsis === true), JSON.stringify(t.overflow.clipped));
+    await page.click('a[href="#one"]'); // pointer input: Chrome stops matching :focus-visible for script focus
+    const tp = await page.evaluate(`(${PROBE})()`);
+    expect(':focus-visible-only rings are not flagged after pointer input', tp.focus.noIndicator.length === 0 && tp.focus.indicatorFromCss === 2, JSON.stringify(tp.focus));
+    await page.goto(`${base}/bad.html`);
+    await page.click('a[tabindex="3"]');
+    const bp = await page.evaluate(`(${PROBE})()`);
+    expect('after pointer input, outline: none on :focus is still caught', bp.focus.noIndicator.length === 2 && bp.focus.noIndicator.every((f) => f.el.startsWith('button.icon-btn')), JSON.stringify(bp.focus));
+
     const d = await run('bad.html', WIDTHS[2]);
     console.log('▸ bad.html @ 1440px (width-specific result)');
     expect('900px hero no longer overflows', !d.overflow.offenders.some((o) => o.el.startsWith('div.hero')), JSON.stringify(d.overflow));

@@ -196,8 +196,11 @@ describe('CLI', () => {
     assert.match(res.stdout, /spacing-grid/);
   });
 
-  test('exit 1 on errors, and the report file is written', () => {
-    const res = cli([fx('img-alt.bad.html')]);
+  test('exit 1 on errors; a local text run leaves no report file, --report writes one', () => {
+    const local = cli([fx('img-alt.bad.html')]);
+    assert.equal(local.status, 1);
+    assert.ok(!fs.existsSync(path.join(local.cwd, 'design-lint-report.json')), 'no report file left in the user folder');
+    const res = cli(['--report', fx('img-alt.bad.html')]);
     assert.equal(res.status, 1);
     const report = JSON.parse(fs.readFileSync(path.join(res.cwd, 'design-lint-report.json'), 'utf-8'));
     assert.ok(report.issues.some(i => i.rule === 'img-alt' && i.check && i.severity === 'error'));
@@ -294,4 +297,53 @@ describe('PostToolUse hook', () => {
     fs.copyFileSync(fx('img-alt.bad.html'), path.join(cwd, 'a.html'));
     assert.deepEqual(hook({ cwd, tool_input: { file_path: 'a.html' } }, cwd), { continue: true });
   });
+});
+
+describe('stylesheets linted on their own (TEST-RESULTS R9, R10)', () => {
+  const tokensCss = ':root {\n' + Array.from({ length: 90 }, (_, i) => `  --color-shade-${i}: #${(0x102030 + i * 0x010101).toString(16)};`).join('\n') + '\n  --color-brand: #0b57d0;\n}\n';
+
+  test('hardcoded-color sees tokens from an @import-ed tokens file', () => {
+    const cwd = tmpdir();
+    fs.writeFileSync(path.join(cwd, 'tokens.css'), tokensCss);
+    fs.writeFileSync(path.join(cwd, 'styles.css'), '@import "tokens.css";\n.btn { color: #0b57d0; padding: 8px; }\n');
+    const report = lint.lintFiles(['styles.css'], { cwd, project: null });
+    const hit = report.issues.find(i => i.rule === 'hardcoded-color');
+    assert.ok(hit, JSON.stringify(report.issues));
+    assert.match(hit.message, /#0b57d0 → var\(--color-brand\)/);
+  });
+
+  test('a page that links tokens.css gets those tokens too; remote imports are ignored', () => {
+    const cwd = tmpdir();
+    fs.mkdirSync(path.join(cwd, 'css'));
+    fs.writeFileSync(path.join(cwd, 'css', 'tokens.css'), tokensCss);
+    fs.writeFileSync(path.join(cwd, 'index.html'),
+      '<!doctype html><html lang="en"><head><meta name="viewport" content="width=device-width">' +
+      '<link rel="stylesheet" href="https://fonts.example/x.css"><link rel="stylesheet" href="css/tokens.css?v=2">' +
+      '<style>.btn { color: #0b57d0; }</style></head><body><main><h1>Hi</h1></main></body></html>');
+    const report = lint.lintFiles(['index.html'], { cwd, project: null });
+    assert.ok(report.issues.some(i => i.rule === 'hardcoded-color' && /var\(--color-brand\)/.test(i.message)), JSON.stringify(report.issues));
+  });
+
+  test('media-queries does not fire on a tokens-only stylesheet', () => {
+    const cwd = tmpdir();
+    fs.writeFileSync(path.join(cwd, 'tokens.css'), tokensCss);
+    assert.ok(tokensCss.length > 2000, 'fixture is big enough to trigger the rule');
+    const report = lint.lintFiles(['tokens.css'], { cwd, project: null });
+    assert.ok(!report.issues.some(i => i.rule === 'media-queries'), JSON.stringify(report.issues));
+    // A real stylesheet of the same size still needs breakpoints.
+    fs.writeFileSync(path.join(cwd, 'layout.css'), tokensCss.replace(/--color-shade-(\d+)/g, 'margin-top').replace(':root', '.box'));
+    const layout = lint.lintFiles(['layout.css'], { cwd, project: null });
+    assert.ok(layout.issues.some(i => i.rule === 'media-queries'));
+  });
+});
+
+test('outside git and CI, no file arguments lints every UI file in the folder (/design-detect fallback, R8)', () => {
+  const cwd = tmpdir();
+  fs.copyFileSync(fx('img-alt.bad.html'), path.join(cwd, 'index.html'));
+  fs.writeFileSync(path.join(cwd, 'notes.md'), '# not UI');
+  const res = cli(['--json'], { cwd });
+  const report = JSON.parse(res.stdout);
+  assert.equal(report.status, 'issues');
+  assert.deepEqual(report.filesLinted, ['index.html']);
+  assert.ok(!fs.existsSync(path.join(cwd, 'design-lint-report.json')));
 });

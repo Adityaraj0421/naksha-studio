@@ -1,14 +1,25 @@
 () => {
   // naksha browser-self-check probe (v1). Pass this whole arrow function as the
   // `function` argument of the Playwright MCP browser_evaluate tool. It reads the
-  // page at the current viewport and returns compact JSON; it changes nothing
-  // except moving focus briefly (restored at the end). Arrays are capped so the
-  // result stays small. See browser-self-check.md for how each field is judged.
+  // page at the current viewport and returns compact JSON. While it runs it
+  // turns CSS transitions off (so colours and focus rings are read at their end
+  // state, not mid-fade) and moves focus; both are restored at the end. Arrays
+  // are capped so the result stays small. See browser-self-check.md for how each
+  // field is judged.
   const CAP = 8;
   const docEl = document.documentElement;
   const body = document.body || docEl;
   const vw = docEl.clientWidth;
   const vh = window.innerHeight;
+
+  // Removing a transition jumps a running one to its end value, so a probe taken
+  // right after a colour-scheme or theme change reads the final colours.
+  const noMotion = document.createElement('style');
+  noMotion.textContent = '*, *::before, *::after { transition: none !important; }';
+  (document.head || docEl).appendChild(noMotion);
+  void getComputedStyle(body).color; // flush styles
+  const runningAnimations = typeof document.getAnimations === 'function'
+    ? document.getAnimations().filter((a) => a.playState === 'running').length : 0;
 
   const sel = (el, depth = 0) => {
     if (el.id) return '#' + el.id;
@@ -46,6 +57,29 @@
       offenders.push({ node: el, el: sel(el), right: Math.round(r.right), width: Math.round(r.width) });
       if (offenders.length >= CAP) break;
     }
+  }
+
+  // Content cut off inside an overflow: hidden/clip box (not html/body, which
+  // `masked` covers): the page does not scroll, so `px` stays 0, but text or
+  // children are wider (or taller) than the box. text-overflow: ellipsis is a
+  // deliberate truncation and is reported with `ellipsis: true`.
+  const clipped = [];
+  for (const el of body.querySelectorAll('*')) {
+    if (clipped.length >= CAP) break;
+    const cs = getComputedStyle(el);
+    const hideX = ['hidden', 'clip'].includes(cs.overflowX);
+    const hideY = ['hidden', 'clip'].includes(cs.overflowY);
+    if (!hideX && !hideY) continue;
+    if (!el.clientWidth || !el.clientHeight || !shown(el)) continue;
+    const dx = hideX ? el.scrollWidth - el.clientWidth : 0;
+    const dy = hideY ? el.scrollHeight - el.clientHeight : 0;
+    if (dx <= 2 && dy <= 2) continue;
+    if (clipped.some((c) => c.node.contains(el))) continue; // keep the outermost clipping box
+    const item = { node: el, el: sel(el), axis: dx > 2 && dy > 2 ? 'both' : dx > 2 ? 'x' : 'y', hiddenPx: Math.round(Math.max(dx, dy)) };
+    if (cs.textOverflow === 'ellipsis') item.ellipsis = true;
+    const t = (el.textContent || '').replace(/\s+/g, ' ').trim();
+    if (t) item.text = t.slice(0, 30);
+    clipped.push(item);
   }
 
   // ── tap targets (WCAG 2.5.8 floor 24px; 44px comfort) ────────────────────
@@ -107,6 +141,65 @@
       }
     }
   }
+  // Chrome does not match :focus-visible for script focus after pointer input,
+  // so a page that styles focus only with :focus-visible looks unchanged to
+  // el.focus(). Fall back to the stylesheets: a :focus / :focus-visible rule that
+  // matches the element (pseudo-classes removed) and draws something counts, and
+  // so does the browser's own focus ring when no author rule removes the outline.
+  const focusRules = [];
+  const outlineKillers = [];
+  const removesOutline = (st) => {
+    const style = st.getPropertyValue('outline-style').trim();
+    const width = st.getPropertyValue('outline-width').trim();
+    const short = st.getPropertyValue('outline').trim();
+    return style === 'none' || style === 'hidden' || /^0(px)?$/.test(width) || /^(none|0|0px)$/.test(short);
+  };
+  // Does a rule draw something? "outline: none" / "border: none" draw nothing even
+  // though they set width and colour longhands. A shorthand that uses var() leaves
+  // its longhands empty in the CSSOM, so read the shorthand too.
+  const draws = (st) => {
+    const val = (p) => st.getPropertyValue(p).trim();
+    const off = (v) => !v || /^(none|hidden|0|0px|transparent|initial|unset)$/.test(v) || /(^|\s)(none|hidden)(\s|$)/.test(v);
+    const outlineStyle = val('outline-style');
+    if (outlineStyle ? !off(outlineStyle) : (val('outline') ? !off(val('outline')) : !!val('outline-color'))) return true;
+    const sides = ['top', 'right', 'bottom', 'left'];
+    const borderStyles = sides.map((s) => val('border-' + s + '-style')).filter(Boolean);
+    const borderShorthands = ['border'].concat(sides.map((s) => 'border-' + s)).map(val).filter(Boolean);
+    if (borderStyles.length ? borderStyles.some((v) => !off(v))
+      : borderShorthands.length ? borderShorthands.some((v) => !off(v))
+        : !!(val('border-color') || sides.some((s) => val('border-' + s + '-color')))) return true;
+    if (!off(val('box-shadow'))) return true;
+    if (!off(val('background-color')) || !off(val('background-image')) || (!val('background-color') && !off(val('background')))) return true;
+    if (!off(val('text-decoration-line')) || (!val('text-decoration-line') && !off(val('text-decoration')))) return true;
+    return !!val('color');
+  };
+  const FOCUS = /:focus(-visible)?(?![\w-])/;
+  const walk = (rules) => {
+    for (const r of Array.from(rules || [])) {
+      if (r.cssRules && !r.selectorText) { walk(r.cssRules); continue; }
+      if (!r.selectorText || !r.style) continue;
+      if (removesOutline(r.style)) {
+        for (const part of r.selectorText.split(',')) {
+          // pointer-only removal leaves the keyboard ring alone
+          if (/:not\([^)]*:focus-visible/.test(part)) continue;
+          outlineKillers.push(part.replace(new RegExp(FOCUS.source, 'g'), '').trim() || '*');
+        }
+      }
+      if (!FOCUS.test(r.selectorText) || !draws(r.style)) continue;
+      for (const part of r.selectorText.split(',')) {
+        // ":focus:not(:focus-visible) { outline: none }" removes a ring, never adds one
+        if (!FOCUS.test(part) || /:not\([^)]*:focus/.test(part)) continue;
+        const bare = part.replace(new RegExp(FOCUS.source, 'g'), '').replace(/::?(before|after)\b/g, '').trim();
+        focusRules.push(bare || '*');
+      }
+    }
+  };
+  for (const sheet of Array.from(document.styleSheets)) {
+    try { walk(sheet.cssRules); } catch { /* cross-origin sheet: unreadable */ }
+  }
+  const matchesAny = (el, list) => list.some((s) => { try { return el.matches(s); } catch { return false; } });
+  let indicatorFromCss = 0, indicatorFromBrowser = 0;
+
   const prevActive = document.activeElement;
   const look = (el) => {
     const c = getComputedStyle(el);
@@ -118,7 +211,10 @@
     el.focus({ preventScroll: true });
     const after = document.activeElement === el ? look(el) : before;
     el.blur();
-    if (before === after && noIndicator.length < CAP) noIndicator.push({ el: sel(el), name: label(el) });
+    if (before !== after) continue;
+    if (matchesAny(el, focusRules)) { indicatorFromCss++; continue; }
+    if (!matchesAny(el, outlineKillers)) { indicatorFromBrowser++; continue; }
+    if (noIndicator.length < CAP) noIndicator.push({ el: sel(el), name: label(el) });
   }
   if (prevActive && prevActive.focus) prevActive.focus({ preventScroll: true });
 
@@ -181,12 +277,18 @@
   const skipped = [];
   for (let i = 1; i < headings.length; i++) if (headings[i] > headings[i - 1] + 1) skipped.push(headings[i - 1] + '→' + headings[i]);
 
+  noMotion.remove();
+
   return {
     probe: 'browser-self-check/1',
     viewport: { w: vw, h: vh },
-    overflow: { px: Math.max(0, overflowPx), masked, offenders: offenders.map(({ node, ...o }) => o) },
+    overflow: {
+      px: Math.max(0, overflowPx), masked, offenders: offenders.map(({ node, ...o }) => o),
+      clipped: clipped.map(({ node, ...o }) => o),
+    },
+    motion: { transitionsDisabled: true, runningAnimations },
     tap: { checked: targets.length, fail: tapFail, warn: tapWarn },
-    focus: { count: focusables.length, positiveTabindex, hiddenFocusable, reordered, noIndicator },
+    focus: { count: focusables.length, positiveTabindex, hiddenFocusable, reordered, noIndicator, indicatorFromCss, indicatorFromBrowser },
     contrast: { checked: contrastChecked, unknown: contrastUnknown, fail: contrastFail.slice(0, CAP), failCount: contrastFail.length },
     semantics: {
       lang: docEl.getAttribute('lang') || '',

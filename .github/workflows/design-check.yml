@@ -50,7 +50,7 @@ jobs:
         env:
           CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
         run: |
-          node scripts/design-lint.js
+          node scripts/design-lint.js --report
         continue-on-error: true
 
       - name: Post PR Comment

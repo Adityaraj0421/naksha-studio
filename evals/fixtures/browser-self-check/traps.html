@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Self-check fixture: probe traps</title>
+  <style>
+    /* Three things the probe used to misread (TEST-RESULTS R5–R7). */
+    :root { --ink: #1a1a1a; --paper: #ffffff; --accent: #0b57d0; }
+    body { margin: 0; padding: 16px; font: 16px/1.5 system-ui, sans-serif; color: var(--ink); background: var(--paper);
+           transition: color 2s linear, background-color 2s linear; }
+    /* R6: the page switches to a dark theme on load; the colours fade for 2 s. */
+    body.dark { --ink: #f2f2f2; --paper: #121212; --accent: #8ab4f8; color: var(--ink); background: var(--paper); }
+    p, h1, a { transition: color 2s linear; }
+    /* R5: the recommended pattern, focus rings for keyboard users only. */
+    a { color: var(--accent); display: inline-block; min-height: 44px; padding: 10px 0; }
+    a:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+    a:focus:not(:focus-visible) { outline: none; }
+    /* R7: a stat that is clipped inside a fixed-width box, and a deliberate ellipsis. */
+    .stats { display: flex; gap: 16px; }
+    .stat { width: 80px; overflow: hidden; white-space: nowrap; font-size: 32px; font-weight: 700; }
+    .label { width: 120px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Probe traps</h1>
+    <p>Body copy that is readable once the theme has settled.</p>
+    <p><a href="#one">First link</a></p>
+    <p><a href="#two">Second link</a></p>
+    <div class="stats">
+      <div class="stat">16,000+</div>
+      <div class="label">A long label that is meant to end in an ellipsis</div>
+    </div>
+  </main>
+  <script>
+    // Resolve the light styles first so switching to dark starts real transitions.
+    for (const el of document.querySelectorAll('body, p, h1, a')) getComputedStyle(el).color;
+    document.body.classList.add('dark');
+  </script>
+</body>
+</html>

@@ -223,6 +223,32 @@ test('cost panel runs scripts/naksha-stats.js --json and normalizes spend vs bud
   }
 });
 
+test('cost: a slow naksha-stats run answers "pending", then serves the result once it finishes', async () => {
+  const fakePlugin = tmpProject();
+  fs.mkdirSync(path.join(fakePlugin.dir, 'scripts'));
+  fs.writeFileSync(
+    path.join(fakePlugin.dir, 'scripts', 'naksha-stats.js'),
+    `setTimeout(() => console.log(JSON.stringify({ schema: 'naksha-stats/1', totals: { cost_usd: 2 }, commands: [], budgets: {} })), 600);`,
+  );
+  try {
+    await withApp(() => ({ pluginRoot: fakePlugin.dir, routeOptions: { costWaitMs: 100 } }), async ({ port, token }) => {
+      const h = { headers: { 'X-Naksha-Token': token } };
+      const first = await request(port, '/api/cost', h);
+      assert.equal(first.json.pending, true, 'not killed, not an error');
+      await new Promise((r) => setTimeout(r, 1500));
+      const second = await request(port, '/api/cost', h);
+      assert.equal(second.json.pending, undefined);
+      assert.deepEqual(second.json.spend, [{ key: 'total', label: 'all time', value: 2 }]);
+      // A later slow refresh serves the last good result, marked stale.
+      const third = await request(port, '/api/cost?refresh=1', h);
+      assert.equal(third.json.stale, true);
+      assert.equal(third.json.spend[0].value, 2);
+    });
+  } finally {
+    fakePlugin.cleanup();
+  }
+});
+
 test('cost: maps the real naksha-stats/1 report exactly', () => {
   const { normalize } = require('../routes/cost');
   const out = normalize({
@@ -259,4 +285,24 @@ test('findings are normalized, clipped and sorted by severity', () => {
   assert.equal(out.findings[0].evidence.length, 800);
   assert.equal(out.findings[0].extra, undefined);
   assert.deepEqual(out.bySeverity, { critical: 1, low: 1 });
+});
+
+test('findings: rejected findings are counted, not listed; confirmed come before needs-validation', () => {
+  const { normalize } = require('../routes/findings');
+  const out = normalize({
+    findings: [
+      { id: 'F-001', severity: 'major', title: 'scroll region not focusable', verdict: 'rejected' },
+      { id: 'F-002', severity: 'major', title: 'low contrast', verdict: 'needs_validation' },
+      { id: 'F-003', severity: 'minor', title: 'tight spacing', verdict: 'confirmed' },
+      { id: 'F-004', severity: 'critical', title: 'no focus ring', verdict: 'confirmed' },
+      { id: 'F-005', severity: 'minor', title: 'odd type size', verdict: 'confirmed' },
+    ],
+  });
+  assert.deepEqual(out.findings.map((f) => f.id), ['F-004', 'F-003', 'F-005', 'F-002']);
+  assert.equal(out.total, 4);
+  assert.equal(out.raised, 5);
+  assert.equal(out.confirmed, 3);
+  assert.equal(out.needsValidation, 1);
+  assert.equal(out.rejected, 1);
+  assert.deepEqual(out.bySeverity, { critical: 1, minor: 2, major: 1 }, 'severity counts leave out the rejected finding');
 });

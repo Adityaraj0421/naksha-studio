@@ -8,8 +8,9 @@
 // "enabled": true. Otherwise it is an immediate no-op.
 //
 // Privacy: prompt text is never stored. A prompt is recorded only when it starts
-// with a naksha /command, and then only the command name. Agent/Task calls are
-// reduced to the naksha role names they mention.
+// with a naksha /command, and then only the command name; a Skill call that runs a
+// naksha command is recorded the same way. Agent/Task calls are reduced to the
+// naksha role names they mention.
 //
 // Contract with Claude Code: always exit 0 and print `{}` (valid JSON, adds no
 // context, makes no decision), whatever happens.
@@ -39,6 +40,15 @@ function readStdin() {
 
 function shortId(v) {
   return typeof v === 'string' && v ? v.replace(/[^A-Za-z0-9_-]/g, '').slice(0, 12) : undefined;
+}
+
+/** "naksha:design-review" → "design-review" when it names a naksha command; else null. */
+function commandFromSkill(skill, pluginRoot) {
+  if (typeof skill !== 'string') return null;
+  const m = /^\s*\/?naksha(?:-studio)?:([a-z0-9][a-z0-9-]{0,63})\s*$/i.exec(skill);
+  if (!m) return null;
+  const cmd = m[1].toLowerCase();
+  return fs.existsSync(path.join(pluginRoot, 'commands', `${cmd}.md`)) ? cmd : null;
 }
 
 function main() {
@@ -108,14 +118,23 @@ function main() {
     case 'PreToolUse':
     case 'PostToolUse': {
       const tool = typeof input.tool_name === 'string' ? input.tool_name.slice(0, 80) : 'unknown';
+      const ti = input.tool_input && typeof input.tool_input === 'object' ? input.tool_input : {};
+      // Claude can run a naksha command itself through the Skill tool ("naksha:design-review").
+      // That starts a command run just like a typed /command, so record it the same way.
+      if (tool === 'Skill' && event === 'PreToolUse') {
+        const cmd = commandFromSkill(ti.skill, pluginRoot);
+        if (cmd) out.push({ ...base, type: 'command', cmd });
+      }
       const evt = { ...base, type: 'tool', tool };
       if (tool === 'Task' || tool === 'Agent') {
-        const ti = input.tool_input && typeof input.tool_input === 'object' ? input.tool_input : {};
         const hint = [ti.subagent_type, ti.description].filter((s) => typeof s === 'string').join(' \n ');
         const found = new Set([
           ...roles.rolesForAgent(ti.subagent_type, getRoster()),
           ...roles.rolesInText(hint, getRoster()),
         ]);
+        // /design-review verifiers are general-purpose agents; their brief names the
+        // finding's dimension, which maps to the role that owns it.
+        if (!found.size) roles.verifierRoles(ti.prompt, getRoster()).forEach((r) => found.add(r));
         if (found.size) evt.roles = [...found].slice(0, 6);
       }
       out.push(evt);

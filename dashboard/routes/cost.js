@@ -17,7 +17,12 @@ const fs = require('fs');
 const path = require('path');
 const { execFile } = require('child_process');
 
-const TIMEOUT_MS = 8000;
+// naksha-stats.js reads every transcript on its first run (it caches per-file results
+// after that), which can take well over WAIT_MS with a long history. The route waits
+// WAIT_MS for a run, then answers with the last good result (marked stale) or a
+// "pending" note, and lets the run finish in the background for the next request.
+const WAIT_MS = 8000;
+const RUN_TIMEOUT_MS = 180000;
 const CACHE_MS = 30000;
 
 function num(...vals) {
@@ -164,32 +169,64 @@ function parseJSONOutput(stdout) {
   }
 }
 
-function register({ route, projectDir, naksha }) {
+function register({ route, projectDir, naksha, options = {}, onClose }) {
   const script = path.join(naksha.pluginRoot, 'scripts', 'naksha-stats.js');
-  let cache = null;
+  const waitMs = options.costWaitMs || WAIT_MS;
+  let cache = null; // last finished run: { at, data }
+  let lastGood = null; // last run without an error
+  let inflight = null;
+  let child = null;
+
+  // Stop a background run on shutdown, and wait for it to exit (on Windows a running
+  // process keeps its working directory locked).
+  if (onClose) {
+    onClose(() => new Promise((resolve) => {
+      if (!child || child.exitCode !== null) return resolve();
+      child.once('exit', () => resolve());
+      child.kill();
+    }));
+  }
+
+  const runStats = () => new Promise((resolve) => {
+    child = execFile(
+      process.execPath,
+      [script, '--json'],
+      { cwd: projectDir, timeout: RUN_TIMEOUT_MS, maxBuffer: 4 * 1024 * 1024, env: { ...process.env, NAKSHA_PROJECT_DIR: projectDir } },
+      (err, stdout) => {
+        if (err && !stdout) {
+          return resolve({ available: true, error: err.killed ? 'naksha-stats.js timed out' : 'naksha-stats.js failed' });
+        }
+        try {
+          resolve(normalize(parseJSONOutput(stdout)));
+        } catch {
+          resolve({ available: true, error: 'naksha-stats.js did not print JSON' });
+        }
+      },
+    );
+  });
+
+  const refresh = () => {
+    if (!inflight) {
+      inflight = runStats().then((data) => {
+        cache = { at: Date.now(), data };
+        if (!data.error) lastGood = data;
+        inflight = null;
+        return data;
+      });
+    }
+    return inflight;
+  };
 
   route('GET', '/cost', async (req, res, { json, query }) => {
     if (!fs.existsSync(script)) return json(200, { available: false, reason: 'not-installed' });
     if (cache && Date.now() - cache.at < CACHE_MS && !query.refresh) return json(200, cache.data);
-    const data = await new Promise((resolve) => {
-      execFile(
-        process.execPath,
-        [script, '--json'],
-        { cwd: projectDir, timeout: TIMEOUT_MS, maxBuffer: 1024 * 1024, env: { ...process.env, NAKSHA_PROJECT_DIR: projectDir } },
-        (err, stdout) => {
-          if (err && !stdout) {
-            return resolve({ available: true, error: err.killed ? 'naksha-stats.js timed out' : 'naksha-stats.js failed' });
-          }
-          try {
-            resolve(normalize(parseJSONOutput(stdout)));
-          } catch {
-            resolve({ available: true, error: 'naksha-stats.js did not print JSON' });
-          }
-        },
-      );
-    });
-    cache = { at: Date.now(), data };
-    return json(200, data);
+    let timer;
+    const late = new Promise((resolve) => { timer = setTimeout(() => resolve(null), waitMs); });
+    const data = await Promise.race([refresh(), late]);
+    clearTimeout(timer);
+    if (data) return json(200, data.error && lastGood ? { ...lastGood, stale: true, error_note: data.error } : data);
+    if (lastGood) return json(200, { ...lastGood, stale: true });
+    return json(200, { available: true, pending: true });
   });
 }
 

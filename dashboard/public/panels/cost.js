@@ -47,6 +47,13 @@
       el.appendChild(h('p', { class: 'panel-error', text: data.error }));
       return;
     }
+    if (data.pending) {
+      el.appendChild(h('p', { class: 'nk-meta', text: 'Reading your transcripts for the first time — this can take a minute with a long history. Later updates are quick.' }));
+      return;
+    }
+    if (data.stale) {
+      el.appendChild(h('p', { class: 'nk-meta', text: 'Showing the last result while it updates.' }));
+    }
     if (data.spend && data.spend.length) {
       var dl = h('dl', { class: 'nk-figures' });
       data.spend.forEach(function (s) {
@@ -73,7 +80,14 @@
     title: 'Cost & budgets',
     order: 30,
     render: function (el, api) {
-      var load = function () { return api.get('/cost').then(function (d) { render(el, d); }); };
+      var retry = null;
+      var load = function () {
+        return api.get('/cost').then(function (d) {
+          render(el, d);
+          clearTimeout(retry);
+          if (d && (d.pending || d.stale)) retry = setTimeout(function () { load().catch(function () {}); }, 5000);
+        });
+      };
       var timer = null;
       api.on('turn_end', function () {
         clearTimeout(timer);
