@@ -12,7 +12,8 @@ This document is the single source of truth for the `.naksha/` schema specificat
 {project-root}/
 ├── .naksha/
 │   ├── project.json          # Project configuration (created by /naksha-init)
-│   └── memory.md             # Append-only decision log
+│   ├── memory.md             # Append-only decision log
+│   └── session-brief.md      # Generated ≤ 2 KB brief (PreCompact hook) — safe to gitignore
 ├── .gitignore                # Consider: commit .naksha/ or keep local-only
 └── [other project files]
 ```
@@ -199,6 +200,12 @@ Learned design taste, written by `/naksha-taste` and by verdicts given during `/
 - Detects v4 schema (missing `schema_version` field or missing `constraints`)
 - Offers migration: adds the v5 optional fields with empty defaults
 - Reports: `[MEMORY] project.json upgraded: v4 → v5 (3 new optional fields added)`
+
+## session-brief.md (generated)
+
+`.naksha/session-brief.md` is written by the PreCompact hook (`scripts/precompact-brief.sh` → `scripts/lib/session-brief.js`) just before Claude Code compacts a conversation. It summarises what can be derived deterministically from disk: project name, brand tokens, stack, constraints, taste leanings (age-weighted as in the taste section above), the last 5 `memory.md` entries, and the 5 most recently modified design files (`design-output.html`, `naksha-variants/`, `naksha-review/`). It is hard-capped at **2048 bytes**.
+
+The SessionStart hook injects a compact index (≤ 600 chars: project name, brand, framework, and counts of constraints, patterns, taste signals, browser findings, and memory entries). When the session `source` is `compact` or `resume` and the brief is less than 24 hours old (by file mtime), the hook also injects the brief. Commands never write this file. It is overwritten wholesale on every compaction, so it is safe to gitignore.
 
 ## memory.md Format
 

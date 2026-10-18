@@ -136,6 +136,7 @@ Before marking your PR ready, confirm all of the following apply to your contrib
 - `validate-structure` CI passes (checks file counts, version consistency, and command frontmatter)
 - `bash scripts/quality-check.sh` passes — the same checks the `CI` workflow runs on every PR
 - No hardcoded paths — use `${CLAUDE_PLUGIN_ROOT}/` for all plugin-relative references
+- No telemetry and no network calls from hooks or scripts; project data stays in `.naksha/`. See [docs/privacy.md](docs/privacy.md)
 
 **New command:**
 - Command `.md` file is in `commands/`
