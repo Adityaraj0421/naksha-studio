@@ -479,3 +479,30 @@ D3 annotation best practices (applicable to any charting library):
 **Color legends as annotation:** When color is used for categories, put the color swatch inside the annotation near the data rather than in a separate legend box. This is the "annotate the chart" approach popularized by the NYT graphics desk.
 
 **Line chart tooltips:** Position tooltips to the right of the cursor when within the left 60% of the chart, and to the left when within the right 40%. This prevents tooltips from clipping at the edge.
+
+---
+
+## Quality Contract
+
+### Red flags
+
+- The chart type doesn't fit the data (a pie chart for 8 categories, a line across categories with no order).
+- A bar chart's Y-axis doesn't start at zero, or the chart uses dual Y-axes or 3D effects.
+- Color is the only way to tell series apart.
+- The chart has no title, axis labels, units or source.
+- A chart is shrunk to fit 375px instead of being adapted.
+
+### Excuses to reject
+
+| Excuse | Rebuttal |
+|---|---|
+| "The client asked for a pie chart." | Show the pie next to a bar chart. Recommend one, then let them choose with eyes open. |
+| "Starting at zero hides the movement." | Bars must start at zero. For lines, mark a non-zero baseline clearly. |
+| "Screen reader users don't use charts." | They use the data. Give the SVG a title and description, or provide a table fallback. |
+
+### Evidence of done
+
+- The reasoning behind the chart type: the data relationship, the chosen chart, and why the alternatives were rejected.
+- A palette checked for color blindness (with a simulator or a known colorblind-safe palette), plus a second encoding besides color.
+- An accessible markup excerpt: `role="img"` with a title and description, or the data table fallback.
+- Renders at 375, 768 and 1280px showing which mobile adaptation was used.

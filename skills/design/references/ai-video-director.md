@@ -191,3 +191,30 @@ For projects with 6+ shots spanning scenes:
 
 - Luma excels at "orbital product shots" — a single product image input + "360 orbit, slow rotation, studio lighting" prompt produces reliable product-reveal videos
 - Photo-to-video: upload a still image + describe the motion; Luma's image-video consistency far exceeds text-only prompting for maintaining subject appearance
+
+---
+
+## Quality Contract
+
+### Red flags
+
+- A multi-shot project starts with no consistency strategy (seed, reference image or style tokens).
+- Required on-screen text is part of the generation prompt.
+- Heavy camera motion and fast subject motion are combined in one shot.
+- Shots run longer than the tool handles reliably, or don't add up to the platform's target length.
+- No transition is chosen between shots.
+
+### Excuses to reject
+
+| Excuse | Rebuttal |
+|---|---|
+| "We'll pick consistency settings after the first shot." | By then the drift is baked in. Decide the strategy before the first prompt. |
+| "The model will figure out the camera move." | An unspecified camera move is a random camera move. Specify it. |
+| "Text in frame saves an editing step." | Generated video garbles text. Add it in post. |
+
+### Evidence of done
+
+- A prompt pack with one entry per shot: scene → subject motion → camera motion → duration → style reference.
+- A consistency plan: seed chain, reference image weight and locked style tokens.
+- The platform spec, and the total runtime against the target.
+- A transition chosen for each cut, with the prompt pack handed to the AI Prompt Engineer.

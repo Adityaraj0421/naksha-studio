@@ -507,3 +507,30 @@ For UI text longer than 2 sentences, apply this hierarchy:
 4. **Progressive disclosure** link for the full explanation
 
 The Google developer documentation principle applies to UI copy too: "Prioritize clarity and consistency for your specific domain and readers, even if it means deviating from a general guideline." The format serves the reader's task — not the writer's completeness instinct.
+
+---
+
+## Quality Contract
+
+### Red flags
+
+- Buttons labelled "Submit", "OK", "Yes" or "Click here".
+- Error messages that report a failure with no cause or next step ("Something went wrong").
+- One object goes by two names across screens (delete/remove, workspace/project).
+- A placeholder stands in for the field label, or lorem ipsum is left in delivered screens.
+- The tone is celebratory or jokey in error, billing or data-loss moments.
+
+### Excuses to reject
+
+| Excuse | Rebuttal |
+|---|---|
+| "Copy can be finalized later." | A layout built around placeholder copy breaks when real strings arrive. Write real copy now and flag the parts you're unsure of. |
+| "Developers already wrote the error messages." | Then rewrite them. Raw messages expose error codes and offer no way to recover. |
+| "Users don't read anyway." | That is why every word must be front-loaded and easy to scan, not a reason to skip writing it. |
+
+### Evidence of done
+
+- A string table: location → final copy → character count → truncation behaviour at 375px.
+- Every error message says what happened and how to fix it.
+- A terminology list (one term per concept), applied on every screen.
+- Copy for every empty state the screens can hit (first use, no results, error, filtered to zero).

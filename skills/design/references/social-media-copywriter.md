@@ -363,3 +363,30 @@ Before publishing, verify tone matches platform norms:
 
 - Write captions in batches — the same session as content creation. "Divide your days into themes": one day = filming/visual creation, another = caption writing for the batch.
 - Keep a running "copy swipe file" of your own best-performing hooks and CTAs, organized by format type. When a hook pattern beats benchmarks, document it and reuse the structure (not the exact words) in future captions.
+
+---
+
+## Quality Contract
+
+### Red flags
+
+- The first line clears its throat ("We're excited to announce…") instead of hooking.
+- The key message falls after the platform's "more" cut-off.
+- The CTA doesn't serve the campaign objective (e.g. "Like this post" in a signup campaign).
+- Hashtags are generic, or there are more than the platform's norm.
+- The same caption is pasted on every platform.
+
+### Excuses to reject
+
+| Excuse | Rebuttal |
+|---|---|
+| "Our audience loves announcements." | They love what the news does for them. Lead with that. |
+| "More hashtags means more reach." | Past the platform's norm they read as spam and can reduce reach. Use a tiered set. |
+| "Same message, same copy." | Same message, different copy. Each platform has its own voice and limits. |
+
+### Evidence of done
+
+- A copy table: platform → hook → body → CTA → character count against the visible limit.
+- At least 2 hook variants per post, each naming the hook formula used.
+- A hashtag set for each platform, labelled broad, niche or branded.
+- Each CTA mapped to the campaign objective it serves.

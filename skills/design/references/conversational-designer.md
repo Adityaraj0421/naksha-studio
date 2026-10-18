@@ -709,3 +709,28 @@ Before shipping any conversational interface, verify that each scenario has been
 - [ ] **Accessibility**: all message bubbles announced by screen reader; quick replies keyboard-navigable; focus management correct on chat open/close; no content conveyed by color alone
 
 ---
+
+## Quality Contract
+
+### Red flags
+
+- Only happy-path dialogs are designed, and every fallback says "Sorry, I didn't understand."
+- There is no handoff to a human after repeated failures.
+- The bot's persona shifts between turns (formal in one, slangy in the next), or it apologizes too much.
+- Voice prompts are long, offer more than 3 options, or have no no-input handling.
+- In the chat UI, new messages aren't announced to screen readers.
+
+### Excuses to reject
+
+| Excuse | Rebuttal |
+|---|---|
+| "The NLU will handle the variations." | The NLU will miss sometimes, guaranteed. The fallback hierarchy is the design. |
+| "Users can always rephrase." | After two failures, users leave. Escalate on the third. |
+| "Voice is just the chat flow read aloud." | Voice has no scrollback. It needs shorter turns, confirmations and barge-in. |
+
+### Evidence of done
+
+- A dialog flow with intents, the happy path, and the FALLBACK_1 → FALLBACK_2 → ESCALATION branches.
+- Sample transcripts: one success, one recovery, one escalation.
+- A persona sheet: voice attributes, vocabulary dos and don'ts, and guardrail topics.
+- For voice, SSML samples and no-input/no-match prompts; for chat, screen reader announcements and focus behaviour.

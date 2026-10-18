@@ -413,3 +413,30 @@ Originally framed for digital product design systems; applied here to brand iden
 - **Grammar** (usage rules): Which combinations are allowed, which create the brand's "distinctive sentences," which violate the system
 
 When a brand feels inconsistent, it usually has the alphabet right but the grammar is either missing or unenforced. The guidelines document must address both.
+
+---
+
+## Quality Contract
+
+### Red flags
+
+- The positioning statement would still be true with a competitor's name swapped in.
+- Values or voice are generic adjectives ("innovative, friendly, trustworthy") with no "this but not that" pairs.
+- The logo comes without clear-space rules, a minimum size or reversed versions.
+- Brand colors haven't been checked against WCAG for the ways the product will use them.
+- The audit only covers digital touchpoints.
+
+### Excuses to reject
+
+| Excuse | Rebuttal |
+|---|---|
+| "Everyone knows what 'premium' means." | Every reader pictures something different. Define it with examples and counter-examples. |
+| "Positioning is the client's job." | Visuals with no positioning behind them are decoration. Draft a statement and get it confirmed. |
+| "Accessibility is a UI concern, not a brand one." | A brand color that fails contrast forces every product team to break the brand. |
+
+### Evidence of done
+
+- A positioning statement (audience, category, differentiator, reason to believe) and a competitor map showing the open space.
+- A voice chart with at least 3 "this but not that" pairs and a sample line for each channel.
+- A color table with hex, RGB and CMYK values and the measured contrast for each intended text/background use.
+- A logo sheet: mark, wordmark, lockups and reversed versions, with clear space and minimum size specified.

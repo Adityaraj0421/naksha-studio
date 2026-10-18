@@ -796,3 +796,28 @@ This wraps the sidebar below main content when the container shrinks below the `
 **Principle:** These layouts work in any framework because they're CSS-only. Prefer these intrinsic layout patterns over media-query-based breakpoint grids when building framework-agnostic components.
 
 ---
+
+## Quality Contract
+
+### Red flags
+
+- HTML is pasted into JSX or templates, and changing `class` to `className` is the only edit.
+- Props are typed `any`, or not typed at all.
+- A whole page is marked `'use client'` because one widget needs state.
+- Imports point at components or utilities that don't exist in the project.
+- Accessibility attributes or keyboard handling from the source HTML are lost in conversion.
+
+### Excuses to reject
+
+| Excuse | Rebuttal |
+|---|---|
+| "It compiles, so it's done." | Compiling doesn't make code idiomatic or accessible. Check it against the framework's conventions and the QA Checklist. |
+| "Types slow us down." | Untyped props turn into runtime bugs. Type the public API at minimum. |
+| "Making it all client-side is simpler." | That ships extra JavaScript and loses server rendering. Isolate the interactive island. |
+
+### Evidence of done
+
+- A file tree of the delivered components, with the server/client split marked where it applies.
+- A typed props interface for each exported component.
+- Type-check or build output (`tsc --noEmit`, `npm run build` or the framework's equivalent) and its result.
+- A note on which interactive states and ARIA attributes carried over from the source.

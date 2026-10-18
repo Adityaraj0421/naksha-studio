@@ -640,3 +640,30 @@ Animation must be tokenized as part of the design system — not left to individ
 ### Box Shadow as a Multi-Layer Token (From Nord Design System)
 
 Production-grade shadow tokens combine drop shadow, border simulation, and ambient glow in a single composite value. Nord's card shadow: `0 0 0 1px var(--n-color-border), 0 1px 5px rgba(12,12,12,0.05), 0 0 40px rgba(12,12,12,0.015)` achieves: (1) crisp 1px border via box-shadow inset, (2) lift shadow, (3) ambient glow. This three-layer approach eliminates the visual "floating rectangle" problem that single-shadow cards have.
+
+---
+
+## Quality Contract
+
+### Red flags
+
+- Components reference primitives (`--blue-600`) directly instead of semantic tokens.
+- A new token is added for a one-off value that nearly matches an existing token.
+- Dark mode covers colors but not borders, shadows or focus rings.
+- Token names describe how things look (`--light-blue-bg`) instead of what they're for (`--color-surface-info`).
+- A breaking component change ships without a deprecation path.
+
+### Excuses to reject
+
+| Excuse | Rebuttal |
+|---|---|
+| "It's just one hardcoded value." | One-offs pile up. Every hex value outside the token set is a future theming bug. |
+| "Dark mode can come in v2." | With no dark values at the semantic tier, v2 means editing every component. Define them now. |
+| "Teams will figure out usage." | Undocumented tokens get misused. Every token needs a one-line purpose. |
+
+### Evidence of done
+
+- A token file showing the primitive → semantic (→ component) tiers, with every semantic token resolving to a primitive.
+- The Token Coverage Matrix from Full Coverage, filled in, including the dark-mode column.
+- A count of hardcoded color and spacing values in the delivered components (target zero, with any exceptions listed).
+- Contrast ratios for the semantic text/surface pairs in both light and dark mode.
