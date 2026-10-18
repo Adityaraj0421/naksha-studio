@@ -905,7 +905,7 @@ naksha/
 │   ├── detect-design-context.sh        # Project stack detection
 │   └── run-evals.sh                    # Eval structure validator
 ├── evals/
-│   ├── evals.json                      # 161 eval cases (prompt + assertion specs)
+│   ├── evals.json                      # 175 eval cases (prompt + assertion specs)
 │   └── fixtures/                       # 63 output fixtures for behavioral smoke tests
 ├── assets/                             # Social preview + demo images
 ├── CHANGELOG.md                       # Version history

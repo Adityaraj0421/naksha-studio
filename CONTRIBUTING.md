@@ -137,7 +137,7 @@ Before marking your PR ready, confirm all of the following apply to your contrib
 - Command `.md` file is in `commands/`
 - Frontmatter has `description`, `allowed-tools`, and role references
 - `meta/stats.json` `commands` count is incremented
-- Eval case added in `evals/evals.json` — this is how we prevent regressions; every command needs one
+- Eval case added in `evals/evals.json` — this is how we prevent regressions; every command needs one (`bash scripts/run-evals.sh` fails if a command has none). Set `"command": "/<name>"` on the eval, or start its prompt with `/<name>`
 
 **New role:**
 - Role definition added to `skills/design/SKILL.md` — roles are virtual, there is no separate role file to create
