@@ -192,6 +192,7 @@ function createApp(opts) {
   let state = createState();
   const clients = new Set();
   const routes = []; // { method, path, matcher, handler, owner }
+  const closeHooks = []; // shutdown callbacks registered by plugin routes
 
   // ── State from the event log ───────────────────────────────────────────────
   const evFile = events.eventsPath(projectDir);
@@ -396,7 +397,8 @@ function createApp(opts) {
   route('GET', '/project', async (req, res, { json }) => json(200, summarizeProject(naksha.readProject())));
   route('GET', '/panels', async (req, res, { json }) => json(200, { panels: listPanels() }));
 
-  // Plugin routes: dashboard/routes/*.js, each exporting register({ route, projectDir, naksha }).
+  // Plugin routes: dashboard/routes/*.js, each exporting register({ route, projectDir, naksha, options, onClose }).
+  // onClose(fn) runs fn (which may return a promise) when the dashboard shuts down.
   const loadedRoutes = [];
   try {
     const files = fs.readdirSync(routesDir).filter((f) => f.endsWith('.js')).sort();
@@ -411,6 +413,8 @@ function createApp(opts) {
           route: (method, p, handler) => route(method, p, handler, f),
           projectDir,
           naksha,
+          options: opts.routeOptions || {},
+          onClose: (fn) => closeHooks.push(fn),
         });
         loadedRoutes.push(f);
       } catch (err) {
@@ -579,6 +583,7 @@ function createApp(opts) {
   }
 
   function close() {
+    const hooks = closeHooks.splice(0).map((fn) => Promise.resolve().then(fn).catch(() => {}));
     clearInterval(pollTimer);
     clearInterval(heartbeat);
     if (stateTimer) clearTimeout(stateTimer);
@@ -590,10 +595,11 @@ function createApp(opts) {
       }
     }
     clients.clear();
-    return new Promise((resolve) => {
+    const closed = new Promise((resolve) => {
       server.close(() => resolve());
       if (typeof server.closeAllConnections === 'function') server.closeAllConnections();
     });
+    return Promise.all([closed, ...hooks]).then(() => undefined);
   }
 
   return { server, token, listen, close, broadcast, snapshot, routes, loadedRoutes, naksha, poll };

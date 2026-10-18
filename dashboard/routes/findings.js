@@ -6,6 +6,9 @@
 //   { target, generated_at, coverage,
 //     findings: [{ id, dimension, severity, title, evidence, recommendation, owner_role, verdict }] }
 // Every field is treated as untrusted: strings are clipped, unknown fields dropped.
+//
+// Like the /design-review report, only confirmed and needs-validation findings are
+// listed; findings the verifier rejected are only counted (`rejected`).
 
 const fs = require('fs');
 const path = require('path');
@@ -25,9 +28,17 @@ function sevRank(s) {
   return i === -1 ? SEVERITY_ORDER.length : i;
 }
 
+// Confirmed issues first, then the ones still waiting on validation.
+const VERDICT_ORDER = ['confirmed', 'needs_validation'];
+
+function verdictRank(v) {
+  const i = VERDICT_ORDER.indexOf(v);
+  return i === -1 ? VERDICT_ORDER.length : i;
+}
+
 function normalize(raw) {
   const list = Array.isArray(raw && raw.findings) ? raw.findings : [];
-  const findings = list
+  const all = list
     .filter((f) => f && typeof f === 'object')
     .slice(0, MAX_FINDINGS)
     .map((f, i) => ({
@@ -40,14 +51,13 @@ function normalize(raw) {
       owner_role: str(f.owner_role, 60),
       verdict: str(f.verdict, 30).toLowerCase(),
     }))
-    .sort((a, b) => sevRank(a.severity) - sevRank(b.severity));
+    .sort((a, b) => verdictRank(a.verdict) - verdictRank(b.verdict) || sevRank(a.severity) - sevRank(b.severity));
+  const findings = all.filter((f) => f.verdict !== 'rejected');
 
   const bySeverity = {};
   const byVerdict = {};
-  for (const f of findings) {
-    bySeverity[f.severity] = (bySeverity[f.severity] || 0) + 1;
-    if (f.verdict) byVerdict[f.verdict] = (byVerdict[f.verdict] || 0) + 1;
-  }
+  for (const f of all) if (f.verdict) byVerdict[f.verdict] = (byVerdict[f.verdict] || 0) + 1;
+  for (const f of findings) bySeverity[f.severity] = (bySeverity[f.severity] || 0) + 1;
   let coverage = null;
   if (raw && raw.coverage !== undefined) {
     if (typeof raw.coverage === 'object' && raw.coverage !== null) {
@@ -66,6 +76,10 @@ function normalize(raw) {
     generated_at: str(raw && raw.generated_at, 40),
     coverage,
     total: findings.length,
+    raised: all.length,
+    confirmed: byVerdict.confirmed || 0,
+    needsValidation: byVerdict.needs_validation || 0,
+    rejected: byVerdict.rejected || 0,
     bySeverity,
     byVerdict,
     severityOrder: SEVERITY_ORDER,

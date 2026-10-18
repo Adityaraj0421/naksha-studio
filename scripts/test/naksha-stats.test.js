@@ -10,6 +10,9 @@ const os = require('os');
 const path = require('path');
 const { spawnSync } = require('child_process');
 
+// Keep the tests away from the real parse cache in ~/.naksha/cache/.
+process.env.NAKSHA_STATS_CACHE = '';
+
 const pricing = require('../lib/pricing');
 const stats = require('../naksha-stats');
 
@@ -174,6 +177,42 @@ test('attributes cost to naksha commands, including subagent usage', () => {
   assert.equal(rep.sessions, 2);
 });
 
+test('commands Claude runs through the Skill tool count as runs and get their usage', () => {
+  const tmp = tmpDir('naksha-stats-skill-');
+  const projectDir = path.join(tmp, 'app');
+  fs.mkdirSync(projectDir);
+  const dir = path.join(tmp, 'projects', stats.encodeProjectPath(projectDir));
+  fs.mkdirSync(dir, { recursive: true });
+  const base = { cwd: projectDir, sessionId: 'sess-skill', isSidechain: false };
+  const ts = s => `2026-10-08T08:00:${String(s).padStart(2, '0')}.000Z`;
+  const usage = { input_tokens: 1000000, output_tokens: 0 };
+  const call = (s, id, skill) => ({
+    ...base, type: 'assistant', timestamp: ts(s), requestId: `req_${id}`,
+    message: { id: `msg_${id}`, model: 'claude-opus-5-5', usage, content: skill ? [{ type: 'tool_use', id: `toolu_${id}`, name: 'Skill', input: { skill } }] : [{ type: 'text', text: 'ok' }] },
+  });
+  const lines = [
+    { ...base, type: 'user', timestamp: ts(0), uuid: 'u1', message: { role: 'user', content: 'build me a landing page' } },
+    call(1, 'a', null), // plain prompt → unattributed ($4)
+    call(2, 'b', 'naksha:naksha-init'), // → /naksha-init ($4 + $4)
+    call(3, 'c', null),
+    call(4, 'd', 'naksha:design-review'), // → /design-review ($4 × 3)
+    call(5, 'e', null),
+    call(6, 'f', 'other-plugin:thing'), // not a naksha command: no new run
+    { ...base, type: 'assistant', isSidechain: true, timestamp: ts(7), message: { content: [{ type: 'tool_use', name: 'Skill', input: { skill: 'naksha:design' } }] } },
+    { ...base, type: 'user', timestamp: ts(8), uuid: 'u2', message: { role: 'user', content: '<command-name>/naksha:design-qa</command-name>' } },
+    call(9, 'g', 'naksha:design-qa'), // typed, then loaded through Skill: still one run
+  ];
+  fs.writeFileSync(path.join(dir, 'sess-skill.jsonl'), lines.map(l => JSON.stringify(l)).join('\n') + '\n');
+  const rep = report({ projectDir, logs: path.join(tmp, 'projects') });
+  assert.equal(row(rep, '/naksha-init').runs, 1);
+  close(row(rep, '/naksha-init').cost_usd, 8, '/naksha-init');
+  assert.equal(row(rep, '/design-review').runs, 1);
+  close(row(rep, '/design-review').cost_usd, 12, '/design-review keeps the turn after a non-naksha skill');
+  assert.equal(row(rep, '/design-qa').runs, 1);
+  assert.equal(row(rep, '/design'), undefined, 'subagent Skill calls do not start runs');
+  close(rep.unattributed.cost_usd, 4, 'only the plain-prompt call is unattributed');
+});
+
 test('--since, --until, --session and --all filters', () => {
   const env = setup();
   const oct = report(env, ['--since', '2026-10-01']);
@@ -304,4 +343,33 @@ test('a broken price table does not crash the CLI', () => {
   const r = runCli(['--prices', bad, '--logs-dir', tmp, '--project', tmp]);
   assert.equal(r.code, 0);
   assert.match(r.out, /invalid price table/);
+});
+
+test('parse cache: unchanged transcripts are reused, grown ones re-read, no message text stored', () => {
+  const env = setup();
+  const cacheFile = path.join(env.tmp, 'cache', 'stats.json');
+  process.env.NAKSHA_STATS_CACHE = cacheFile;
+  try {
+    const first = report(env);
+    assert.equal(first.parse.cached_files, 0);
+    assert.ok(fs.existsSync(cacheFile));
+    const second = report(env);
+    assert.equal(second.parse.cached_files, second.parse.files, 'every file came from the cache');
+    assert.deepEqual(second.commands, first.commands);
+    assert.deepEqual(second.totals, first.totals);
+    // Grow one transcript: only that file is re-read, and its new usage is counted.
+    const sess = path.join(env.logs, stats.encodeProjectPath(env.projectDir), 'sess-0002.jsonl');
+    fs.appendFileSync(sess, JSON.stringify({
+      type: 'assistant', sessionId: 'sess-0002', cwd: env.projectDir, requestId: 'req_new', timestamp: '2026-10-09T08:00:00.000Z',
+      message: { id: 'msg_new', model: 'claude-opus-5-5', content: [{ type: 'text', text: 'SECRET-REPLY-TEXT' }], usage: { input_tokens: 1000000, output_tokens: 0 } },
+    }) + '\n');
+    const third = report(env);
+    assert.equal(third.parse.cached_files, third.parse.files - 1);
+    close(third.totals.cost_usd, first.totals.cost_usd + 4, 'appended usage is counted');
+    assert.doesNotMatch(fs.readFileSync(cacheFile, 'utf8'), /SECRET-REPLY-TEXT/);
+    // --no-cache ignores it.
+    assert.equal(report(env, ['--no-cache']).parse.cached_files, 0);
+  } finally {
+    process.env.NAKSHA_STATS_CACHE = '';
+  }
 });

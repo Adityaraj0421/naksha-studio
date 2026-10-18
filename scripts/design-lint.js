@@ -8,7 +8,7 @@
  * dependencies. Every rule has an id, a severity, a message and a fix hint.
  *
  * Usage:
- *   node scripts/design-lint.js [files...] [--json] [--rules a,b] [--no-report]
+ *   node scripts/design-lint.js [files...] [--json] [--rules a,b] [--report | --no-report]
  *   node scripts/design-lint.js --list-rules [--json]
  *   CHANGED_FILES="a.html b.css" node scripts/design-lint.js   # CI mode
  *   node scripts/design-lint.js                                # scan src/, public/, dist/, .
@@ -19,9 +19,10 @@
  * Configuration: .design-lint.json in the working directory (optional).
  * Project memory: constraints.grid / min_contrast_ratio / accessibility_target
  * and brand colors are read from .naksha/project.json (cwd or up to 3 parents).
- * Output: console (or JSON on stdout with --json) and design-lint-report.json,
- * which the design-check workflow turns into a PR comment. --json and
- * --no-report skip writing the report file.
+ * Output: console, or JSON on stdout with --json. design-lint-report.json, which
+ * the design-check workflow turns into a PR comment, is written only in CI mode
+ * (CHANGED_FILES set) or with --report, so local runs leave no file behind;
+ * --json and --no-report never write it.
  *
  * Also used as a library by scripts/design-lint-hook.js and the unit tests.
  */
@@ -518,6 +519,44 @@ function collectTokens(file, content, into) {
   return tokens;
 }
 
+/**
+ * Local stylesheets a file pulls in: CSS @import and HTML <link rel="stylesheet">.
+ * Remote URLs and missing files are ignored. Paths are absolute.
+ */
+function importedSheets(file, content) {
+  const dir = path.dirname(file);
+  const refs = [];
+  const importRe = /@import\s+(?:url\(\s*)?["']?([^"')\s;]+)["']?\s*\)?/gi;
+  let m;
+  while ((m = importRe.exec(content))) refs.push(m[1]);
+  if (classifyFile(file) !== 'css') {
+    const linkRe = /<link\b[^>]*>/gi;
+    while ((m = linkRe.exec(content))) {
+      if (!/\brel\s*=\s*["']?stylesheet/i.test(m[0])) continue;
+      const href = m[0].match(/\bhref\s*=\s*["']([^"']+)["']/i);
+      if (href) refs.push(href[1]);
+    }
+  }
+  return refs
+    .filter(r => !/^([a-z]+:)?\/\//i.test(r) && !r.startsWith('data:'))
+    .map(r => path.resolve(dir, r.split(/[?#]/)[0]))
+    .filter(p => SUPPORTED_EXT.test(p) && fs.existsSync(p) && fs.statSync(p).isFile());
+}
+
+/** Tokens from the stylesheets a file imports (recursively, up to 4 levels). */
+function collectImportedTokens(file, content, into, seen = new Set([file]), depth = 0) {
+  if (depth >= 4) return into;
+  for (const sheet of importedSheets(file, content)) {
+    if (seen.has(sheet)) continue;
+    seen.add(sheet);
+    let text;
+    try { text = fs.readFileSync(sheet, 'utf-8'); } catch { continue; }
+    collectTokens(sheet, text, into);
+    collectImportedTokens(sheet, text, into, seen, depth + 1);
+  }
+  return into;
+}
+
 function colorTokens(tokens) {
   const out = new Map(); // normalized hex → token name
   for (const [name, value] of tokens) {
@@ -909,6 +948,8 @@ rule({
   fix: 'Add breakpoints (e.g. 768px tablet, 1024px desktop) or use container queries / fluid clamp() sizing.',
   run(ctx) {
     if (ctx.cssText.length < 2000) return null;
+    // A tokens file (only custom properties, e.g. a generated tokens.css) has no layout.
+    if (ctx.decls.length && ctx.decls.every(d => d.prop.startsWith('--'))) return null;
     if (!/@media|@container|clamp\(/i.test(ctx.cssText)) return { message: 'Substantial CSS with no @media or @container queries', locations: [] };
     return null;
   },
@@ -1134,6 +1175,9 @@ function lintFiles(files, opts = {}) {
 
   const shared = new Map();
   for (const t of targets) if (classifyFile(t.file) === 'css') collectTokens(t.file, t.content, shared);
+  // A stylesheet that @imports tokens.css (or a page that links it) uses those tokens
+  // even when tokens.css is not part of this run, e.g. the edit hook linting one file.
+  for (const t of targets) collectImportedTokens(t.file, t.content, shared);
   const allIssues = [];
   let totalPassed = 0;
   for (const t of targets) {
@@ -1173,7 +1217,8 @@ const USAGE = `Usage: node scripts/design-lint.js [files...] [options]
 Options:
   --json            Print the report as JSON on stdout (no report file)
   --rules a,b       Run only these rule ids
-  --no-report       Do not write ${REPORT_FILE}
+  --report          Also write ${REPORT_FILE} (default in CI mode only)
+  --no-report       Never write ${REPORT_FILE}
   --list-rules      List rule ids, severities and owners
   -h, --help        Show this help
 
@@ -1183,11 +1228,12 @@ Exit codes: 0 clean, 1 errors or score below failThreshold, 2 bad usage.`;
 class UsageError extends Error {}
 
 function parseArgs(argv) {
-  const opts = { files: [], json: false, report: true, rules: null, listRules: false, help: false };
+  const opts = { files: [], json: false, report: null, rules: null, listRules: false, help: false };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     if (a === '--json') opts.json = true;
     else if (a === '--no-report') opts.report = false;
+    else if (a === '--report') opts.report = true;
     else if (a === '--list-rules') opts.listRules = true;
     else if (a === '-h' || a === '--help') opts.help = true;
     else if (a === '--rules' || a.startsWith('--rules=')) {
@@ -1300,7 +1346,8 @@ function main(argv) {
       process.stderr.write(`Design quality score ${report.score} is below threshold ${report.settings.failThreshold}.\n`);
     }
   }
-  if (opts.report && !opts.json) {
+  const ciMode = Object.prototype.hasOwnProperty.call(process.env, 'CHANGED_FILES');
+  if ((opts.report === null ? ciMode : opts.report) && !opts.json) {
     try { fs.writeFileSync(path.join(cwd, REPORT_FILE), JSON.stringify(report, null, 2)); } catch { /* read-only cwd */ }
   }
   return report.exitCode;

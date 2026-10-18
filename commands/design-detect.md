@@ -15,7 +15,7 @@ Roles involved: **UX Researcher** (accessibility), **UI Designer** (type, layout
 | Argument | Meaning |
 |----------|---------|
 | `files...` | Files to lint. Supported: `.html`, `.css`, `.scss`, `.jsx`, `.tsx`, `.vue`, `.svelte`. |
-| *(none)* | Lint the files changed in git (unstaged + staged + untracked). |
+| *(none)* | Lint the files changed in git (unstaged + staged + untracked). Outside a git repository, lint every UI file in the folder. |
 | `--staged` | Only staged changes. |
 | `--rules a,b` | Run only these rule ids (see the table below). |
 | `--fix` | After the report, apply the mechanical fixes you proposed (with confirmation). |
@@ -24,7 +24,15 @@ Roles involved: **UX Researcher** (accessibility), **UI Designer** (type, layout
 
 ### Step 1: Resolve the file list
 
-If file arguments were given, use them. Otherwise collect changed files from git:
+If file arguments were given, use them. Otherwise, first check that the folder is a git repository:
+
+```bash
+git rev-parse --is-inside-work-tree
+```
+
+If that fails (not a git repository, or git is not installed), say **"This folder is not a git repository, so there are no changes to diff; linting every HTML/CSS/component file instead."** Then go to Step 2 and run the linter with no file arguments: it scans `src/`, `public/`, `dist/` and the folder itself, and honors `ignorePatterns` in `.design-lint.json`. `--staged` needs git: if it was given, say so and stop.
+
+In a git repository, collect the changed files:
 
 ```bash
 { git diff --name-only --diff-filter=ACMRT; git diff --name-only --cached --diff-filter=ACMRT; git ls-files --others --exclude-standard; } 2>/dev/null \
@@ -33,13 +41,15 @@ If file arguments were given, use them. Otherwise collect changed files from git
 
 With `--staged`, use only `git diff --name-only --cached --diff-filter=ACMRT`.
 
-If the list is empty, say **"Nothing to lint: no changed HTML/CSS/component files."** and stop. Do not report a score.
+If the list is empty, say **"Nothing to lint: no changed HTML/CSS/component files."** and stop. Do not report a score. (Only say this after `git rev-parse` succeeded; otherwise use the fallback above.)
 
 ### Step 2: Run the linter
 
 ```bash
 node "${CLAUDE_PLUGIN_ROOT}/scripts/design-lint.js" --json [--rules a,b] -- <files>
 ```
+
+(Outside git, leave out `-- <files>`.)
 
 `--json` prints the report on stdout and writes no files. Exit code `0` means no errors, `1` means errors (or a score below `failThreshold`), `2` means bad usage: if you get `2`, show the stderr message and fix the arguments.
 

@@ -71,7 +71,7 @@ so any report file it writes lands there, not in the user's project:
 if grep -q -- '--json' "${CLAUDE_PLUGIN_ROOT}/scripts/design-lint.js"; then
   (cd "SC_DIR" && node "${CLAUDE_PLUGIN_ROOT}/scripts/design-lint.js" "SC_FILE" --json)
 else
-  (cd "SC_DIR" && node "${CLAUDE_PLUGIN_ROOT}/scripts/design-lint.js" "SC_FILE" >/dev/null; cat design-lint-report.json)
+  (cd "SC_DIR" && node "${CLAUDE_PLUGIN_ROOT}/scripts/design-lint.js" "SC_FILE" --report >/dev/null; cat design-lint-report.json)
 fi
 ```
 
@@ -92,8 +92,10 @@ Widths, in this order: **375×812, 768×1024, 1440×900**. For each one:
 3. **Geometry probe**: call `browser_evaluate` and pass the full text of
    `${CLAUDE_PLUGIN_ROOT}/skills/design/procedures/browser-self-check.probe.js` as the
    `function` argument (read the file once per session). It returns about 1–2 KB of
-   JSON: overflow, tap targets, focus order, focus indicators, text contrast and a
-   semantics cross-check. It changes nothing on the page.
+   JSON: overflow (including content clipped inside `overflow: hidden` boxes), tap
+   targets, focus order, focus indicators, text contrast and a semantics cross-check.
+   While it runs it turns CSS transitions off, so colours are read at their final
+   value even right after a theme change, and it moves focus; it restores both.
 4. Optional: if a `browser_console_messages` tool exists, read it once at the first
    width; uncaught errors count as `fail` under `console`.
 
@@ -106,7 +108,7 @@ features key on them.
 | `heading-order` | snapshot (probe `semantics` cross-checks) | no `h1` or several; a level is skipped going down (h1 → h3) | headings used only for styling |
 | `names-roles` | snapshot | a button, link, form field, or meaningful image has no accessible name; a clickable element has no interactive role | vague names ("click here", "more") repeated with different targets |
 | `focus-order` | snapshot order + probe `focus` | `positiveTabindex` non-empty; `hiddenFocusable` (aria-hidden ancestor, or off-screen and not a skip link) | `reordered` (CSS `order` / `*-reverse` makes visual order differ from focus order); `noIndicator` (heuristic) |
-| `overflow` | probe `overflow` | `px > 0` (page scrolls sideways); the probe names the outermost offenders | `masked` is true (overflow hidden on html/body may be hiding a real problem) |
+| `overflow` | probe `overflow` | `px > 0` (page scrolls sideways); the probe names the outermost offenders. A `clipped` entry without `ellipsis` whose `text` is real content (a stat, a label, a button) | `masked` is true (overflow hidden on html/body may be hiding a real problem); other `clipped` entries (carousels, decorative crops, `ellipsis: true`) |
 | `tap-targets` | probe `tap` | `fail` list non-empty (under 24×24 px and crowded: WCAG 2.2 SC 2.5.8) | at 375 and 768 only: `warn` list (under 44×44 px) |
 | `contrast` | probe `contrast` | any entry in `fail` (below 4.5:1, or 3:1 for large text) | `unknown` is large (text on gradients/images is not measured; say so) |
 | `lint` | Step 3 | linter errors | linter warnings |
@@ -117,7 +119,14 @@ Notes:
 - Off-screen focusables at a width that also overflows are often the overflow itself.
   Fix overflow first, then re-judge `focus-order`.
 - The probe's `noIndicator` compares computed styles before and after programmatic
-  focus. Treat it as a hint and confirm in the CSS (`:focus-visible` rules) before fixing.
+  focus. When nothing changes (Chrome does not apply `:focus-visible` to script focus
+  after mouse input), it falls back to the stylesheets: a matching `:focus` or
+  `:focus-visible` rule that draws something counts (`indicatorFromCss`), and so does
+  the browser's default ring when no author rule removes the outline
+  (`indicatorFromBrowser`). Cross-origin stylesheets cannot be read, so still treat it
+  as a hint and confirm in the CSS before fixing.
+- `motion.runningAnimations` > 0 means CSS animations were mid-play; if contrast or
+  layout findings involve animated elements, re-probe once they settle.
 - Width-independent checks (`landmarks`, `heading-order`, `names-roles`, `lint`) are
   judged once and reported under every width unless the snapshot differs at that width.
 

@@ -139,3 +139,49 @@ test('emit caps events.jsonl at 5 MB, keeping the last 2,000 lines', () => {
     p.cleanup();
   }
 });
+
+test('emit records a naksha command Claude runs through the Skill tool', () => {
+  const p = tmpProject({ enabled: true });
+  try {
+    const skill = (s, event = 'PreToolUse') =>
+      emit({ hook_event_name: event, session_id: 'sk', cwd: p.dir, tool_name: 'Skill', tool_input: { skill: s, args: 'secret args' } });
+    skill('naksha:design-review');
+    skill('naksha:design-review', 'PostToolUse'); // only the PreToolUse call starts a run
+    skill('naksha-studio:naksha-init');
+    skill('naksha:not-a-command');
+    skill('other-plugin:design');
+    skill('design-qa'); // un-namespaced: could be any plugin's skill
+    const raw = fs.readFileSync(path.join(p.dir, '.naksha', 'events.jsonl'), 'utf8');
+    assert.doesNotMatch(raw, /secret/);
+    const ev = eventsOf(p.dir);
+    assert.deepEqual(ev.filter((e) => e.type === 'command').map((e) => e.cmd), ['design-review', 'naksha-init']);
+    assert.equal(ev.filter((e) => e.type === 'tool' && e.tool === 'Skill').length, 6);
+  } finally {
+    p.cleanup();
+  }
+});
+
+test('emit maps /design-review verifier agents to the roles that own the findings', () => {
+  const p = tmpProject({ enabled: true });
+  try {
+    const agent = (ti) => emit({ hook_event_name: 'PreToolUse', session_id: 'v', cwd: p.dir, tool_name: 'Agent', tool_input: ti });
+    const brief = (dims) =>
+      'You are an independent design-review verifier. Your job is to try to DISPROVE\nFinding: ' +
+      dims.map((d) => JSON.stringify({ id: 'F-001', dimension: d, title: 'secret title' })).join('\n');
+    agent({ subagent_type: 'general-purpose', description: 'Verify F-001', prompt: brief(['accessibility']) });
+    agent({ subagent_type: 'general-purpose', description: 'Verify F-002', prompt: brief(['spacing', 'color']) });
+    agent({ subagent_type: 'general-purpose', description: 'Verify F-003 (Content Designer)', prompt: brief(['typography']) });
+    agent({ subagent_type: 'general-purpose', description: 'Explore', prompt: 'look at "dimension": "accessibility"' });
+    const raw = fs.readFileSync(path.join(p.dir, '.naksha', 'events.jsonl'), 'utf8');
+    assert.doesNotMatch(raw, /secret|DISPROVE/);
+    const tools = eventsOf(p.dir).filter((e) => e.type === 'tool');
+    assert.deepEqual(tools.map((e) => e.roles), [
+      ['UX Researcher'],
+      ['Design System Lead', 'UI Designer'],
+      ['Content Designer'], // a role named in the description wins
+      undefined, // not a verifier brief
+    ]);
+  } finally {
+    p.cleanup();
+  }
+});

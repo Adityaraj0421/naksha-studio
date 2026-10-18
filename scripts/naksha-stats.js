@@ -6,7 +6,8 @@
  * Reads the JSONL session transcripts Claude Code keeps on disk
  * (~/.claude/projects/<encoded-project-path>/*.jsonl, plus <session>/subagents/*.jsonl),
  * sums token usage from assistant lines, prices it with scripts/lib/pricing.js, and
- * attributes it to the naksha /command that started each turn. Compares month-to-date
+ * attributes it to the naksha /command that started each turn (typed by the user, or run by
+ * Claude through the Skill tool as "naksha:<command>"). Compares month-to-date
  * spend with the optional `budgets` object in .naksha/project.json.
  *
  * Local only: reads files, prints a report, never sends anything anywhere, never prints
@@ -14,7 +15,7 @@
  *
  * Usage: node scripts/naksha-stats.js [--all] [--since YYYY-MM-DD] [--until YYYY-MM-DD]
  *          [--session <id>] [--json] [--budget-check [--command /name]]
- *          [--project <dir>] [--logs-dir <dir>]... [--prices <file>]
+ *          [--project <dir>] [--logs-dir <dir>]... [--prices <file>] [--no-cache]
  */
 
 const fs = require('fs');
@@ -43,6 +44,8 @@ Usage: node scripts/naksha-stats.js [options]
                         ~/.config/claude/projects)
   --prices <file>       price table (default: meta/model-prices.json, or $NAKSHA_PRICES)
   --now <ISO date>      treat this as the current time (testing)
+  --no-cache            re-read every transcript (default: reuse the per-file parse cache
+                        in ~/.naksha/cache/, or $NAKSHA_STATS_CACHE; set it empty to disable)
   -h, --help            show this help
 
 Costs are estimates at API list prices, not invoices.`;
@@ -61,7 +64,7 @@ function parseDateArg(flag, v, endOfDay) {
 function parseArgs(argv) {
   const opts = {
     all: false, since: null, until: null, session: null, json: false, budgetCheck: false,
-    command: null, project: null, logsDirs: [], prices: null, now: null, help: false,
+    command: null, project: null, logsDirs: [], prices: null, now: null, help: false, noCache: false,
   };
   const need = (i, flag) => {
     if (i + 1 >= argv.length || String(argv[i + 1]).startsWith('--')) throw new ArgError(`${flag} needs a value`);
@@ -73,6 +76,7 @@ function parseArgs(argv) {
       case '--all': opts.all = true; break;
       case '--json': opts.json = true; break;
       case '--budget-check': opts.budgetCheck = true; break;
+      case '--no-cache': opts.noCache = true; break;
       case '-h': case '--help': opts.help = true; break;
       case '--since': opts.since = parseDateArg(a, need(i, a), false); i++; break;
       case '--until': opts.until = parseDateArg(a, need(i, a), true); i++; break;
@@ -207,6 +211,25 @@ function classifyPrompt(o) {
   return { slash: null };
 }
 
+/**
+ * Naksha commands Claude ran itself through the Skill tool ("naksha:design-review"), from a
+ * main-thread assistant line. These start a command run just like a typed /command does.
+ * Returns [{ id, slash }].
+ */
+function skillInvocations(o) {
+  if (o.type !== 'assistant' || o.isSidechain) return [];
+  const m = o.message;
+  if (!m || !Array.isArray(m.content)) return [];
+  const out = [];
+  for (const b of m.content) {
+    if (!b || b.type !== 'tool_use' || b.name !== 'Skill' || !b.input || typeof b.input !== 'object') continue;
+    const s = typeof b.input.skill === 'string' ? b.input.skill.trim() : '';
+    const hit = /^\/?naksha(?:-studio)?:([A-Za-z0-9_-]+)$/.exec(s);
+    if (hit) out.push({ id: typeof b.id === 'string' ? b.id : '', slash: `/${hit[1]}` });
+  }
+  return out;
+}
+
 const USAGE_FIELDS = ['input_tokens', 'output_tokens', 'cache_creation_input_tokens', 'cache_read_input_tokens'];
 
 function validUsage(u) {
@@ -240,72 +263,177 @@ function fileSessionId(file) {
 }
 
 /**
+ * Parse one transcript file into what the report needs: usage entries (ids, timestamps,
+ * model, token counts), prompts (ids, timestamps, command names), the working directories
+ * seen, and line counters. No message content is kept, so the result is safe to cache.
+ */
+function parseFile(file) {
+  let text;
+  try { text = fs.readFileSync(file, 'utf8'); } catch { return null; }
+  const counts = { lines: 0, malformed: 0, invalid_usage: 0, ignored: 0, usage_lines: 0 };
+  const entries = [];
+  const prompts = [];
+  const cwds = new Set();
+  let anon = 0;
+  const fallbackSession = fileSessionId(file);
+  for (const line of text.split('\n')) {
+    if (!line.trim()) continue;
+    counts.lines++;
+    let o;
+    try { o = JSON.parse(line); } catch { counts.malformed++; continue; }
+    if (!o || typeof o !== 'object' || Array.isArray(o)) { counts.malformed++; continue; }
+    if (typeof o.cwd === 'string' && o.cwd) cwds.add(o.cwd);
+    const sessionId = typeof o.sessionId === 'string' && o.sessionId ? o.sessionId : fallbackSession;
+    const ts = parseTs(o.timestamp);
+    for (const sk of skillInvocations(o)) {
+      // The same command typed by the user and then loaded through Skill is one run.
+      const last = prompts[prompts.length - 1];
+      if (last && last.sessionId === sessionId && last.slash === sk.slash) continue;
+      const uuid = sk.id || `${typeof o.uuid === 'string' ? o.uuid : file}:skill:${counts.lines}`;
+      prompts.push({ uuid, sessionId, ts, slash: sk.slash, via: 'skill' });
+    }
+    if (o.type === 'assistant' && o.message && typeof o.message === 'object' && 'usage' in o.message) {
+      const m = o.message;
+      if (!validUsage(m.usage)) { counts.invalid_usage++; continue; }
+      counts.usage_lines++;
+      const id = typeof m.id === 'string' ? m.id : '';
+      const req = typeof o.requestId === 'string' ? o.requestId : '';
+      const key = id || req ? `${id}|${req}` : `anon-${file}-${anon++}`;
+      entries.push({ key, sessionId, ts, model: typeof m.model === 'string' ? m.model : '', usage: pricing.normalizeUsage(m.usage) });
+      continue;
+    }
+    const p = classifyPrompt(o);
+    if (p) {
+      const uuid = typeof o.uuid === 'string' && o.uuid ? o.uuid : `${file}:${counts.lines}`;
+      prompts.push({ uuid, sessionId, ts, slash: p.slash });
+      continue;
+    }
+    counts.ignored++;
+  }
+  return { counts, entries, prompts, cwds: [...cwds] };
+}
+
+// ─── Parse cache ──────────────────────────────────────────────────────────────
+// Transcripts are append-only and there can be hundreds of MB of them, so each file's
+// parse result is cached by path, size and mtime; only new or grown files are re-read.
+// The cache holds token counts, ids, timestamps and command names — never message text.
+
+const CACHE_VERSION = 1;
+const PACKED_USAGE = ['input_tokens', 'output_tokens', 'cache_creation_input_tokens', 'cache_creation_1h_input_tokens', 'cache_read_input_tokens'];
+
+// Compact form for the cache file: entries and prompts as arrays, the session id left
+// out when it is the one the file name implies.
+function packParsed(file, d) {
+  const sid = fileSessionId(file);
+  return {
+    counts: d.counts,
+    cwds: d.cwds,
+    e: d.entries.map(e => [e.key, e.ts, e.model, PACKED_USAGE.map(k => e.usage[k] || 0), e.usage.speed || 0, e.sessionId === sid ? 0 : e.sessionId]),
+    p: d.prompts.map(p => [p.uuid, p.ts, p.slash, p.via || 0, p.sessionId === sid ? 0 : p.sessionId]),
+  };
+}
+
+function unpackParsed(file, c) {
+  const sid = fileSessionId(file);
+  return {
+    counts: c.counts,
+    cwds: c.cwds,
+    entries: c.e.map(([key, ts, model, u, speed, sessionId]) => {
+      const usage = { speed: speed || undefined };
+      PACKED_USAGE.forEach((k, i) => { usage[k] = u[i]; });
+      return { key, sessionId: sessionId || sid, ts, model, usage };
+    }),
+    prompts: c.p.map(([uuid, ts, slash, via, sessionId]) => Object.assign(
+      { uuid, sessionId: sessionId || sid, ts, slash }, via ? { via } : {})),
+  };
+}
+
+function defaultCachePath() {
+  if (process.env.NAKSHA_STATS_CACHE !== undefined) return process.env.NAKSHA_STATS_CACHE || null;
+  return path.join(os.homedir(), '.naksha', 'cache', 'stats-transcripts.json');
+}
+
+function loadCache(file) {
+  if (!file) return new Map();
+  try {
+    const raw = JSON.parse(fs.readFileSync(file, 'utf8'));
+    if (raw && raw.version === CACHE_VERSION && raw.files && typeof raw.files === 'object') return new Map(Object.entries(raw.files));
+  } catch { /* missing or corrupt: start over */ }
+  return new Map();
+}
+
+function saveCache(file, cache) {
+  if (!file) return;
+  try {
+    fs.mkdirSync(path.dirname(file), { recursive: true });
+    const tmp = `${file}.${process.pid}.tmp`;
+    fs.writeFileSync(tmp, JSON.stringify({ version: CACHE_VERSION, files: Object.fromEntries(cache) }), { mode: 0o600 });
+    fs.renameSync(tmp, file);
+  } catch { /* read-only home: the report still works, just slower next time */ }
+}
+
+/** parseFile through the cache. Returns { parsed, hit }. */
+function parseFileCached(file, cache, used) {
+  let st;
+  try { st = fs.statSync(file); } catch { return { parsed: null, hit: false }; }
+  const sig = `${st.size}:${st.mtimeMs}`;
+  const prev = cache.get(file);
+  used.add(file);
+  if (prev && prev.sig === sig) {
+    try { return { parsed: unpackParsed(file, prev.data), hit: true }; } catch { /* bad entry: re-read */ }
+  }
+  const parsed = parseFile(file);
+  if (parsed) cache.set(file, { sig, data: packParsed(file, parsed) });
+  return { parsed, hit: false };
+}
+
+/**
  * Parse transcript files defensively. Unknown line types are ignored; lines that are not
  * JSON, or assistant lines whose usage is malformed, are counted as skipped.
  * Assistant messages that Claude Code splits across several lines (one per content block,
  * same message.id + requestId) are merged, keeping the largest value of each counter.
+ * options.cachePath: parse cache file (null disables it; default ~/.naksha/cache/…).
  */
-function parseTranscripts(fileInfos, projectPaths) {
-  const stats = { files: 0, lines: 0, malformed: 0, invalid_usage: 0, ignored: 0, usage_lines: 0, merged_duplicates: 0 };
+function parseTranscripts(fileInfos, projectPaths, options = {}) {
+  const stats = { files: 0, lines: 0, malformed: 0, invalid_usage: 0, ignored: 0, usage_lines: 0, merged_duplicates: 0, cached_files: 0 };
   const entries = new Map();
   const prompts = new Map();
-  let anon = 0;
+  const cachePath = options.cachePath !== undefined ? options.cachePath : null;
+  const cache = loadCache(cachePath);
+  const used = new Set();
+  let changed = false;
   for (const info of fileInfos) {
-    let text;
-    try { text = fs.readFileSync(info.file, 'utf8'); } catch { continue; }
+    const { parsed, hit } = parseFileCached(info.file, cache, used);
+    if (!parsed) continue;
+    if (hit) stats.cached_files++; else changed = true;
     stats.files++;
-    const fileEntries = [];
-    const filePrompts = [];
-    let cwdInProject = false;
-    const fallbackSession = fileSessionId(info.file);
-    for (const line of text.split('\n')) {
-      if (!line.trim()) continue;
-      stats.lines++;
-      let o;
-      try { o = JSON.parse(line); } catch { stats.malformed++; continue; }
-      if (!o || typeof o !== 'object' || Array.isArray(o)) { stats.malformed++; continue; }
-      if (!cwdInProject && within(o.cwd, projectPaths)) cwdInProject = true;
-      const sessionId = typeof o.sessionId === 'string' && o.sessionId ? o.sessionId : fallbackSession;
-      const ts = parseTs(o.timestamp);
-      if (o.type === 'assistant' && o.message && typeof o.message === 'object' && 'usage' in o.message) {
-        const m = o.message;
-        if (!validUsage(m.usage)) { stats.invalid_usage++; continue; }
-        stats.usage_lines++;
-        const id = typeof m.id === 'string' ? m.id : '';
-        const req = typeof o.requestId === 'string' ? o.requestId : '';
-        const key = id || req ? `${id}|${req}` : `anon-${anon++}`;
-        fileEntries.push({ key, sessionId, ts, model: typeof m.model === 'string' ? m.model : '', usage: m.usage });
-        continue;
-      }
-      const p = classifyPrompt(o);
-      if (p) {
-        const uuid = typeof o.uuid === 'string' && o.uuid ? o.uuid : `${info.file}:${stats.lines}`;
-        filePrompts.push({ uuid, sessionId, ts, slash: p.slash });
-        continue;
-      }
-      stats.ignored++;
-    }
-    const inProject = info.exactDir || cwdInProject;
-    for (const e of fileEntries) {
+    for (const k of ['lines', 'malformed', 'invalid_usage', 'ignored', 'usage_lines']) stats[k] += parsed.counts[k];
+    const inProject = info.exactDir || parsed.cwds.some(c => within(c, projectPaths));
+    for (const e of parsed.entries) {
       const prev = entries.get(e.key);
       if (!prev) {
         entries.set(e.key, {
           key: e.key, sessionId: e.sessionId, ts: e.ts, model: e.model, inProject,
-          usage: pricing.normalizeUsage(e.usage),
+          usage: Object.assign({}, e.usage),
         });
         continue;
       }
       stats.merged_duplicates++;
-      const nu = pricing.normalizeUsage(e.usage);
+      const nu = e.usage;
       for (const f of Object.keys(nu)) if (typeof nu[f] === 'number') prev.usage[f] = Math.max(prev.usage[f], nu[f]);
       if (!prev.usage.speed && nu.speed) prev.usage.speed = nu.speed;
       if (!prev.model && e.model) prev.model = e.model;
       if (prev.ts === null || (e.ts !== null && e.ts < prev.ts)) prev.ts = e.ts;
       prev.inProject = prev.inProject || inProject;
     }
-    for (const p of filePrompts) {
-      if (!prompts.has(p.uuid)) prompts.set(p.uuid, Object.assign(p, { inProject }));
+    for (const p of parsed.prompts) {
+      if (!prompts.has(p.uuid)) prompts.set(p.uuid, Object.assign({}, p, { inProject }));
     }
+  }
+  if (cachePath) {
+    // Forget files that no longer exist; keep other projects' entries for their own runs.
+    for (const f of [...cache.keys()]) if (!used.has(f) && !fs.existsSync(f)) { cache.delete(f); changed = true; }
+    if (changed) saveCache(cachePath, cache);
   }
   return { entries: [...entries.values()], prompts: [...prompts.values()], stats };
 }
@@ -611,7 +739,8 @@ function buildReport(opts) {
   const nakshaCommands = opts.nakshaCommands || loadNakshaCommands();
 
   const { files, mode } = discoverFiles(roots, projectPaths, opts.all);
-  const { entries, prompts, stats } = parseTranscripts(files, projectPaths);
+  const cachePath = opts.noCache ? null : (opts.cachePath !== undefined ? opts.cachePath : defaultCachePath());
+  const { entries, prompts, stats } = parseTranscripts(files, projectPaths, { cachePath });
   priceEntries(entries, table);
   attribute(entries, prompts, nakshaCommands);
   const agg = aggregate(entries, prompts, { all: opts.all, since: opts.since, until: opts.until, session: opts.session, nakshaCommands });
@@ -671,7 +800,7 @@ function run(argv, out = process.stdout, err = process.stderr) {
 if (require.main === module) process.exitCode = run(process.argv.slice(2));
 
 module.exports = {
-  parseArgs, encodeProjectPath, findProjectJson, discoverFiles, classifyPrompt, normalizeCommandName,
-  parseTranscripts, attribute, priceEntries, aggregate, readBudgets, evaluateBudgets, buildReport,
+  parseArgs, encodeProjectPath, findProjectJson, discoverFiles, classifyPrompt, skillInvocations, normalizeCommandName,
+  parseTranscripts, parseFile, attribute, priceEntries, aggregate, readBudgets, evaluateBudgets, buildReport,
   renderText, renderBudgetLines, run, loadNakshaCommands,
 };
