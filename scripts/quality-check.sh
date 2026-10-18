@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # quality-check.sh — runs all naksha-studio quality gates in sequence.
 # Fail-at-end: all checks run regardless of individual failures.
-# All 5 checks count toward FAILED.
+# All 6 checks count toward FAILED.
 # Usage: bash scripts/quality-check.sh
-# Exit: 0 if all 5 checks pass, 1 if any fail
+# Exit: 0 if all 6 checks pass, 1 if any fail
 
 set -uo pipefail
 REPO="$(cd "$(dirname "$0")/.." && pwd)"
@@ -39,15 +39,19 @@ echo ""
 bash "$REPO/scripts/guard-counts.sh" || FAILED=$((FAILED + 1))
 echo ""
 
+# ── 6. Hook smoke ─────────────────────────────────────────────────────────
+bash "$REPO/scripts/hook-smoke.sh" || FAILED=$((FAILED + 1))
+echo ""
+
 # ── Summary ───────────────────────────────────────────────────────────────
 echo "╔═══════════════════════════════════════╗"
 if [ "$FAILED" -gt 0 ]; then
-  echo "║  quality-check: FAIL ($FAILED of 5 failed) ║"
+  echo "║  quality-check: FAIL ($FAILED of 6 failed) ║"
   echo "╚═══════════════════════════════════════╝"
   echo ""
   exit 1
 else
-  echo "║  quality-check: PASS (all 5 passed)   ║"
+  echo "║  quality-check: PASS (all 6 passed)   ║"
   echo "╚═══════════════════════════════════════╝"
   echo ""
   exit 0

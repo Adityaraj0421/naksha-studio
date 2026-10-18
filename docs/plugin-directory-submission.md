@@ -14,7 +14,7 @@ Use this document when submitting to the Claude Code plugin directory.
 |-------|-------|
 | Plugin name (slug) | `naksha` |
 | Display name | Naksha — Design Team |
-| Version | 4.0.0 |
+| Version | 5.1.2 |
 | License | MIT |
 | Author | Aditya Raj |
 | Author GitHub | https://github.com/Adityaraj0421 |
@@ -38,13 +38,13 @@ A virtual design team for Claude Code — 26 roles, 63 commands, 15,000+ lines o
 ```
 Naksha assembles specialist roles automatically based on what you're designing. UI Designer, UX Researcher, Content Designer, Motion Designer, Figma Expert, Email Designer, Data Viz Designer, Brand Strategist, Conversational Designer, Spatial Designer, Compliance Designer, and more — 26 roles total.
 
-60 slash commands cover the full design-to-code pipeline: /design builds pages and components, /design-review audits for accessibility and usability, /design-system extracts tokens, /design-framework converts HTML to React/Vue/Svelte/Next.js/Astro, /figma-create builds Figma frames, /email-template generates production HTML emails, /chart-design produces accessible data visualizations, /design-chatbot designs chatbot UIs, /design-voice-ui designs voice interfaces, /design-spatial builds visionOS/WebXR specs, /design-gdpr generates GDPR consent flows, /design-compliance audits for HIPAA/PCI/ADA, and more.
+63 slash commands cover the full design-to-code pipeline: /design builds pages and components, /design-review audits for accessibility and usability, /design-system extracts tokens, /design-framework converts HTML to React/Vue/Svelte/Next.js/Astro, /figma-create builds Figma frames, /email-template generates production HTML emails, /chart-design produces accessible data visualizations, /design-chatbot designs chatbot UIs, /design-voice-ui designs voice interfaces, /design-spatial builds visionOS/WebXR specs, /design-gdpr generates GDPR consent flows, /design-compliance audits for HIPAA/PCI/ADA, and more.
 
 Over 15,000 lines of expert design knowledge, source-attributed from authoritative references (WCAG, Nielsen heuristics, Refactoring UI, MJML docs, Apple HIG, GDPR Art. 7/12/17, etc.).
 
-v4.0.0 adds project memory (/naksha-init stores brand, framework, and design decisions across sessions), agentic pipelines (/pipeline chains multiple commands automatically), vision-powered reviews (/design-compare and /competitive-audit capture and analyze any URL), and three new frontier wings (Conversational, Spatial/AR, Compliance).
+v5 adds persistent project memory (/naksha-init, /naksha-remember, and /naksha-browse capture brand, constraints, component patterns, and live-site research once and feed them into every design command) and /design-reel, which renders a /design run into a share-able 9:16 + 16:9 video of the team at work. Earlier releases added agentic pipelines (/pipeline chains multiple commands automatically), vision-powered reviews (/design-compare and /competitive-audit capture and analyze any URL), and three frontier wings (Conversational, Spatial/AR, Compliance).
 
-Also works in Cursor, Windsurf, Gemini CLI, and VS Code Copilot.
+Also works in Cursor, Windsurf, Gemini CLI, VS Code Copilot, and Autohand Code CLI.
 ```
 
 ### Categories & Keywords
@@ -64,23 +64,24 @@ Also works in Cursor, Windsurf, Gemini CLI, and VS Code Copilot.
 
 **Git clone:**
 ```bash
-git clone https://github.com/Adityaraj0421/naksha-studio.git ~/.claude/plugins/naksha
+git clone https://github.com/Adityaraj0421/naksha-studio.git
+cd naksha-studio && bash install.sh
 ```
 
 ### Screenshots / Assets
 
 Assets for the submission form:
-- `assets/social-preview.png` — 1200×630 preview image
-- `assets/demo.svg` — animated command demo
+- `site/og.png` — 1200×630 preview image
+- `site/before.png` / `site/after.png` — 900×1340 before/after of an Account Settings screen redesigned by naksha (used on the landing page)
 
 ---
 
 ## Checklist Before Submitting
 
-- [ ] Version is `5.0.0` in `plugin.json`
-- [ ] GitHub release `v5.0.0` exists and is tagged `Latest`
+- [ ] Version in `plugin.json` matches the Version field above
+- [ ] GitHub release for that version exists and is tagged `Latest`
 - [ ] README has install instructions for both methods
 - [ ] `marketplace.json` is present in `.claude-plugin/`
 - [ ] All 63 commands work in Claude Code (including /design-reel with the Node render toolchain)
-- [ ] validate-structure: 5/5 checks pass (`node scripts/validate-structure.js`)
-- [ ] behavioral-smoke: PASS (`bash scripts/behavioral-smoke.sh`)
+- [ ] validate-structure: all checks pass (`node scripts/validate-structure.js`)
+- [ ] quality-check: PASS (`bash scripts/quality-check.sh` — includes behavioral-smoke, guard-counts, and hook-smoke)
