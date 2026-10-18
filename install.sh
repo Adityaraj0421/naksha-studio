@@ -26,7 +26,7 @@ cat > "$MARKETPLACE_DIR/.claude-plugin/marketplace.json" << EOF
   "plugins": [
     {
       "name": "naksha",
-      "description": "A virtual design team for Claude Code — 30 roles, 67 commands, 16,000+ lines of expert design knowledge.",
+      "description": "A virtual design team for Claude Code — 30 roles, 68 commands, 16,000+ lines of expert design knowledge.",
       "version": "$VERSION",
       "author": { "name": "adityaraj0421" },
       "source": "./plugins/naksha",

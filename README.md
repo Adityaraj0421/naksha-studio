@@ -16,7 +16,7 @@
 [![Copilot](https://img.shields.io/badge/Copilot-Instructions-24292e)]()
 [![Autohand Code CLI](https://img.shields.io/badge/Autohand_Code_CLI-AGENTS.md-0A84FF)](https://github.com/autohandai/code-cli)
 [![Roles](https://img.shields.io/badge/Specialist_Roles-30-orange)]()
-[![Commands](https://img.shields.io/badge/Slash_Commands-67-green)]()
+[![Commands](https://img.shields.io/badge/Slash_Commands-68-green)]()
 [![Design Knowledge](https://img.shields.io/badge/Design_Knowledge-16000%2B_lines-E8633A)]()
 
 [Quick Start](#-quick-start) · [Commands](#-commands) · [The Team](#-the-team) · [How It Works](#-how-it-works) · [Changelog](CHANGELOG.md)
@@ -27,7 +27,7 @@
 
 ## 🚀 Quick Start
 
-### Claude Code (full plugin — 67 commands, agents, hooks)
+### Claude Code (full plugin — 68 commands, agents, hooks)
 
 **From the marketplace** (Claude Code 2.1.72+) — run inside Claude Code:
 
@@ -398,6 +398,7 @@ _The skill loads only the references your task actually needs_
 | `/design-variants <task> [--count 2-5]` | Build 2–5 genuinely different directions for the same brief (each pair differs on at least two of layout, type, color, density, ornament), side by side in `naksha-variants/index.html`. Leans into your taste profile, with one deliberate "Wildcard" |
 | `/design-detect [files]` | Free, no-AI design lint (22 rules: WCAG contrast, spacing grid, type scale, focus-visible, reduced motion, alt text, clickable divs, hardcoded colors, AI-design clichés) with `--json` and CI exit codes; also runs as a hook after UI edits (v6) |
 | `/naksha-stats [--since <date>]` | Tokens and estimated cost per naksha command from your local Claude Code usage, compared against optional budgets in `.naksha/project.json` (v6) |
+| `/naksha-vote helpful\|needs-work <subject> [because …]` | Vote on a design, variant, review finding or command run. Votes stay local in `.naksha/votes.jsonl`, consolidate into evidence-backed taste observations, and calibrate eval judges against what you actually thought (v6) |
 | `/naksha-taste [approve\|reject <direction> …]` | Record which directions you approved or rejected; with no arguments, show your taste profile. `/design` and `/design-variants` default to approved traits and avoid rejected ones; signals fade after 90 days |
 
 <details>
@@ -834,6 +835,7 @@ Naksha can remember your project's design constraints across sessions. Run `/nak
 | `/naksha-browse <url>` | Capture live site patterns (layout, type, color, UX) and store as `browser_findings` |
 | `/naksha-remember <constraint>` | Persist constraints (`grid is 8px`, `no dark mode`, `WCAG AA required`) or component patterns |
 | `/naksha-taste approve\|reject <direction>` | Teach naksha your taste — the directions you like and the ones you don't (pair it with `/design-variants`) |
+| `/naksha-vote helpful\|needs-work <subject>` | Vote on a result, variant or review finding; votes stay local and teach taste and judge calibration |
 
 Memory is stored in `.naksha/project.json`. Commit it to share context with your team, or add `.naksha/` to `.gitignore` to keep it local. The Stop hook automatically applies any memory-write blocks emitted during a session — so constraints written mid-conversation are persisted without manual saves.
 
@@ -947,7 +949,7 @@ naksha/
 │       ├── conversational-designer.md  # Chatbot UI, VUI, dialog flows, persona systems
 │       ├── spatial-designer.md         # visionOS HIG, WebXR, depth layers, gaze/gesture
 │       └── compliance-designer.md      # GDPR/CCPA consent UX, HIPAA, PCI, ADA compliance
-├── commands/                           # 67 slash commands
+├── commands/                           # 68 slash commands
 ├── agents/                             # 7 specialist agents
 ├── hooks/hooks.json                    # SessionStart + PreToolUse + Stop hooks
 ├── scripts/

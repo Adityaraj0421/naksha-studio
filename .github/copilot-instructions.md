@@ -276,6 +276,7 @@ Naksha keeps persistent project context in `.naksha/project.json`. These command
 
 - **`/design-variants <task> [--count 2-5]`** — build 2–5 clearly different directions for the same brief (default 3), side by side in `naksha-variants/index.html`. When you have a taste profile, most directions lean into it and one "Wildcard" deliberately doesn't.
 - **`/naksha-taste approve|reject <direction> [because …]`** — record your verdicts; with no arguments, show your taste profile. `/design` and `/design-variants` then default to the traits you approve and avoid the ones you reject. Taste is a preference: your request, constraints, and brand always win. Older signals fade (half weight after 90 days, ignored after 180).
+- **`/naksha-vote helpful|needs-work <subject> [because …]`** (v6) — vote on a variant, design, review finding or command run. Votes stay in `.naksha/votes.jsonl` and are never sent anywhere; `/naksha-vote consolidate` turns them into taste observations with counts and evidence, and `/naksha-vote calibrate` shows where eval judges passed work you said needs work. Share only with `/naksha-vote export --redact`.
 
 **Also:** `/design-reel` records the design team working and renders a shareable 9:16 + 16:9 video reel. It needs Node and `packages/naksha-reel`; where that toolchain is absent, the command is documentation only.
 <!-- /naksha:generated project-memory -->
