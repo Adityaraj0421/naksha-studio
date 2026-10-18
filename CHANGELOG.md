@@ -2,6 +2,58 @@
 
 All notable changes to naksha are documented here.
 
+## v6.0.0-beta — Naksha Live (unreleased)
+
+naksha v6 makes the design team observable, measurable and cheaper to trust. You can watch the team work in a local dashboard, see what each command costs, get free instant design lint after every edit, keep your design system in the open DESIGN.md format, and teach naksha with Helpful / Needs-work votes. Review findings are now verified before you see them. All of it runs locally: no telemetry, and nothing leaves your machine unless a command you run calls a service.
+
+This is a pre-release. Please report anything that breaks, especially hooks and the dashboard.
+
+**New commands (70 total)**
+- `/design-detect [files]` — free, no-AI design lint with 22 rules (WCAG AA contrast, spacing grid, type scale, focus-visible, reduced motion, alt text, clickable divs, hardcoded colors, common AI-design clichés). `--json` output and CI exit codes (0 clean, 1 errors or score below threshold, 2 usage).
+- `/naksha-stats [--since <date>]` — tokens and estimated cost per naksha command from your local Claude Code transcripts, against optional monthly and per-command budgets in `.naksha/project.json`. Budgets only warn; `/design-reel` and `/pipeline` show a short pre-flight warning.
+- `/design-md lint|import|export|page|show` — read, lint and write [DESIGN.md](https://github.com/google-labs-code/design.md) files (spec `alpha`): lint includes WCAG AA contrast; import DTCG JSON or CSS variables; export DTCG, CSS or Tailwind.
+- `/naksha-dashboard setup|start|stop|status|disable` — Naksha Live, an optional local dashboard (see below).
+- `/naksha-vote helpful|needs-work <subject> [because …]` — vote on a design, variant, review finding or command run (see below).
+
+**Naksha Live (optional, recommended)**
+- A zero-dependency local dashboard: a live org chart of the 30 roles, an activity stream, project memory, review findings and cost. Bound to 127.0.0.1, protected by a per-start token, with Host/Origin checks and a strict CSP.
+- Off until you run `/naksha-dashboard setup`. Only then do hooks append compact events (command and tool names, never prompt text) to `.naksha/events.jsonl`, capped at 5 MB. `disable` turns the hooks back into no-ops.
+- New sessions in a naksha project suggest setting it up, once per session, until you set it up or disable it.
+- Other features plug in panels through a small contract (`dashboard/routes/*.js`, `dashboard/public/panels/*.js`; see `docs/dashboard.md`).
+
+**Design quality**
+- `/design-review` findings follow a schema (`schemas/design-findings.schema.json`) and pass a verifier step before you see them; `scripts/validate-findings.js` checks the file.
+- After every Write or Edit of a UI file, a hook runs the design linter and reports issues without blocking. It replaces the old PreToolUse prompt hook, whose four HTML checks are all linter rules now, at no token cost.
+- `/design` and `/design-qa` can check their own output in a browser at 375, 768 and 1440 px (accessibility snapshot and linter first, screenshots only in visual mode, at most 3 fix rounds), and skip the check gracefully without the Playwright MCP. `--no-check` turns it off.
+- Each of the 28 role reference files has a Quality Contract (red flags, excuses to reject, evidence of done), enforced by a structural check. `/naksha-doctor --transcripts` finds misrouted roles in your local session transcripts and proposes regression evals.
+
+**Design systems**
+- `.naksha/design-system/MASTER.md` holds the project design system in DESIGN.md format, with optional `pages/<page>.md` overrides. Precedence: page override > MASTER.md > brand defaults. `/design-system` can import and export it, and `/design` reads it before building.
+
+**Votes and taste**
+- Votes are saved only in `.naksha/votes.jsonl`. `/naksha-vote consolidate` turns them into `taste.observations` with counts and the evidence behind each one, so taste survives after old votes rotate out.
+- `/naksha-vote calibrate` compares your votes with eval results and flags evals where you said Needs work but the judge passed.
+- Sharing is explicit only: `/naksha-vote export --redact` strips emails, URLs, paths, token-like strings and `+`-prefixed phone numbers. It cannot catch names or addresses, so read the file before sharing it.
+
+**Leaner, safer runtime**
+- SessionStart now injects a compact memory index (at most 600 characters) instead of dumping memory, through `hookSpecificOutput.additionalContext`.
+- A PreCompact hook saves a short session brief (at most 2 KB) to `.naksha/session-brief.md`, and SessionStart restores it after compaction or on resume when it is less than a day old.
+- `docs/privacy.md` documents exactly what naksha stores and what reaches the network.
+
+**Evals**
+- Evals have tiers (`structural` free, `e2e` and `judge` paid), weights and per-eval budgets. `node scripts/eval-runner.js --dry-run` shows the plan and cost estimate without spending anything.
+- Paid runs need `NAKSHA_EVALS_PAID=1` and `ANTHROPIC_API_KEY`, refuse when the estimate exceeds the budget, and run only inside the sandbox (`scripts/lib/sandboxed-run.sh` with `evals/sandbox.json`: network only to `api.anthropic.com`, writes only in a temp dir). Without `srt` they refuse unless `NAKSHA_ALLOW_UNSANDBOXED=1`.
+- One price table, `meta/model-prices.json`, for both `/naksha-stats` and the eval runner. Prices are estimates at API list prices with a source and date, not an invoice.
+- 39 new evals for the new commands (218 cases, 1,068 assertions).
+
+**Checks and CI**
+- `quality-check.sh` has 9 checks, adding procedure references and the script unit tests. CI also runs the dashboard tests.
+- `hook-smoke.sh` runs every command hook naksha registers (now across 9 events) from a path with spaces, with and without the executable bit.
+
+**Changed**
+- `design-lint.js` now exits 1 when it finds any error, even if the score is above `failThreshold` (previously it failed only below the threshold, 70 by default), and reports "nothing to lint" instead of 100/100 when no files matched. Check CI jobs that call it directly.
+- The PreToolUse HTML prompt hook is removed (replaced by the linter hook above).
+
 ## v5.3.0 — Taste Memory (2026-10-18)
 
 naksha now learns what you like. Compare real design directions side by side, tell naksha which ones work for you, and every later design starts from your taste instead of generic defaults. Under the hood, the platform adapters are now generated from one source, so they can't drift apart again.
@@ -22,7 +74,7 @@ naksha now learns what you like. Compare real design directions side by side, te
 **Evals**
 - 4 new evals for the new commands (179 cases, 880 assertions).
 
-— Reliability (2026-10-18)
+## v5.2.0 — Reliability (2026-10-18)
 
 A release about trust rather than new commands: every check naksha has now runs on every pull request, the silent SessionStart hook failure fixed in v5.1.2 can't come back unnoticed, and every command has at least one eval.
 
