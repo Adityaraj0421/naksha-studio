@@ -69,7 +69,40 @@ else
   echo "  (no fixture references found or all present)"
 fi
 
-# 4. Summary table
+# 4. Every command has at least one eval (a matching "command" field, or a prompt starting with /<command>)
+echo ""
+echo "Checking command coverage..."
+UNCOVERED=$(python3 - "$EVALS_FILE" "$PLUGIN_ROOT/commands" <<'PYEOF'
+import json, os, re, sys
+evals = json.load(open(sys.argv[1]))['evals']
+commands = sorted(f[:-3] for f in os.listdir(sys.argv[2]) if f.endswith('.md'))
+covered = set()
+for e in evals:
+    if e.get('command'):
+        covered.add(e['command'].strip().lstrip('/').split()[0])
+    m = re.match(r'\s*/([\w-]+)', e.get('prompt', ''))
+    if m:
+        covered.add(m.group(1))
+for c in commands:
+    if c not in covered:
+        print(c)
+for c in sorted(covered - set(commands)):
+    print(f"WARN {c}")
+PYEOF
+)
+COVERAGE_FAILED=0
+while IFS= read -r line; do
+  [ -z "$line" ] && continue
+  case "$line" in
+    "WARN "*) echo "  ⚠️  eval targets /${line#WARN } but commands/${line#WARN }.md does not exist" ;;
+    *) echo "  ❌ /$line has no eval case"; COVERAGE_FAILED=$((COVERAGE_FAILED + 1)) ;;
+  esac
+done <<< "$UNCOVERED"
+if [ "$COVERAGE_FAILED" -eq 0 ]; then
+  echo "  ✅ all $(find "$PLUGIN_ROOT/commands" -maxdepth 1 -name '*.md' | wc -l | tr -d ' ') commands have at least one eval"
+fi
+
+# 5. Summary table
 echo ""
 echo "───────────────────────────────────────"
 printf "%-4s %-30s %s\n" "ID" "Name" "Assertions"
@@ -83,3 +116,9 @@ for e in data['evals']:
 echo "───────────────────────────────────────"
 echo ""
 echo "Done. These are structural checks only — eval execution requires Claude Code."
+
+if [ "$COVERAGE_FAILED" -gt 0 ]; then
+  echo ""
+  echo "❌ $COVERAGE_FAILED command(s) have no eval case — add one to evals/evals.json"
+  exit 1
+fi
