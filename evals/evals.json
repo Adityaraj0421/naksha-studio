@@ -5005,6 +5005,138 @@
           "description": "does not invoke the renderer or claim an mp4 was produced"
         }
       ]
+    },
+    {
+      "id": 175,
+      "name": "design-variants-distinct-directions",
+      "command": "/design-variants",
+      "prompt": "/design-variants pricing page for a B2B analytics SaaS with three tiers",
+      "expected_output": "Three self-contained HTML directions in naksha-variants/ that differ on at least two of five dimensions each, a comparison index page, and a prompt to record taste",
+      "assertions": [
+        {
+          "name": "default-three-directions",
+          "description": "builds 3 directions when --count is not given, each with a letter, a short name, and a one-sentence rationale"
+        },
+        {
+          "name": "pairwise-distinctness",
+          "description": "every pair of directions differs on at least two of layout structure, type personality, color strategy, density, and ornament, including layout or type"
+        },
+        {
+          "name": "same-content-across-variants",
+          "description": "all variants use the same task-specific copy, so the comparison is about design rather than wording"
+        },
+        {
+          "name": "files-written",
+          "description": "writes naksha-variants/variant-a.html, -b, -c and a naksha-variants/index.html comparison page"
+        },
+        {
+          "name": "quality-bar",
+          "description": "each variant is responsive, semantic, meets WCAG AA contrast, has visible focus states, and respects prefers-reduced-motion"
+        },
+        {
+          "name": "asks-for-verdicts",
+          "description": "ends by showing how to record reactions with /naksha-taste or in plain words"
+        }
+      ]
+    },
+    {
+      "id": 176,
+      "name": "design-variants-taste-and-constraints",
+      "command": "/design-variants",
+      "prompt": "/design-variants onboarding flow --count 4 (project.json has constraints.dark_mode=false, and taste.signals approve 'editorial' and 'serif display' and reject 'playful', all recorded last month)",
+      "expected_output": "Four directions: about two thirds lean into editorial/serif taste, one labelled Wildcard explores elsewhere, none is playful, and none uses dark mode",
+      "assertions": [
+        {
+          "name": "respects-count",
+          "description": "builds exactly 4 directions"
+        },
+        {
+          "name": "announces-taste",
+          "description": "states the taste being applied: leaning editorial and serif display, avoiding playful"
+        },
+        {
+          "name": "leans-into-taste",
+          "description": "most directions use the approved traits in different combinations, while staying distinct from each other"
+        },
+        {
+          "name": "has-wildcard",
+          "description": "at least one direction is labelled Wildcard and deliberately does not repeat the approved traits"
+        },
+        {
+          "name": "avoids-rejected",
+          "description": "no direction is playful"
+        },
+        {
+          "name": "constraints-override-variety",
+          "description": "no direction includes dark mode or prefers-color-scheme rules, because constraints apply to every variant"
+        }
+      ]
+    },
+    {
+      "id": 177,
+      "name": "naksha-taste-record-verdicts",
+      "command": "/naksha-taste",
+      "prompt": "/naksha-taste approve editorial layout with a serif display face and lots of whitespace because the hierarchy is clear; reject glassy gradient cards: feels dated",
+      "expected_output": "Two taste signals built with direction, traits from the shared vocabulary, verbatim reasons, then a single taste.signals memory block containing the full updated array",
+      "assertions": [
+        {
+          "name": "two-signals",
+          "description": "records one approved and one rejected signal"
+        },
+        {
+          "name": "traits-from-vocabulary",
+          "description": "tags each with 2-6 lowercase traits from the shared vocabulary, e.g. editorial, serif display, airy layout; glassmorphism, gradients"
+        },
+        {
+          "name": "keeps-reasons",
+          "description": "keeps the user's reasons and does not invent reasons that weren't given"
+        },
+        {
+          "name": "full-array-block",
+          "description": "emits one naksha-memory-update block for path taste.signals containing the existing signals plus the new ones, followed by an updatedAt block"
+        },
+        {
+          "name": "summary-box",
+          "description": "shows a summary of each verdict, its traits, and the resulting lean/avoid profile"
+        },
+        {
+          "name": "no-project-guard",
+          "description": "if .naksha/project.json does not exist, tells the user to run /naksha-init instead of creating it"
+        }
+      ]
+    },
+    {
+      "id": 178,
+      "name": "naksha-taste-profile-decay-conflict",
+      "command": "/naksha-taste",
+      "prompt": "/naksha-taste (project.json has taste.signals: 'dense layout' approved 200 days ago, 'playful' approved 60 days ago for a marketing site, 'playful' rejected today for a finance dashboard, 'serif display' approved 120 days ago)",
+      "expected_output": "Shows the taste profile with age decay applied and the playful verdicts explained as context-dependent rather than a plain conflict",
+      "assertions": [
+        {
+          "name": "shows-profile-without-args",
+          "description": "with no arguments, shows the taste profile instead of recording anything"
+        },
+        {
+          "name": "ignores-stale-signal",
+          "description": "does not count the 200-day-old 'dense layout' signal as active (weight 0)"
+        },
+        {
+          "name": "half-weights-older",
+          "description": "counts 'serif display' at half weight because it is between 91 and 180 days old"
+        },
+        {
+          "name": "context-dependent",
+          "description": "explains the two 'playful' verdicts as context-dependent (marketing site vs finance dashboard) rather than simply overriding one"
+        },
+        {
+          "name": "recent-signals",
+          "description": "lists recent signals with dates and verdicts"
+        },
+        {
+          "name": "no-write",
+          "description": "emits no memory-update block, since nothing was recorded"
+        }
+      ]
     }
   ]
 }

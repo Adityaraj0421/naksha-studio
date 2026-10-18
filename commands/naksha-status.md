@@ -71,6 +71,9 @@ Read the `.naksha/project.json` file. Extract:
 - `component_patterns` → array of recorded UI patterns
 - `browser_findings` → array of browser research captures
 
+**v5.3 fields (if present — optional):**
+- `taste.signals` → approved/rejected design directions recorded by `/naksha-taste` and `/design-variants`. Weight each by age (≤ 90 days = 1, 91–180 days = 0.5, older = 0) and sum per trait.
+
 ### Step 4: Generate Color Hints
 
 For each color (primary and secondary), append a human-readable color name hint:
@@ -155,6 +158,13 @@ Render a formatted status dashboard:
 {For each finding, most recent first, max 5:}
 - [{mode}] {url} — {patterns.length} patterns  ({captured_at as YYYY-MM-DD})
 
+{If taste.signals is present AND non-empty:}
+### Taste ({count} signals, {active} active)
+- Leans toward: {top 3 approved traits by weight} or —
+- Steers away from: {top 3 rejected traits by weight} or —
+{If any trait appears in both approved and rejected signals:}
+- Conflicted: {trait} — newer verdict {approved|rejected}
+
 ### Recent Decisions (last 10)
 {numbered list of last 10 memory entries, with newest first}
 
@@ -162,6 +172,7 @@ Render a formatted status dashboard:
 Run `/naksha-init` to update brand/framework settings.
 Run `/naksha-remember <decision>` to add constraints or component patterns.
 Run `/naksha-browse <url>` to capture design research.
+Run `/naksha-taste` to see or record your taste, or `/design-variants <task>` to compare directions.
 ```
 
 ### Example Output
@@ -204,6 +215,10 @@ Run `/naksha-browse <url>` to capture design research.
 - [inspect] localhost:3000 — 4 patterns  (2026-05-28)
 - [research] linear.app — 6 patterns  (2026-05-27)
 
+### Taste (4 signals, 4 active)
+- Leans toward: editorial · serif display · airy layout
+- Steers away from: playful · glassmorphism
+
 ### Recent Decisions (last 10)
 1. [2026-05-29T15:01:00Z] /naksha-browse: research stripe.com — 5 patterns captured
 2. [2026-05-29T14:35:00Z] /naksha-remember: grid 8px, dark_mode false, WCAG AA target
@@ -215,6 +230,7 @@ Run `/naksha-browse <url>` to capture design research.
 Run `/naksha-init` to update brand/framework settings.
 Run `/naksha-remember <decision>` to add constraints or component patterns.
 Run `/naksha-browse <url>` to capture design research.
+Run `/naksha-taste` to see or record your taste, or `/design-variants <task>` to compare directions.
 ```
 
 ## Color Hint Logic

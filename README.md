@@ -16,7 +16,7 @@
 [![Copilot](https://img.shields.io/badge/Copilot-Instructions-24292e)]()
 [![Autohand Code CLI](https://img.shields.io/badge/Autohand_Code_CLI-AGENTS.md-0A84FF)](https://github.com/autohandai/code-cli)
 [![Roles](https://img.shields.io/badge/Specialist_Roles-30-orange)]()
-[![Commands](https://img.shields.io/badge/Slash_Commands-63-green)]()
+[![Commands](https://img.shields.io/badge/Slash_Commands-65-green)]()
 [![Design Knowledge](https://img.shields.io/badge/Design_Knowledge-15000%2B_lines-E8633A)]()
 
 [Quick Start](#-quick-start) · [Commands](#-commands) · [The Team](#-the-team) · [How It Works](#-how-it-works) · [Changelog](CHANGELOG.md)
@@ -27,7 +27,7 @@
 
 ## 🚀 Quick Start
 
-### Claude Code (full plugin — 63 commands, agents, hooks)
+### Claude Code (full plugin — 65 commands, agents, hooks)
 
 **From the marketplace** (Claude Code 2.1.72+) — run inside Claude Code:
 
@@ -390,6 +390,11 @@ _The skill loads only the references your task actually needs_
 
 | `/naksha-browse <url>` | Browser-vision design research — captures a live URL, extracts layout patterns, typography, color, and UX patterns, stores findings in `.naksha/project.json` for automatic context injection into future design commands |
 | `/naksha-remember <constraint>` | Persist a design constraint or component pattern to project memory — classified as `constraint` or `component_pattern` and written to `.naksha/project.json`; context flows automatically into `/design`, `/brand-kit`, `/design-system`, and 3 other commands |
+
+**v5.3.0 — Taste Memory**
+
+| `/design-variants <task> [--count 2-5]` | Build 2–5 genuinely different directions for the same brief (each pair differs on at least two of layout, type, color, density, ornament), side by side in `naksha-variants/index.html`. Leans into your taste profile, with one deliberate "Wildcard" |
+| `/naksha-taste [approve\|reject <direction> …]` | Record which directions you approved or rejected; with no arguments, show your taste profile. `/design` and `/design-variants` default to approved traits and avoid rejected ones; signals fade after 90 days |
 
 <details>
 <summary><b>📖 Command details & examples</b></summary>
@@ -815,15 +820,16 @@ node scripts/design-lint.js src/**/*.html src/**/*.css
 
 ## 🧠 Project Memory (v5)
 
-Naksha can remember your project's design constraints across sessions. Run `/naksha-init` once to create a `.naksha/project.json` file with your brand colors, font, voice, and framework. Commands like `/design`, `/brand-kit`, `/design-system`, `/design-score`, and `/accessibility-audit` read this file automatically — no copy-pasting context every time.
+Naksha can remember your project's design constraints across sessions. Run `/naksha-init` once to create a `.naksha/project.json` file with your brand colors, font, voice, and framework. Commands like `/design`, `/brand-kit`, `/design-system`, `/design-score`, and `/design-review` read this file automatically — no copy-pasting context every time.
 
-**Three ways to build memory:**
+**Four ways to build memory:**
 
 | Command | What It Does |
 |---------|-------------|
 | `/naksha-init` | Interactive wizard — sets brand color, font, voice, framework, token format |
 | `/naksha-browse <url>` | Capture live site patterns (layout, type, color, UX) and store as `browser_findings` |
 | `/naksha-remember <constraint>` | Persist constraints (`grid is 8px`, `no dark mode`, `WCAG AA required`) or component patterns |
+| `/naksha-taste approve\|reject <direction>` | Teach naksha your taste — the directions you like and the ones you don't (pair it with `/design-variants`) |
 
 Memory is stored in `.naksha/project.json`. Commit it to share context with your team, or add `.naksha/` to `.gitignore` to keep it local. The Stop hook automatically applies any memory-write blocks emitted during a session — so constraints written mid-conversation are persisted without manual saves.
 
@@ -937,14 +943,14 @@ naksha/
 │       ├── conversational-designer.md  # Chatbot UI, VUI, dialog flows, persona systems
 │       ├── spatial-designer.md         # visionOS HIG, WebXR, depth layers, gaze/gesture
 │       └── compliance-designer.md      # GDPR/CCPA consent UX, HIPAA, PCI, ADA compliance
-├── commands/                           # 63 slash commands
+├── commands/                           # 65 slash commands
 ├── agents/                             # 7 specialist agents
 ├── hooks/hooks.json                    # SessionStart + PreToolUse + Stop hooks
 ├── scripts/
 │   ├── detect-design-context.sh        # Project stack detection
 │   └── run-evals.sh                    # Eval structure validator
 ├── evals/
-│   ├── evals.json                      # 175 eval cases (prompt + assertion specs)
+│   ├── evals.json                      # 179 eval cases (prompt + assertion specs)
 │   └── fixtures/                       # 63 output fixtures for behavioral smoke tests
 ├── assets/                             # Social preview + demo images
 ├── CHANGELOG.md                       # Version history

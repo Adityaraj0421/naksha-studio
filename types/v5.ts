@@ -218,10 +218,42 @@ export interface ProjectBrain {
   browser_findings?: BrowserFinding[];
 
   /**
+   * Learned design taste (v5.3+), written by /naksha-taste and /design-variants.
+   * A preference, never a rule: requests, constraints, and brand always win.
+   */
+  taste?: Taste;
+
+  /**
    * v5 schema version marker. Absent = v4. "5" = this schema.
    * Used by /naksha-doctor to detect and offer migration.
    */
   schema_version?: '5';
+}
+
+// ─── Taste (v5.3) ─────────────────────────────────────────────────────────────
+
+/**
+ * One reaction to a design direction. Only verdicts the user actually gave
+ * are recorded — never inferred from silence or from accepting a single design.
+ */
+export interface TasteSignal {
+  verdict: 'approved' | 'rejected';
+  /** One sentence describing what the direction looks like (≤ 140 chars). */
+  direction: string;
+  /** 2–6 short lowercase trait tags from the shared vocabulary in /naksha-taste. */
+  traits: string[];
+  /** What was being designed, e.g. "pricing page". Optional. */
+  context?: string;
+  /** The user's reason (≤ 140 chars). Optional; never invented. */
+  reason?: string;
+  /** ISO 8601 timestamp. Drives decay: ≤ 90 days weight 1, 91–180 days 0.5, older 0. */
+  recorded_at: string;
+  source_command: '/naksha-taste' | '/design-variants';
+}
+
+export interface Taste {
+  /** Cap: 30 signals; oldest by recorded_at evicted. */
+  signals: TasteSignal[];
 }
 
 // ─── NakshaContext — the runtime context object ───────────────────────────────

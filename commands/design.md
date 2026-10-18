@@ -60,6 +60,7 @@ If found:
 - `constraints.notes` → treat each note as a hard design rule for this session.
 - `component_patterns` → when building components named in this list, use the recorded pattern as the primary reference. Note: "Using established pattern: {name}."
 - `browser_findings` (5 most recent) → use as design reference. If a `research` finding matches the task context (e.g., building a settings page and there's a research finding for a settings page), apply relevant patterns. Cite: "Reference: {url}."
+- `taste.signals` (v5.3) → the user's learned taste from `/naksha-taste`. Weight each signal by age (≤ 90 days = 1, 91–180 days = 0.5, older = ignore) and sum per trait. Use the strongest approved traits as defaults for the Creative Director's direction, and avoid the strongest rejected traits. When signals have a `context` matching the current task, weight them higher. Taste is a preference, not a rule: the request, `constraints`, and brand always win. Note: "Applying your taste: leaning {traits}, avoiding {traits}." Skip silently if there are no active signals.
 
 If not found: continue normally (no project memory, no message).
 
