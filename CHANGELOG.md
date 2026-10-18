@@ -2,11 +2,19 @@
 
 All notable changes to naksha are documented here.
 
-## Unreleased (towards v6.0.0)
+## v6.0.0 — Naksha Live (2026-10-18)
 
-**Fixed**
+The stable release of v6. Everything in the 6.0.0-beta notes below ships, plus the fixes from beta testing on Windows and on a real project (a landing page built with every v6 command). Upgrading from 6.0.0-beta needs no migration.
+
+**Fixed since 6.0.0-beta**
 - **The Stop hook no longer calls the model or blocks the end of a turn.** It was a `prompt` hook that asked Claude to apply `naksha-memory-update` blocks and suggest a follow-up, and its judge could keep re-rejecting the same reply, holding a turn open indefinitely. It is now a deterministic Node script (`scripts/memory-apply-hook.js`) that does what `docs/naksha-memory-schema.md` always described: reads only new transcript lines, takes blocks only from the assistant's own text (not tool output or code fences), validates paths against the ProjectBrain fields, writes `project.json` atomically and logs problems to `~/.naksha/hook-errors.log`. No more token cost per turn. Follow-up suggestions stay in each command's "What's Next" section.
 - **Updating a local clone now works as documented.** Claude Code runs its own cached copy of the plugin and refreshes it only on a version change, so `git pull` alone was never picked up. `install.sh` now reinstalls (`uninstall --keep-data` + `install`) when naksha is already installed, and the README says `git pull && bash install.sh`.
+- **Commands Claude runs itself now count.** `/naksha-stats`, the transcript scanner and the dashboard hook treat a Skill tool call for `naksha:<command>` as a run of that command, so model-invoked commands get their own cost line, turn and org-chart staffing (they were 100% "unattributed" before).
+- **Naksha Live shows the data it was missing.** `/design-review` verifier agents light up the owner roles of their findings; the findings panel lists confirmed and needs-validation findings and counts rejected ones (it used to show rejected findings as issues); the cost panel no longer times out on large transcript histories (`/naksha-stats` now caches each transcript's parse in `~/.naksha/cache/` — counts and ids only, never message text — and the route answers "pending" instead of failing after 8 s).
+- **The browser self-check probe is more accurate.** It disables CSS transitions while measuring (no more mid-animation contrast failures after a theme change), stops flagging `:focus-visible`-only focus rings as missing, and reports content clipped inside `overflow: hidden` boxes.
+- **`/design-detect` and the linter.** Lints every UI file when the folder is not a git repo (it used to say "nothing to lint"); reads tokens from `@import`-ed and `<link>`-ed local stylesheets; skips the `media-queries` rule for tokens-only files; text mode no longer leaves `design-lint-report.json` in your project (only in CI mode or with `--report`).
+- **The website tells the v6 story.** `site/index.html` gains a "New in v6" section, correct stats (16,000+ lines, 6 platforms including Autohand Code CLI), the full two-step marketplace install, accurate update and privacy answers, a `<main>` landmark, AA contrast in both themes and an install-tab row that fits at 375 px. `guard-counts.sh` now also catches `15k+`-style line claims.
+- **Windows.** A `.gitattributes` keeps LF line endings on every checkout, so hook scripts and generated adapter regions work under Git for Windows' default `core.autocrlf`. `install.sh` reads the version with `node` (it wrote 4.8.0 without `python3`) and links the plugin with a directory junction on Git Bash. The quality scripts no longer need `python3`. Tests that need POSIX symlinks skip on Windows with a reason.
 
 ## v6.0.0-beta — Naksha Live (2026-10-18, pre-release)
 
