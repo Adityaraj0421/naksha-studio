@@ -184,6 +184,7 @@ Learned design taste, written by `/naksha-taste` and by verdicts given during `/
 | `taste.signals[].reason` | string | No | — | The user's reason, ≤ 140 chars; never invented |
 | `taste.signals[].recorded_at` | ISO 8601 | Yes (entry) | — | Drives decay: ≤ 90 days weight 1, 91–180 days 0.5, older 0 (kept, ignored) |
 | `taste.signals[].source_command` | string | Yes (entry) | — | `/naksha-taste` or `/design-variants` |
+| `taste.signals[].vote_id` | string | No | `/design-variants` | v6: id of the vote recorded for the same reaction in `.naksha/votes.jsonl`. Consolidation counts the vote and skips the signal, so one reaction never counts twice. |
 
 **Applying taste:** sum the weights per trait, separately for approved and rejected signals. The strongest approved traits become defaults; the strongest rejected traits are avoided. A trait in both lists is *conflicted*: the newer verdict wins, unless the signals have different `context` values (context-dependent taste is legitimate). No migration is needed: `taste` is optional and absent on older files.
 
@@ -207,6 +208,92 @@ Spending limits for naksha runs, written by `/naksha-stats budget`. Read by `scr
 | `budgets.warn_at` | number in (0, 1] | No | — | Fraction of a budget at which to warn. Default `0.8`. |
 
 **Evaluation:** month-to-date spend in the current project is compared with `monthly_usd`: at or above `warn_at` → `WARN`; above 100% → `OVER BUDGET`. For `per_command_usd`, the most expensive run of that command this month is compared with its limit in the same way. Invalid values are ignored and reported (e.g. a negative amount, or `warn_at` outside 0–1, which falls back to `0.8`). No migration is needed: `budgets` is optional and absent on older files.
+
+### v6 Field Additions: Taste Observations (optional)
+
+Evidence-backed summaries of taste, one per trait, produced by `node scripts/votes.js consolidate` from Helpful / Needs-work votes on designs and variants (see [v6 Votes](#v6-votes-nakshavotesjsonl)) plus `taste.signals`. Written through the usual `taste.observations` memory-update block by `/naksha-taste consolidate` and `/naksha-vote`; read by `/naksha-taste` (profile view) and `/design-variants`.
+
+```json
+"taste": {
+  "signals": [ … ],
+  "observations": [
+    {
+      "trait": "serif display",
+      "helpful": 5,
+      "needs_work": 1,
+      "confidence": 0.5,
+      "first_seen": "2026-07-02T09:14:00Z",
+      "updated_at": "2026-10-18T12:00:00Z",
+      "evidence": ["v_20261018T115812Z_h_3fa9c1", "s_20260702T091400Z_a_9c0e11d2", "…"]
+    }
+  ]
+}
+```
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `taste.observations` | array | No | One entry per trait. **Cap: 40** (lowest active weight dropped first). |
+| `trait` | string | Yes (entry) | Lowercase trait tag from the `/naksha-taste` vocabulary |
+| `helpful` | number | Yes (entry) | Σ age weight of Helpful votes and approved signals in `evidence` (multiples of 0.5) |
+| `needs_work` | number | Yes (entry) | Σ age weight of Needs-work votes and rejected signals in `evidence` |
+| `confidence` | number 0–1 | Yes (entry) | `|helpful − needs_work| / (helpful + needs_work + 2)`. One vote = 0.33; 5 helpful vs 1 needs work = 0.5; 0 when nothing is active. |
+| `first_seen` | ISO 8601 | Yes (entry) | Earliest evidence ever seen for this trait (kept across consolidations) |
+| `updated_at` | ISO 8601 | Yes (entry) | When the evidence set last changed (unchanged if a consolidation adds nothing) |
+| `evidence` | string[] | Yes (entry) | Vote and signal ids, newest first. **Cap: 50.** |
+
+**Refined, not overwritten.** Consolidation starts from the existing observations and merges new evidence into them, so evidence survives after the raw vote rotates out of `votes.jsonl` or the signal is evicted by the 30-signal cap. Ids are self-describing so counts can always be recomputed from `evidence` alone:
+
+- vote ids: `v_<UTC yyyymmddThhmmssZ>_<h|n>_<6 hex>` (`h` = helpful, `n` = needs work)
+- signal ids: `s_<recorded_at as yyyymmddThhmmssZ>_<a|r>_<8-hex FNV-1a of direction + traits>` (deterministic, so re-running never double counts)
+
+**Decay** is the same as for signals: ≤ 90 days weight 1, 91–180 days 0.5, older 0 (kept as history, ignored). Counts are recomputed from evidence timestamps on every run, so an observation fades on its own as its evidence ages.
+
+**What counts.** Only votes on `design` and `variant` subjects that carry traits (on the vote, or resolved from `naksha-variants/variants.json` by variant letter and `run_id`). The latest vote per subject wins; a superseded vote is removed from evidence. A signal with a `vote_id` that matches a stored vote is skipped. Findings and command runs never feed taste.
+
+**Applying observations:** a trait with `helpful > needs_work` and `confidence ≥ 0.5` is a leaning trait; `needs_work > helpful` with `confidence ≥ 0.5` is an avoided trait. Below 0.5 it is a hint only. Observations sit alongside the per-signal profile; explicit requests, `constraints` and brand still win.
+
+**Why a memory block and not a direct write.** Inside a Claude session the Stop hook stays the single writer of `project.json`, so the observations block cannot race the `taste.signals` block emitted in the same turn. `votes.js consolidate --write` exists for terminal use outside a session; it writes atomically (temp file + rename).
+
+## v6 Votes (`.naksha/votes.jsonl`)
+
+Helpful / Needs-work votes on designs, variants, review findings and command runs. Written by `/naksha-vote`, `/design-variants` (when you react to a variant) and the dashboard Votes panel, all through `scripts/votes.js`. One JSON object per line, append-only, local only — **nothing is ever sent anywhere.** Sharing is opt-in via `votes.js export --redact`, which writes a file you can send yourself.
+
+```json
+{"id":"v_20261018T120501Z_n_9b1c55","ts":"2026-10-18T12:05:01Z","verdict":"needs_work","reason":"B and C feel too similar","subject":{"kind":"variant","ref":"C@vr-20261018T1150Z","command":"/design-variants","traits":["glassmorphism","vivid palette"]},"source":"command"}
+```
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `id` | string | Yes | `v_<UTC yyyymmddThhmmssZ>_<h\|n>_<6 hex>`, assigned by the script (never taken from input) |
+| `ts` | ISO 8601 | Yes | UTC, second precision, assigned by the script |
+| `verdict` | `"helpful"` \| `"needs_work"` | Yes | `needs-work` is accepted on input and normalised |
+| `reason` | string | No | ≤ 280 chars, whitespace and control characters collapsed. Never invented. |
+| `subject.kind` | `"design"` \| `"variant"` \| `"finding"` \| `"command_run"` | Yes | What was voted on |
+| `subject.ref` | string | Yes | ≤ 200 chars. Unique per artifact version: variants `"{letter}@{run_id}"` (from `variants.json`), designs `"design-output.html@{mtime}"`, findings their `id` from `naksha-review/findings.json`, command runs a run id |
+| `subject.command` | string | No | e.g. `"/design-review"` |
+| `subject.role` | string | No | Owning role, e.g. a finding's `owner_role` |
+| `subject.eval` | string | No | Eval name this vote calibrates (letters, digits, `. _ : / -`, ≤ 120) |
+| `subject.traits` | string[] | No | 1–6 lowercase trait tags; feeds taste consolidation |
+| `source` | `"command"` \| `"dashboard"` \| `"cli"` | Yes | Where the vote came from |
+
+**Rules**
+
+- **Latest vote per subject wins** (`kind` + `ref`, case-insensitive ref; calibration also keys on `eval`). Changing your mind or double-clicking never counts twice; earlier lines stay in the file for history.
+- **Rotation:** when `votes.jsonl` reaches **1,000** lines it is renamed to `votes.1.jsonl` (replacing the previous archive) and a fresh file starts. Readers use both, so 1,000–2,000 votes are retained. Observations keep their evidence after rotation.
+- **Malformed lines** are skipped and counted, never fatal.
+- **Git:** if you commit `.naksha/`, consider adding `.naksha/votes*.jsonl` and `.naksha/votes-export-*.json` to `.gitignore` — votes are personal by default.
+
+**Variant manifest.** `/design-variants` writes `naksha-variants/variants.json` so votes can find a variant's traits: `{ "run_id", "task", "created_at", "variants": [{ "letter", "name", "file", "rationale", "traits", "dimensions", "wildcard" }] }`. Each variant file also carries `<meta name="naksha-traits" content="…">`. Both are read defensively; without them, variant votes need explicit traits.
+
+**Judge calibration.** `votes.js calibrate --results <file>` compares votes that carry `subject.eval` with LLM-judge verdicts. Minimal results shape (a top-level array, or an object with a `results` array; `pass`/`passed` booleans are accepted in place of `judge_verdict`):
+
+```json
+[{ "eval": "design-variants-distinct-directions", "assertion": "pairwise-distinctness", "judge_verdict": "pass", "run_id": "run-42" }]
+```
+
+An eval (or one run of it) counts as *pass* only if none of its rows failed. A vote whose `subject.ref` equals a `run_id` is compared with that run; otherwise with the whole file. The report gives the disagreement rate, the evals where people said **Needs work but the judge passed** (tighten these), the reverse (check for over-strict or flaky assertions), and evals voted on but missing from the results.
+
+**Redacted export.** `votes.js export --redact` writes `.naksha/votes-export-<date>-redacted.json` with emails → `[email]`, URLs → `[url]`, absolute, home and Windows paths and relative file paths → `[path]`, token-like strings (mixed letters and digits, 32+ chars, or `sk-`/`ghp_`-style prefixes) → `[secret]`, and `+`-prefixed phone numbers → `[phone]`, in reasons, refs and roles. **Limits:** it cannot recognise names, company or product names, street addresses, or phone numbers without a leading `+`; read the file before sharing it.
 
 ### v4 → v5 Migration
 

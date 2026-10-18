@@ -24,7 +24,8 @@ Find `.naksha/project.json` (current directory or up to 3 parents). If present, 
 Then read `taste.signals` and compute active taste the same way `/naksha-taste` does (age weights: ≤ 90 days = 1, 91–180 = 0.5, older = 0; sum per trait):
 
 - **Leaning traits** (top approved) and **avoided traits** (top rejected).
-- No project file or no active signals → no taste bias; every direction is exploratory.
+- Also read `taste.observations` (learned from Helpful / Needs-work votes): a trait with `helpful > needs_work` and `confidence ≥ 0.5` joins the leaning traits; `needs_work > helpful` with `confidence ≥ 0.5` joins the avoided traits. Where an observation and a recent signal disagree, the newer evidence wins (compare the observation's `updated_at` with the signal's `recorded_at`).
+- No project file, or no active signals or confident observations → no taste bias; every direction is exploratory.
 
 ## Step 2: Plan the Directions
 
@@ -55,8 +56,32 @@ For each direction, write a complete, self-contained HTML file to **`naksha-vari
 - Responsive, semantic HTML, accessible contrast for the project's target (WCAG AA by default), visible focus states, `prefers-reduced-motion` respected.
 - CSS custom properties for color, type and spacing at the top of each file, so the direction's system is readable at a glance.
 - A small fixed label in a corner: "Variant {letter} — {name}".
+- In `<head>`: `<title>Variant {letter} — {name}</title>` and `<meta name="naksha-traits" content="{trait}, {trait}, …">` — the direction's 2–6 traits from the `/naksha-taste` vocabulary (its dimension positions), so votes on the file can teach taste.
 
 Then write **`naksha-variants/index.html`**: a comparison page with each variant in an `<iframe>` (or links on narrow screens), its name, rationale, and dimension positions underneath.
+
+Finally write **`naksha-variants/variants.json`**, the machine-readable manifest that `/naksha-vote` and the dashboard Votes panel read to know what each variant is:
+
+```json
+{
+  "run_id": "vr-20261018T115000Z",
+  "task": "pricing page for a B2B analytics SaaS",
+  "created_at": "2026-10-18T11:50:00Z",
+  "variants": [
+    {
+      "letter": "A",
+      "name": "Quiet Editorial",
+      "file": "variant-a.html",
+      "rationale": "Calm, type-led page that lets the tiers breathe",
+      "traits": ["editorial", "serif display", "airy layout", "muted palette"],
+      "dimensions": { "layout": "single column", "type": "serif display", "color": "muted", "density": "airy", "ornament": "minimal" },
+      "wildcard": false
+    }
+  ]
+}
+```
+
+`run_id` is `vr-` plus the UTC time (`date -u +"vr-%Y%m%dT%H%M%SZ"`); a new run gets a new id, so votes on yesterday's "B" never merge with today's. When you add a combined variant in Step 5, append it to `variants` and keep the same `run_id`.
 
 ## Step 4: Present the Comparison
 
@@ -76,6 +101,7 @@ Then write **`naksha-variants/index.html`**: a comparison page with each variant
 
   Tell me what you think — e.g.
     /naksha-taste approve A because …; reject C: too busy
+    /naksha-vote helpful A because …   (or use the Votes panel in the dashboard)
   or just reply in plain words ("A, but with B's colors").
 ```
 
@@ -83,12 +109,22 @@ Then write **`naksha-variants/index.html`**: a comparison page with each variant
 
 When the user reacts in this session:
 
-- Record each verdict exactly as `/naksha-taste` Step 2–5 specifies: resolve the variant letter to its direction summary and its dimension positions as **traits**, set `source_command` to `"/design-variants"`, and emit the `taste.signals` memory block. Record only verdicts the user actually gave.
+- **Record each verdict as a vote first**, so it lands in `.naksha/votes.jsonl` with the variant it was about (this works even without `.naksha/project.json`):
+
+  ```bash
+  node ${CLAUDE_PLUGIN_ROOT}/scripts/votes.js append <helpful|needs-work> --kind variant \
+    --ref "{letter}@{run_id}" --traits "{trait, trait, …}" --command /design-variants \
+    [--reason "{the user's reason}"] --source command --json
+  ```
+
+  Approve / like / keep → `helpful`; reject / dislike / drop → `needs-work`. Note the returned `vote.id`. Votes stay on this machine; nothing is sent anywhere.
+- **Then record the taste signal** exactly as `/naksha-taste` Step 2–5 specifies: resolve the variant letter to its direction summary and its dimension positions as **traits**, set `source_command` to `"/design-variants"`, add `"vote_id": "{vote.id}"` so consolidation counts the reaction once, and emit the `taste.signals` memory block. Record only verdicts the user actually gave.
+- After recording, mention that `/naksha-taste consolidate` (in a later turn) folds these votes into the learned taste observations.
 - If they ask to combine ("A with B's palette"), build that as **variant {next letter}** in the same folder and update `index.html`. Combining is not a verdict; don't record one unless they say they like or dislike something.
 - If they pick a winner to take forward, offer to continue with `/design` using that direction as the creative brief, or to copy `variant-{letter}.html` to `design-output.html` so `/design-framework` and `/design-review` work on it directly.
 
 ## Notes
 
-- **No project memory?** Variants still work; there's just no taste bias, and verdicts can't be saved until `/naksha-init` creates `.naksha/project.json`. Say so once if the user reacts.
+- **No project memory?** Variants still work; there's just no taste bias, and taste signals can't be saved until `/naksha-init` creates `.naksha/project.json` (votes are still recorded in `.naksha/votes.jsonl`). Say so once if the user reacts.
 - **Cost of variety.** Each direction is a full page. For large tasks (multi-page apps) build one representative screen per direction and say which.
 - **Memory.md.** If `.naksha/memory.md` exists, append: `[{ISO}] /design-variants: {N} directions for "{task}" ({names})`.
