@@ -36,7 +36,7 @@
 /plugin install naksha@naksha
 ```
 
-**Or from a local clone** (live symlink — best if you want to edit naksha):
+**Or from a local clone** (best if you want to edit naksha):
 
 ```bash
 git clone https://github.com/Adityaraj0421/naksha-studio.git
@@ -54,7 +54,7 @@ Then restart Claude Code and try:
 
 > **✨ New in v5.1 — `/design-reel`:** record the design team working and render a share-able video of it (9:16 + 16:9). `/design-reel Design a pricing page for a SaaS analytics product` → a post-ready clip of your screen being designed, live. [Learn more ↓](#design-reel-task--watch-the-team-new-in-v51)
 
-> **Updates:** Marketplace installs update with `claude plugin update naksha`. Local clones: just `git pull` inside the repo — no reinstall needed, since the plugin is a live symlink to your clone.
+> **Updates:** Marketplace installs update with `claude plugin update naksha` (it moves when a new version is released). Local clones: `git pull && bash install.sh` — Claude Code runs its own cached copy of the plugin, so re-running the installer is what picks up the new code.
 
 ### Cursor
 
@@ -1051,14 +1051,14 @@ Checks: metadata consistency (`meta/stats.json` vs filesystem vs README badges),
 
 To update: `claude plugin update naksha`.
 
-**Local clone** (live symlink):
+**Local clone**:
 
 ```bash
 git clone https://github.com/Adityaraj0421/naksha-studio.git
 cd naksha-studio && bash install.sh
 ```
 
-Restart Claude Code to load the plugin. To update: `git pull` (no reinstall needed).
+Restart Claude Code to load the plugin. To update: `git pull && bash install.sh`, then restart.
 
 ---
 

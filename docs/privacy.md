@@ -12,6 +12,7 @@ Everything naksha remembers stays on your machine, in your project:
 | `.naksha/memory.md` | Append-only decision log | Commands that make design decisions |
 | `.naksha/session-brief.md` | A ≤ 2 KB summary of the above, rebuilt before each context compaction and read back after it | The PreCompact hook (`scripts/precompact-brief.sh`) |
 | `~/.naksha/hook-errors.log` | Local error lines when the Stop hook cannot update `project.json` | The Stop hook |
+| `.naksha/.memory-hook.json` | How far the Stop hook has read each session's transcript (a byte offset and a timestamp per session, no content), so each memory block is applied once | The Stop hook (`scripts/memory-apply-hook.js`) |
 
 You own these files. Commit `.naksha/` to share design memory with your team, or add it to `.gitignore` to keep it local. `session-brief.md` is regenerated, so it is safe to ignore even when the rest of `.naksha/` is committed. Deleting `.naksha/` erases naksha's memory of the project completely.
 

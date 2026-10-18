@@ -443,7 +443,13 @@ v5 commands write structured updates to `project.json` via the **Claude Code Sto
 -->
 ```
 
-The hook validates the `path` against this schema and patches `.naksha/project.json` atomically (`mktemp+mv`). Failed or malformed blocks are logged to `~/.naksha/hook-errors.log` and skipped. `memory.md` entries are still written directly via the `Write` tool and must be ≤100 characters.
+The hook is a plain Node script (`scripts/memory-apply-hook.js`), not a model call, and it never blocks the end of a turn. It:
+
+- reads only transcript lines added since its last run for that session (the byte offset is kept in `.naksha/.memory-hook.json`), so each block is applied exactly once;
+- takes blocks only from the assistant's own text — never from tool results or user messages — and ignores blocks inside ``` code fences, so quoting an example does not write anything;
+- checks the top-level field of `path` against the ProjectBrain fields in [types/v5.ts](../types/v5.ts) and refuses `__proto__`, `prototype` and `constructor` segments;
+- applies `browser_finding_write` by prepending the finding, dropping entries older than 30 days and capping the list at 20;
+- writes `.naksha/project.json` atomically (temp file + rename). Failed or malformed blocks are logged to `~/.naksha/hook-errors.log` and skipped; if `project.json` is not valid JSON, nothing is written and the blocks are retried on the next Stop once it is fixed. `memory.md` entries are still written directly via the `Write` tool and must be ≤100 characters.
 
 See [types/v5.ts](../types/v5.ts) — `MemoryUpdateBlock` type — for the full block schema.
 

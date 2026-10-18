@@ -2,6 +2,12 @@
 
 All notable changes to naksha are documented here.
 
+## Unreleased (towards v6.0.0)
+
+**Fixed**
+- **The Stop hook no longer calls the model or blocks the end of a turn.** It was a `prompt` hook that asked Claude to apply `naksha-memory-update` blocks and suggest a follow-up, and its judge could keep re-rejecting the same reply, holding a turn open indefinitely. It is now a deterministic Node script (`scripts/memory-apply-hook.js`) that does what `docs/naksha-memory-schema.md` always described: reads only new transcript lines, takes blocks only from the assistant's own text (not tool output or code fences), validates paths against the ProjectBrain fields, writes `project.json` atomically and logs problems to `~/.naksha/hook-errors.log`. No more token cost per turn. Follow-up suggestions stay in each command's "What's Next" section.
+- **Updating a local clone now works as documented.** Claude Code runs its own cached copy of the plugin and refreshes it only on a version change, so `git pull` alone was never picked up. `install.sh` now reinstalls (`uninstall --keep-data` + `install`) when naksha is already installed, and the README says `git pull && bash install.sh`.
+
 ## v6.0.0-beta — Naksha Live (2026-10-18, pre-release)
 
 naksha v6 makes the design team observable, measurable and cheaper to trust. You can watch the team work in a local dashboard, see what each command costs, get free instant design lint after every edit, keep your design system in the open DESIGN.md format, and teach naksha with Helpful / Needs-work votes. Review findings are now verified before you see them. All of it runs locally: no telemetry, and nothing leaves your machine unless a command you run calls a service.
