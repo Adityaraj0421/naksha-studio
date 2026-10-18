@@ -7,42 +7,9 @@
 (function () {
   'use strict';
 
-  var STYLE_ID = 'naksha-votes-panel-style';
-  var CSS = [
-    '.nkv{display:grid;gap:1.25rem;font:inherit;color:inherit}',
-    '.nkv h3{font-size:1rem;margin:0 0 .5rem}',
-    '.nkv h4{font-size:.8125rem;text-transform:uppercase;letter-spacing:.04em;margin:.75rem 0 .375rem;opacity:.8}',
-    '.nkv-notice{margin:0;padding:.625rem .75rem;border:1px solid color-mix(in srgb,currentColor 25%,transparent);border-radius:.5rem;font-size:.875rem;line-height:1.45}',
-    '.nkv ul,.nkv ol{list-style:none;margin:0;padding:0;display:grid;gap:.5rem}',
-    '.nkv-item{padding:.75rem;border:1px solid color-mix(in srgb,currentColor 18%,transparent);border-radius:.5rem;display:grid;gap:.375rem}',
-    '.nkv-head{display:flex;flex-wrap:wrap;gap:.5rem;align-items:baseline}',
-    '.nkv-kind{font-size:.75rem;padding:.0625rem .4375rem;border-radius:999px;border:1px solid color-mix(in srgb,currentColor 35%,transparent)}',
-    '.nkv-label{font-weight:600;overflow-wrap:anywhere}',
-    '.nkv-detail,.nkv-meta{margin:0;font-size:.8125rem;opacity:.85;overflow-wrap:anywhere}',
-    '.nkv-actions{display:flex;flex-wrap:wrap;gap:.5rem}',
-    '.nkv-btn{min-height:44px;min-width:44px;padding:.5rem .875rem;border-radius:.5rem;border:1px solid currentColor;background:transparent;color:inherit;font:inherit;cursor:pointer}',
-    '.nkv-btn[aria-pressed="true"]{background:CanvasText;color:Canvas;border-color:CanvasText}',
-    '.nkv-btn:disabled{opacity:.55;cursor:progress}',
-    '.nkv-btn:focus-visible,.nkv summary:focus-visible,.nkv textarea:focus-visible{outline:2px solid currentColor;outline-offset:2px}',
-    '.nkv details{font-size:.875rem}',
-    '.nkv summary{cursor:pointer;min-height:32px;display:inline-flex;align-items:center}',
-    '.nkv label{display:block;margin:.375rem 0 .25rem}',
-    '.nkv textarea{width:100%;box-sizing:border-box;min-height:3.5rem;padding:.5rem;border-radius:.375rem;border:1px solid color-mix(in srgb,currentColor 35%,transparent);background:transparent;color:inherit;font:inherit;resize:vertical}',
-    '.nkv-status{margin:0;min-height:1.25rem;font-size:.875rem}',
-    '.nkv-empty{margin:0;font-size:.875rem;opacity:.85}',
-    '@media (prefers-reduced-motion:reduce){.nkv *{transition:none!important;animation:none!important}}'
-  ].join('\n');
-
+  // Styles live in style.css (.nkv*): the dashboard CSP blocks injected style elements.
   var KIND_HEADINGS = { variant: 'Variants', design: 'Designs', finding: 'Review findings', command_run: 'Command runs' };
   var uid = 0;
-
-  function injectStyle(doc) {
-    if (doc.getElementById(STYLE_ID)) return;
-    var s = doc.createElement('style');
-    s.id = STYLE_ID;
-    s.textContent = CSS;
-    (doc.head || doc.documentElement).appendChild(s);
-  }
 
   function h(doc, tag, attrs, children) {
     var el = doc.createElement(tag);
@@ -84,7 +51,6 @@
 
   function render(el, api) {
     var doc = el.ownerDocument || document;
-    injectStyle(doc);
     while (el.firstChild) el.removeChild(el.firstChild);
 
     var status = h(doc, 'p', { className: 'nkv-status', role: 'status', 'aria-live': 'polite' });
