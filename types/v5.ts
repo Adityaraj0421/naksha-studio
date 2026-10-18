@@ -249,12 +249,96 @@ export interface TasteSignal {
   /** ISO 8601 timestamp. Drives decay: ≤ 90 days weight 1, 91–180 days 0.5, older 0. */
   recorded_at: string;
   source_command: '/naksha-taste' | '/design-variants';
+  /**
+   * v6: id of the Vote recorded for the same reaction. Consolidation counts the
+   * vote and skips this signal so one reaction never counts twice.
+   */
+  vote_id?: string;
 }
 
 export interface Taste {
   /** Cap: 30 signals; oldest by recorded_at evicted. */
   signals: TasteSignal[];
+  /** v6: evidence-backed per-trait summaries (see TasteObservation). Cap: 40. */
+  observations?: TasteObservation[];
 }
+
+/**
+ * v6: one evidence-backed taste observation, produced by
+ * `node scripts/votes.js consolidate` from votes on designs/variants plus
+ * taste.signals. Refined on every run (new evidence merged in, superseded votes
+ * removed), never rebuilt from scratch — evidence survives vote rotation and the
+ * 30-signal cap. Counts are recomputed from evidence ids with the taste decay.
+ */
+export interface TasteObservation {
+  /** Lowercase trait tag from the /naksha-taste vocabulary. */
+  trait: string;
+  /** Σ age weight (1 / 0.5 / 0) of Helpful votes and approved signals in evidence. */
+  helpful: number;
+  /** Σ age weight of Needs-work votes and rejected signals in evidence. */
+  needs_work: number;
+  /** |helpful − needs_work| / (helpful + needs_work + 2), rounded to 2 places. */
+  confidence: number;
+  /** ISO 8601 — earliest evidence ever seen for this trait. */
+  first_seen: string;
+  /** ISO 8601 — when the evidence set last changed. */
+  updated_at: string;
+  /**
+   * Self-describing ids, newest first, cap 50:
+   *   vote   v_<yyyymmddThhmmssZ>_<h|n>_<6 hex>
+   *   signal s_<yyyymmddThhmmssZ>_<a|r>_<8 hex FNV-1a of direction + traits>
+   */
+  evidence: string[];
+}
+
+// ─── Votes (v6) ───────────────────────────────────────────────────────────────
+
+/**
+ * One Helpful / Needs-work vote, stored as a line in .naksha/votes.jsonl
+ * (append-only, local only; rotates to votes.1.jsonl at 1,000 lines).
+ * Written only through scripts/votes.js; id and ts are assigned there.
+ * The latest vote per subject (kind + ref; calibration adds eval) is the effective one.
+ */
+export interface Vote {
+  /** v_<UTC yyyymmddThhmmssZ>_<h|n>_<6 hex> */
+  id: string;
+  /** ISO 8601 UTC, second precision. */
+  ts: string;
+  verdict: 'helpful' | 'needs_work';
+  /** ≤ 280 chars. Optional; never invented. */
+  reason?: string;
+  subject: VoteSubject;
+  source: 'command' | 'dashboard' | 'cli';
+}
+
+export interface VoteSubject {
+  kind: 'design' | 'variant' | 'finding' | 'command_run';
+  /**
+   * ≤ 200 chars, unique per artifact version: "B@<run_id>" for variants,
+   * "design-output.html@<mtime>" for designs, a finding id, or a run id.
+   */
+  ref: string;
+  /** e.g. "/design-review" */
+  command?: string;
+  /** Owning role, e.g. a finding's owner_role. */
+  role?: string;
+  /** Eval name this vote calibrates the LLM judge against. */
+  eval?: string;
+  /** 1–6 lowercase trait tags; feeds taste consolidation (design/variant only). */
+  traits?: string[];
+}
+
+/** Minimal judge-results row accepted by `votes.js calibrate --results`. */
+export interface JudgeResult {
+  eval: string;
+  assertion?: string;
+  judge_verdict: 'pass' | 'fail';
+  run_id?: string;
+}
+
+export const VOTES_ACTIVE_CAP = 1000 as const;
+export const TASTE_OBSERVATIONS_CAP = 40 as const;
+export const TASTE_OBSERVATION_EVIDENCE_CAP = 50 as const;
 
 // ─── NakshaContext — the runtime context object ───────────────────────────────
 

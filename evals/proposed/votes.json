@@ -1,0 +1,80 @@
+[
+  {
+    "name": "naksha-vote-variant-teaches-taste",
+    "command": "/naksha-vote",
+    "prompt": "/naksha-vote helpful B because the type hierarchy is obvious (naksha-variants/variants.json has run_id vr-20261018T115000Z and variant B 'Quiet Editorial' with traits editorial, serif display, airy layout; .naksha/project.json exists)",
+    "expected_output": "Resolves B to the variant subject, appends one Helpful vote with traits and reason through scripts/votes.js, confirms it stays local, then consolidates taste and emits the taste.observations memory block",
+    "assertions": [
+      { "name": "resolves-subject", "description": "resolves 'B' via votes.js subjects to kind variant with ref B@vr-20261018T115000Z rather than guessing" },
+      { "name": "appends-through-script", "description": "records the vote by running scripts/votes.js append helpful --kind variant with --traits and --reason, never by editing .naksha/votes.jsonl by hand" },
+      { "name": "keeps-reason", "description": "keeps the user's reason ('the type hierarchy is obvious') and does not invent one" },
+      { "name": "local-only", "description": "says the vote is saved in .naksha/votes.jsonl and that nothing is sent anywhere" },
+      { "name": "consolidates", "description": "runs votes.js consolidate and shows observations like 'prefers serif display (N helpful, M needs work)'" },
+      { "name": "emits-observations-block", "description": "emits the naksha-memory-update block for path taste.observations exactly as the script printed it, plus an updatedAt block" }
+    ]
+  },
+  {
+    "name": "naksha-vote-finding-needs-work",
+    "command": "/naksha-vote",
+    "prompt": "/naksha-vote needs-work F3 because this contrast issue was a false positive (naksha-review/findings.json has F3 'Low contrast on secondary CTA', owner_role Accessibility Specialist)",
+    "expected_output": "Records a Needs-work vote on finding F3 with role Accessibility Specialist and command /design-review, does not touch taste, and explains what a Needs-work vote on a finding means",
+    "assertions": [
+      { "name": "finding-subject", "description": "records kind finding with ref F3, --role Accessibility Specialist and --command /design-review" },
+      { "name": "verdict-normalised", "description": "records the verdict as needs_work" },
+      { "name": "no-taste-write", "description": "does not emit a taste.observations or taste.signals block, because findings never feed taste" },
+      { "name": "explains-meaning", "description": "explains that a Needs-work vote on a finding means it was wrong, unhelpful or mis-prioritised and points to /naksha-vote stats" },
+      { "name": "ambiguity-guard", "description": "if F3 were not in findings.json, would list candidates and ask instead of voting on the wrong thing" }
+    ]
+  },
+  {
+    "name": "naksha-vote-calibrate-judges",
+    "command": "/naksha-vote",
+    "prompt": "/naksha-vote calibrate --results evals/results/latest.json (four votes tagged --eval design-variants-distinct-directions are Needs work; the results file says that eval passed)",
+    "expected_output": "Runs votes.js calibrate with the results file and reports the disagreement rate, flagging design-variants-distinct-directions as an eval where people said Needs work but the judge passed, with the voters' reasons",
+    "assertions": [
+      { "name": "runs-calibrate", "description": "runs scripts/votes.js calibrate --results with the given file" },
+      { "name": "disagreement-rate", "description": "reports how many votes were compared and the disagreement rate" },
+      { "name": "flags-lenient-eval", "description": "names design-variants-distinct-directions as Needs work but judge passed, and suggests tightening its assertions" },
+      { "name": "quotes-reasons", "description": "quotes the voters' reasons as evidence for what to tighten" },
+      { "name": "no-results-guidance", "description": "without --results, prints the minimal shape [{ eval, assertion?, judge_verdict, run_id? }] instead of failing" }
+    ]
+  },
+  {
+    "name": "naksha-vote-export-redacted",
+    "command": "/naksha-vote",
+    "prompt": "/naksha-vote export --redact",
+    "expected_output": "Writes a redacted votes export file locally, states that nothing is sent anywhere, and explains the limits of redaction",
+    "assertions": [
+      { "name": "runs-export", "description": "runs scripts/votes.js export --redact and reports the file path it wrote" },
+      { "name": "nothing-sent", "description": "states clearly that the file is local and naksha never sends it anywhere; sharing is the user's choice" },
+      { "name": "redaction-scope", "description": "says emails, URLs, file paths and token-like strings are scrubbed from reasons and refs" },
+      { "name": "redaction-limits", "description": "warns that names, company names and other plain-word personal details are not detected, so the file should be read before sharing" }
+    ]
+  },
+  {
+    "name": "naksha-taste-consolidate-observations",
+    "command": "/naksha-taste",
+    "prompt": "/naksha-taste consolidate (.naksha/votes.jsonl has five Helpful votes and one Needs-work vote on variants with trait 'serif display'; taste.observations already lists 'serif display' with older evidence)",
+    "expected_output": "Runs votes.js consolidate, shows 'prefers serif display (… helpful, … needs work)' with confidence, keeps the older evidence, and emits the taste.observations block as printed",
+    "assertions": [
+      { "name": "runs-script", "description": "runs scripts/votes.js consolidate rather than computing counts by hand" },
+      { "name": "observation-lines", "description": "shows one line per observation in the form 'prefers serif display (N helpful, M needs work)' with confidence" },
+      { "name": "refines-not-overwrites", "description": "explains or shows that existing evidence is kept and new votes are merged in, not replaced" },
+      { "name": "block-as-printed", "description": "emits the taste.observations and updatedAt memory-update blocks exactly as the script printed them" },
+      { "name": "project-guard", "description": "if .naksha/project.json is missing, tells the user to run /naksha-init instead of writing" }
+    ]
+  },
+  {
+    "name": "design-variants-manifest-and-vote",
+    "command": "/design-variants",
+    "prompt": "/design-variants settings page for a developer tool, then: 'I like A, C is too busy'",
+    "expected_output": "Writes variants plus naksha-variants/variants.json with a run_id and traits, then records A as a Helpful vote and C as a Needs-work vote through scripts/votes.js and emits taste signals that carry vote_id",
+    "assertions": [
+      { "name": "writes-manifest", "description": "writes naksha-variants/variants.json with run_id, task, created_at and per-variant letter, name, file, rationale and traits" },
+      { "name": "meta-traits", "description": "each variant file has <meta name=\"naksha-traits\"> listing its traits" },
+      { "name": "votes-recorded", "description": "records a helpful vote on A and a needs-work vote on C with refs like A@{run_id} via scripts/votes.js append" },
+      { "name": "signals-link-votes", "description": "emits taste.signals entries for A and C that include the matching vote_id" },
+      { "name": "local-only", "description": "mentions that votes stay on this machine" }
+    ]
+  }
+]
