@@ -67,16 +67,20 @@ EOF
 # Register marketplace (safe to run multiple times)
 claude plugin marketplace add "$MARKETPLACE_DIR" 2>/dev/null || true
 
-# Install (or reinstall) plugin
+# Install, or reinstall when already installed. Claude Code loads plugins from its own
+# cached copy and only refreshes it on a version change, so a git pull alone is not
+# picked up; uninstall --keep-data + install refreshes the copy and keeps plugin data.
+if claude plugin list 2>/dev/null | grep -q "naksha@naksha-local"; then
+  claude plugin uninstall naksha@naksha-local --keep-data >/dev/null 2>&1 || true
+fi
 claude plugin install naksha@naksha-local 2>/dev/null || claude plugin update naksha 2>/dev/null || true
 
 echo ""
 echo "Done! Restart Claude Code, then try:"
 echo "  /design Build a landing page for a SaaS analytics product"
 echo ""
-echo "To update later: cd $(basename "$PLUGIN_DIR") && git pull"
+echo "To update later: cd $(basename "$PLUGIN_DIR") && git pull && bash install.sh"
+echo "(Claude Code runs its own cached copy of the plugin, so re-run install.sh after each pull.)"
 if [ "$LINK_KIND" = "copy" ]; then
-  echo "(Could not link the plugin, so it was copied: run bash install.sh again after each git pull.)"
-else
-  echo "(No reinstall needed — the plugin is a live $LINK_KIND to this repo.)"
+  echo "(The plugin folder was copied, not linked: install.sh refreshes that copy too.)"
 fi
