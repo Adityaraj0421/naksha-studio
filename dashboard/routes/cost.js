@@ -88,10 +88,59 @@ function normalizeTop(raw) {
   return rows.filter((r) => r.value !== null).sort((a, b) => b.value - a.value).slice(0, 5);
 }
 
+// Exact mapping for naksha's own scripts/naksha-stats.js (schema "naksha-stats/1"):
+// { totals: { cost_usd }, commands: [{ command, cost_usd }], budgets: { configured,
+//   month, month_spend_usd, warn_at, monthly: { limit_usd, spend_usd, ratio, status } | null,
+//   per_command: [{ command, limit_usd, max_run_usd, status }] } }
+// Statuses come from the script, so they respect the user's warn_at.
+const STATUSES = new Set(['ok', 'warn', 'over']);
+
+function fromNakshaStats(raw) {
+  const b = raw.budgets && typeof raw.budgets === 'object' ? raw.budgets : {};
+  const spend = [];
+  const total = num(raw.totals && raw.totals.cost_usd);
+  if (total !== null) spend.push({ key: 'total', label: 'all time', value: total });
+  const month = num(b.month_spend_usd);
+  if (month !== null) spend.push({ key: 'month', label: typeof b.month === 'string' ? b.month.slice(0, 7) : 'this month', value: month });
+
+  const toBudget = (lab, limit, spent, status) => {
+    if (limit === null || limit <= 0) return null;
+    const ratio = spent === null ? null : spent / limit;
+    const fallback = ratio === null ? 'unknown' : ratio >= 1 ? 'over' : ratio >= 0.8 ? 'warn' : 'ok';
+    return { label: label(lab), limit, spent, ratio, status: STATUSES.has(status) ? status : fallback };
+  };
+  const budgets = [];
+  if (b.monthly && typeof b.monthly === 'object') {
+    budgets.push(toBudget('monthly', num(b.monthly.limit_usd), num(b.monthly.spend_usd), b.monthly.status));
+  }
+  for (const c of Array.isArray(b.per_command) ? b.per_command : []) {
+    if (c && typeof c === 'object') budgets.push(toBudget(`${c.command} per run (max)`, num(c.limit_usd), num(c.max_run_usd), c.status));
+  }
+
+  const top = (Array.isArray(raw.commands) ? raw.commands : [])
+    .map((r) => ({ label: String((r && r.command) || '?').slice(0, 40), value: num(r && r.cost_usd) }))
+    .filter((r) => r.value !== null && r.value > 0)
+    .sort((x, y) => y.value - x.value)
+    .slice(0, 5);
+
+  return {
+    available: true,
+    currency: 'USD',
+    spend,
+    budgets: budgets.filter(Boolean).slice(0, 8),
+    top,
+    generated_at: typeof raw.generated_at === 'string' ? raw.generated_at.slice(0, 40) : new Date().toISOString(),
+  };
+}
+
 function normalize(raw) {
   if (!raw || typeof raw !== 'object' || Array.isArray(raw)) {
     return { available: true, error: 'naksha-stats.js returned no JSON object' };
   }
+  if (raw.error && typeof raw.error === 'string') {
+    return { available: true, error: raw.error.slice(0, 200) };
+  }
+  if (typeof raw.schema === 'string' && raw.schema.startsWith('naksha-stats/')) return fromNakshaStats(raw);
   const spend = normalizeSpend(raw);
   return {
     available: true,

@@ -220,6 +220,28 @@ test('cost panel runs scripts/naksha-stats.js --json and normalizes spend vs bud
   }
 });
 
+test('cost: maps the real naksha-stats/1 report exactly', () => {
+  const { normalize } = require('../routes/cost');
+  const out = normalize({
+    schema: 'naksha-stats/1',
+    generated_at: '2026-10-18T06:00:00.000Z',
+    totals: { cost_usd: 12.5 },
+    placeholder_usd: 0,
+    commands: [{ command: '/design', cost_usd: 3.2, runs: 4 }, { command: '/design-review', cost_usd: 7, runs: 2 }, { command: '(no command)', cost_usd: 0 }],
+    budgets: {
+      configured: true, month: '2026-10', warn_at: 0.5, month_spend_usd: 6, problems: [], messages: [],
+      monthly: { limit_usd: 10, spend_usd: 6, ratio: 0.6, status: 'warn' },
+      per_command: [{ command: '/design-reel', limit_usd: 2, runs: 1, max_run_usd: 2.5, status: 'over' }],
+    },
+  });
+  assert.deepEqual(out.spend, [{ key: 'total', label: 'all time', value: 12.5 }, { key: 'month', label: '2026-10', value: 6 }]);
+  assert.equal(out.budgets.length, 2, 'warn_at / month_spend_usd must not become budgets');
+  assert.equal(out.budgets[0].status, 'warn', "uses the script's status (custom warn_at)");
+  assert.equal(out.budgets[1].status, 'over');
+  assert.deepEqual(out.top.map((r) => r.label), ['/design-review', '/design']);
+  assert.match(normalize({ schema: 'naksha-stats/1', error: 'bad --since' }).error, /bad --since/);
+});
+
 test('findings are normalized, clipped and sorted by severity', () => {
   const { normalize } = require('../routes/findings');
   const out = normalize({

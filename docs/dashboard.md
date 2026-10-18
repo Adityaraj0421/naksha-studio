@@ -165,7 +165,11 @@ exports.register = ({ route, projectDir, naksha }) => {
 
 ## Cost panel input (`scripts/naksha-stats.js --json`)
 
-The cost route runs the script, if it exists, with an 8 s timeout and a 1 MB output cap, with `cwd` set to the project and `NAKSHA_PROJECT_DIR` set. Results are cached for 30 s. The output is parsed defensively. The expected shape is:
+The cost route runs the script, if it exists, with an 8 s timeout and a 1 MB output cap, with `cwd` set to the project and `NAKSHA_PROJECT_DIR` set. Results are cached for 30 s.
+
+naksha's own report (`"schema": "naksha-stats/1"`, see [cost-and-budgets.md](cost-and-budgets.md)) is mapped exactly: spend is `totals.cost_usd` (all time) and `budgets.month_spend_usd`; budgets are `budgets.monthly` and each `budgets.per_command` entry (max run vs per-run limit), with the script's own `status` so a custom `warn_at` is respected; top commands come from `commands[].cost_usd`.
+
+Any other output is parsed defensively. The generic shape is:
 
 ```json
 {
