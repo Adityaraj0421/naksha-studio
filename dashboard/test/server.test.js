@@ -152,6 +152,35 @@ test('SSE stream delivers an event appended to events.jsonl', async () => {
   });
 });
 
+test('GET /api/project summarizes v6 taste.observations (traits learned from votes)', async () => {
+  await withApp(none, async ({ port, token, proj }) => {
+    const obs = (trait, helpful, needsWork, confidence) => ({
+      trait, helpful, needs_work: needsWork, confidence, first_seen: '2026-10-18T07:42:46Z', updated_at: '2026-10-18T07:50:41Z', evidence: ['v_1'],
+    });
+    fs.writeFileSync(
+      path.join(proj.dir, '.naksha', 'project.json'),
+      JSON.stringify({
+        name: 'Landing',
+        taste: {
+          observations: [
+            obs('dark-first', 0, 1, 0.33), obs('full-bleed', 1, 0, 0.33), obs('serif display', 3, 0, 0.8),
+            obs('dense', 1, 1, 0.2), { not: 'a trait' },
+          ],
+        },
+      }),
+    );
+    const res = await request(port, '/api/project', { headers: { 'X-Naksha-Token': token } });
+    const t = res.json.taste;
+    assert.equal(t.count, 0, 'no v5 signals');
+    assert.equal(t.traits.count, 4);
+    assert.deepEqual(t.traits.leans.map((l) => l.trait), ['serif display', 'full-bleed'], 'highest confidence first');
+    assert.deepEqual(t.traits.avoids, [{ trait: 'dark-first', weight: 0.33, helpful: 0, needs_work: 1 }]);
+    assert.deepEqual(t.traits.mixed, ['dense']);
+    assert.equal(t.traits.updated_at, '2026-10-18T07:50:41Z');
+    assert.equal(t.observations, undefined, 'trait objects are not echoed as raw observations');
+  });
+});
+
 test('refuses to serve the plugin directory as a project', () => {
   assert.throws(() => createApp({ projectDir: REPO, pluginRoot: REPO, log: quiet }), /plugin directory/);
 });

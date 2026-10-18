@@ -96,6 +96,31 @@ function decayWeight(recordedAt, now) {
   return 0;
 }
 
+/**
+ * v6 taste.observations (written by /naksha-taste consolidate from votes): one entry per
+ * trait with helpful / needs_work counts and a confidence. Leans = more helpful than
+ * needs-work votes; avoids = the reverse; ties are mixed.
+ */
+function summarizeTraits(observations) {
+  const list = Array.isArray(observations)
+    ? observations.filter((o) => o && typeof o === 'object' && typeof o.trait === 'string' && o.trait)
+    : [];
+  if (!list.length) return null;
+  const n = (v) => (typeof v === 'number' && Number.isFinite(v) && v >= 0 ? v : 0);
+  const row = (o) => ({
+    trait: o.trait.slice(0, 60),
+    weight: Math.round(n(o.confidence) * 100) / 100,
+    helpful: n(o.helpful),
+    needs_work: n(o.needs_work),
+  });
+  const byWeight = (a, b) => b.weight - a.weight || (b.helpful + b.needs_work) - (a.helpful + a.needs_work) || a.trait.localeCompare(b.trait);
+  const leans = list.filter((o) => n(o.helpful) > n(o.needs_work)).map(row).sort(byWeight);
+  const avoids = list.filter((o) => n(o.needs_work) > n(o.helpful)).map(row).sort(byWeight);
+  const mixed = list.filter((o) => n(o.helpful) === n(o.needs_work)).map((o) => o.trait.slice(0, 60));
+  const updated = list.map((o) => (typeof o.updated_at === 'string' ? o.updated_at : '')).sort().pop() || null;
+  return { count: list.length, leans: leans.slice(0, 8), avoids: avoids.slice(0, 8), mixed: mixed.slice(0, 8), updated_at: updated };
+}
+
 /** Summarize taste.signals per the v5.3 schema (decay + per-trait weights). */
 function summarizeTaste(taste) {
   if (!taste || typeof taste !== 'object') return null;
@@ -140,7 +165,9 @@ function summarizeTaste(taste) {
     avoids,
     conflicted,
     recent,
-    observations: taste.observations === undefined ? undefined : taste.observations,
+    traits: summarizeTraits(taste.observations),
+    // Free-form observations (older schema); v6 trait objects are summarized in `traits`.
+    observations: taste.observations === undefined || summarizeTraits(taste.observations) ? undefined : taste.observations,
   };
 }
 
