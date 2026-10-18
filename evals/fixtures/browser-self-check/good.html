@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Self-check fixture: clean page</title>
+  <style>
+    :root { --ink: #1a1a1a; --paper: #ffffff; --accent: #0b57d0; --space: 16px; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font: 16px/1.5 system-ui, sans-serif; color: var(--ink); background: var(--paper); }
+    .skip { position: absolute; left: -9999px; }
+    .skip:focus { left: var(--space); top: var(--space); }
+    header, main, footer { padding: var(--space); max-width: 72rem; margin: 0 auto; }
+    nav ul { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; margin: 0; }
+    nav a, .btn { display: inline-flex; align-items: center; min-height: 44px; padding: 0 var(--space); color: var(--accent); }
+    .btn { background: var(--accent); color: var(--paper); border: 0; border-radius: 8px; font: inherit; }
+    a:focus-visible, .btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+    .grid { display: grid; gap: var(--space); grid-template-columns: 1fr; }
+    @media (min-width: 768px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#content">Skip to content</a>
+  <header>
+    <nav aria-label="Primary">
+      <ul>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main id="content">
+    <h1>Plan work your team will actually finish</h1>
+    <p>Short cycles, honest estimates, and a board that stays readable.</p>
+    <section id="features" aria-labelledby="features-h">
+      <h2 id="features-h">Features</h2>
+      <div class="grid">
+        <article><h3>Cycles</h3><p>Two-week rhythm with a clear finish line.</p></article>
+        <article><h3>Estimates</h3><p>Ranges, not guesses, with history behind them.</p></article>
+        <article><h3>Boards</h3><p>One view per team, no clutter.</p></article>
+      </div>
+    </section>
+    <section id="pricing" aria-labelledby="pricing-h">
+      <h2 id="pricing-h">Pricing</h2>
+      <p>Free for teams of five. <a href="#pricing">See the full plan list</a> for larger teams.</p>
+      <button class="btn" type="button">Start free</button>
+    </section>
+  </main>
+  <footer><p>Fixture page for the naksha browser self-check smoke test.</p></footer>
+</body>
+</html>
