@@ -7,7 +7,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/detect-design-context.sh",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/detect-design-context.sh\"",
             "timeout": 10
           }
         ]
