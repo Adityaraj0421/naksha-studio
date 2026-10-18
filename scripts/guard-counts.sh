@@ -62,9 +62,13 @@ KNOWLEDGE_FILES=(
   ".claude-plugin/plugin.json"
   ".claude-plugin/marketplace.json"
   "docs/plugin-directory-submission.md"
+  "README.md"
+  "site/index.html"
 )
 
 THRESHOLD=$(( STATS_LINES * 15 / 100 ))
+# Headline files must state the exact thousand-floor (16,007 -> "16,000+"), not just stay within 15%
+STRICT_FILES=" README.md site/index.html "
 
 for f in "${KNOWLEDGE_FILES[@]}"; do
   path="$REPO/$f"
@@ -72,10 +76,12 @@ for f in "${KNOWLEDGE_FILES[@]}"; do
     echo "  WARN  $f not found — skipping"
     continue
   fi
-  # Extract largest "NN,NNN+ lines" / "NNNNN+ lines" claim from the file
+  # Extract largest line claim from the file: "NN,NNN+ lines", "NNNNN+ lines", "15k+ lines",
+  # "16,000+ raw lines" and HTML forms like "<b>15k+</b> lines of …"
   CLAIM=$(node - "$path" <<'JSEOF'
 const content = require('fs').readFileSync(process.argv[2], 'utf8');
-const matches = [...content.matchAll(/([\d,]+)\+\s*lines/g)].map(m => parseInt(m[1].replace(/,/g, ''), 10));
+const pat = /(\d[\d,]*(?:\.\d+)?)\s*(k)?\+(?:<\/\w+>)?\s*(?:[a-z-]+\s+)?lines\b/gi;
+const matches = [...content.matchAll(pat)].map(m => Math.round(parseFloat(m[1].replace(/,/g, '')) * (m[2] ? 1000 : 1)));
 console.log(matches.length ? Math.max(...matches) : 0);
 JSEOF
 )
@@ -86,6 +92,9 @@ JSEOF
   DIFF=$(( STATS_LINES - CLAIM ))
   if [ "$CLAIM" -gt "$STATS_LINES" ]; then
     echo "  FAIL  $f: claims ${CLAIM}+ but actual=${STATS_LINES} (over-promised)"
+    FAILED=$((FAILED + 1))
+  elif [[ "$STRICT_FILES" == *" $f "* ]] && [ "$CLAIM" -ne "$FLOOR" ]; then
+    echo "  FAIL  $f: headline claims ${CLAIM}+ lines, expected ${FLOOR}+ (floor of ${STATS_LINES})"
     FAILED=$((FAILED + 1))
   elif [ "$DIFF" -gt "$THRESHOLD" ]; then
     echo "  FAIL  $f: claims ${CLAIM}+ lines, drift=$(( DIFF ))  vs threshold=${THRESHOLD} (>15% stale)"

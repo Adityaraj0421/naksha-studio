@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>naksha-studio — a virtual design agency in your terminal</title>
-<meta name="description" content="A virtual design agency in your terminal. 30 specialist roles, 70 commands, inside Claude Code, Cursor, Windsurf, Gemini CLI, and Copilot.">
+<meta name="description" content="A virtual design agency in your terminal. 30 specialist roles, 70 commands, inside Claude Code, Cursor, Windsurf, Gemini CLI, Copilot, and Autohand Code CLI. New in v6 beta: Naksha Live.">
 <meta property="og:title" content="naksha-studio — a virtual design agency in your terminal">
 <meta property="og:description" content="30 specialist roles. 70 commands. One command and the whole design agency shows up.">
 <meta property="og:type" content="website">
@@ -40,7 +40,7 @@
   html[data-theme="light"]{
     --bg:#ECEEF5; --bg2:#F5F6FB; --panel:#FFFFFF; --card:#FFFFFF; --term:#0A0B12;
     --line:rgba(20,22,44,.10); --line-2:rgba(20,22,44,.17);
-    --ink:#14162A; --ink-soft:#585C72; --ink-dim:#6C7088;
+    --ink:#14162A; --ink-soft:#585C72; --ink-dim:#5F6380;   /* ink-dim ≥4.5:1 on #ECEEF5 */
     --grid:rgba(60,70,150,.06); --tick:rgba(60,70,150,.20); --accent-soft:#5247DE;
   }
   *{box-sizing:border-box;margin:0}
@@ -55,12 +55,13 @@
   .skip:focus{transform:translateY(0)}
   /* touch: guarantee ≥44px hit areas on touch devices (skill §2) */
   @media(pointer:coarse){
-    .theme button{min-height:44px}
+    .nav-links .theme button{min-height:44px;min-width:44px}
+    .tabs button{min-height:44px}
     .copy{min-height:44px}
     .nav-cta{min-height:44px;display:inline-flex;align-items:center}
     .foot-inner a{display:inline-flex;align-items:center;min-height:44px;padding:0 4px}
   }
-  body{font-family:var(--sans);color:var(--ink);background:var(--bg);line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden;transition:background .4s,color .4s}
+  body{font-family:var(--sans);color:var(--ink);background:var(--bg);line-height:1.5;-webkit-font-smoothing:antialiased;transition:background .4s,color .4s}
   body::before{content:"";position:fixed;inset:0;z-index:-2;
     background-image:
       url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36' height='36'%3E%3Cpath d='M18 14v8M14 18h8' stroke='%239aa6dc' stroke-opacity='0.18' stroke-width='1'/%3E%3C/svg%3E"),
@@ -74,7 +75,7 @@
   html[data-theme="light"] .grain{opacity:.02;mix-blend-mode:multiply}
   a{color:inherit}
   .wrap{max-width:var(--max);margin:0 auto;padding:0 24px}
-  ::selection{background:var(--accent);color:#0a0814}
+  ::selection{background:var(--accent);color:#fff}
 
   /* tilt layer for the "crooked mode" gag */
   .tilt-layer{transition:transform 1s cubic-bezier(.6,0,.2,1);transform-origin:50% 32%}
@@ -111,9 +112,11 @@
   .nav-cta:hover{border-color:var(--accent);color:var(--accent-soft)!important;background:color-mix(in srgb,var(--accent) 9%,transparent)}
   .nav-cta:active{transform:translateY(1px)}
   .theme{display:inline-flex;border:1px solid var(--line-2);border-radius:8px;overflow:hidden}
-  .theme button{font-family:var(--mono);font-size:11px;border:0;background:transparent;color:var(--ink-soft);padding:7px 9px;cursor:pointer;transition:.15s}
+  .theme button{font-family:var(--mono);font-size:11px;border:0;background:transparent;color:var(--ink-soft);padding:7px 9px;min-width:32px;cursor:pointer;transition:.15s}
   .theme button.on{background:var(--accent);color:#fff}
   @media(max-width:820px){.nav-links a:not(.nav-cta){display:none}}
+  /* phones: drop the nav wordmark (the hero lockup carries it) so the theme switcher and CTA fit */
+  @media(max-width:460px){.brand .wordmark{display:none}.nav-links{gap:12px}}
 
   /* ---------- hero ---------- */
   header.hero{text-align:center;padding:62px 0 36px}
@@ -124,21 +127,33 @@
   .eyebrow{font-family:var(--mono);font-size:13px;letter-spacing:.13em;color:var(--ink-soft)}
   h1{font-family:var(--serif);font-style:italic;font-weight:500;font-size:clamp(34px,6vw,62px);line-height:1.03;letter-spacing:-.02em;margin-top:30px}
   h1 .pop{color:var(--accent-soft);font-style:italic}
+  .v6-pill{display:inline-flex;align-items:center;gap:9px;margin-top:22px;font-family:var(--mono);font-size:12px;color:var(--ink-soft);text-decoration:none;border:1px solid var(--line-2);border-radius:999px;padding:6px 14px 6px 6px;background:color-mix(in srgb,var(--accent) 8%,transparent);transition:border-color .25s var(--ease),color .25s var(--ease)}
+  .v6-pill b{font-weight:600;color:#fff;background:var(--accent);border-radius:999px;padding:2px 9px;font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+  .v6-pill:hover{border-color:var(--accent);color:var(--ink)}
   .lede{font-family:var(--serif);font-size:clamp(17px,2.4vw,21px);color:var(--ink);max-width:610px;margin:24px auto 0;line-height:1.5}
   .lede .muted{color:var(--ink-soft)}
 
   /* ---------- install widget ---------- */
   .install{max-width:770px;margin:42px auto 0;border:1px solid var(--line-2);border-radius:14px;background:linear-gradient(180deg,var(--panel),var(--bg2));overflow:hidden;box-shadow:var(--edge),var(--lift)}
-  .tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);background:rgba(0,0,0,.18);overflow-x:auto;scrollbar-width:none}
-  .tabs::-webkit-scrollbar{display:none}
+  /* tabs wrap instead of scrolling sideways: a hidden-scrollbar row pushed Gemini/Copilot off-screen on phones */
+  .tabs{display:flex;flex-wrap:wrap;gap:2px;border-bottom:1px solid var(--line);background:rgba(0,0,0,.18)}
   .tabs button{font-family:var(--mono);font-size:12px;letter-spacing:.04em;text-transform:uppercase;font-weight:500;border:0;background:transparent;color:var(--ink-soft);padding:13px 17px;cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .15s}
   .tabs button.on{color:var(--ink);border-bottom-color:var(--accent)}
   .tabs button:hover{color:var(--ink)}
   .cmd{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:19px 20px;font-family:var(--mono);font-size:14px}
-  .cmd code{color:var(--ink);white-space:nowrap;overflow:auto;scrollbar-width:none}
-  .cmd code::-webkit-scrollbar{display:none}
+  .cmd+.cmd{border-top:1px dashed var(--line)}
+  .cmd .step{flex:none;font-size:11px;letter-spacing:.1em;color:var(--ink-soft);width:16px}
+  .cmd code{flex:1;min-width:0;color:var(--ink);overflow-wrap:anywhere;text-align:left}
   .cmd code .dim{color:var(--accent-soft)}
-  .copy{font-family:var(--mono);font-size:11px;letter-spacing:.08em;font-weight:600;border:1px solid var(--line-2);background:rgba(0,0,0,.12);color:var(--ink-soft);border-radius:7px;padding:8px 13px;cursor:pointer;transition:.15s}
+  .cmd-note{padding:0 20px 16px;font-family:var(--mono);font-size:12px;color:var(--ink-soft);text-align:left}
+  .cmd-note:empty{display:none}
+  @media(max-width:560px){
+    .tabs{display:grid;grid-template-columns:repeat(3,1fr)}
+    .tabs button{padding:12px 6px;font-size:11px;letter-spacing:.02em}
+    .cmd{padding:16px 14px;font-size:13px;gap:10px}
+    .cmd-note{padding:0 14px 14px}
+  }
+  .copy{flex:none;font-family:var(--mono);font-size:11px;letter-spacing:.08em;font-weight:600;border:1px solid var(--line-2);background:rgba(0,0,0,.12);color:var(--ink-soft);border-radius:7px;padding:8px 13px;cursor:pointer;transition:.15s}
   .copy:hover{color:var(--accent-soft);border-color:var(--accent)}
   .copy:active{transform:scale(.96)}
   .copy.copied{color:#5FD08A;border-color:#5FD08A}
@@ -158,7 +173,7 @@
   .stage-body .role{color:#8E86F4}
   .stage-body .ok{color:#5FD08A}
   .stage-body .you{color:#6FA0F0}
-  .stage-body .dim{color:#6C7088}
+  .stage-body .dim{color:#7E8399}   /* 5.2:1 on --term */
   .cur{color:#8E86F4;animation:blink 1s steps(2,jump-none) infinite}
   @keyframes fadein{to{opacity:1}}
   @keyframes blink{50%{opacity:0}}
@@ -180,7 +195,7 @@
     .stage-mini{display:block;margin-top:18px;border:1px solid var(--line-2);border-radius:12px;background:var(--term);overflow:hidden}
     .sm-bar{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid rgba(255,255,255,.08);font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:#9aa0b4}
     .sm-body{font-family:var(--mono);font-size:12.5px;line-height:1.85;padding:14px;color:#D7DAE6}
-    .sm-body .role{color:#8E86F4}.sm-body .ok{color:#5FD08A}.sm-body .you{color:#6FA0F0}.sm-body .dim{color:#6C7088}
+    .sm-body .role{color:#8E86F4}.sm-body .ok{color:#5FD08A}.sm-body .you{color:#6FA0F0}.sm-body .dim{color:#7E8399}
     .sm-foot{border-top:1px solid rgba(255,255,255,.08);padding:11px 14px;font-family:var(--mono);font-size:11.5px;color:#8B90A6}}
 
   /* ---------- section heads ---------- */
@@ -200,7 +215,7 @@
   .fig .corner{position:absolute;width:13px;height:13px;border:1.5px solid var(--accent);opacity:.6}
   .fig .tl{top:11px;left:11px;border-right:0;border-bottom:0}.fig .tr{top:11px;right:11px;border-left:0;border-bottom:0}
   .fig .bl{bottom:11px;left:11px;border-right:0;border-top:0}.fig .br{bottom:11px;right:11px;border-left:0;border-top:0}
-  .fig .cap{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:14px}
+  .fig .cap{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:14px}
   .fig h3{font-family:var(--serif);font-style:italic;font-weight:500;font-size:25px;margin-bottom:10px}
   .fig p{font-size:14.5px;color:var(--ink-soft)}
   .fig .tag{display:inline-block;font-family:var(--mono);font-size:11px;color:var(--accent-soft);border:1px solid color-mix(in srgb,var(--accent) 40%,transparent);background:color-mix(in srgb,var(--accent) 12%,transparent);border-radius:999px;padding:3px 10px;margin-top:16px}
@@ -221,7 +236,7 @@
   .platforms{margin-top:42px;border:1px solid var(--line);border-radius:14px;background:var(--bg2);padding:28px;display:flex;gap:20px;justify-content:center;flex-wrap:wrap;align-items:center}
   .platforms span{font-family:var(--mono);font-size:13px;color:var(--ink-soft);display:flex;align-items:center;gap:9px}
   .platforms span::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--accent)}
-  .closing{text-align:center;margin:112px 0 0;padding:74px 0;border-top:1px solid var(--line);position:relative}
+  .closing{text-align:center;margin:112px 0 0;padding:74px 0;border-top:1px solid var(--line);position:relative;overflow-x:clip}   /* the 700px glow below must not widen the page on phones */
   .closing::before{content:"";position:absolute;top:-30%;left:50%;width:700px;height:540px;transform:translateX(-50%);z-index:-1;background:radial-gradient(closest-side,rgba(92,80,232,.18),transparent 70%);filter:blur(24px)}
   .closing h2{font-family:var(--serif);font-style:italic;font-weight:500;font-size:clamp(32px,5.4vw,56px)}
   .closing p{color:var(--ink-soft);margin:16px auto 0;max-width:520px}
@@ -260,9 +275,9 @@
   /* ---------- command index ---------- */
   .cmd-index{margin-top:46px}
   .cmd-group{margin-top:26px}
-  .cmd-group h4{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-soft);margin-bottom:13px;display:flex;align-items:center;gap:12px}
-  .cmd-group h4 .n{color:var(--ink-dim);font-weight:400}
-  .cmd-group h4::after{content:"";flex:1;height:1px;background:var(--line)}
+  .cmd-group h3{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-soft);margin-bottom:13px;display:flex;align-items:center;gap:12px}
+  .cmd-group h3 .n{color:var(--ink-soft);font-weight:400}
+  .cmd-group h3::after{content:"";flex:1;height:1px;background:var(--line)}
   .cmd-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(248px,1fr));gap:9px}
   .cmd-item{border:1px solid var(--line);border-radius:9px;padding:11px 13px;background:var(--bg2);transition:border-color .25s var(--ease),transform .25s var(--ease),background .25s var(--ease)}
   .cmd-item:hover{border-color:color-mix(in srgb,var(--accent) 55%,var(--line));background:color-mix(in srgb,var(--accent) 6%,var(--bg2));transform:translateY(-2px)}
@@ -271,8 +286,8 @@
 
   /* ---------- team roster (grouped + explained) ---------- */
   .team-groups{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:26px 30px;margin-top:40px;text-align:left}
-  .team-col h4{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-soft);margin-bottom:8px;display:flex;align-items:center;gap:10px}
-  .team-col h4::after{content:"";flex:1;height:1px;background:var(--line)}
+  .team-col h3{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-soft);margin-bottom:8px;display:flex;align-items:center;gap:10px}
+  .team-col h3::after{content:"";flex:1;height:1px;background:var(--line)}
   .role{padding:9px 0;border-bottom:1px dashed var(--line)}
   .role:last-child{border-bottom:0}
   .role .rn{font-family:var(--mono);font-size:13px;color:var(--ink)}
@@ -286,6 +301,8 @@
   .faq summary::after{content:"+";font-family:var(--mono);color:var(--accent-soft);font-size:19px;line-height:1}
   .faq details[open] summary::after{content:"\2013"}
   .faq details p{padding:0 20px 18px;color:var(--ink-soft);font-size:14.5px;line-height:1.6}
+  .faq a,.section-head .sub a{color:var(--accent-soft)}
+  .fig code{font-family:var(--mono);font-size:.9em;color:var(--accent-soft)}
   .faq code{font-family:var(--mono);font-size:.88em;color:var(--accent-soft)}
 
   @media(prefers-reduced-motion:reduce){*{animation:none!important}.tilt-layer{transition:none}body.crooked .tilt-layer{transform:none}}
@@ -300,6 +317,7 @@
   <div class="brand"><span class="mark" data-mark="sm"></span> <span class="wordmark">naksha<span class="hy">-</span>studio</span></div>
   <div class="nav-links">
     <a href="#stage">How it works</a>
+    <a href="#v6">New in v6</a>
     <a href="#commands">Commands</a>
     <a href="#team">The team</a>
     <div class="theme" id="theme" role="group" aria-label="Color theme">
@@ -311,6 +329,7 @@
   </div>
 </div></nav>
 
+<main id="main">
 <header class="hero"><div class="wrap">
   <div class="lockup">
     <span class="mark mark--replay" id="heromark" data-mark="lg" title="click to replay"></span>
@@ -318,28 +337,32 @@
     <span class="wm-rule"></span>
     <p class="eyebrow">A virtual design agency in your terminal.</p>
   </div>
+  <a class="v6-pill" href="#v6"><b>New</b> v6 beta · Naksha Live, free lint, costs →</a>
   <h1>There are many AI design tools<br>but this one is a <span class="pop">studio</span></h1>
   <p class="lede">naksha assembles 30 specialist roles — a creative director, UX designer, UI designer, content designer, and more — to take a screen from brief to built. <span class="muted">You run one command. The whole agency shows up.</span></p>
 
   <div class="install" id="install">
-    <div class="tabs" id="tabs">
-      <button class="on" data-cmd="claude">Claude Code</button>
-      <button data-cmd="cursor">Cursor</button>
-      <button data-cmd="windsurf">Windsurf</button>
-      <button data-cmd="gemini">Gemini CLI</button>
-      <button data-cmd="copilot">Copilot</button>
+    <div class="tabs" id="tabs" role="group" aria-label="Install for">
+      <button class="on" aria-pressed="true" data-cmd="claude">Claude Code</button>
+      <button aria-pressed="false" data-cmd="cursor">Cursor</button>
+      <button aria-pressed="false" data-cmd="windsurf">Windsurf</button>
+      <button aria-pressed="false" data-cmd="gemini">Gemini CLI</button>
+      <button aria-pressed="false" data-cmd="copilot">Copilot</button>
+      <button aria-pressed="false" data-cmd="autohand">Autohand</button>
     </div>
-    <div class="cmd">
-      <code id="cmdtext"><span class="dim">/plugin marketplace add</span> Adityaraj0421/naksha-studio</code>
-      <button class="copy" id="copy" aria-live="polite" aria-label="Copy install command">[ COPY ]</button>
+    <div id="cmdrows">
+      <div class="cmd"><span class="step">1</span><code><span class="dim">/plugin marketplace add</span> Adityaraj0421/naksha-studio</code><button class="copy" aria-label="Copy step 1">[ COPY ]</button></div>
+      <div class="cmd"><span class="step">2</span><code><span class="dim">/plugin install</span> naksha@naksha</code><button class="copy" aria-label="Copy step 2">[ COPY ]</button></div>
     </div>
+    <p class="cmd-note" id="cmdnote">Run each line inside Claude Code (2.1.72+). Update later with <code>claude plugin update naksha</code>.</p>
+    <span class="sr-only" id="copystatus" aria-live="polite"></span>
   </div>
 
   <div class="stat-row">
     <span class="stat"><b>30</b> specialist roles</span>
     <span class="stat"><b>70</b> commands</span>
-    <span class="stat"><b>15k+</b> lines of design knowledge</span>
-    <span class="stat"><b>5</b> platforms</span>
+    <span class="stat"><b>16,000+</b> lines of design knowledge</span>
+    <span class="stat"><b>6</b> platforms</span>
   </div>
 </div></header>
 
@@ -392,6 +415,53 @@
       <input class="ba-range" id="baRange" type="range" min="2" max="98" value="52" aria-label="Drag to compare the before and after design">
     </div>
     <p class="ba-cap">drag the handle ↔ · or use arrow keys</p>
+  </div>
+</div></section>
+
+<!-- v6 story (source: CHANGELOG.md v6.0.0-beta) -->
+<section id="v6"><div class="wrap">
+  <div class="section-head">
+    <span class="eyebrow">New in v6 (beta)</span>
+    <h2>Watch the team work. Know what it costs.</h2>
+    <p class="sub">v6 makes the design team observable, measurable and cheaper to trust. Everything runs locally, with no telemetry. It's a pre-release, so please <a href="https://github.com/Adityaraj0421/naksha-studio/issues">report what breaks</a>.</p>
+  </div>
+  <div class="figures">
+    <div class="fig">
+      <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+      <div class="cap">v6 · 01 — Naksha Live</div><h3>Your design team, live</h3>
+      <p>An optional local dashboard: a live org chart of the 30 roles, an activity stream, project memory, review findings and cost. Bound to 127.0.0.1, token-protected, and off until you set it up.</p>
+      <span class="tag">/naksha-dashboard setup</span>
+    </div>
+    <div class="fig">
+      <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+      <div class="cap">v6 · 02 — Free lint</div><h3>Design lint with no AI bill</h3>
+      <p>22 deterministic rules: WCAG AA contrast, spacing grid, type scale, focus-visible, reduced motion, alt text and common AI-design clichés. It runs after every UI edit at no token cost, with <code>--json</code> and CI exit codes.</p>
+      <span class="tag">/design-detect</span>
+    </div>
+    <div class="fig">
+      <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+      <div class="cap">v6 · 03 — Cost</div><h3>See what each command costs</h3>
+      <p>Tokens and estimated cost per naksha command, read from your local Claude Code transcripts, against optional monthly and per-command budgets. Budgets warn; they never block.</p>
+      <span class="tag">/naksha-stats --since 2026-10-01</span>
+    </div>
+    <div class="fig">
+      <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+      <div class="cap">v6 · 04 — DESIGN.md</div><h3>Your design system, in the open</h3>
+      <p>Lint, import and export DESIGN.md files: contrast checks, import from DTCG JSON or CSS variables, export to DTCG, CSS or Tailwind. <code>/design</code> reads your project's design system before it builds.</p>
+      <span class="tag">/design-md lint · import · export</span>
+    </div>
+    <div class="fig">
+      <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+      <div class="cap">v6 · 05 — Votes</div><h3>Teach it with a vote</h3>
+      <p>Mark a design, variant, finding or run Helpful or Needs work. Votes stay in <code>.naksha/votes.jsonl</code>, consolidate into your taste profile, and flag evals where the judge passed something you didn't.</p>
+      <span class="tag">/naksha-vote needs-work … because …</span>
+    </div>
+    <div class="fig">
+      <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+      <div class="cap">v6 · 06 — Verified review</div><h3>Findings, checked first</h3>
+      <p>Design review findings follow a schema and pass a verifier step before you see them, so the critique you read is one the team has already checked.</p>
+      <span class="tag">/design-review</span>
+    </div>
   </div>
 </div></section>
 
@@ -466,7 +536,7 @@
   </div>
   <div class="team-groups" id="teamroster"></div>
   <div class="platforms">
-    <span>Claude Code</span><span>Cursor</span><span>Windsurf</span><span>Gemini CLI</span><span>Copilot</span>
+    <span>Claude Code</span><span>Cursor</span><span>Windsurf</span><span>Gemini CLI</span><span>Copilot</span><span>Autohand Code CLI</span>
   </div>
 </div></section>
 
@@ -478,11 +548,11 @@
   </div>
   <div class="faq">
     <details><summary>Is it really free?</summary><p>Yes — naksha-studio is MIT-licensed and free. There's no naksha account and no separate API key; it runs on whatever AI coding tool you already use.</p></details>
-    <details><summary>Which tools does it work in?</summary><p>Claude Code gets the full plugin — all 70 slash-commands. Cursor, Windsurf, Gemini CLI, and Copilot load the same design-team rules so the agency activates automatically on your design files. The install box up top gives the exact command for each.</p></details>
-    <details><summary>What's the difference between the Claude Code install and the others?</summary><p>Claude Code installs as a marketplace plugin (<code>/plugin marketplace add …</code>) with every command available. The others drop a single rules file (<code>.cursor/rules</code>, <code>.windsurfrules</code>, <code>GEMINI.md</code>, or <code>copilot-instructions.md</code>) so the same 30-role team guides design work inline.</p></details>
-    <details><summary>Does it send my code anywhere?</summary><p>No. naksha is just commands and skills that run inside your AI tool — there's no naksha server and no telemetry. The only time it reaches the network is when you point <code>/naksha-browse</code> or an audit command at a URL you choose.</p></details>
-    <details><summary>What does it cost to run?</summary><p>naksha itself is free; it spends the tokens of the AI tool you're already paying for. No extra subscription.</p></details>
-    <details><summary>How do I update it?</summary><p>For the Claude Code plugin, <code>git pull</code> — it's a live symlink, no reinstall. For the rules-file installs, re-run the one-line <code>curl</code> from the install box.</p></details>
+    <details><summary>Which tools does it work in?</summary><p>Claude Code gets the full plugin: all 70 slash commands, the v6 hooks and the Naksha Live dashboard. Cursor, Windsurf, Gemini CLI and Copilot load the same design-team rules, so the agency activates automatically on your design files. Autohand Code CLI reads <code>AGENTS.md</code> and loads the naksha design skill. The install box up top gives the exact command for each.</p></details>
+    <details><summary>What's the difference between the Claude Code install and the others?</summary><p>Claude Code installs as a marketplace plugin (<code>/plugin marketplace add …</code>) with every command available. The others drop a rules file (<code>.cursor/rules</code>, <code>.windsurfrules</code>, <code>GEMINI.md</code> or <code>copilot-instructions.md</code>), or for Autohand Code CLI <code>AGENTS.md</code> plus the design skill, so the same 30-role team guides design work inline.</p></details>
+    <details><summary>Does it send my code anywhere?</summary><p>naksha has no server and collects no telemetry; its hooks, scripts and prompts never send anything about you or your project. Your AI tool still sends your conversation to its model provider, as it would without naksha (naksha adds only a short project index). Beyond that, the network is reached only through tools you choose: MCP servers you connect, such as Figma, Playwright or image generation, talk to their own services, and <code>/design-reel</code>'s Remotion renderer may download a headless browser and Google Fonts the first time it renders. Project memory stays in <code>.naksha/</code> in your repo. Full details: <a href="https://github.com/Adityaraj0421/naksha-studio/blob/main/docs/privacy.md">docs/privacy.md</a>.</p></details>
+    <details><summary>What does it cost to run?</summary><p>naksha itself is free; it spends the tokens of the AI tool you're already paying for. No extra subscription. In Claude Code, <code>/naksha-stats</code> shows tokens and estimated cost per naksha command from your local transcripts and can warn against a monthly or per-command budget. <code>/design-detect</code> lint makes no AI calls at all.</p></details>
+    <details><summary>How do I update it?</summary><p>Marketplace install (the one in the box above): run <code>claude plugin update naksha</code> in your terminal, then restart Claude Code. Local clone: <code>git pull</code> alone doesn't reach Claude Code, because it runs a cached copy of the plugin that refreshes only when the version changes or you reinstall; after pulling a new release, re-run <code>bash install.sh</code>. Cursor, Windsurf, Gemini CLI, Copilot and Autohand: re-run the command from the install box.</p></details>
   </div>
 </div></section>
 
@@ -493,6 +563,7 @@
   <a class="cta" href="https://github.com/Adityaraj0421/naksha-studio">Get naksha →</a>
   <div class="cta-note">MIT licensed · free · works where you already code</div>
 </div></section>
+</main>
 
 <footer><div class="wrap foot-inner">
   <span class="wordmark" style="font-size:13px">naksha<span class="hy">-</span>studio</span>
@@ -549,33 +620,46 @@
   // Real per-platform installs. Claude = marketplace plugin; the rest drop naksha's
   // rules file into the project from the repo (matches README's documented setup).
   const RAW='https://raw.githubusercontent.com/Adityaraj0421/naksha-studio/main';
+  // Each entry is the list of commands to run in order (one row + copy button each) plus a note.
+  const REPO='https://github.com/Adityaraj0421/naksha-studio.git';
+  const RULES_NOTE='Run in your project root. Re-run to update.';
   const CMDS={
-    claude:'<span class="dim">/plugin marketplace add</span> Adityaraj0421/naksha-studio',
-    cursor:`<span class="dim">mkdir -p .cursor/rules &amp;&amp; curl -sL</span> ${RAW}/.cursor/rules/naksha.mdc <span class="dim">-o</span> .cursor/rules/naksha.mdc`,
-    windsurf:`<span class="dim">curl -sL</span> ${RAW}/.windsurfrules <span class="dim">-o</span> .windsurfrules`,
-    gemini:`<span class="dim">curl -sL</span> ${RAW}/GEMINI.md <span class="dim">-o</span> GEMINI.md`,
-    copilot:`<span class="dim">mkdir -p .github &amp;&amp; curl -sL</span> ${RAW}/.github/copilot-instructions.md <span class="dim">-o</span> .github/copilot-instructions.md`,
+    claude:{rows:['<span class="dim">/plugin marketplace add</span> Adityaraj0421/naksha-studio','<span class="dim">/plugin install</span> naksha@naksha'],
+      note:'Run each line inside Claude Code (2.1.72+). Update later with <code>claude plugin update naksha</code>.'},
+    cursor:{rows:[`<span class="dim">mkdir -p .cursor/rules &amp;&amp; curl -sL</span> ${RAW}/.cursor/rules/naksha.mdc <span class="dim">-o</span> .cursor/rules/naksha.mdc`],note:RULES_NOTE},
+    windsurf:{rows:[`<span class="dim">curl -sL</span> ${RAW}/.windsurfrules <span class="dim">-o</span> .windsurfrules`],note:RULES_NOTE},
+    gemini:{rows:[`<span class="dim">curl -sL</span> ${RAW}/GEMINI.md <span class="dim">-o</span> GEMINI.md`],note:RULES_NOTE},
+    copilot:{rows:[`<span class="dim">mkdir -p .github &amp;&amp; curl -sL</span> ${RAW}/.github/copilot-instructions.md <span class="dim">-o</span> .github/copilot-instructions.md`],note:RULES_NOTE},
+    autohand:{rows:[`<span class="dim">git clone --depth 1</span> ${REPO} <span class="dim">/tmp/naksha</span>`,
+      '<span class="dim">cp</span> /tmp/naksha/AGENTS.md . <span class="dim">&amp;&amp; mkdir -p</span> .autohand/skills <span class="dim">&amp;&amp; cp -r</span> /tmp/naksha/skills/design .autohand/skills/naksha-design'],
+      note:'Run in your project root. Autohand Code CLI reads AGENTS.md and loads the naksha-design skill.'},
   };
-  const tabs=document.getElementById('tabs'), cmd=document.getElementById('cmdtext');
+  const tabs=document.getElementById('tabs'), rowsEl=document.getElementById('cmdrows'),
+        noteEl=document.getElementById('cmdnote'), copyStatus=document.getElementById('copystatus');
+  function renderCmd(key){
+    const c=CMDS[key], multi=c.rows.length>1;
+    rowsEl.innerHTML=c.rows.map((r,i)=>`<div class="cmd">${multi?`<span class="step">${i+1}</span>`:''}<code>${r}</code><button class="copy" aria-label="Copy ${multi?'step '+(i+1):'install command'}">[ COPY ]</button></div>`).join('');
+    noteEl.innerHTML=c.note;
+  }
   tabs.addEventListener('click',e=>{const b=e.target.closest('button'); if(!b)return;
-    [...tabs.children].forEach(x=>x.classList.toggle('on',x===b)); cmd.innerHTML=CMDS[b.dataset.cmd];});
-  const copyBtn=document.getElementById('copy');
-  function selectCmd(){ const r=document.createRange(); r.selectNodeContents(cmd); const s=getSelection(); s.removeAllRanges(); s.addRange(r); }
-  copyBtn.addEventListener('click',async e=>{
-    const btn=e.currentTarget;
+    [...tabs.children].forEach(x=>{const on=x===b; x.classList.toggle('on',on); x.setAttribute('aria-pressed',on);}); renderCmd(b.dataset.cmd);});
+  function selectCode(code){ const r=document.createRange(); r.selectNodeContents(code); const s=getSelection(); s.removeAllRanges(); s.addRange(r); }
+  rowsEl.addEventListener('click',async e=>{
+    const btn=e.target.closest('.copy'); if(!btn) return;
+    const code=btn.parentElement.querySelector('code');
     try{
       if(!navigator.clipboard) throw 0;
-      await navigator.clipboard.writeText(cmd.textContent);
-      btn.textContent='[ COPIED ]'; btn.classList.add('copied');
-      setTimeout(()=>{ btn.textContent='[ COPY ]'; btn.classList.remove('copied'); },1400);
-    }catch{ selectCmd(); btn.textContent='[ PRESS ⌘C ]'; setTimeout(()=>btn.textContent='[ COPY ]',2200); }
+      await navigator.clipboard.writeText(code.textContent);
+      btn.textContent='[ COPIED ]'; btn.classList.add('copied'); copyStatus.textContent='Copied to clipboard';
+      setTimeout(()=>{ btn.textContent='[ COPY ]'; btn.classList.remove('copied'); copyStatus.textContent=''; },1400);
+    }catch{ selectCode(code); btn.textContent='[ SELECTED ]'; copyStatus.textContent='Command selected, press Ctrl+C or Command+C to copy'; setTimeout(()=>btn.textContent='[ COPY ]',2200); }
   });
 
   // ---- command index + team roster (data-driven; data pulled from commands/*.md + SKILL.md) ----
   const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
   const COMMANDS = [{"cat":"Design & build","items":[{"n":"/design","d":"Design anything"},{"n":"/design-template","d":"Generate a production-ready web page from a curated template…"},{"n":"/design-framework","d":"Convert HTML/CSS design output to framework-specific component…"},{"n":"/design-system","d":"Generate design tokens, theme configuration, or extract a…"},{"n":"/design-md","d":"Lint, import and export DESIGN.md design systems"},{"n":"/design-sprint","d":"Guided design sprint methodology"},{"n":"/design-tutorial","d":"Interactive guided tour of Naksha"},{"n":"/design-variants","d":"Compare 2–5 distinct directions side by side, then pick"}]},{"cat":"Figma & handoff","items":[{"n":"/figma","d":"Convert a Figma design to production code"},{"n":"/figma-create","d":"Create designs directly in Figma"},{"n":"/figma-component-library","d":"Generate a complete component library in Figma from a design…"},{"n":"/figma-prototype","d":"Create interactive prototype connections between Figma frames"},{"n":"/figma-responsive","d":"Generate mobile and tablet variants from a desktop Figma wireframe"},{"n":"/figma-sync","d":"Detect drift between Figma designs and code implementation"},{"n":"/site-to-figma","d":"Capture a live website and recreate its layout in Figma as…"},{"n":"/design-handoff","d":"Generate a developer handoff document from a Figma file"},{"n":"/design-present","d":"Generate an interactive HTML presentation from Figma screens"},{"n":"/component-docs","d":"Auto-generate component documentation from Figma"}]},{"cat":"Review & audit","items":[{"n":"/design-review","d":"Review an existing design for quality"},{"n":"/design-detect","d":"Free, instant design lint — contrast, spacing, type scale, clichés"},{"n":"/design-critique","d":"UX heuristic review of Figma screens"},{"n":"/design-qa","d":"Visual QA on an HTML/CSS implementation"},{"n":"/design-score","d":"Quantitative 0–100 design quality score across Accessibility,…"},{"n":"/ux-audit","d":"Audit a Figma file against a design brief"},{"n":"/accessibility-audit","d":"Full WCAG AA accessibility audit on an HTML file"},{"n":"/lint-design","d":"Scan a Figma file for design quality issues"},{"n":"/design-compare","d":"Capture two websites with Playwright and produce a structured…"},{"n":"/competitive-audit","d":"Capture a competitor website with Playwright and extract its…"},{"n":"/ab-variants","d":"Generate A/B test design variants from an existing Figma screen"}]},{"cat":"Brand","items":[{"n":"/brand-strategy","d":"Define or audit a brand"},{"n":"/brand-kit","d":"Generate a complete brand kit from a logo and 1-2 brand colors"}]},{"cat":"Social","items":[{"n":"/social-content","d":"Design social media visual content"},{"n":"/social-campaign","d":"Plan a social media campaign"},{"n":"/social-analytics","d":"Design a social media analytics dashboard, generate a…"}]},{"cat":"Email","items":[{"n":"/email-template","d":"Generate a production-ready HTML email template"},{"n":"/email-campaign","d":"Plan and write a complete multi-email campaign sequence"},{"n":"/email-audit","d":"Full-spectrum email audit"}]},{"cat":"Data viz","items":[{"n":"/chart-design","d":"Design a chart or data visualization"},{"n":"/dashboard-layout","d":"Design and build a complete dashboard layout"},{"n":"/data-viz-audit","d":"Audit a data visualization for chart type selection,…"}]},{"cat":"Motion, video & decks","items":[{"n":"/motion-design","d":"Design micro-interactions, transitions, and animation systems…"},{"n":"/illustration-system","d":"Design an illustration style guide, icon system, or SVG asset…"},{"n":"/presentation-design","d":"Design a complete presentation deck"},{"n":"/video-script","d":"Write a video script, storyboard, or content series plan for…"},{"n":"/design-reel","d":"Record naksha's design team working"}]},{"cat":"AI generation","items":[{"n":"/gen-image","d":"Generate a brand-aligned AI image"},{"n":"/gen-video","d":"Generate video output in one of three modes: Remotion…"},{"n":"/gen-audio","d":"Generate an AI audio brief"},{"n":"/gen-moodboard","d":"Generate 3 AI moodboard directions for a concept or campaign"},{"n":"/prompt-refine","d":"Diagnose and optimize any AI gen prompt"}]},{"cat":"Print","items":[{"n":"/print-layout","d":"Design a single print artifact (business card, flyer,…"},{"n":"/pdf-report","d":"Generate a multi-page print-ready report or document layout…"},{"n":"/print-audit","d":"Audit a print layout for bleed, safe zone, color mode, font…"}]},{"cat":"Conversational & spatial","items":[{"n":"/design-chatbot","d":"Design a complete chatbot or conversational assistant UI"},{"n":"/design-voice-ui","d":"Design a voice interface"},{"n":"/design-spatial","d":"Design a spatial computing interface for visionOS, Vision Pro,…"},{"n":"/design-ar-overlay","d":"Design an AR overlay interface"}]},{"cat":"Compliance","items":[{"n":"/design-compliance","d":"Audit or generate regulation-specific UI patterns for HIPAA,…"},{"n":"/design-gdpr","d":"Design GDPR/CCPA-compliant consent flows"}]},{"cat":"Project & memory","items":[{"n":"/naksha-init","d":"Initialize Naksha project memory"},{"n":"/naksha-remember","d":"Record a design constraint, component pattern, or decision to…"},{"n":"/naksha-taste","d":"Teach naksha your taste: the directions you like and don't"},{"n":"/naksha-vote","d":"Vote Helpful or Needs work — teaches taste, keeps judges honest"},{"n":"/naksha-dashboard","d":"Watch your design team work live, in a local dashboard"},{"n":"/naksha-stats","d":"See tokens and estimated cost per command, against your budget"},{"n":"/naksha-status","d":"Show current Naksha project memory"},{"n":"/naksha-browse","d":"Browse any URL with browser vision"},{"n":"/naksha-doctor","d":"Run all naksha quality checks and report the plugin's health…"},{"n":"/naksha-help","d":"Quick-reference for any Naksha command"},{"n":"/pipeline","d":"Run multi-command design pipelines"}]}];
   const ci=document.getElementById('cmdindex');
-  if(ci) ci.innerHTML=COMMANDS.map(g=>`<div class="cmd-group"><h4>${esc(g.cat)} <span class="n">${g.items.length}</span></h4><div class="cmd-grid">${g.items.map(c=>`<div class="cmd-item"><div class="cn">${esc(c.n)}</div><div class="cd">${esc(c.d)}</div></div>`).join('')}</div></div>`).join('');
+  if(ci) ci.innerHTML=COMMANDS.map(g=>`<div class="cmd-group"><h3>${esc(g.cat)} <span class="n">${g.items.length}</span></h3><div class="cmd-grid">${g.items.map(c=>`<div class="cmd-item"><div class="cn">${esc(c.n)}</div><div class="cd">${esc(c.d)}</div></div>`).join('')}</div></div>`).join('');
 
   const ROLES=[
     {group:'Leadership',items:[{r:'Creative Director',d:'Sets the visual vision, mood, and creative direction'},{r:'Design Manager',d:'Reads the brief, assembles the team, ensures delivery'}]},
@@ -586,7 +670,7 @@
     {group:'AI & frontier',items:[{r:'AI Image Director',d:'Brand-aligned image-gen prompts and seeds'},{r:'AI Video Director',d:'Shot prompts for Runway, Kling, Sora, Pika'},{r:'AI Audio & Voice Producer',d:'Voiceover and music briefs, timing to video'},{r:'AI Prompt Engineer',d:'Reusable brand prompt libraries across tools'},{r:'Conversational Designer',d:'Chatbot UI, dialog flows, voice interfaces'},{r:'Spatial Designer',d:'visionOS, WebXR, AR overlays, depth UI'},{r:'Compliance Designer',d:'GDPR, HIPAA, PCI, ADA-compliant flows'}]},
   ];
   const tr=document.getElementById('teamroster');
-  if(tr) tr.innerHTML=ROLES.map(g=>`<div class="team-col"><h4>${esc(g.group)}</h4>${g.items.map(r=>`<div class="role"><div class="rn">${esc(r.r)}</div><div class="rd">${esc(r.d)}</div></div>`).join('')}</div>`).join('');
+  if(tr) tr.innerHTML=ROLES.map(g=>`<div class="team-col"><h3>${esc(g.group)}</h3>${g.items.map(r=>`<div class="role"><div class="rn">${esc(r.r)}</div><div class="rd">${esc(r.d)}</div></div>`).join('')}</div>`).join('');
 
   // ---- before/after compare slider ----
   (()=>{ const ba=document.getElementById('ba'), range=document.getElementById('baRange');
