@@ -18,7 +18,7 @@ Then, for each feature still marked **not on integration** below, give Claude it
 |---|---|---|---|---|
 | 4 | Verified design-review findings | 1 | `v6/verified-findings` | ✅ on integration |
 | 2 | Tiered, weighted evals + $0 dry run | 1 | `v6/tiered-evals` | ✅ on integration |
-| 1 | Free no-LLM design linter (`/design-detect` + hook) | 1 | `v6/design-linter` | building |
+| 1 | Free no-LLM design linter (`/design-detect` + hook) | 1 | `v6/design-linter` | ✅ on integration |
 | 9 | Role quality contracts + transcript diagnosis | 1 | `v6/role-contracts` | ✅ on integration |
 | 5 | DESIGN.md compatibility | 1 | `v6/design-md` | building |
 | 3 | Bounded browser self-check | 2 | `v6/browser-self-check` | ✅ on integration |

@@ -5713,6 +5713,93 @@
           "description": "Colors and spacing used are traced to named tokens rather than hardcoded values"
         }
       ]
+    },
+    {
+      "id": 199,
+      "name": "design-detect-changed-files-by-role",
+      "command": "/design-detect",
+      "prompt": "/design-detect (git shows src/pricing.html and src/pricing.css changed: an <img> without alt, a .badge with color #9a9a9a on background #fff, padding: 13px, and a :root that defines --color-text-muted: #6b6b6b while .note uses color: #6b6b6b)",
+      "expected_output": "Runs the deterministic linter on the two changed files with --json and explains each finding under the owning role with concrete before/after fixes that reuse the project's existing tokens",
+      "assertions": [
+        {
+          "name": "runs-linter-json",
+          "description": "runs node \"${CLAUDE_PLUGIN_ROOT}/scripts/design-lint.js\" --json on the changed files instead of judging the files by eye"
+        },
+        {
+          "name": "groups-by-role",
+          "description": "groups findings under role headings (UX Researcher for img-alt and contrast-aa, Design System Lead for spacing-grid and hardcoded-color)"
+        },
+        {
+          "name": "cites-rule-and-line",
+          "description": "names each rule id with its file and line number"
+        },
+        {
+          "name": "contrast-fix",
+          "description": "reports the .badge contrast as below 4.5:1 and proposes a darker text color that passes"
+        },
+        {
+          "name": "reuses-token",
+          "description": "suggests replacing #6b6b6b with var(--color-text-muted) rather than inventing a new token"
+        },
+        {
+          "name": "errors-first",
+          "description": "orders roles with errors before roles with only warnings and points to /design-review or /design-score for judgment calls"
+        }
+      ]
+    },
+    {
+      "id": 200,
+      "name": "design-detect-nothing-to-lint",
+      "command": "/design-detect",
+      "prompt": "/design-detect (the only changed files in git are README.md and package.json)",
+      "expected_output": "Says there is nothing to lint because no HTML, CSS or component files changed, and does not report a score",
+      "assertions": [
+        {
+          "name": "filters-extensions",
+          "description": "filters the git change list to .html/.css/.scss/.jsx/.tsx/.vue/.svelte files"
+        },
+        {
+          "name": "nothing-to-lint",
+          "description": "states that there is nothing to lint"
+        },
+        {
+          "name": "no-fake-score",
+          "description": "does not report a 100/100 score or say all checks passed"
+        },
+        {
+          "name": "suggests-next-step",
+          "description": "suggests passing files explicitly (e.g. /design-detect src/index.html) if the user wanted a specific file checked"
+        }
+      ]
+    },
+    {
+      "id": 201,
+      "name": "design-detect-ai-slop-cliches",
+      "command": "/design-detect",
+      "prompt": "/design-detect src/landing.html (hero uses linear-gradient(135deg, #667eea, #764ba2), four cards with backdrop-filter: blur(12px), feature list items that start with \ud83d\ude80 \u2728 \ud83d\udd12, and an <h1>Unlock the power of your data</h1>; .naksha/project.json has brand.primary #0f766e)",
+      "expected_output": "Reports the slop-* findings as taste warnings owned by the Creative Director and Content Designer, explains why each pattern reads as generic, and proposes brand-led alternatives using the teal primary",
+      "assertions": [
+        {
+          "name": "flags-slop-rules",
+          "description": "reports slop-gradient-hero, slop-glassmorphism, slop-emoji-bullets and slop-generic-copy"
+        },
+        {
+          "name": "taste-not-defect",
+          "description": "frames slop findings as warnings about generic taste rather than accessibility defects"
+        },
+        {
+          "name": "brand-alternative",
+          "description": "proposes a hero treatment derived from brand.primary #0f766e instead of the blue-violet gradient"
+        },
+        {
+          "name": "emoji-a11y",
+          "description": "explains that screen readers announce emoji names at the start of each list item and suggests list styling or aria-hidden SVG icons"
+        },
+        {
+          "name": "concrete-copy",
+          "description": "rewrites the headline as a concrete outcome but leaves the final wording to the user"
+        }
+      ]
     }
   ]
 }

@@ -33,7 +33,7 @@ Display when no arguments are given:
 
 ```
 ━━━ Naksha Quick Reference ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Your virtual design team — 30 roles, 66 commands, 7 agents
+Your virtual design team — 30 roles, 67 commands, 7 agents
 
 CATEGORIES                                     Run /naksha-help <category>
 
@@ -81,6 +81,7 @@ When `$ARGUMENTS` matches a category name, display its commands.
   /design-present     Create a presentation-ready design deck
   /design-handoff     Generate developer-ready specs
   /design-score       Quantitative design quality score (0–100)
+  /design-detect      Free no-AI lint: contrast, spacing grid, type scale, focus, clichés
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```

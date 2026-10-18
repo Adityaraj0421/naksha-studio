@@ -326,6 +326,7 @@ This skill is part of the **naksha** plugin. For focused workflows, use these co
 |---------|----------|
 | `/design <task>` | Full design workflow with team assembly |
 | `/design-reel <task> [--url <page>]` | Record the design team working — render a /design run into a share-able video reel (9:16 + 16:9) |
+| `/design-detect [files]` | Fast, free, no-AI check of HTML/CSS/components — contrast, spacing grid, type scale, focus and motion, AI-design clichés — grouped by the role that owns each fix |
 | `/design-review <file or screenshot>` | Audit an existing design — accepts HTML files, Figma URLs, screenshots (visual AI critique), or preview servers |
 | `/design-system` | Generate or extract design tokens |
 | `/figma <URL>` | Convert a Figma design to production code |

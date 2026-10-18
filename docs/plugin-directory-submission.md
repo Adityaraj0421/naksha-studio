@@ -31,14 +31,14 @@ Use this document when submitting to the Claude Code plugin directory.
 
 **Short description (≤160 chars):**
 ```
-A virtual design team for Claude Code — 30 roles, 66 commands, 16,000+ lines of design knowledge.
+A virtual design team for Claude Code — 30 roles, 67 commands, 16,000+ lines of design knowledge.
 ```
 
 **Long description:**
 ```
 Naksha assembles specialist roles automatically based on what you're designing. UI Designer, UX Researcher, Content Designer, Motion Designer, Figma Expert, Email Designer, Data Viz Designer, Brand Strategist, Conversational Designer, Spatial Designer, Compliance Designer, and more — 30 roles total.
 
-66 slash commands cover the full design-to-code pipeline: /design builds pages and components, /design-review audits for accessibility and usability, /design-system extracts tokens, /design-framework converts HTML to React/Vue/Svelte/Next.js/Astro, /figma-create builds Figma frames, /email-template generates production HTML emails, /chart-design produces accessible data visualizations, /design-chatbot designs chatbot UIs, /design-voice-ui designs voice interfaces, /design-spatial builds visionOS/WebXR specs, /design-gdpr generates GDPR consent flows, /design-compliance audits for HIPAA/PCI/ADA, and more.
+67 slash commands cover the full design-to-code pipeline: /design builds pages and components, /design-review audits for accessibility and usability, /design-system extracts tokens, /design-framework converts HTML to React/Vue/Svelte/Next.js/Astro, /figma-create builds Figma frames, /email-template generates production HTML emails, /chart-design produces accessible data visualizations, /design-chatbot designs chatbot UIs, /design-voice-ui designs voice interfaces, /design-spatial builds visionOS/WebXR specs, /design-gdpr generates GDPR consent flows, /design-compliance audits for HIPAA/PCI/ADA, and more.
 
 Over 16,000 lines of expert design knowledge, source-attributed from authoritative references (WCAG, Nielsen heuristics, Refactoring UI, MJML docs, Apple HIG, GDPR Art. 7/12/17, etc.).
 
@@ -82,6 +82,6 @@ Assets for the submission form:
 - [ ] GitHub release for that version exists and is tagged `Latest`
 - [ ] README has install instructions for both methods
 - [ ] `marketplace.json` is present in `.claude-plugin/`
-- [ ] All 66 commands work in Claude Code (including /design-reel with the Node render toolchain)
+- [ ] All 67 commands work in Claude Code (including /design-reel with the Node render toolchain)
 - [ ] validate-structure: all checks pass (`node scripts/validate-structure.js`)
 - [ ] quality-check: PASS (`bash scripts/quality-check.sh` — includes behavioral-smoke, guard-counts, and hook-smoke)
