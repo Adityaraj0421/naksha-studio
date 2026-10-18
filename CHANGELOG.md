@@ -2,6 +2,28 @@
 
 All notable changes to naksha are documented here.
 
+## v5.2.0 — Reliability (2026-10-18)
+
+A release about trust rather than new commands: every check naksha has now runs on every pull request, the silent SessionStart hook failure fixed in v5.1.2 can't come back unnoticed, and every command has at least one eval.
+
+**Always-on CI**
+- New `CI` workflow runs on every PR and push to `main` with no path filter: `quality-check.sh`, `validate-structure.js`, `run-evals.sh`, and the `@naksha/reel` unit tests. Previously `guard-counts`, `verify-metadata`, `run-evals`, and the reel tests never ran in CI, and no workflow triggered on `hooks/` or `scripts/` changes ([#20](https://github.com/Adityaraj0421/naksha-studio/pull/20)).
+- `scripts/hook-smoke.sh` (new, check 6 of `quality-check.sh`): runs every command hook from a plugin path containing spaces, with and without the executable bit, and checks every `.sh` is tracked as executable. It fails on both causes of the v5.1.2 SessionStart bug ([#17](https://github.com/Adityaraj0421/naksha-studio/issues/17)) if they come back.
+- `guard-counts.sh` now also covers `CONTRIBUTING.md`.
+
+**Eval coverage**
+- Evals for the three commands that had none: `/chart-design`, `/dashboard-layout`, `/design-reel` (two each; 175 cases, 856 assertions).
+- `run-evals.sh` now fails if any command in `commands/` has no eval, and warns when an eval targets a command that no longer exists ([#21](https://github.com/Adityaraj0421/naksha-studio/pull/21)).
+
+**CI maintenance & supply chain**
+- All workflows moved to the Node 24 majors of their actions (checkout v7, setup-node v7, github-script v8, configure-pages v6, upload-pages-artifact v5, deploy-pages v5) after GitHub removed Node 20 from runners; scripts now run on Node 22.
+- `design-check` no longer uses `tj-actions/changed-files` (compromised in CVE-2025-30066); it lists changed files with plain `git diff` ([#22](https://github.com/Adityaraj0421/naksha-studio/pull/22)).
+
+**Docs**
+- README documents both install methods: the `/plugin marketplace add` route and the `install.sh` local clone, with update steps for each.
+- `CONTRIBUTING.md`: corrected command count (39 → 63); Testing and Definition of Done now point at the suite CI runs.
+- `docs/plugin-directory-submission.md` refreshed from v4.0.0 to current.
+
 ## v5.1.2 — SessionStart hook fix (2026-10-18)
 
 **Fixed:** the `SessionStart` hook that detects project design context failed silently on every session for many installs, so naksha never picked up your project's stack or `.naksha/project.json` memory at startup. There were two causes, and either one was enough to break it:
