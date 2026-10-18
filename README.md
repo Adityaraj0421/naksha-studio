@@ -48,6 +48,8 @@ Then restart Claude Code and try:
 /design Build a landing page for a SaaS analytics product
 ```
 
+> **✨ New in v5.3 — taste memory:** `/design-variants Design a pricing page` builds three genuinely different directions side by side; tell naksha which you like with `/naksha-taste approve A`, and every later `/design` starts from your taste.
+
 > **✨ New in v5.1 — `/design-reel`:** record the design team working and render a share-able video of it (9:16 + 16:9). `/design-reel Design a pricing page for a SaaS analytics product` → a post-ready clip of your screen being designed, live. [Learn more ↓](#design-reel-task--watch-the-team-new-in-v51)
 
 > **Updates:** Marketplace installs update with `claude plugin update naksha`. Local clones: just `git pull` inside the repo — no reinstall needed, since the plugin is a live symlink to your clone.

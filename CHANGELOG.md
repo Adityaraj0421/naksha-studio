@@ -2,7 +2,27 @@
 
 All notable changes to naksha are documented here.
 
-## v5.2.0 — Reliability (2026-10-18)
+## v5.3.0 — Taste Memory (2026-10-18)
+
+naksha now learns what you like. Compare real design directions side by side, tell naksha which ones work for you, and every later design starts from your taste instead of generic defaults. Under the hood, the platform adapters are now generated from one source, so they can't drift apart again.
+
+**New commands (65 total)**
+- `/design-variants <task> [--count 2-5]` — builds 2–5 genuinely different directions for the same brief (default 3) into `naksha-variants/`, with a side-by-side comparison page. Every pair must differ on at least two of layout, type, color, density, and ornament. With a taste profile, most directions lean into it and one "Wildcard" deliberately doesn't. Constraints and brand apply to every variant ([#25](https://github.com/Adityaraj0421/naksha-studio/pull/25)).
+- `/naksha-taste [approve|reject <direction> [because …]]` — records your verdicts as `taste.signals` in `.naksha/project.json`; with no arguments, shows your taste profile. Signals fade with age (half weight after 90 days, ignored after 180), and taste learned for different kinds of projects isn't treated as a conflict.
+
+**Taste everywhere**
+- `/design`, the skill's creative-direction step, and `/naksha-status` read your taste profile. Taste is a preference: your request, constraints, and brand always win.
+- Schema: `taste.signals` (optional, no migration) documented in `docs/naksha-memory-schema.md` and `types/v5.ts`.
+
+**30 roles, one source of truth**
+- `adapters/roles.json` is now the canonical roster: 30 roles (the 28 specialists that have a reference file, plus Design Manager and Creative Director). It replaces the "26" that no two places agreed on: the adapters listed 22, and the README and the site each showed a different 26 ([#24](https://github.com/Adityaraj0421/naksha-studio/pull/24)).
+- `scripts/build-adapters.js` generates the role lists and Project Memory section of the Cursor, Windsurf, Gemini CLI, and Copilot adapters, plus the README team grid. Text outside the generated sections stays hand-written.
+- New checks, run in CI: adapters in sync with the source (`quality-check` step 7), every role reference file in the roster, every role on the landing page, and no stale role count anywhere it's stated (`guard-counts` check 3).
+
+**Evals**
+- 4 new evals for the new commands (179 cases, 880 assertions).
+
+— Reliability (2026-10-18)
 
 A release about trust rather than new commands: every check naksha has now runs on every pull request, the silent SessionStart hook failure fixed in v5.1.2 can't come back unnoticed, and every command has at least one eval.
 
