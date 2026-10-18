@@ -160,9 +160,12 @@ Run the full local suite — this is what the `CI` workflow runs on every PR:
 ```bash
 bash scripts/quality-check.sh        # metadata, behavioral smoke, design lint, branding, count drift, hook smoke, adapter sync
 node scripts/validate-structure.js   # file counts, version consistency, command frontmatter
-bash scripts/run-evals.sh            # eval structure and fixture references
+bash scripts/run-evals.sh            # eval structure, fixture references, and the $0 structural eval tier
 (cd packages/naksha-reel && node --test test/*.test.mjs)   # reel unit tests
+node --test scripts/test/            # eval-runner unit tests
 ```
+
+Evals are tiered (see [docs/evals.md](docs/evals.md)). `node scripts/eval-runner.js` runs the free structural tier; `--tier e2e` and `--tier judge` drive headless `claude -p` and only execute with `NAKSHA_EVALS_PAID=1` and `ANTHROPIC_API_KEY` set. Before any paid run, check the estimate with `--dry-run --budget <usd>`; it exits 3 when the estimate exceeds the budget. Assertions with a deterministic `check` and an explicit `fixture` are graded for free on every PR.
 
 If you touch `hooks/hooks.json` or a hook script, `bash scripts/hook-smoke.sh` runs every command hook from a plugin path containing spaces, with and without the executable bit, and checks every `.sh` file is tracked as executable. New shell scripts need `git update-index --chmod=+x <file>`.
 
