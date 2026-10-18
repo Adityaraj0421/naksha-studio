@@ -365,6 +365,8 @@ This skill is part of the **naksha** plugin. For focused workflows, use these co
 | **Memory & Pipelines** | |
 | `/naksha-init` | Set up project memory — stores brand colors, font, framework, token format in `.naksha/project.json` |
 | `/naksha-status` | Display current project context and last 10 design decisions from `.naksha/memory.md` |
+| `/design-variants <task> [--count 2-5]` | User wants options, alternatives, or "a few directions" to compare — builds 2–5 distinct directions side by side and records which ones they like |
+| `/naksha-taste [approve\|reject <direction>]` | User reacts to a direction ("I like this one", "not that") or asks what naksha has learned about their taste |
 | `/naksha-doctor` | Run all naksha quality checks and report the plugin's health status — structural validation, metadata consistency, behavioral smoke, legacy branding guard |
 | `/naksha-help` | Quick-reference for all commands — browse by category or look up a specific command |
 | `/pipeline <action>` | Run a multi-step design pipeline: `run <name>`, `list` available pipelines, `show <name>` to preview steps |
@@ -491,7 +493,7 @@ Before assembling roles, establish the creative direction (the Creative Director
 - **References**: Any existing brand, Figma files, or style precedent to follow
 - **Constraints**: What's non-negotiable (accessibility, responsive, performance, brand colors)
 
-If the user hasn't specified these, make tasteful default choices and state them clearly so the user can course-correct.
+If the user hasn't specified these, make tasteful default choices and state them clearly so the user can course-correct. When `.naksha/project.json` has active `taste.signals` (recorded with `/naksha-taste`), start from the user's approved traits and steer away from rejected ones instead of generic defaults — taste never overrides the request, constraints, or brand. If the user is unsure which direction they want, suggest `/design-variants`.
 
 ### Step 3 — Assemble the Team
 

@@ -153,6 +153,39 @@ All fields below are **optional and additive**. Existing v4 `project.json` files
 | `browser_findings[].score` | object | No | — | Design score snapshot (score mode only) |
 | `browser_findings[].source_command` | string | Yes (entry) | — | Which naksha command generated this finding |
 
+### v5.3 Field Additions: Taste (optional)
+
+Learned design taste, written by `/naksha-taste` and by verdicts given during `/design-variants`. Read by `/design`, `/design-variants`, and `/naksha-status`. Taste is a preference, not a rule: the request, `constraints`, and brand always win.
+
+```json
+"taste": {
+  "signals": [
+    {
+      "verdict": "approved",
+      "direction": "Editorial layout with a serif display face and generous whitespace",
+      "traits": ["editorial", "serif display", "airy layout"],
+      "context": "pricing page",
+      "reason": "the type hierarchy is clear",
+      "recorded_at": "2026-10-18T12:00:00Z",
+      "source_command": "/naksha-taste"
+    }
+  ]
+}
+```
+
+| Field | Type | Required | Written by | Description |
+|-------|------|----------|------------|-------------|
+| `taste.signals` | array | No | `/naksha-taste`, `/design-variants` | Reactions to design directions. **Cap: 30 (oldest evicted).** |
+| `taste.signals[].verdict` | `"approved"` \| `"rejected"` | Yes (entry) | — | The user's verdict. Only recorded when the user actually gave one. |
+| `taste.signals[].direction` | string | Yes (entry) | — | What the direction looks like, ≤ 140 chars |
+| `taste.signals[].traits` | string[] | Yes (entry) | — | 2–6 lowercase trait tags from the vocabulary in `commands/naksha-taste.md` |
+| `taste.signals[].context` | string | No | — | What was being designed (e.g. `"pricing page"`) |
+| `taste.signals[].reason` | string | No | — | The user's reason, ≤ 140 chars; never invented |
+| `taste.signals[].recorded_at` | ISO 8601 | Yes (entry) | — | Drives decay: ≤ 90 days weight 1, 91–180 days 0.5, older 0 (kept, ignored) |
+| `taste.signals[].source_command` | string | Yes (entry) | — | `/naksha-taste` or `/design-variants` |
+
+**Applying taste:** sum the weights per trait, separately for approved and rejected signals. The strongest approved traits become defaults; the strongest rejected traits are avoided. A trait in both lists is *conflicted*: the newer verdict wins, unless the signals have different `context` values (context-dependent taste is legitimate). No migration is needed: `taste` is optional and absent on older files.
+
 ### v4 → v5 Migration
 
 **`/naksha-init` on a v4 project:**
