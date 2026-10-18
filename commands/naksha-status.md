@@ -173,6 +173,10 @@ Run `/naksha-init` to update brand/framework settings.
 Run `/naksha-remember <decision>` to add constraints or component patterns.
 Run `/naksha-browse <url>` to capture design research.
 Run `/naksha-taste` to see or record your taste, or `/design-variants <task>` to compare directions.
+{If .naksha/dashboard.json is absent or not "enabled": true:}
+Optional: `/naksha-dashboard setup` lets you watch your design team live.
+{If it is enabled:}
+Naksha Live is on — `/naksha-dashboard status` shows the dashboard URL.
 ```
 
 ### Example Output

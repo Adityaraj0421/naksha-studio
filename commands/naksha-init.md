@@ -190,7 +190,10 @@ Naksha initialized for: <project_name>
 
 Run /naksha-status anytime to see your project context.
 Run /naksha-remember to save design constraints and component patterns.
+Optional: run /naksha-dashboard setup to watch your design team live.
 ```
+
+Show the last line ("Optional: …") only if `.naksha/dashboard.json` is absent or does not have `"enabled": true`. Show it once, as written, and don't push it further.
 
 ## Notes
 

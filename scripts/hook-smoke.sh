@@ -43,6 +43,10 @@ PLUGIN_ROOT="$TMP/Application Support/naksha plugin"
 PROJECT_DIR="$TMP/project"
 mkdir -p "$PLUGIN_ROOT" "$PROJECT_DIR"
 cp -R "$REPO/hooks" "$REPO/scripts" "$PLUGIN_ROOT/"
+# Hooks may also run scripts from these plugin dirs (e.g. Naksha Live's dashboard/hooks/emit.js)
+for extra in dashboard adapters commands; do
+  if [ -d "$REPO/$extra" ]; then cp -R "$REPO/$extra" "$PLUGIN_ROOT/"; fi
+done
 
 # One line per command hook: <event>\t<timeout>\t<command>
 HOOK_LINES=$(python3 - "$HOOKS" <<'PYEOF'

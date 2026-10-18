@@ -1,0 +1,54 @@
+[
+  {
+    "name": "naksha-dashboard-setup",
+    "command": "/naksha-dashboard",
+    "prompt": "/naksha-dashboard setup (project has .naksha/project.json; no .naksha/dashboard.json yet)",
+    "expected_output": "Explains what Naksha Live records and that it stays local, then enables it by running the bundled script, which writes .naksha/dashboard.json with enabled: true and a .naksha/.gitignore",
+    "files": [],
+    "assertions": [
+      { "name": "explains-before-enabling", "description": "tells the user what will be recorded (command names, subagents/roles, tool counts) before running anything" },
+      { "name": "privacy-stated", "description": "states that prompt text is never stored and that nothing leaves the machine" },
+      { "name": "runs-setup-script", "description": "runs node \"${CLAUDE_PLUGIN_ROOT}/dashboard/server.js\" setup with the path quoted" },
+      { "name": "writes-dashboard-json", "description": "results in .naksha/dashboard.json containing \"enabled\": true (direct write, not a naksha-memory-update block)" },
+      { "name": "no-auto-start", "description": "does not start the server during setup; points to /naksha-dashboard start instead" }
+    ]
+  },
+  {
+    "name": "naksha-dashboard-start-url",
+    "command": "/naksha-dashboard",
+    "prompt": "/naksha-dashboard start (dashboard enabled in .naksha/dashboard.json, server not running)",
+    "expected_output": "Starts the zero-dependency server in the background and gives the user the exact tokenized 127.0.0.1 URL",
+    "files": [],
+    "assertions": [
+      { "name": "runs-start", "description": "runs the bundled server.js start subcommand (no npm install, no Express)" },
+      { "name": "prints-tokenized-url", "description": "shows a URL on 127.0.0.1 that includes ?token=" },
+      { "name": "token-rotates", "description": "mentions the token changes on each start and that /naksha-dashboard status shows the current URL" },
+      { "name": "local-only", "description": "states the dashboard is local-only (bound to 127.0.0.1)" }
+    ]
+  },
+  {
+    "name": "naksha-dashboard-not-enabled",
+    "command": "/naksha-dashboard",
+    "prompt": "/naksha-dashboard start (no .naksha/dashboard.json in the project)",
+    "expected_output": "Does not enable anything implicitly; explains Live is not set up and offers /naksha-dashboard setup",
+    "files": [],
+    "assertions": [
+      { "name": "no-implicit-enable", "description": "does not write .naksha/dashboard.json or enable hooks without the user running setup" },
+      { "name": "offers-setup", "description": "suggests /naksha-dashboard setup" },
+      { "name": "non-nagging", "description": "keeps the suggestion to one or two sentences" }
+    ]
+  },
+  {
+    "name": "naksha-dashboard-disable",
+    "command": "/naksha-dashboard",
+    "prompt": "/naksha-dashboard disable (server running, events.jsonl has 300 events)",
+    "expected_output": "Stops the server, sets enabled: false so hooks become no-ops, keeps the event history and says how to delete it",
+    "files": [],
+    "assertions": [
+      { "name": "runs-disable", "description": "runs the bundled server.js disable subcommand" },
+      { "name": "hooks-noop", "description": "explains that hooks are now no-ops" },
+      { "name": "history-kept", "description": "says .naksha/events.jsonl is kept and can be deleted to remove history" },
+      { "name": "server-stopped", "description": "confirms the running server was stopped" }
+    ]
+  }
+]

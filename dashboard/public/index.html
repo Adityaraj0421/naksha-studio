@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta name="color-scheme" content="light dark">
+  <title>Naksha Live</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to dashboard</a>
+
+  <header class="topbar">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+        <path d="M4 7.5 11.5 5l9 3L28 5.5v19L20.5 27l-9-3L4 26.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+        <path d="M11.5 5v19M20.5 8v19" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".55"/>
+        <circle cx="16" cy="15" r="3" fill="currentColor"/>
+      </svg>
+      <h1 class="wordmark">naksha<span class="wordmark-live">live</span></h1>
+    </div>
+    <p class="project-name" id="project-name">Loading project…</p>
+    <div class="topbar-meta">
+      <p class="conn" id="conn" data-status="connecting" role="status">
+        <span class="conn-dot" aria-hidden="true"></span>
+        <span id="conn-label">Connecting…</span>
+      </p>
+      <button class="icon-btn" id="theme-toggle" type="button" aria-label="Switch to dark theme">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path id="theme-icon" d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+    <dl class="session-strip" aria-label="Current session">
+      <div class="stat"><dt>Session</dt><dd id="stat-session">—</dd></div>
+      <div class="stat"><dt>Current command</dt><dd class="mono" id="stat-command">—</dd></div>
+      <div class="stat"><dt>Roles engaged</dt><dd id="stat-roles">0 / 0</dd></div>
+      <div class="stat"><dt>Agents running</dt><dd id="stat-agents">0</dd></div>
+      <div class="stat"><dt>Tool calls</dt><dd id="stat-tools">0</dd></div>
+    </dl>
+
+    <div class="stage">
+      <section class="card orgchart-card" aria-labelledby="org-title">
+        <header class="card-head">
+          <div>
+            <h2 id="org-title">Design team</h2>
+            <p class="card-sub" id="org-sub">Roles light up as your session staffs them.</p>
+          </div>
+          <ul class="legend" aria-label="Legend">
+            <li><span class="legend-dot" aria-hidden="true"></span>Idle</li>
+            <li><span class="legend-dot" data-state="staffed" aria-hidden="true"></span>Staffed</li>
+            <li><span class="legend-dot" data-state="active" aria-hidden="true"></span>Active</li>
+            <li><span class="legend-dot" data-state="done" aria-hidden="true"></span>Done</li>
+          </ul>
+        </header>
+        <div class="orgchart" id="orgchart" role="group" aria-labelledby="org-title" aria-describedby="org-help">
+          <svg class="handoffs" id="handoffs" aria-hidden="true" focusable="false"></svg>
+          <div class="org-lead" id="org-lead"></div>
+          <div class="org-groups" id="org-groups"></div>
+        </div>
+        <p class="sr-only" id="org-help">Arrow up and down move within a team, left and right move between teams. Press Enter to see a role's details.</p>
+        <div class="inspector" id="inspector" aria-live="polite">
+          <p class="inspector-empty">Select a role to see what it does and how often it has worked this session.</p>
+        </div>
+      </section>
+
+      <aside class="card feed-card" aria-labelledby="feed-title">
+        <header class="card-head">
+          <h2 id="feed-title">Live activity</h2>
+          <p class="card-sub" id="feed-sub">This session</p>
+        </header>
+        <ol class="feed" id="feed" aria-live="off"></ol>
+        <section class="tools" aria-labelledby="tools-title">
+          <h3 id="tools-title">Tool use</h3>
+          <ul class="bars" id="tools"></ul>
+        </section>
+      </aside>
+    </div>
+
+    <section class="panels" id="panels" aria-label="Project panels"></section>
+  </main>
+
+  <footer class="foot">
+    <p>Local only — served from 127.0.0.1 with a per-start token. Events stay in <code>.naksha/events.jsonl</code> and never include prompt text.</p>
+  </footer>
+
+  <div class="sr-only" id="announcer" aria-live="polite"></div>
+</body>
+</html>
