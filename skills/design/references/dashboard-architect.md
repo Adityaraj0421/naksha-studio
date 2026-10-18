@@ -668,3 +668,30 @@ After shipping a dashboard, collect these specific signals to iterate:
 **Do not change visualization type just for variety.** If you're showing the same type of metric for multiple entities (e.g., revenue by region), use the same chart type for all of them. Mixing a bar chart for one region with a line chart for another implies a structural difference that doesn't exist, and makes comparison much harder.
 
 **Consistency rule:** Identical data relationships should always use identical chart types. The viewer builds a mental model — violating it forces a re-read every time.
+
+---
+
+## Quality Contract
+
+### Red flags
+
+- More than 5 headline KPIs compete at the top, or the KPI row falls below the fold at 1280px.
+- Nothing separates the KPI row, charts and tables visually; everything is the same size.
+- Charts don't respond to the filter bar, or the filters have no visible reset.
+- Green/red trend arrows appear on metrics where going up isn't always good.
+- Empty, loading or error states are blank space.
+
+### Excuses to reject
+
+| Excuse | Rebuttal |
+|---|---|
+| "Stakeholders want to see everything." | A dashboard that shows everything prioritizes nothing. Move secondary data to drill-downs. |
+| "Mobile users don't use dashboards." | Executives check KPIs on their phones. At minimum, the KPI row must work at 375px. |
+| "States can be added once the API exists." | States designed later end up as blank divs. Mock them now. |
+
+### Evidence of done
+
+- A hierarchy map: Level 1 KPIs → Level 2 charts → Level 3 table, with the decision each KPI supports.
+- Screenshots at 1280px (KPI row above the fold) and at 375px (mobile layout).
+- Empty, loading and error state mockups for each chart and table.
+- A table spec showing right-aligned tabular numbers and the `scope` and `aria-sort` attributes.

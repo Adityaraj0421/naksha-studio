@@ -434,3 +434,30 @@ Before producing any video, answer these 9 questions to define the strategic con
 9. **Internal users**: Which other teams (sales, support, onboarding) can repurpose this video?
 
 The 9-question framework prevents the most common video production failure: creating videos without a defined distribution channel, measurement plan, or integration into the broader marketing system.
+
+---
+
+## Quality Contract
+
+### Red flags
+
+- The first 3 seconds set context ("Hi, I'm…", a logo sting) instead of a hook.
+- The voiceover word count doesn't fit the target length (about 2.5 words per second).
+- Features are listed with no benefit attached.
+- The storyboard skips scenes from the script, or captions sit under platform UI.
+- There is more than one CTA, or a CTA with no destination.
+
+### Excuses to reject
+
+| Excuse | Rebuttal |
+|---|---|
+| "A brand intro builds recognition." | On short-form video it costs you viewers. Put the logo at the end or in a corner. |
+| "The editor will sort out timing." | If the script runs 40% long, the editor can only cut meaning. Fix the word count now. |
+| "One format works on every platform." | Aspect ratio, length and safe zones differ. Cut a version per platform, or say which platform this one is for. |
+
+### Evidence of done
+
+- A timestamped script with the hook (0–3s), body beats and CTA, plus the word count against the target duration.
+- A storyboard table covering every scene: shot, visual, voiceover or on-screen text, duration.
+- The platform spec (aspect ratio, length, safe zones) named for each deliverable.
+- A thumbnail concept with its text checked for legibility at 160px wide.

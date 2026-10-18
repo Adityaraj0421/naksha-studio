@@ -116,6 +116,7 @@ Every specialist role has its own reference file, and `adapters/roles.json` is t
 3. Add it to the team tables and routing in `SKILL.md`, with team assembly examples showing when it activates
 4. Bump `roles` in `meta/stats.json`, then update the headline count in prose (`bash scripts/guard-counts.sh` lists every file that still states the old number)
 5. Run `node scripts/build-adapters.js` to regenerate the adapters
+6. End the reference file with a `## Quality Contract` section (see the Wing File Checklist below); `node scripts/validate-structure.js` fails without it
 
 `build-adapters.js` fails if a role reference file is missing from `roles.json`, if a roster entry points at a missing file, or if `stats.json` disagrees with the roster.
 
@@ -133,7 +134,7 @@ Before marking your PR ready, confirm all of the following apply to your contrib
 
 **All PRs:**
 - Tested locally end-to-end in Claude Code
-- `validate-structure` CI passes (checks file counts, version consistency, and command frontmatter)
+- `validate-structure` CI passes (checks file counts, version consistency, command frontmatter, and role Quality Contracts)
 - `bash scripts/quality-check.sh` passes — the same checks the `CI` workflow runs on every PR
 - No hardcoded paths — use `${CLAUDE_PLUGIN_ROOT}/` for all plugin-relative references
 
@@ -159,7 +160,7 @@ Run the full local suite — this is what the `CI` workflow runs on every PR:
 
 ```bash
 bash scripts/quality-check.sh        # metadata, behavioral smoke, design lint, branding, count drift, hook smoke, adapter sync
-node scripts/validate-structure.js   # file counts, version consistency, command frontmatter
+node scripts/validate-structure.js   # file counts, version consistency, command frontmatter, role Quality Contracts
 bash scripts/run-evals.sh            # eval structure and fixture references
 (cd packages/naksha-reel && node --test test/*.test.mjs)   # reel unit tests
 ```
@@ -251,6 +252,7 @@ Follow the established pattern from any existing reference file:
 - `## Handoffs` — one sub-section per stakeholder with `Deliver:` line
 - `## Advanced Patterns` — 3–5 sophisticated patterns not obvious from the basics
 - `## Full Coverage` — pre-handoff verification checklist with `- [ ]` items
+- `## Quality Contract` — the last section, with `### Red flags` (3–5 role-specific signs the work is wrong), `### Excuses to reject` (2–4 shortcuts an agent might take, each with a one-line rebuttal) and `### Evidence of done` (3–5 checkable artifacts, e.g. "contrast ratio listed for every text/background pair"). Point to the checklists above it instead of repeating them. `node scripts/check-role-contracts.js` enforces it, and validate-structure runs that check too
 
 Target: 500–700 lines. Read an existing file in full before writing yours.
 

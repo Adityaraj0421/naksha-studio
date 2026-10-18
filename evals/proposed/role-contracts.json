@@ -1,0 +1,66 @@
+[
+  {
+    "name": "naksha-doctor-transcripts-misroute",
+    "command": "/naksha-doctor",
+    "prompt": "/naksha-doctor --transcripts (the scanned transcripts hold two naksha runs: one session asked 'Design a welcome email for new signups' and only ui-designer.md was read; another asked for a landing page, named the Motion Designer in the team, and produced no motion spec)",
+    "expected_output": "Runs the local transcript scanner, flags the email task as misrouted and the Motion Designer as a silent role, and writes generalized regression evals to .naksha/proposed-evals.json without touching evals/evals.json",
+    "assertions": [
+      { "name": "runs-local-scanner", "description": "Runs scripts/scan-transcripts.js locally and reports its file, line and unparseable counts" },
+      { "name": "flags-email-misroute", "description": "Flags the welcome-email session as M1 Misrouted because the Email Designer and Email Copywriter never activated" },
+      { "name": "flags-silent-motion", "description": "Flags the Motion Designer as an M2 Silent role because no durations, easing or transitions were produced" },
+      { "name": "evals-without-id", "description": "Each proposed eval has name, prompt, expected_output and 4-6 assertions, and no id field" },
+      { "name": "writes-proposed-file-only", "description": "Writes .naksha/proposed-evals.json and states that evals/evals.json was not edited" },
+      { "name": "states-local-only", "description": "States that transcript content stayed on this machine and quotes no more than a short phrase of any task" }
+    ]
+  },
+  {
+    "name": "naksha-doctor-transcripts-missing-evidence",
+    "command": "/naksha-doctor",
+    "prompt": "/naksha-doctor --transcripts (a past /design-review run activated the UI Designer and UX Researcher; the reply has no contrast ratios, no severity ratings and no screenshots at any width)",
+    "expected_output": "Compares the activated roles' Evidence of done items against the output, flags M3 Missing evidence for both roles, and proposes evals whose assertions are the missing evidence items",
+    "assertions": [
+      { "name": "loads-contracts", "description": "Loads Quality Contracts with scripts/check-role-contracts.js --json (or by reading the role references)" },
+      { "name": "flags-ui-evidence", "description": "Flags the UI Designer for missing contrast ratios and missing 375/768/1440 previews" },
+      { "name": "flags-researcher-evidence", "description": "Flags the UX Researcher for missing severity ratings in a findings table" },
+      { "name": "evidence-as-assertions", "description": "Proposed eval assertions are written from the missing Evidence of done items, not generic checks" },
+      { "name": "generalized-prompt", "description": "The proposed eval prompt is a rewritten, anonymized version of the task, not a verbatim copy" }
+    ]
+  },
+  {
+    "name": "naksha-doctor-transcripts-none-found",
+    "command": "/naksha-doctor",
+    "prompt": "/naksha-doctor --transcripts /tmp/does-not-exist",
+    "expected_output": "Reports that no transcripts were found at the path it checked, asks for a valid path, and writes nothing",
+    "assertions": [
+      { "name": "reports-path-checked", "description": "Names the path it looked in" },
+      { "name": "asks-for-path", "description": "Asks the user for a transcript file or folder" },
+      { "name": "no-file-written", "description": "Does not create or modify .naksha/proposed-evals.json" },
+      { "name": "no-health-checks", "description": "Does not run the Step 2 health checks in transcript mode" }
+    ]
+  },
+  {
+    "name": "naksha-doctor-role-contract-fix",
+    "command": "/naksha-doctor",
+    "prompt": "/naksha-doctor --fix (skills/design/references/print-designer.md has a Quality Contract with no Evidence of done subsection)",
+    "expected_output": "Reports validate-structure failing on role-quality-contracts and gives step-by-step remediation for adding the missing subsection",
+    "assertions": [
+      { "name": "names-failing-check", "description": "Reports the role-quality-contracts check as failed, with print-designer.md named" },
+      { "name": "check-count", "description": "Shows validate-structure as 8/9 checks passed" },
+      { "name": "fix-steps", "description": "Remediation says to add '### Evidence of done' with 3-5 checkable items specific to print work" },
+      { "name": "points-to-checker", "description": "Points to node scripts/check-role-contracts.js to see the full list of problems" }
+    ]
+  },
+  {
+    "name": "quality-contract-evidence-landing-page",
+    "role": "skills/design/references/ui-designer.md",
+    "prompt": "Build a pricing page for a SaaS analytics tool with three tiers and a monthly/annual toggle",
+    "expected_output": "A responsive pricing page whose delivery notes include the UI Designer's evidence of done: contrast ratios, previews at three widths, component states and a token map",
+    "assertions": [
+      { "name": "contrast-ratios-listed", "description": "Lists measured contrast ratios for the text/background pairs used, each at least 4.5:1 for body text" },
+      { "name": "three-breakpoints", "description": "Shows or describes the layout at 375, 768 and 1440px" },
+      { "name": "toggle-states", "description": "Specifies hover, focus, active and disabled states for the billing toggle and CTA buttons" },
+      { "name": "single-primary-cta", "description": "Each tier card has exactly one primary-styled CTA" },
+      { "name": "token-map", "description": "Colors and spacing used are traced to named tokens rather than hardcoded values" }
+    ]
+  }
+]

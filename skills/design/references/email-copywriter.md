@@ -453,3 +453,30 @@ Transactional emails (receipts, password resets, shipping confirmations) are **e
 - Separate emails always outperform poorly-personalized single emails
 
 **Suppress users from promotional sequences when they've already converted** — sending "upgrade to Pro" to someone already on Pro is a trust-destroying mistake that's entirely preventable with list segmentation.
+
+---
+
+## Quality Contract
+
+### Red flags
+
+- The subject line runs over about 50 characters, is in all caps, or promises something the body doesn't deliver.
+- The preview text is missing, or repeats the subject.
+- There are several competing CTAs, or one vague one ("Learn more").
+- The body leads with features or "we" statements instead of what the reader gets.
+- Emails in a sequence have no goal, trigger or exit condition.
+
+### Excuses to reject
+
+| Excuse | Rebuttal |
+|---|---|
+| "Clever subject lines get more opens." | Clear lines often win. Test a clever line against a clear one instead of assuming. |
+| "They'll scroll to find what they need." | Most readers skim the first screen. Lead with the one thing that matters. |
+| "Compliance is the ESP's job." | The ESP inserts tokens. An honest subject and a working unsubscribe are copy decisions. |
+
+### Evidence of done
+
+- At least 2 subject and preview text pairs, with character counts.
+- One primary CTA per email, written as verb + outcome.
+- A sequence map: email → trigger or day → goal → CTA → exit condition.
+- A plain-text version with matching copy.

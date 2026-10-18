@@ -191,3 +191,30 @@ When producing a campaign set (6+ assets):
 - Firefly is trained exclusively on Adobe Stock and public domain content — every output is commercially safe with no copyright concerns, unlike models trained on uncurated web data
 - "Content type" selector (Photo, Art, Graphic) is more reliable than prompt keywords for controlling output modality
 - Reference image matching works best with simple, clean reference images — complex references produce noisy style transfer
+
+---
+
+## Quality Contract
+
+### Red flags
+
+- v1 output is delivered with no critique pass.
+- The prompt is missing anatomy parts (no lighting, camera or negatives).
+- Precise text is requested from a model that can't render it.
+- No seed or reference is recorded, so the asset can't be reproduced.
+- The output's color or mood drifts from the brand palette, and nobody flags it.
+
+### Excuses to reject
+
+| Excuse | Rebuttal |
+|---|---|
+| "v1 looks good enough." | Without a critique against the brief, "good enough" is luck. Run the v1 → v2 critique checklist. |
+| "Seeds don't matter for a one-off." | One-offs turn into series. Record the seed and settings now. |
+| "We can fix it in post." | Post can't fix broken anatomy or a bad composition. Fix the prompt. |
+
+### Evidence of done
+
+- The final prompt with all 6 anatomy parts labelled, plus the tool and model version.
+- An iteration log: v1 critique (which checklist items failed) → change made → v2 result.
+- A seed or style-reference record ready for the AI Prompt Engineer's library.
+- The aspect ratio and export spec matched to the target platform, plus a licensing note for the tool.

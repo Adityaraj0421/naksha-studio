@@ -502,3 +502,30 @@ Minimum touch targets (mobile, finger interaction):
 Primary CTA on mobile: should be in the thumb zone — bottom 40% of the screen for right-handed one-handed use. Never put the primary action in the top half of the screen on mobile-first flows.
 
 Deliberately hard-to-hit targets: destructive actions (Delete, Remove, Cancel subscription) should be smaller, lower contrast, and physically separated from the primary action. Making them harder to hit is not bad UX — it's error prevention by design.
+
+---
+
+## Quality Contract
+
+### Red flags
+
+- Only the happy path is mapped: no error, back or cancel branch in the flow.
+- Navigation labels mirror the org chart or the database tables instead of user tasks.
+- Wireframes use lorem ipsum, so hierarchy and truncation can't be judged.
+- Interactive elements have no defined loading, error or disabled states ("the UI Designer will figure it out").
+- On mobile-first flows the primary action sits in the top half of the screen, or touch targets are smaller than 44×44px.
+
+### Excuses to reject
+
+| Excuse | Rebuttal |
+|---|---|
+| "Edge cases can be handled in development." | Engineers will each invent them differently. The 8 edge cases in Full Coverage are part of the flow, not polish. |
+| "It's a standard pattern, users will get it." | Then name the pattern and the convention it follows. If you can't, it isn't standard. |
+| "Low-fi doesn't need real content." | Low-fi still needs real headlines. Placeholder copy hides the IA problems that wireframes exist to find. |
+
+### Evidence of done
+
+- A flow diagram (entry → decision → action → feedback) with at least one error path and one exit path per task.
+- An edge-case table covering all 8 cases from Full Coverage for every screen in the flow.
+- A state list for each interactive element (default → loading → success/error).
+- An IA tree with labels in the user's language, and the navigation pattern justified against the Navigation Patterns table.

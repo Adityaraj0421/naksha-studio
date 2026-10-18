@@ -388,3 +388,30 @@ For each product area, confirm instrumentation covers:
 
 - All tactics become less effective over time as more organizations adopt them. Early-mover advantage on a tactic is real but temporary. Teams that rely primarily on tactics must constantly invent new ones — not sustainable. Teams that rely on growth loops (which are product-specific) are less exposed to tactic saturation.
 - Measurement implication: when a previously effective channel or tactic shows declining efficiency over multiple reporting periods, the default hypothesis should be tactic saturation, not execution failure. The correct response is loop-level strategic review, not optimization of the decaying tactic.
+
+---
+
+## Quality Contract
+
+### Red flags
+
+- Vanity metrics (followers, impressions) are presented as the primary KPIs.
+- An A/B test is called with no sample-size calculation, or before it reaches its planned sample.
+- Links lack UTM parameters, or UTM naming is inconsistent.
+- The engagement rate formula isn't stated, or a different formula is used on each platform.
+- Dashboard numbers don't match native platform analytics.
+
+### Excuses to reject
+
+| Excuse | Rebuttal |
+|---|---|
+| "The trend is clearly up, we don't need significance." | Early swings fade back toward the average. Wait for the planned sample, or call the test inconclusive. |
+| "Impressions show it's working." | Impressions show delivery, not results. Pair them with a conversion metric. |
+| "Attribution is too hard, we'll eyeball it." | Pick a model, write it down and apply it consistently. Imperfect but consistent beats ad hoc. |
+
+### Evidence of done
+
+- A KPI framework: objective → primary metric → formula → target → benchmark source.
+- An A/B test plan with the hypothesis, the single variable tested, the minimum sample per variant and the stopping rule.
+- A UTM naming convention with at least one complete example link.
+- An event list (entry, completion, drop-off) with the trigger for each event.

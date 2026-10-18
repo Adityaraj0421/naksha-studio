@@ -401,3 +401,30 @@ Adding one extra UI element rarely tanks a metric immediately. But over time, th
 **Practical rule:** Every time a new element is proposed for a screen, ask: "What is this replacing or removing?" If the answer is "nothing," the element needs a stronger justification. Net additions to a UI require higher evidence bars than replacements.
 
 **Consistency as a user experience property (not just aesthetics):** Users don't just use one feature — they use the whole product. If uploading photos and uploading videos work differently, users struggle with both. Every inconsistency creates a separate thing to learn. Inconsistency is cognitive tax paid at every interaction, invisible per-instance but compounding across the full product experience.
+
+---
+
+## Quality Contract
+
+### Red flags
+
+- The problem statement names a solution ("we need a dashboard") instead of a user problem ("ops leads can't see which orders are late").
+- The success metric is missing, or is an engagement metric (time on page, sessions) with no outcome metric paired with it.
+- There is no Out of scope list, so every idea in the brief ended up in v1.
+- Screens appear before the job-to-be-done is written down.
+- Assumptions are stated as facts, and nothing is flagged for the UX Researcher to validate.
+
+### Excuses to reject
+
+| Excuse | Rebuttal |
+|---|---|
+| "The brief already says what to build." | A brief is a Lvl 1 solution. Restate it as the problem it solves, or no trade-off can be judged. |
+| "We'll pick metrics after launch." | Metrics picked after launch tend to flatter the result. Set them before design starts. |
+| "Everything is a must-have." | If nothing breaks without it, it isn't a must. Run the must/should/nice/out audit and show what was cut. |
+
+### Evidence of done
+
+- A problem statement in user terms, plus a JTBD sentence ("When … I want to … so I can …").
+- A scope table with at least one item explicitly marked Out of scope.
+- A primary and a secondary success metric, each with a target, plus a kill or rollback condition.
+- An assumption list (5–10 items) with the two riskiest marked for validation and the method named.

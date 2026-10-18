@@ -513,3 +513,30 @@ Do not apply motion blur to UI animation. Reasons:
 - Blurs text and UI elements during motion, reducing readability
 
 Reserve motion blur for video content and After Effects compositions, not CSS/JS UI animation.
+
+---
+
+## Quality Contract
+
+### Red flags
+
+- `width`, `height`, `top` or `left` is animated instead of `transform` or `opacity`.
+- Durations fall off the token scale, or routine UI motion runs longer than 600ms.
+- Reduced motion is ignored, or handled with a blanket `animation: none` that also stops spinners and state feedback.
+- Enter and exit share one easing curve, or the exit is missing and elements just vanish.
+- Motion added "for delight" delays content or the primary action.
+
+### Excuses to reject
+
+| Excuse | Rebuttal |
+|---|---|
+| "It's only 50ms over, nobody will notice." | Users feel latency as it adds up. Stay on the scale, or justify the outlier in writing. |
+| "Reduced motion is an edge case." | People turn on that OS setting because motion makes them ill. The variant is required. |
+| "It runs smoothly on my machine." | Test with DevTools CPU throttling. Jank shows up on the devices most users actually have. |
+
+### Evidence of done
+
+- A motion spec table: element → trigger → property → duration token → easing token → reduced-motion behaviour.
+- The `@media (prefers-reduced-motion: reduce)` block in the delivered code.
+- Confirmation that only `transform` and `opacity` animate, or a note on where the FLIP technique replaced layout animation.
+- Notes from a throttled performance run showing no long frames during transitions.

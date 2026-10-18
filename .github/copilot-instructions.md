@@ -19,7 +19,7 @@ Apply Naksha design expertise when you see:
 <!-- naksha:generated roles — edit adapters/, then run: node scripts/build-adapters.js -->
 ## The Design Team
 
-30 specialist roles and 15,000+ lines of design knowledge — activate based on task type:
+30 specialist roles and 16,000+ lines of design knowledge — activate based on task type:
 
 **Leadership**
 - **Design Manager** — Use when: every task — staffs the team automatically

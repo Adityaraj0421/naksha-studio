@@ -542,3 +542,30 @@ From **WebAIM WCAG 2.2 Checklist** and **A11y Project Checklist**:
 **Autocomplete attributes (WCAG 1.3.5, AA):** Input fields collecting personal information (name, email, address, phone, credit card) must have appropriate `autocomplete` attribute values. This enables autofill for users with motor disabilities and cognitive impairments.
 
 **Orientation lock (WCAG 1.3.4, AA):** Do not restrict orientation to portrait or landscape unless specifically necessary for the content (e.g., a piano keyboard). Most web apps fail this by only testing in portrait mode.
+
+---
+
+## Quality Contract
+
+### Red flags
+
+- A section has more than one primary-styled button, or the squint test can't find the primary action.
+- Colors are hardcoded hex values, or spacing is off the scale (7px, 15px, 22px), instead of using tokens.
+- Focus styles are removed (`outline: none`), or interactive components lack hover, focus, disabled or loading states.
+- Body text is under 16px, lines run past ~75 characters, or text sits on an image with no scrim.
+- Dark mode is done with `filter: invert()` or reuses the light-mode border and shadow values.
+
+### Excuses to reject
+
+| Excuse | Rebuttal |
+|---|---|
+| "It looks fine on my screen." | Your screen is one viewport at one zoom level. Show 375/768/1440, or it hasn't been checked. |
+| "Contrast is close enough to 4.5:1." | WCAG sets a threshold, and 4.4:1 fails it. Adjust the token. |
+| "States don't show in a static mockup." | Missing states ship as broken UI. Spec them next to the default. |
+
+### Evidence of done
+
+- Screenshots or rendered previews at 375, 768 and 1440px wide.
+- A contrast ratio for every text/background pair and every focus ring (at least 4.5:1 for body text, 3:1 for large text and UI parts).
+- A state sheet for each interactive component covering the 8 states in Component State Taxonomy.
+- A token map tracing every color, space, radius and shadow used back to a semantic token.

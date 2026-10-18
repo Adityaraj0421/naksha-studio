@@ -224,3 +224,30 @@ multiple styles, amateur, sketch quality, unfinished
 
 - In Stable Diffusion, the clip skip setting affects how literally prompts are interpreted. CLIP skip 1 = very literal; CLIP skip 2 = more "artistic" and abstract interpretation. Most community-trained models expect CLIP skip 2.
 - Embedding tokens (Textual Inversion) are the SD equivalent of brand style seeds — a small file that encodes a specific style or subject that can be included in any prompt as a token. For brand consistency work in SD, consider creating a brand embedding.
+
+---
+
+## Quality Contract
+
+### Red flags
+
+- Prompts are stored without a tool version, seed or date.
+- One client's style tokens show up in another client's prompt.
+- One tool's syntax is used in a tool that doesn't support it (Midjourney parameters in a DALL-E prompt).
+- A failure is "fixed" by adding more words, without naming the failure mode.
+- The prompt library changes with no version note.
+
+### Excuses to reject
+
+| Excuse | Rebuttal |
+|---|---|
+| "The prompt worked last month." | Models update. Re-test approved prompts after every tool version change. |
+| "Longer prompts give more control." | Past a point, tools ignore or conflict on tokens. Diagnose the failure and trim. |
+| "A library is overhead for small projects." | Small projects get reused. A record takes a minute and saves rebuilding the prompt. |
+
+### Evidence of done
+
+- A prompt record: tokens by type (subject, style, negative, lighting, camera), tool and version, seed or reference, date.
+- A cross-tool variant table for each tool in use, noting any tokens with no equivalent.
+- A failure diagnosis: failure mode from the Failure Diagnosis table → root cause → fix applied → before and after.
+- A library changelog entry for the change.

@@ -654,6 +654,7 @@ Before delivering, the Design Manager checks:
 - [ ] Is the copy clear and helpful?
 - [ ] Are animations purposeful and smooth?
 - [ ] Does it use consistent tokens/patterns?
+- [ ] For every activated role, does the output show the **Evidence of done** from the `## Quality Contract` at the end of its reference file, with none of that contract's **Red flags** present? If an item doesn't apply, say why instead of skipping it silently.
 - [ ] Would a real design team be proud of this?
 
 ---

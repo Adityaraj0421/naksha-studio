@@ -427,3 +427,30 @@ What adapts: [list of flexible elements]
 
 - Start all creative work for one platform, then adapt: "go deep, not wide." Design a canonical version of each template for your primary platform, then create adaptation rules for adjacent platforms (e.g., TikTok → Instagram Reels). Do not start with 5-platform design specs simultaneously.
 - Adjacent network pairs: TikTok ↔ Instagram Reels (9:16 portrait, same dimensions, minimal adaptation), YouTube Shorts ↔ Reels (same), LinkedIn ↔ Twitter/X (horizontal/landscape, text-forward).
+
+---
+
+## Quality Contract
+
+### Red flags
+
+- Asset dimensions don't match the platform format (e.g. a 1080×1080 image used as a Story).
+- The headline or CTA sits under a platform UI overlay.
+- Text is too small to read at a 375px phone width.
+- Carousel slides have no visual thread (color bar, numbering, shared layout).
+- Text dominates an ad creative instead of the image.
+
+### Excuses to reject
+
+| Excuse | Rebuttal |
+|---|---|
+| "It's close to spec, the platform will crop it." | The platform crops the part you care about. Design to the exact dimensions. |
+| "It looks great on my monitor." | Social is seen on phones, often in daylight. Preview it at phone size. |
+| "One design works on every platform." | Safe zones and ratios differ. Reformat for each platform; don't stretch. |
+
+### Evidence of done
+
+- An asset list: platform → format → exact pixel dimensions → file size against the limit.
+- A safe-zone overlay check for each vertical asset, showing key content clear of platform UI.
+- A preview at 375px width (or a phone mockup) for every asset.
+- The contrast ratio for any text over an image (aim for 7:1 or better), and alt text drafted for each image.
