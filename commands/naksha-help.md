@@ -33,7 +33,7 @@ Display when no arguments are given:
 
 ```
 ━━━ Naksha Quick Reference ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Your virtual design team — 30 roles, 65 commands, 7 agents
+Your virtual design team — 30 roles, 66 commands, 7 agents
 
 CATEGORIES                                     Run /naksha-help <category>
 
@@ -197,6 +197,7 @@ When `$ARGUMENTS` matches a category name, display its commands.
   /naksha-remember    Record a design constraint or decision to project memory
   /naksha-taste       Record approved/rejected directions; show your taste profile
   /design-variants    Build 2–5 distinct directions side by side, learn from your pick
+  /naksha-stats       Token and cost usage per command, with budget warnings
   /pipeline           Chain commands: run <name>, list, show <name>
   /design-framework   Convert HTML to React/Vue/Svelte/Next.js/Astro
   /design-template    Browse and use production-ready layout templates

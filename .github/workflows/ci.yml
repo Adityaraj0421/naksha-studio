@@ -41,6 +41,10 @@ jobs:
         if: success() || failure()
         run: bash scripts/run-evals.sh
 
+      - name: Script unit tests
+        if: success() || failure()
+        run: node --test scripts/test/
+
       - name: Reel unit tests
         if: success() || failure()
         working-directory: packages/naksha-reel

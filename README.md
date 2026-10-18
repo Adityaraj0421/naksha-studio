@@ -16,7 +16,7 @@
 [![Copilot](https://img.shields.io/badge/Copilot-Instructions-24292e)]()
 [![Autohand Code CLI](https://img.shields.io/badge/Autohand_Code_CLI-AGENTS.md-0A84FF)](https://github.com/autohandai/code-cli)
 [![Roles](https://img.shields.io/badge/Specialist_Roles-30-orange)]()
-[![Commands](https://img.shields.io/badge/Slash_Commands-65-green)]()
+[![Commands](https://img.shields.io/badge/Slash_Commands-66-green)]()
 [![Design Knowledge](https://img.shields.io/badge/Design_Knowledge-15000%2B_lines-E8633A)]()
 
 [Quick Start](#-quick-start) · [Commands](#-commands) · [The Team](#-the-team) · [How It Works](#-how-it-works) · [Changelog](CHANGELOG.md)
@@ -27,7 +27,7 @@
 
 ## 🚀 Quick Start
 
-### Claude Code (full plugin — 65 commands, agents, hooks)
+### Claude Code (full plugin — 66 commands, agents, hooks)
 
 **From the marketplace** (Claude Code 2.1.72+) — run inside Claude Code:
 
@@ -396,6 +396,7 @@ _The skill loads only the references your task actually needs_
 **v5.3.0 — Taste Memory**
 
 | `/design-variants <task> [--count 2-5]` | Build 2–5 genuinely different directions for the same brief (each pair differs on at least two of layout, type, color, density, ornament), side by side in `naksha-variants/index.html`. Leans into your taste profile, with one deliberate "Wildcard" |
+| `/naksha-stats [--since <date>]` | Tokens and estimated cost per naksha command from your local Claude Code usage, compared against optional budgets in `.naksha/project.json` (v6) |
 | `/naksha-taste [approve\|reject <direction> …]` | Record which directions you approved or rejected; with no arguments, show your taste profile. `/design` and `/design-variants` default to approved traits and avoid rejected ones; signals fade after 90 days |
 
 <details>
@@ -945,7 +946,7 @@ naksha/
 │       ├── conversational-designer.md  # Chatbot UI, VUI, dialog flows, persona systems
 │       ├── spatial-designer.md         # visionOS HIG, WebXR, depth layers, gaze/gesture
 │       └── compliance-designer.md      # GDPR/CCPA consent UX, HIPAA, PCI, ADA compliance
-├── commands/                           # 65 slash commands
+├── commands/                           # 66 slash commands
 ├── agents/                             # 7 specialist agents
 ├── hooks/hooks.json                    # SessionStart + PreToolUse + Stop hooks
 ├── scripts/

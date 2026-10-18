@@ -366,6 +366,7 @@ This skill is part of the **naksha** plugin. For focused workflows, use these co
 | `/naksha-init` | Set up project memory — stores brand colors, font, framework, token format in `.naksha/project.json` |
 | `/naksha-status` | Display current project context and last 10 design decisions from `.naksha/memory.md` |
 | `/design-variants <task> [--count 2-5]` | User wants options, alternatives, or "a few directions" to compare — builds 2–5 distinct directions side by side and records which ones they like |
+| `/naksha-stats [--since <date>] [--all]` | User asks what naksha costs, which commands are expensive, or wants to set or check a budget |
 | `/naksha-taste [approve\|reject <direction>]` | User reacts to a direction ("I like this one", "not that") or asks what naksha has learned about their taste |
 | `/naksha-doctor` | Run all naksha quality checks and report the plugin's health status — structural validation, metadata consistency, behavioral smoke, legacy branding guard |
 | `/naksha-help` | Quick-reference for all commands — browse by category or look up a specific command |
