@@ -1,0 +1,44 @@
+{
+  "$comment": "Sandbox profile for paid headless eval runs (claude -p). Rendered and applied by scripts/lib/sandboxed-run.sh, which substitutes ${NAKSHA_EVAL_DIR} with the run's temp directory, writes the `srt` block as an srt settings file, exports `env`, and runs the command under srt (Anthropic sandbox-runtime). Validated against srt 0.0.80's settings schema. See docs/privacy.md and the header of sandboxed-run.sh.",
+  "version": 1,
+  "srt": {
+    "network": {
+      "allowedDomains": ["api.anthropic.com"],
+      "deniedDomains": []
+    },
+    "filesystem": {
+      "denyRead": [
+        "~/.ssh",
+        "~/.aws",
+        "~/.gnupg",
+        "~/.netrc",
+        "~/.npmrc",
+        "~/.docker",
+        "~/.kube",
+        "~/.azure",
+        "~/.config/gh",
+        "~/.config/gcloud",
+        "~/.git-credentials"
+      ],
+      "allowWrite": ["${NAKSHA_EVAL_DIR}"],
+      "denyWrite": []
+    }
+  },
+  "env": {
+    "CLAUDE_CONFIG_DIR": "${NAKSHA_EVAL_DIR}/.claude-config",
+    "TMPDIR": "${NAKSHA_EVAL_DIR}/tmp",
+    "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1",
+    "DISABLE_TELEMETRY": "1",
+    "DISABLE_ERROR_REPORTING": "1",
+    "DISABLE_AUTOUPDATER": "1"
+  },
+  "rationale": {
+    "network.allowedDomains": {
+      "api.anthropic.com": "The Messages API that `claude -p` calls. It is the only host a paid eval needs: evals generate and grade design output from prompts and local fixtures, and none fetch remote pages or packages."
+    },
+    "network.notAllowed": "No telemetry, error-reporting or update hosts (statsig, sentry, npm). The env block turns that traffic off at the source, so nothing is left to allow. A custom ANTHROPIC_BASE_URL host is added at run time and logged. An eval that truly needs another host (for example /naksha-browse against a live site) must name it via NAKSHA_SANDBOX_EXTRA_DOMAINS and document why in its eval spec.",
+    "filesystem.allowWrite": "Only the per-run temp eval directory. CLAUDE_CONFIG_DIR and TMPDIR are pointed inside it, so Claude Code's session files and temp files stay there too. srt itself also permits the child's stdio and /tmp/claude.",
+    "filesystem.denyRead": "Common credential stores. Reads are otherwise allowed, because claude needs the plugin directory and fixtures.",
+    "auth": "CLAUDE_CONFIG_DIR is a fresh directory, so stored logins are not visible: pass ANTHROPIC_API_KEY in the environment."
+  }
+}
