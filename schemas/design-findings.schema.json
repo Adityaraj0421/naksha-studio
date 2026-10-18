@@ -1,0 +1,230 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Adityaraj0421/naksha-studio/schemas/design-findings.schema.json",
+  "title": "Naksha design findings report",
+  "description": "Machine-readable output of /design-review. Every review dimension appears in the coverage ledger, and every finding carries evidence plus a verdict set by an independent verifier. Checked by scripts/validate-findings.js, which also enforces the cross-field rules listed in docs/design-findings.md (owner_role must exist in adapters/roles.json, ids are unique, each finding's dimension is marked checked, verdicts agree with verification).",
+  "type": "object",
+  "required": ["schema_version", "target", "generated_at", "coverage", "verification", "findings"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "description": "Format version of this report. Bump only with a breaking schema change.",
+      "const": "1.0"
+    },
+    "target": {
+      "description": "What was reviewed.",
+      "type": "object",
+      "required": ["kind", "location"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": ["file", "url", "figma", "screenshot", "preview"]
+        },
+        "location": {
+          "description": "File path (relative to the project root), URL, Figma URL, or image path.",
+          "type": "string",
+          "minLength": 1
+        },
+        "viewports": {
+          "description": "Viewport sizes inspected, e.g. 1440x900.",
+          "type": "array",
+          "items": { "type": "string", "pattern": "^[0-9]+x[0-9]+$" }
+        }
+      }
+    },
+    "generated_at": {
+      "description": "When the report was written, ISO 8601 date-time with timezone.",
+      "type": "string",
+      "format": "date-time"
+    },
+    "generator": {
+      "description": "Command or agent that produced the report, e.g. /design-review.",
+      "type": "string",
+      "minLength": 1
+    },
+    "coverage": {
+      "description": "Coverage ledger. Every dimension must be listed as checked, or skipped with a reason.",
+      "type": "object",
+      "required": [
+        "accessibility",
+        "visual_hierarchy",
+        "typography",
+        "color",
+        "spacing",
+        "content",
+        "interaction_states",
+        "responsive",
+        "tokens"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "accessibility": { "$ref": "#/$defs/coverageEntry" },
+        "visual_hierarchy": { "$ref": "#/$defs/coverageEntry" },
+        "typography": { "$ref": "#/$defs/coverageEntry" },
+        "color": { "$ref": "#/$defs/coverageEntry" },
+        "spacing": { "$ref": "#/$defs/coverageEntry" },
+        "content": { "$ref": "#/$defs/coverageEntry" },
+        "interaction_states": { "$ref": "#/$defs/coverageEntry" },
+        "responsive": { "$ref": "#/$defs/coverageEntry" },
+        "tokens": { "$ref": "#/$defs/coverageEntry" }
+      }
+    },
+    "verification": {
+      "description": "How the verdicts were reached.",
+      "type": "object",
+      "required": ["mode"],
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "description": "isolated-subagent: a fresh agent that saw only the target and each finding. same-context: verified in the reviewer's own context (weaker). not-run: nothing verified yet, so every verdict must be needs_validation.",
+          "enum": ["isolated-subagent", "same-context", "not-run"]
+        },
+        "completed_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/finding" }
+    }
+  },
+  "$defs": {
+    "dimension": {
+      "enum": [
+        "accessibility",
+        "visual_hierarchy",
+        "typography",
+        "color",
+        "spacing",
+        "content",
+        "interaction_states",
+        "responsive",
+        "tokens"
+      ]
+    },
+    "coverageEntry": {
+      "type": "object",
+      "required": ["status"],
+      "additionalProperties": false,
+      "properties": {
+        "status": { "enum": ["checked", "skipped"] },
+        "reason": {
+          "description": "Required when status is skipped: why this dimension could not be reviewed.",
+          "type": "string",
+          "minLength": 1
+        },
+        "notes": {
+          "description": "Optional: what was checked, e.g. 'contrast on 12 text pairs, tab order, landmarks'.",
+          "type": "string"
+        }
+      },
+      "if": {
+        "required": ["status"],
+        "properties": { "status": { "const": "skipped" } }
+      },
+      "then": {
+        "required": ["reason"]
+      }
+    },
+    "measurement": {
+      "description": "A re-checkable number, e.g. a contrast ratio.",
+      "type": "object",
+      "required": ["metric", "value"],
+      "additionalProperties": false,
+      "properties": {
+        "metric": {
+          "description": "What was measured, e.g. contrast-ratio, touch-target-px, line-length-chars, font-size-px.",
+          "type": "string",
+          "minLength": 1
+        },
+        "value": { "type": ["number", "string"] },
+        "threshold": { "type": ["number", "string"] },
+        "unit": { "type": "string" },
+        "method": {
+          "description": "How the value was obtained, e.g. 'WCAG 2.x relative luminance, #777777 on #ffffff'.",
+          "type": "string"
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "required": ["locator"],
+      "additionalProperties": false,
+      "properties": {
+        "locator": {
+          "description": "Where the problem is: a CSS selector, file:line, Figma node id, or screen region.",
+          "type": "string",
+          "minLength": 1
+        },
+        "file": { "type": "string", "minLength": 1 },
+        "line": { "type": "integer", "minimum": 1 },
+        "snippet": {
+          "description": "The exact source text or visible copy the finding is about.",
+          "type": "string"
+        },
+        "measurement": { "$ref": "#/$defs/measurement" },
+        "screenshot": { "type": "string", "minLength": 1 }
+      }
+    },
+    "findingVerification": {
+      "type": "object",
+      "required": ["reproduced", "note"],
+      "additionalProperties": false,
+      "properties": {
+        "reproduced": {
+          "description": "Did the verifier independently reproduce the evidence? Must be true for confirmed and false for rejected.",
+          "type": "boolean"
+        },
+        "note": {
+          "description": "What the verifier re-checked and what it found.",
+          "type": "string",
+          "minLength": 1
+        },
+        "remeasured": {
+          "description": "The verifier's own measurement, when it re-measured.",
+          "type": ["number", "string"]
+        }
+      }
+    },
+    "finding": {
+      "type": "object",
+      "required": [
+        "id",
+        "dimension",
+        "severity",
+        "title",
+        "evidence",
+        "recommendation",
+        "owner_role",
+        "verdict",
+        "verification"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "description": "Stable id, unique within the report, e.g. F-001.",
+          "type": "string",
+          "pattern": "^F-[0-9]{3,}$"
+        },
+        "dimension": { "$ref": "#/$defs/dimension" },
+        "severity": { "enum": ["critical", "major", "minor"] },
+        "title": { "type": "string", "minLength": 1 },
+        "criterion": {
+          "description": "Optional standard or rule, e.g. 'WCAG 1.4.3 Contrast (Minimum)' or 'Nielsen #5 Error prevention'.",
+          "type": "string"
+        },
+        "evidence": { "$ref": "#/$defs/evidence" },
+        "recommendation": { "type": "string", "minLength": 1 },
+        "owner_role": {
+          "description": "A role name from adapters/roles.json, e.g. 'UX Researcher'.",
+          "type": "string",
+          "minLength": 1
+        },
+        "verdict": { "enum": ["confirmed", "needs_validation", "rejected"] },
+        "verification": { "$ref": "#/$defs/findingVerification" }
+      }
+    }
+  }
+}

@@ -225,3 +225,5 @@ Sorted by: Impact × Effort (quick wins first)
 ```
 
 Always end with genuine strengths. A critique that only finds problems is not useful — designers need to know what to preserve.
+
+**Structured findings (only when the caller asks, e.g. `/design-review`):** also return each action-list issue in the finding format of `${CLAUDE_PLUGIN_ROOT}/schemas/design-findings.schema.json` (see `${CLAUDE_PLUGIN_ROOT}/docs/design-findings.md`). Map 🔴 → `critical`, 🟡 → `major`, 🟢 → `minor`; pick the closest of the nine dimensions; take `owner_role` from `${CLAUDE_PLUGIN_ROOT}/adapters/roles.json`. Set every verdict to `needs_validation`: confirming a finding is an independent verifier's job, not the critic's.

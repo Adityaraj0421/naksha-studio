@@ -1,0 +1,186 @@
+{
+  "schema_version": "1.0",
+  "target": {
+    "kind": "file",
+    "location": "evals/fixtures/test-page.html",
+    "viewports": [
+      "1440x900"
+    ]
+  },
+  "generated_at": "2026-10-18T09:30:00Z",
+  "generator": "/design-review",
+  "coverage": {
+    "accessibility": {
+      "status": "checked",
+      "notes": "Contrast on 6 text pairs, focus styles, alt text, lang, landmarks"
+    },
+    "visual_hierarchy": {
+      "status": "checked"
+    },
+    "typography": {
+      "status": "checked"
+    },
+    "color": {
+      "status": "checked"
+    },
+    "spacing": {
+      "status": "checked"
+    },
+    "content": {
+      "status": "checked"
+    },
+    "interaction_states": {
+      "status": "checked",
+      "notes": "Focus, hover, reduced motion"
+    },
+    "responsive": {
+      "status": "skipped",
+      "reason": "Static file reviewed without a browser; viewport behavior could not be rendered"
+    },
+    "tokens": {
+      "status": "checked"
+    }
+  },
+  "verification": {
+    "mode": "isolated-subagent",
+    "completed_at": "2026-10-18T09:41:00Z"
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "dimension": "interaction_states",
+      "severity": "critical",
+      "title": "Primary CTA removes its focus outline with no replacement",
+      "criterion": "WCAG 2.4.7 Focus Visible",
+      "evidence": {
+        "locator": ".cta-btn:focus",
+        "file": "evals/fixtures/test-page.html",
+        "line": 27,
+        "snippet": ".cta-btn:focus { outline: none; }"
+      },
+      "recommendation": "Replace with .cta-btn:focus-visible { outline: 2px solid #ffffff; outline-offset: 3px; }",
+      "owner_role": "UX Researcher",
+      "verdict": "confirmed",
+      "verification": {
+        "reproduced": true,
+        "note": "Line 27 contains the rule. Searched the whole file for :focus-visible, box-shadow and border changes on .cta-btn; none exist, so keyboard focus is invisible."
+      }
+    },
+    {
+      "id": "F-002",
+      "dimension": "accessibility",
+      "severity": "major",
+      "title": "White CTA label on #e94560 fails AA contrast",
+      "criterion": "WCAG 1.4.3 Contrast (Minimum)",
+      "evidence": {
+        "locator": ".cta-btn",
+        "file": "evals/fixtures/test-page.html",
+        "line": 19,
+        "measurement": {
+          "metric": "contrast-ratio",
+          "value": 3.83,
+          "threshold": 4.5,
+          "method": "WCAG 2.x relative luminance, #ffffff on #e94560, 16px regular (normal text)"
+        }
+      },
+      "recommendation": "Darken the button background until white text reaches 4.5:1, or set the label to 18.66px bold so the 3:1 large-text threshold applies.",
+      "owner_role": "UI Designer",
+      "verdict": "confirmed",
+      "verification": {
+        "reproduced": true,
+        "note": "Recomputed from the declared colors: 3.83:1. Font-size is 16px at normal weight, so the 4.5:1 threshold applies.",
+        "remeasured": 3.83
+      }
+    },
+    {
+      "id": "3",
+      "dimension": "accessibility",
+      "severity": "major",
+      "title": "Feature icons have no alt attribute",
+      "criterion": "WCAG 1.1.1 Non-text Content",
+      "evidence": {
+        "locator": ".feature-card img",
+        "file": "evals/fixtures/test-page.html",
+        "line": 82,
+        "snippet": "<img src=\"icon-speed.svg\" width=\"48\" height=\"48\">"
+      },
+      "recommendation": "The icons are decorative next to their headings: add alt=\"\" to all three.",
+      "owner_role": "UX Researcher",
+      "verdict": "confirmed",
+      "verification": {
+        "reproduced": true,
+        "note": "Lines 82, 87 and 92: three <img> elements, none with alt, aria-label, aria-hidden or role=presentation."
+      }
+    },
+    {
+      "id": "F-004",
+      "dimension": "accessibility",
+      "severity": "minor",
+      "title": "Feature body copy #777 on white is just under AA",
+      "criterion": "WCAG 1.4.3 Contrast (Minimum)",
+      "evidence": {
+        "locator": ".feature-card p",
+        "file": "evals/fixtures/test-page.html",
+        "line": 43,
+        "measurement": {
+          "metric": "contrast-ratio",
+          "value": 4.48,
+          "threshold": 4.5,
+          "method": "WCAG 2.x relative luminance, #777777 on #ffffff, 14px regular"
+        }
+      },
+      "recommendation": "Darken secondary body text one step, e.g. to #6b6b6b, and re-check it reaches 4.5:1.",
+      "owner_role": "UI Designer",
+      "verdict": "confirmed",
+      "verification": {
+        "reproduced": true,
+        "note": "The card has no background of its own and inherits white from body. Recomputed 4.48:1, below 4.5:1.",
+        "remeasured": 4.48
+      }
+    },
+    {
+      "id": "F-005",
+      "dimension": "accessibility",
+      "severity": "major",
+      "title": "Hero subtitle #888 on #1a1a2e fails AA contrast",
+      "criterion": "WCAG 1.4.3 Contrast (Minimum)",
+      "evidence": {
+        "locator": ".hero p",
+        "file": "evals/fixtures/test-page.html",
+        "line": 16,
+        "measurement": {
+          "metric": "contrast-ratio",
+          "value": 3.1,
+          "threshold": 4.5,
+          "method": "Estimate taken from the source comment on line 17"
+        }
+      },
+      "recommendation": "Lighten the subtitle color.",
+      "owner_role": "UX Researcher",
+      "verdict": "rejected",
+      "verification": {
+        "reproduced": false,
+        "note": "Recomputed #888888 on #1a1a2e: 4.81:1, which passes the 4.5:1 threshold for 18px regular text. The 3.1:1 figure came from a source comment, not a measurement.",
+        "remeasured": 4.81
+      }
+    },
+    {
+      "id": "F-006",
+      "dimension": "visual_hierarchy",
+      "severity": "minor",
+      "title": "Three feature cards compete at equal weight",
+      "evidence": {
+        "locator": ".features",
+        "file": "evals/fixtures/test-page.html",
+        "line": 28
+      },
+      "recommendation": "Promote the most important feature with a larger card or an accent border.",
+      "owner_role": "UI Designer",
+      "verdict": "needs_validation",
+      "verification": {
+        "reproduced": false,
+        "note": "The cards share identical styles, but whether equal weight is a problem depends on product priorities; this needs a human design call."
+      }
+    }
+  ]
+}

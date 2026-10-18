@@ -1,0 +1,64 @@
+[
+  {
+    "name": "design-review-verified-findings",
+    "command": "/design-review",
+    "prompt": "/design-review ./evals/fixtures/test-page.html",
+    "expected_output": "A review whose findings are written to naksha-review/findings.json, re-checked by a fresh verifier subagent, validated with scripts/validate-findings.js, and reported with confirmed findings first, needs-validation findings separately, and a rejected count.",
+    "files": [],
+    "assertions": [
+      {
+        "name": "writes-findings-json",
+        "description": "Writes naksha-review/findings.json with target, generated_at, coverage, verification and findings."
+      },
+      {
+        "name": "coverage-ledger-complete",
+        "description": "Coverage lists all nine dimensions, each checked or skipped with a specific reason."
+      },
+      {
+        "name": "fresh-verifier-subagent",
+        "description": "Launches a separate verifier subagent that receives only the target and the finding's evidence, not the recommendation or the reviewer's reasoning."
+      },
+      {
+        "name": "validator-passes",
+        "description": "Runs node scripts/validate-findings.js on the file and only calls it validated after exit code 0."
+      },
+      {
+        "name": "confirmed-first-report",
+        "description": "The issue sections list confirmed findings only, with ids; needs-validation findings appear in their own section."
+      },
+      {
+        "name": "rejected-count-reported",
+        "description": "The report states how many findings were rejected and excludes them from the scores."
+      }
+    ]
+  },
+  {
+    "name": "design-review-verifier-rejects-wrong-contrast",
+    "command": "/design-review",
+    "prompt": "/design-review ./evals/fixtures/test-page.html — the source comment says the hero subtitle (#888 on #1a1a2e) is about 3.1:1; check whether that claim holds up",
+    "expected_output": "The verifier recomputes #888888 on #1a1a2e as about 4.81:1, which passes AA for 18px text, so a finding based on the 3.1:1 comment is rejected or never raised, while #777 on white (4.48:1) and white on #e94560 (3.83:1) are confirmed.",
+    "files": [],
+    "assertions": [
+      {
+        "name": "recomputes-hero-contrast",
+        "description": "Reports a recomputed ratio of about 4.8:1 for #888 on #1a1a2e instead of repeating 3.1:1."
+      },
+      {
+        "name": "hero-claim-not-confirmed",
+        "description": "The hero-subtitle contrast claim is marked rejected (reproduced false) or not raised; it is not listed as a confirmed issue."
+      },
+      {
+        "name": "confirms-real-contrast-failures",
+        "description": "Confirms .feature-card p (#777 on #fff, about 4.48:1) and .cta-btn (#fff on #e94560, about 3.83:1) as failing 4.5:1."
+      },
+      {
+        "name": "measurement-evidence",
+        "description": "Contrast findings in findings.json include a measurement with metric, value, threshold and method."
+      },
+      {
+        "name": "verification-note-explains",
+        "description": "Each verdict has a verification note that names what was re-checked and the value found."
+      }
+    ]
+  }
+]
