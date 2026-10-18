@@ -6,6 +6,7 @@
     "assets/**",
     "brand/**",
     "packages/**",
-    "site/**"
+    "site/**",
+    "scripts/test/fixtures/**"
   ]
 }

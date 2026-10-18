@@ -1,0 +1,6 @@
+@keyframes spin { to { transform: rotate(1turn); } }
+.spinner { animation: spin 1s linear infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .spinner { animation: none; }
+}
+.fade { transition: opacity 150ms ease; }

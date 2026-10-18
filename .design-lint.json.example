@@ -3,7 +3,20 @@
   "warnOnTokens": true,
   "checkContrast": true,
   "checkSemantic": true,
+  "checkFocus": true,
   "checkResponsive": true,
+  "checkTypography": true,
+  "checkMotion": true,
+  "checkSlop": true,
+  "grid": null,
+  "contrastMin": null,
+  "maxFontSizes": 8,
+  "typeScale": null,
+  "hook": true,
+  "rules": {
+    "slop-generic-copy": "off",
+    "spacing-grid": "error"
+  },
   "ignorePatterns": [
     "dist/**",
     "*.min.html",

@@ -120,6 +120,25 @@ Every specialist role has its own reference file, and `adapters/roles.json` is t
 
 `build-adapters.js` fails if a role reference file is missing from `roles.json`, if a roster entry points at a missing file, or if `stats.json` disagrees with the roster.
 
+## Adding a Design Lint Rule
+
+`scripts/design-lint.js` is naksha's free eval tier: deterministic rules with no network and no model calls. The same rules run from the CLI, in the `design-check` workflow, in the PostToolUse hook (`scripts/design-lint-hook.sh`) and behind `/design-detect`. To add one:
+
+1. **Check it is deterministic.** The rule must give the same answer from the file text alone. If it needs a rendered page or taste, it belongs in a command or agent instead.
+2. **Add a `rule({ … })` block** in the Rules section of `scripts/design-lint.js`, with a comment above it saying why the pattern is a problem (cite the WCAG criterion where there is one). Fields:
+   - `id`: kebab-case, unique, stable (users reference it in `.design-lint.json` and `--rules`)
+   - `label`, `category` (`accessibility`, `tokens`, `typography`, `motion`, `responsive`, `structure`, `slop`) and `role`: the Naksha role that owns the fix, as named in `adapters/roles.json`. `/design-detect` groups findings by it.
+   - `severity`: `error` only for clear accessibility or rendering failures, since errors fail CI. Everything else is a `warning`.
+   - `configKey`: the group toggle it belongs to (`checkContrast`, `checkSlop`, …)
+   - `applies(ctx)`: usually `hasMarkup`, `hasCss` or `isHtml`
+   - `fix`: one actionable sentence
+   - `run(ctx)`: return `null` when clean, or `{ message, locations }`, where `locations` are character indices (from `ctx.decls[].index`, `ctx.rules[].index` or `ctx.allTags[].index`) that the runner turns into line numbers. Use the parsed context (`ctx.rules`, `ctx.decls`, `ctx.allTags`, `ctx.tokens`, `ctx.settings.grid`) rather than new regexes over raw text where you can.
+3. **Add two fixtures**: `scripts/test/fixtures/<id>.bad.<ext>` must trigger the rule and `<id>.good.<ext>` must not, including the closest legitimate pattern you can think of. The test suite fails if a rule has no fixture pair.
+4. **Run** `node --test scripts/test/` and `node scripts/design-lint.js --list-rules`.
+5. **Document it** in the rules table in `commands/design-detect.md`.
+
+Keep rule text original. Do not copy rule lists or wording from other linters.
+
 ## Code Style
 
 - **Markdown**: Use ATX headings (`##`), pipe tables, fenced code blocks
@@ -160,11 +179,11 @@ Before marking your PR ready, confirm all of the following apply to your contrib
 Run the full local suite — this is what the `CI` workflow runs on every PR:
 
 ```bash
-bash scripts/quality-check.sh        # metadata, behavioral smoke, design lint, branding, count drift, hook smoke, adapter sync
+bash scripts/quality-check.sh        # metadata, behavioral smoke, design lint, branding, count drift, hook smoke, adapter sync, procedures, unit tests
 node scripts/validate-structure.js   # file counts, version consistency, command frontmatter, role Quality Contracts
 bash scripts/run-evals.sh            # eval structure, fixture references, and the $0 structural eval tier
 (cd packages/naksha-reel && node --test test/*.test.mjs)   # reel unit tests
-node --test scripts/test/            # script unit tests (eval runner, findings validator, session brief, sandbox, cost stats)
+node --test scripts/test/            # script unit tests (linter + hooks, eval runner, findings, session brief, sandbox, cost stats); also check 9 of quality-check
 ```
 
 Evals are tiered (see [docs/evals.md](docs/evals.md)). `node scripts/eval-runner.js` runs the free structural tier; `--tier e2e` and `--tier judge` drive headless `claude -p` and only execute with `NAKSHA_EVALS_PAID=1` and `ANTHROPIC_API_KEY` set. Before any paid run, check the estimate with `--dry-run --budget <usd>`; it exits 3 when the estimate exceeds the budget. Assertions with a deterministic `check` and an explicit `fixture` are graded for free on every PR.

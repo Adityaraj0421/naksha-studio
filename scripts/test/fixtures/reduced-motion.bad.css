@@ -1,0 +1,3 @@
+@keyframes spin { to { transform: rotate(1turn); } }
+.spinner { animation: spin 1s linear infinite; }
+html { scroll-behavior: smooth; }

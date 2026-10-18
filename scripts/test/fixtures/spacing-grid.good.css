@@ -1,0 +1,3 @@
+.card { padding: 12px 8px; margin: 0 auto; gap: 1rem; margin-top: -16px; }
+.hairline { padding-top: 1px; margin-left: 2px; }
+.fluid { padding: 5% var(--space-3) calc(1rem + 3px); margin: 1.5em; }

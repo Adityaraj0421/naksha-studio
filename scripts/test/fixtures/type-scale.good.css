@@ -1,0 +1,6 @@
+.a { font-size: 12px; }
+.b { font-size: 14px; }
+.c { font-size: 1rem; }
+.d { font-size: 20px; }
+.e { font: 600 1.5rem/1.2 system-ui, sans-serif; }
+.f { font-size: var(--text-xl); }
