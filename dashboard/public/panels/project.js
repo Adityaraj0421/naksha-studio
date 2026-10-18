@@ -40,8 +40,10 @@
   function traitChips(list, tone) {
     if (!list || !list.length) return h('p', { class: 'nk-meta', text: '—' });
     return h('ul', { class: 'nk-chips' }, list.map(function (t) {
-      var w = Math.round(t.weight * 10) / 10;
-      return h('li', { class: 'nk-chip', 'data-tone': tone }, t.trait, h('span', { class: 'mono', text: '×' + w }));
+      var w = Math.round(t.weight * 100) / 100;
+      var label = typeof t.helpful === 'number' ? 'confidence ' + w : '×' + w;
+      return h('li', { class: 'nk-chip', 'data-tone': tone, title: typeof t.helpful === 'number' ? t.helpful + ' helpful, ' + t.needs_work + ' needs work' : null },
+        t.trait, h('span', { class: 'mono', text: label }));
     }));
   }
 
@@ -86,8 +88,23 @@
 
     var t = data.taste;
     var taste = h('div', { class: 'nk-section' }, h('h3', { text: 'Taste' }));
+    var traits = t && t.traits;
+    if (traits && traits.count) {
+      // v6: traits consolidated from Helpful / Needs-work votes (/naksha-taste consolidate).
+      taste.appendChild(h('p', { class: 'nk-meta', text: traits.count + (traits.count === 1 ? ' trait' : ' traits') + ' learned from your votes' +
+        (traits.updated_at ? ' · ' + n.fmt.relTime(traits.updated_at) : '') }));
+      taste.appendChild(h('p', { class: 'nk-meta', text: 'Leans toward' }));
+      taste.appendChild(traitChips(traits.leans, 'good'));
+      taste.appendChild(h('p', { class: 'nk-meta', text: 'Steers away from' }));
+      taste.appendChild(traitChips(traits.avoids, 'bad'));
+      if (traits.mixed && traits.mixed.length) {
+        taste.appendChild(h('p', { class: 'nk-meta', text: 'Mixed: ' + traits.mixed.join(', ') }));
+      }
+    }
     if (!t || !t.count) {
-      taste.appendChild(h('p', { class: 'nk-meta' }, 'No taste signals yet — react to directions with ', h('code', { text: '/naksha-taste' }), '.'));
+      if (!traits || !traits.count) {
+        taste.appendChild(h('p', { class: 'nk-meta' }, 'No taste signals yet — vote on designs with ', h('code', { text: '/naksha-vote' }), ', then run ', h('code', { text: '/naksha-taste consolidate' }), '.'));
+      }
     } else {
       taste.appendChild(h('p', { class: 'nk-meta', text: t.count + ' signals · ' + t.active + ' active (older than 180 days are ignored)' }));
       taste.appendChild(h('p', { class: 'nk-meta', text: 'Leans toward' }));
