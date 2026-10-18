@@ -5974,6 +5974,180 @@
           "description": "mentions that votes stay on this machine"
         }
       ]
+    },
+    {
+      "id": 208,
+      "name": "design-md-lint-contrast",
+      "command": "/design-md",
+      "prompt": "/design-md lint ./scripts/test/fixtures/design-md/low-contrast.md",
+      "expected_output": "Runs the bundled design-md.js linter and reports the failing component contrast pair as an error with a passing replacement colour, while explaining why the large-text and translucent cases differ",
+      "assertions": [
+        {
+          "name": "uses-cli",
+          "description": "runs scripts/design-md.js lint instead of judging the YAML by eye"
+        },
+        {
+          "name": "flags-caption",
+          "description": "reports components.caption-muted (#949494 on #ffffff, 3.03:1) as below WCAG AA 4.5:1"
+        },
+        {
+          "name": "large-text-passes",
+          "description": "does not flag hero-title, because 32px bold text only needs 3:1"
+        },
+        {
+          "name": "translucent-warning",
+          "description": "describes glass-panel as a warning that depends on the backdrop, not a definite failure"
+        },
+        {
+          "name": "concrete-fix",
+          "description": "proposes a replacement text colour and confirms it passes by re-running lint"
+        }
+      ]
+    },
+    {
+      "id": 209,
+      "name": "design-md-import-css-vars",
+      "command": "/design-md",
+      "prompt": "/design-md import ./scripts/test/fixtures/design-md/tokens.css (project has .naksha/ but no design-system/ yet)",
+      "expected_output": "Converts the CSS custom properties to DESIGN.md with from-tokens, relays the skipped dark-mode and shadow notes, offers to save it as .naksha/design-system/MASTER.md, and replaces the placeholder prose",
+      "assertions": [
+        {
+          "name": "uses-from-tokens",
+          "description": "runs design-md.js from-tokens on the CSS file"
+        },
+        {
+          "name": "relays-notes",
+          "description": "tells the user the dark-mode overrides were not imported because DESIGN.md has no modes"
+        },
+        {
+          "name": "primary-alias",
+          "description": "mentions that primary was aliased to {colors.brand} and can be changed"
+        },
+        {
+          "name": "offers-master",
+          "description": "offers to save the result as .naksha/design-system/MASTER.md rather than writing it unasked"
+        },
+        {
+          "name": "real-prose",
+          "description": "replaces the generated placeholder notes with actual design rationale before linting"
+        }
+      ]
+    },
+    {
+      "id": 210,
+      "name": "design-md-page-override",
+      "command": "/design-md",
+      "prompt": "/design-md page checkout \u2014 the checkout should use a teal accent instead of copper and drop the promo badge (MASTER.md already exists)",
+      "expected_output": "Writes a partial DESIGN.md to .naksha/design-system/pages/checkout.md with only the changed tokens, uses null to remove the badge, explains the deviation in prose, and lints the merged system",
+      "assertions": [
+        {
+          "name": "page-path",
+          "description": "writes .naksha/design-system/pages/checkout.md"
+        },
+        {
+          "name": "only-differences",
+          "description": "the override holds only the accent change and the badge removal, not a copy of MASTER.md"
+        },
+        {
+          "name": "null-removal",
+          "description": "removes the promo badge with `promo-badge: null` under components"
+        },
+        {
+          "name": "merged-lint",
+          "description": "runs `design-md.js lint --page checkout` to check the merged system"
+        },
+        {
+          "name": "precedence",
+          "description": "states the precedence: page override > MASTER.md > brand defaults"
+        }
+      ]
+    },
+    {
+      "id": 211,
+      "name": "design-system-import-design-md",
+      "command": "/design-system",
+      "prompt": "/design-system ./scripts/test/fixtures/design-md/basic.md",
+      "expected_output": "Detects a DESIGN.md source (Mode E), lints it, generates CSS custom properties from its tokens with the export command, carries the prose rules into component guidance, and persists MASTER.md when .naksha/ exists",
+      "assertions": [
+        {
+          "name": "mode-e",
+          "description": "treats the file as an imported DESIGN.md instead of generating a new palette"
+        },
+        {
+          "name": "lints-first",
+          "description": "runs design-md.js lint before using the tokens"
+        },
+        {
+          "name": "exports-css",
+          "description": "produces tokens.css via `design-md.js export --to css` with values matching the file (e.g. --color-primary: #1F3A5F)"
+        },
+        {
+          "name": "uses-prose",
+          "description": "applies the file's Do's and Don'ts (one primary action per view, no accent text on paper)"
+        },
+        {
+          "name": "keeps-output-contract",
+          "description": "still outputs CSS custom properties with a usage example"
+        }
+      ]
+    },
+    {
+      "id": 212,
+      "name": "design-system-export-dtcg",
+      "command": "/design-system",
+      "prompt": "/design-system brand color #2563EB, editorial serif, comfortable density --export dtcg",
+      "expected_output": "Generates the token system as usual, persists it as MASTER.md, and exports a DTCG 2025.10 tokens.json via design-md.js with the correct value shapes",
+      "assertions": [
+        {
+          "name": "normal-generation",
+          "description": "still runs Mode A and outputs CSS custom properties"
+        },
+        {
+          "name": "dtcg-export",
+          "description": "writes tokens.json using `design-md.js export --to dtcg`"
+        },
+        {
+          "name": "dtcg-shapes",
+          "description": "colours use { colorSpace, components, hex } objects and dimensions use { value, unit }, not bare strings"
+        },
+        {
+          "name": "schema-url",
+          "description": "the file declares $schema https://www.designtokens.org/schemas/2025.10/format.json"
+        },
+        {
+          "name": "lossy-notes",
+          "description": "relays any notes about values DTCG cannot express (kept under $extensions)"
+        }
+      ]
+    },
+    {
+      "id": 213,
+      "name": "design-reads-master-and-page",
+      "command": "/design",
+      "prompt": "/design checkout page with order summary and payment form (project has .naksha/design-system/MASTER.md and pages/checkout.md overriding the accent to #0F766E)",
+      "expected_output": "Loads the design system in Step 0.6 via `design-md.js resolve --page checkout`, applies the page override's teal accent over the master copper, and notes which files were used",
+      "assertions": [
+        {
+          "name": "resolves-page",
+          "description": "runs `design-md.js resolve --page checkout` (or reads both files) before designing"
+        },
+        {
+          "name": "override-wins",
+          "description": "uses #0F766E for the accent, not the master value"
+        },
+        {
+          "name": "master-fills",
+          "description": "keeps master tokens the override does not change (typography, spacing, button radius)"
+        },
+        {
+          "name": "follows-prose",
+          "description": "applies the override's rationale (calmer payment step, larger touch targets)"
+        },
+        {
+          "name": "notes-source",
+          "description": "notes 'Using design system: MASTER.md + pages/checkout.md'"
+        }
+      ]
     }
   ]
 }

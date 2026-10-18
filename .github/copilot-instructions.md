@@ -272,6 +272,8 @@ Naksha keeps persistent project context in `.naksha/project.json`. These command
 
 `/design`, `/design-review`, `/design-score`, `/design-system`, and `/brand-kit` read project memory automatically, so saved constraints and patterns apply without repeating them.
 
+**Design system files (v6)** — `.naksha/design-system/MASTER.md` holds the project design system in the open [DESIGN.md](https://github.com/google-labs-code/design.md) format (YAML tokens plus prose), with optional `pages/<page>.md` overrides. Precedence: page override > MASTER.md > brand defaults. `/design-md` lints, imports (DTCG JSON or CSS variables) and exports (DTCG, CSS, Tailwind) them; `/design` reads them before building.
+
 **Taste memory (v5.3)** — naksha learns which design directions you like:
 
 - **`/design-variants <task> [--count 2-5]`** — build 2–5 clearly different directions for the same brief (default 3), side by side in `naksha-variants/index.html`. When you have a taste profile, most directions lean into it and one "Wildcard" deliberately doesn't.

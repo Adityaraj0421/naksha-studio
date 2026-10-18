@@ -329,6 +329,7 @@ This skill is part of the **naksha** plugin. For focused workflows, use these co
 | `/design-detect [files]` | Fast, free, no-AI check of HTML/CSS/components — contrast, spacing grid, type scale, focus and motion, AI-design clichés — grouped by the role that owns each fix |
 | `/design-review <file or screenshot>` | Audit an existing design — accepts HTML files, Figma URLs, screenshots (visual AI critique), or preview servers |
 | `/design-system` | Generate or extract design tokens |
+| `/design-md [lint\|import\|export\|page\|show]` | User has or wants a DESIGN.md file, asks to lint/convert one to DTCG, CSS or Tailwind, or wants page-specific overrides of the project design system (`.naksha/design-system/`) |
 | `/figma <URL>` | Convert a Figma design to production code |
 | `/figma-create <task>` | Create designs directly in Figma (pages, components, styles) |
 | `/ux-audit <brief>` | Audit a Figma file against a design brief |

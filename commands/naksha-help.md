@@ -33,7 +33,7 @@ Display when no arguments are given:
 
 ```
 ━━━ Naksha Quick Reference ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Your virtual design team — 30 roles, 68 commands, 7 agents
+Your virtual design team — 30 roles, 69 commands, 7 agents
 
 CATEGORIES                                     Run /naksha-help <category>
 
@@ -75,6 +75,7 @@ When `$ARGUMENTS` matches a category name, display its commands.
   /design-critique    Heuristic UX review of a design or screenshot
   /design-qa          Visual QA across breakpoints, tokens, states
   /design-system      Extract or build a design token system
+  /design-md          Lint, import and export DESIGN.md; MASTER.md + page overrides
   /brand-kit          Build a full brand identity from a color
   /brand-strategy     Develop brand positioning and voice
   /design-sprint      Run a 5-day design sprint structure

@@ -20,7 +20,7 @@ Then, for each feature still marked **not on integration** below, give Claude it
 | 2 | Tiered, weighted evals + $0 dry run | 1 | `v6/tiered-evals` | ✅ on integration |
 | 1 | Free no-LLM design linter (`/design-detect` + hook) | 1 | `v6/design-linter` | ✅ on integration |
 | 9 | Role quality contracts + transcript diagnosis | 1 | `v6/role-contracts` | ✅ on integration |
-| 5 | DESIGN.md compatibility | 1 | `v6/design-md` | building |
+| 5 | DESIGN.md compatibility | 1 | `v6/design-md` | ✅ on integration |
 | 3 | Bounded browser self-check | 2 | `v6/browser-self-check` | ✅ on integration |
 | 6 | Cost tracking + budgets (`/naksha-stats`) | 2 | `v6/cost-budgets` | ✅ on integration |
 | 10 | Lean, safe runtime (PreCompact brief, compact SessionStart, sandbox, privacy) | 2 | `v6/lean-runtime` | ✅ on integration |

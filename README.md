@@ -16,7 +16,7 @@
 [![Copilot](https://img.shields.io/badge/Copilot-Instructions-24292e)]()
 [![Autohand Code CLI](https://img.shields.io/badge/Autohand_Code_CLI-AGENTS.md-0A84FF)](https://github.com/autohandai/code-cli)
 [![Roles](https://img.shields.io/badge/Specialist_Roles-30-orange)]()
-[![Commands](https://img.shields.io/badge/Slash_Commands-68-green)]()
+[![Commands](https://img.shields.io/badge/Slash_Commands-69-green)]()
 [![Design Knowledge](https://img.shields.io/badge/Design_Knowledge-16000%2B_lines-E8633A)]()
 
 [Quick Start](#-quick-start) · [Commands](#-commands) · [The Team](#-the-team) · [How It Works](#-how-it-works) · [Changelog](CHANGELOG.md)
@@ -27,7 +27,7 @@
 
 ## 🚀 Quick Start
 
-### Claude Code (full plugin — 68 commands, agents, hooks)
+### Claude Code (full plugin — 69 commands, agents, hooks)
 
 **From the marketplace** (Claude Code 2.1.72+) — run inside Claude Code:
 
@@ -322,6 +322,7 @@ _The skill loads only the references your task actually needs_
 | `/design <task>` | Full design workflow with team assembly |
 | `/design-review <file or screenshot>` | Quality audit — accepts HTML, Figma URLs, or screenshots for visual AI critique (6 design principles scored 0–10) |
 | `/design-system` | Generate, extract, or audit design tokens |
+| `/design-md <lint\|import\|export\|page\|show>` | Read, lint (incl. WCAG AA contrast) and write [DESIGN.md](https://github.com/google-labs-code/design.md) design systems; import DTCG/CSS tokens, export DTCG, CSS or Tailwind, and keep `.naksha/design-system/MASTER.md` plus per-page overrides (v6) |
 | `/figma <URL>` | Convert Figma designs to production code |
 | `/figma-create <task>` | Build pages, wireframes, components in Figma |
 | `/ux-audit <brief>` | Audit Figma file against a design brief |
@@ -949,7 +950,7 @@ naksha/
 │       ├── conversational-designer.md  # Chatbot UI, VUI, dialog flows, persona systems
 │       ├── spatial-designer.md         # visionOS HIG, WebXR, depth layers, gaze/gesture
 │       └── compliance-designer.md      # GDPR/CCPA consent UX, HIPAA, PCI, ADA compliance
-├── commands/                           # 68 slash commands
+├── commands/                           # 69 slash commands
 ├── agents/                             # 7 specialist agents
 ├── hooks/hooks.json                    # SessionStart, PreCompact, Stop, PostToolUse lint hooks
 ├── scripts/
