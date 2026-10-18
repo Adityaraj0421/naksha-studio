@@ -1,6 +1,6 @@
 ---
 description: "Design anything — pages, components, apps, dashboards, presentations. Assembles the right design specialists for the task."
-argument-hint: "[design task description]"
+argument-hint: "[design task description] [--no-check] [--visual]"
 allowed-tools: ["Read", "Write", "Edit", "Bash", "Glob", "Grep", "mcp__*"]
 ---
 
@@ -155,6 +155,9 @@ Write the final HTML to **`design-output.html`** in the current working director
 This is the canonical handoff artifact — used by `/design-framework` and `/design-review`.
 
 ### 6. Preview & Verify
+
+**Browser self-check** (default; skip it when `$ARGUMENTS` has `--no-check`, and strip `--no-check` / `--visual` from the task like `--framework`):
+Read and follow `${CLAUDE_PLUGIN_ROOT}/skills/design/procedures/browser-self-check.md` with `TARGET=design-output.html`, `CALLER=/design`, `FIX=apply`, `VISUAL=true` only if `--visual` was passed. Put its result block in the final summary. When it ran with a browser, only step 4 below (interactive states) is still needed.
 
 Use the Preview MCP tools to show live results:
 1. Start preview server

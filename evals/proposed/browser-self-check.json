@@ -1,0 +1,82 @@
+[
+  {
+    "name": "design-runs-browser-self-check-by-default",
+    "command": "/design",
+    "prompt": "/design a pricing page for a note-taking app with three tiers and an FAQ",
+    "expected_output": "Writes design-output.html, then runs the browser self-check procedure (accessibility snapshot and geometry probe at 375, 768 and 1440 px), applies fixes within at most 3 rounds, and ends the summary with the browser-self-check JSON result block",
+    "assertions": [
+      { "name": "reads-procedure", "description": "Reads skills/design/procedures/browser-self-check.md after design-output.html is written and before the final summary" },
+      { "name": "three-widths", "description": "Checks the page at 375, 768 and 1440 px" },
+      { "name": "accessibility-tree-first", "description": "Uses browser_snapshot (accessibility tree) and the probe via browser_evaluate before any screenshot; takes no screenshots without --visual" },
+      { "name": "served-over-http", "description": "Serves the file over http on 127.0.0.1 (scripts/serve-static.js or python http.server), not file://, and stops the server afterwards" },
+      { "name": "round-cap", "description": "Runs at most 3 fix rounds and reports rounds and stopped_because" },
+      { "name": "result-block", "description": "Final summary contains one fenced json block with naksha_check \"browser-self-check\", version 1, status, rounds, widths[], fixes[] and remaining[]" }
+    ]
+  },
+  {
+    "name": "design-no-check-opt-out",
+    "command": "/design",
+    "prompt": "/design a newsletter signup card with an email field and a submit button --no-check",
+    "expected_output": "Builds design-output.html without running the browser self-check, strips --no-check from the task, and does not emit a browser-self-check result block",
+    "assertions": [
+      { "name": "flag-stripped", "description": "--no-check is not treated as part of the design brief" },
+      { "name": "no-procedure-run", "description": "Does not run the browser self-check procedure or call browser_evaluate for the probe" },
+      { "name": "no-result-block", "description": "Output contains no browser-self-check JSON result block" },
+      { "name": "still-delivers", "description": "design-output.html is still written and the usual summary and next steps are given" }
+    ]
+  },
+  {
+    "name": "design-qa-self-check-core-loop",
+    "command": "/design-qa",
+    "prompt": "/design-qa ./evals/fixtures/browser-self-check/bad.html",
+    "expected_output": "Runs the browser self-check as its core loop on the fixture: finds the seeded overflow, crowded 16px tap targets, positive tabindex, aria-hidden and off-canvas focusables, row-reverse reordering, missing focus indicator, low-contrast text, skipped heading and missing main landmark; fixes them at the cause within at most 3 rounds and appends the result block to the QA report",
+    "files": ["./evals/fixtures/browser-self-check/bad.html"],
+    "assertions": [
+      { "name": "finds-overflow", "description": "Reports horizontal overflow at 375 and 768 px and names div.hero as the cause" },
+      { "name": "finds-a11y-tree-issues", "description": "Reports the missing main landmark and the h1 to h3 heading skip" },
+      { "name": "finds-focus-issues", "description": "Reports the positive tabindex and the focusable link inside aria-hidden" },
+      { "name": "fixes-at-cause", "description": "Fixes overflow without overflow-x: hidden on html or body, and does not silence findings with aria-hidden" },
+      { "name": "bounded", "description": "Stops after at most 3 fix rounds and lists anything unresolved under remaining" },
+      { "name": "report-plus-block", "description": "Output keeps the Design QA Report sections and ends with the browser-self-check JSON block (caller /design-qa)" }
+    ]
+  },
+  {
+    "name": "self-check-degrades-without-playwright",
+    "command": "/design-qa",
+    "prompt": "/design-qa ./evals/fixtures/browser-self-check/good.html (Playwright MCP is not connected in this session)",
+    "expected_output": "Probes Playwright with browser_navigate about:blank, finds it unavailable, runs only the static linter, says the browser check was skipped, and emits a result block with status static-only and an empty widths list",
+    "files": ["./evals/fixtures/browser-self-check/good.html"],
+    "assertions": [
+      { "name": "probes-first", "description": "Probes the Playwright MCP with about:blank before attempting any width checks" },
+      { "name": "lint-only", "description": "Runs scripts/design-lint.js (with --json when supported) and nothing browser-based" },
+      { "name": "says-skipped", "description": "States plainly that the browser check was skipped because Playwright MCP is not available" },
+      { "name": "no-guessing", "description": "Makes no claims about overflow, tap targets or focus order and runs no fix loop" },
+      { "name": "static-only-block", "description": "Result block has browser \"none\", status \"static-only\", stopped_because \"browser-unavailable\" and widths []" }
+    ]
+  },
+  {
+    "name": "self-check-visual-mode-opt-in",
+    "command": "/design",
+    "prompt": "/design a photo-led landing hero for a travel brand with text over the image --visual",
+    "expected_output": "Runs the browser self-check in Visual mode: full-page screenshots at each checked width in addition to the accessibility snapshot and probe, with visual findings recorded under the visual check id; later rounds re-shoot only re-checked widths",
+    "assertions": [
+      { "name": "screenshots-each-width", "description": "Takes browser_take_screenshot at 375, 768 and 1440 px in round 0" },
+      { "name": "tree-still-first", "description": "Still takes the accessibility snapshot and probe at each width; screenshots are additional" },
+      { "name": "visual-findings", "description": "Judges clipping, overlap, hierarchy and text over the image, recorded under the visual check id" },
+      { "name": "visual-flag-in-block", "description": "Result block has visual true and does not list visual under skipped" },
+      { "name": "delta-reshoot", "description": "Fix rounds re-shoot only the widths affected by the last fix" }
+    ]
+  },
+  {
+    "name": "self-check-stops-honestly-at-cap",
+    "command": "/design-qa",
+    "prompt": "/design-qa landing.html — the hero caption sits on a brand gradient at 3.9:1 contrast and the brand colours are fixed by the client",
+    "expected_output": "Does not loop on a failure it cannot fix safely: stops with stopped_because stalled (or round-cap after 3 rounds), keeps contrast in remaining with the reason, and does not claim a pass",
+    "assertions": [
+      { "name": "no-fourth-round", "description": "Never runs more than 3 fix rounds" },
+      { "name": "stalls-on-decision", "description": "Stops with stalled when the only remaining failure needs a brand decision, instead of retrying" },
+      { "name": "honest-remaining", "description": "Lists the contrast failure under remaining with the widths and a one-line reason" },
+      { "name": "no-false-pass", "description": "Result status is fail, not pass, and no check is reported passed without a re-check after its last related edit" }
+    ]
+  }
+]
