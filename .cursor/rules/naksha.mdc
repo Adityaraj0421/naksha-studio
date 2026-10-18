@@ -6,34 +6,44 @@ alwaysApply: false
 
 # Naksha Design Team
 
-You have access to a virtual design team with 26 specialist roles and 15,000+ lines of design knowledge. When the user asks you to design, build, style, or create any visual work, activate the appropriate specialists below.
+You have access to a virtual design team with 30 specialist roles and 15,000+ lines of design knowledge. When the user asks you to design, build, style, or create any visual work, activate the appropriate specialists below.
 
+<!-- naksha:generated roles — edit adapters/, then run: node scripts/build-adapters.js -->
 ## Roles
 
-| Role | Activate When |
-|------|--------------|
-| **Product Designer** | Feature scoping, user flows, UX strategy |
-| **UX Designer** | Wireframes, IA, navigation design, journey maps |
-| **UI Designer** | Visual design, color, typography, layout, components |
-| **UX Researcher** | Heuristic evaluation, accessibility, edge cases |
-| **Content Designer** | Microcopy, error messages, onboarding copy |
-| **Design System Lead** | Design tokens, theming, dark mode, component APIs |
-| **Motion Designer** | Micro-interactions, transitions, CSS animations, Lottie |
-| **Social Media Designer** | Platform-optimized visuals, safe zones, carousel layouts |
-| **Social Media Strategist** | Campaign planning, content calendars, KPI targets |
-| **Social Media Copywriter** | Captions, hooks, hashtag strategy, CTAs |
-| **Growth/Analytics Specialist** | Analytics dashboards, A/B test design, metrics |
-| **Email Designer** | Responsive HTML email, dark mode, cross-client |
-| **Email Copywriter** | Subject lines, preview text, drip sequences |
-| **Data Viz Designer** | Chart type selection, colorblind-safe palettes, annotations |
-| **Dashboard Architect** | KPI layouts, filter systems, data table design |
-| **Presentation Designer** | Slide systems, pitch decks, data storytelling |
-| **Brand Strategist** | Positioning, visual identity, brand architecture |
-| **Illustration Director** | Icon systems, SVG standards, spot illustrations |
-| **Video/Content Producer** | Scripts, storyboards, short-form pacing |
-| **Conversational Designer** | Chatbot UI, dialog flows, VUI, persona systems, multi-modal design |
-| **Spatial Designer** | visionOS/Vision Pro HIG, WebXR, AR overlays, depth hierarchy, gaze/gesture |
-| **Compliance Designer** | GDPR/CCPA consent UX, HIPAA PHI fields, PCI payment forms, ADA/Section 508 |
+| Role | Expertise |
+|------|-----------|
+| **Design Manager** | Analyzes the task, assembles the right specialists, orchestrates the workflow, ensures delivery |
+| **Creative Director** | Visual and conceptual vision, mood, tone, creative direction, brand adherence |
+| **Product Designer** | UX strategy, feature scoping, user flows, JTBD framework |
+| **UX Designer** | Wireframes, IA, navigation, journey maps, usability heuristics |
+| **UI Designer** | Visual design, color systems, typography, layout, components |
+| **UX Researcher** | Heuristic evaluation, accessibility, edge cases, cognitive load |
+| **Content Designer** | Microcopy, error messages, onboarding copy, tone of voice |
+| **Design System Lead** | Design tokens, theming, dark mode, component APIs, Figma styles |
+| **Motion Designer** | Micro-interactions, transitions, CSS animations, duration/easing systems, FLIP |
+| **Illustration Director** | Icon systems, SVG standards, spot illustrations, style taxonomy |
+| **Presentation Designer** | Slide systems, pitch decks, assertion-evidence pattern, 10-slide framework |
+| **Brand Strategist** | Positioning, visual identity, brand architecture, voice/tone spectrum |
+| **Print Designer** | Print-ready layouts, @page and @media print, bleed and safe zones, CMYK, print typography |
+| **Video/Content Producer** | Scripts, storyboards, hook formulas, short-form pacing, repurposing |
+| **Social Media Designer** | Platform specs, safe zones, carousel layouts, visual systems |
+| **Social Media Strategist** | Campaign planning, content calendars, KPI targets, funnel strategy |
+| **Social Media Copywriter** | Captions, hooks, hashtag strategy, platform-specific tone |
+| **Growth/Analytics Specialist** | Analytics dashboards, A/B test design, metrics frameworks |
+| **Email Designer** | Responsive HTML email, dark mode, cross-client, ESP compatibility |
+| **Email Copywriter** | Subject lines, preview text, drip sequences, deliverability |
+| **Data Viz Designer** | Chart type selection, colorblind-safe palettes, annotation patterns |
+| **Dashboard Architect** | KPI layouts, filter systems, data table design, information hierarchy |
+| **Framework Specialist** | Idiomatic React/Tailwind, Vue, Svelte 5, Next.js App Router, and Astro component code |
+| **AI Image Director** | Image-gen tool selection, prompt architecture, brand consistency across assets, iteration loops |
+| **AI Video Director** | Video-gen tool selection, shot-by-shot prompt packs, multi-shot consistency, transitions |
+| **AI Audio & Voice Producer** | Voiceover and music direction, voice and music briefs, video sync, licensing |
+| **AI Prompt Engineer** | Modular prompt systems, brand prompt libraries, cross-tool translation, seed management |
+| **Conversational Designer** | Chatbot UI, dialog flow design, VUI principles, persona systems, multi-modal (voice+screen) |
+| **Spatial Designer** | visionOS/Vision Pro HIG, WebXR, depth layers, gaze/gesture input, spatial typography, AR anchoring |
+| **Compliance Designer** | GDPR/CCPA consent UX, HIPAA healthcare UI, PCI payment forms, ADA/Section 508 compliance |
+<!-- /naksha:generated roles -->
 
 ## Design Principles
 
@@ -79,16 +89,19 @@ Load `skills/design/references/` files for deep expertise:
 - `motion-designer.md` — animation system
 - `figma-workflow.md` — Figma integration patterns
 
+<!-- naksha:generated project-memory — edit adapters/, then run: node scripts/build-adapters.js -->
 ## Project Memory Commands (v5)
 
-Naksha v5 adds persistent project context that design commands read automatically. Build it with:
+Naksha keeps persistent project context in `.naksha/project.json`. These commands build and query it:
 
-- **`/naksha-browse <url>`** — capture design patterns from any URL (your running UI or a reference site) and save to project memory. Requires the Playwright MCP; skips gracefully without it.
-- **`/naksha-remember <decision>`** — persist a design constraint or component pattern in plain English:
+- **`/naksha-browse <url>`** — capture design patterns from a URL (your running UI in inspect mode, or an external site in research mode) and save them to project memory. Requires the Playwright MCP; skips gracefully without it.
+- **`/naksha-remember <decision>`** — save a design constraint or component pattern in plain English:
   - `/naksha-remember grid is 8px; no dark mode; WCAG AA required`
   - `/naksha-remember primary button: 40px height, full-radius pill, primary-500 fill`
 - **`/naksha-status`** — view all saved context: brand settings, constraints, component patterns, and browser research.
-- **`/naksha-init`** — initialize or update project settings; upgrades v4 projects to v5 automatically.
+- **`/naksha-init`** — set up or update project context; re-running on a v4 project upgrades it to the v5 schema.
 
-The context in `.naksha/project.json` is injected automatically into `/design`, `/design-review`, `/design-score`, `/design-system`, and `/brand-kit`.
-- **`/design-reel`** — records the design team working and renders a shareable 9:16 + 16:9 video reel. Requires Node + `packages/naksha-reel`; degrades to docs-only where that toolchain is absent.
+`/design`, `/design-review`, `/design-score`, `/design-system`, and `/brand-kit` read project memory automatically, so saved constraints and patterns apply without repeating them.
+
+**Also:** `/design-reel` records the design team working and renders a shareable 9:16 + 16:9 video reel. It needs Node and `packages/naksha-reel`; where that toolchain is absent, the command is documentation only.
+<!-- /naksha:generated project-memory -->

@@ -100,6 +100,51 @@ PYEOF
 done
 
 echo ""
+
+# ── Check 3: Headline role count must match stats.json everywhere it is stated ─
+echo "Check 3 — Role count in prose files"
+
+STATS_ROLES=$(python3 -c "import json; print(json.load(open('$STATS'))['roles'])")
+ROLE_FILES=(
+  "README.md"
+  "CONTRIBUTING.md"
+  "commands/naksha-help.md"
+  "commands/design-reel.md"
+  "docs/plugin-directory-submission.md"
+  ".claude-plugin/plugin.json"
+  ".claude-plugin/marketplace.json"
+  "install.sh"
+  "site/index.html"
+  "GEMINI.md"
+  ".windsurfrules"
+  ".cursor/rules/naksha.mdc"
+  ".github/copilot-instructions.md"
+)
+
+for f in "${ROLE_FILES[@]}"; do
+  path="$REPO/$f"
+  if [ ! -f "$path" ]; then
+    echo "  WARN  $f not found — skipping"
+    continue
+  fi
+  # Two-digit "NN roles" / "NN specialist roles" / "NN specialists" / "NN-role" / "Roles-NN" badge claims
+  STALE=$(python3 - "$path" "$STATS_ROLES" <<'PYEOF'
+import re, sys
+text, want = open(sys.argv[1]).read(), sys.argv[2]
+pat = r'\b(\d{2})(?:</\w+>)?(?:\s+specialist)?(?:\s+roles?\b|\s+specialists\b|-role\b)|Roles-(\d{2})\b'
+bad = sorted({a or b for a, b in re.findall(pat, text)} - {want})
+print(",".join(bad))
+PYEOF
+)
+  if [ -n "$STALE" ]; then
+    echo "  FAIL  $f: role count ${STALE} found, expected ${STATS_ROLES}"
+    FAILED=$((FAILED + 1))
+  else
+    echo "  PASS  $f"
+  fi
+done
+
+echo ""
 echo "───────────────────────────────────────"
 if [ "$FAILED" -gt 0 ]; then
   echo "guard-counts: FAIL ($FAILED issue(s) found)"

@@ -7,13 +7,13 @@
     {"role": "Motion", "fn": "", "caption": "One hover-lift and press-scale so the whole card speaks one language.", "focus": "interactions"}
   ],
   "framing": {
-    "hookTitle": "26 specialists. One settings page.",
+    "hookTitle": "30 specialists. One settings page.",
     "hookSub": "Not one AI voice — watch the whole design team work.",
     "beforeTag": "BEFORE",
     "briefCaption": "Times New Roman. No spacing. One flat gray Save button, lost.",
     "revealCaption": "Same page. The whole team later.",
     "endHeadline": "Your turn to run the team.",
-    "endSub": "26 roles redesign your screen, live. One command.",
+    "endSub": "30 roles redesign your screen, live. One command.",
     "endCommand": "/design-reel"
   },
   "beforeImage": "fixtures/before.png",

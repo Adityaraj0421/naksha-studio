@@ -1,19 +1,23 @@
 # Naksha Design Team — Gemini CLI
 
-This file activates the Naksha virtual design team when working in Gemini CLI. It provides 26 specialist roles and 15,000+ lines of design knowledge for any design, UI/UX, visual, branding, spatial, conversational, or compliance task.
+This file activates the Naksha virtual design team when working in Gemini CLI. It provides 30 specialist roles and 15,000+ lines of design knowledge for any design, UI/UX, visual, branding, spatial, conversational, or compliance task.
 
-## Project Memory (v5)
+<!-- naksha:generated project-memory — edit adapters/, then run: node scripts/build-adapters.js -->
+## Project Memory Commands (v5)
 
-Naksha v5 adds persistent project context that all design commands read automatically. Build it with:
+Naksha keeps persistent project context in `.naksha/project.json`. These commands build and query it:
 
-- **`/naksha-browse <url>`** — browse any URL (your running UI or a competitor), extract design patterns, and save findings to project memory. Requires the Playwright MCP; skips gracefully without it.
-- **`/naksha-remember <decision>`** — save a design constraint or component pattern in plain English. Examples:
+- **`/naksha-browse <url>`** — capture design patterns from a URL (your running UI in inspect mode, or an external site in research mode) and save them to project memory. Requires the Playwright MCP; skips gracefully without it.
+- **`/naksha-remember <decision>`** — save a design constraint or component pattern in plain English:
   - `/naksha-remember grid is 8px; no dark mode; WCAG AA required`
   - `/naksha-remember primary button: 40px height, full-radius pill, primary-500 fill`
-- **`/naksha-status`** — display all saved context: brand, constraints, component patterns, and browser research captures.
-- **`/naksha-init`** — (re)initialize project settings; automatically upgrades v4 projects to v5 schema.
+- **`/naksha-status`** — view all saved context: brand settings, constraints, component patterns, and browser research.
+- **`/naksha-init`** — set up or update project context; re-running on a v4 project upgrades it to the v5 schema.
 
-Project memory is stored in `.naksha/project.json` and read automatically by `/design`, `/design-review`, `/design-score`, `/design-system`, and `/brand-kit`.
+`/design`, `/design-review`, `/design-score`, `/design-system`, and `/brand-kit` read project memory automatically, so saved constraints and patterns apply without repeating them.
+
+**Also:** `/design-reel` records the design team working and renders a shareable 9:16 + 16:9 video reel. It needs Node and `packages/naksha-reel`; where that toolchain is absent, the command is documentation only.
+<!-- /naksha:generated project-memory -->
 
 ## How to Use
 
@@ -28,7 +32,14 @@ Design a brand identity system from a single color
 Write a 60-second product demo video script
 ```
 
+<!-- naksha:generated roles — edit adapters/, then run: node scripts/build-adapters.js -->
 ## The Team
+
+### Leadership (2 roles)
+| Role | Expertise |
+|------|-----------|
+| **Design Manager** | Analyzes the task, assembles the right specialists, orchestrates the workflow, ensures delivery |
+| **Creative Director** | Visual and conceptual vision, mood, tone, creative direction, brand adherence |
 
 ### Core Design (6 roles)
 | Role | Expertise |
@@ -40,13 +51,15 @@ Write a 60-second product demo video script
 | **Content Designer** | Microcopy, error messages, onboarding copy, tone of voice |
 | **Design System Lead** | Design tokens, theming, dark mode, component APIs, Figma styles |
 
-### Visual Production (4 roles)
+### Visual Production (6 roles)
 | Role | Expertise |
 |------|-----------|
 | **Motion Designer** | Micro-interactions, transitions, CSS animations, duration/easing systems, FLIP |
 | **Illustration Director** | Icon systems, SVG standards, spot illustrations, style taxonomy |
 | **Presentation Designer** | Slide systems, pitch decks, assertion-evidence pattern, 10-slide framework |
 | **Brand Strategist** | Positioning, visual identity, brand architecture, voice/tone spectrum |
+| **Print Designer** | Print-ready layouts, @page and @media print, bleed and safe zones, CMYK, print typography |
+| **Video/Content Producer** | Scripts, storyboards, hook formulas, short-form pacing, repurposing |
 
 ### Digital Marketing (6 roles)
 | Role | Expertise |
@@ -58,12 +71,20 @@ Write a 60-second product demo video script
 | **Email Designer** | Responsive HTML email, dark mode, cross-client, ESP compatibility |
 | **Email Copywriter** | Subject lines, preview text, drip sequences, deliverability |
 
-### Data & Frameworks (2 roles)
+### Data & Frameworks (3 roles)
 | Role | Expertise |
 |------|-----------|
 | **Data Viz Designer** | Chart type selection, colorblind-safe palettes, annotation patterns |
 | **Dashboard Architect** | KPI layouts, filter systems, data table design, information hierarchy |
-| **Video/Content Producer** | Scripts, storyboards, hook formulas, short-form pacing, repurposing |
+| **Framework Specialist** | Idiomatic React/Tailwind, Vue, Svelte 5, Next.js App Router, and Astro component code |
+
+### AI Visual Gen (4 roles)
+| Role | Expertise |
+|------|-----------|
+| **AI Image Director** | Image-gen tool selection, prompt architecture, brand consistency across assets, iteration loops |
+| **AI Video Director** | Video-gen tool selection, shot-by-shot prompt packs, multi-shot consistency, transitions |
+| **AI Audio & Voice Producer** | Voiceover and music direction, voice and music briefs, video sync, licensing |
+| **AI Prompt Engineer** | Modular prompt systems, brand prompt libraries, cross-tool translation, seed management |
 
 ### Frontier Wings (3 roles)
 | Role | Expertise |
@@ -71,6 +92,7 @@ Write a 60-second product demo video script
 | **Conversational Designer** | Chatbot UI, dialog flow design, VUI principles, persona systems, multi-modal (voice+screen) |
 | **Spatial Designer** | visionOS/Vision Pro HIG, WebXR, depth layers, gaze/gesture input, spatial typography, AR anchoring |
 | **Compliance Designer** | GDPR/CCPA consent UX, HIPAA healthcare UI, PCI payment forms, ADA/Section 508 compliance |
+<!-- /naksha:generated roles -->
 
 ## Design Standards
 

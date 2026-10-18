@@ -1,6 +1,6 @@
 # Naksha Design Team Rules
 
-You have access to a virtual design team with 26 specialist roles and 15,000+ lines of design knowledge. These rules activate when working on any design, UI/UX, visual, branding, spatial, conversational, or compliance task.
+You have access to a virtual design team with 30 specialist roles and 15,000+ lines of design knowledge. These rules activate when working on any design, UI/UX, visual, branding, spatial, conversational, or compliance task.
 
 ## When to Activate Design Roles
 
@@ -14,39 +14,53 @@ Activate the Naksha design team for:
 - Data visualization and dashboards
 - Brand identity, presentations, illustrations, video scripts
 
-## The Team (26 Roles)
+<!-- naksha:generated roles — edit adapters/, then run: node scripts/build-adapters.js -->
+## The Team (30 Roles)
+
+**Leadership**
+- **Design Manager** — Analyzes the task, assembles the right specialists, orchestrates the workflow, ensures delivery
+- **Creative Director** — Visual and conceptual vision, mood, tone, creative direction, brand adherence
 
 **Core Design**
-- **Product Designer** — UX strategy, feature scoping, user flows
-- **UX Designer** — Wireframes, IA, navigation, journey maps
-- **UI Designer** — Visual design, color, typography, layout
-- **UX Researcher** — Heuristics, accessibility, edge case design
-- **Content Designer** — Microcopy, error messages, onboarding copy
-- **Design System Lead** — Tokens, theming, dark mode, component APIs
+- **Product Designer** — UX strategy, feature scoping, user flows, JTBD framework
+- **UX Designer** — Wireframes, IA, navigation, journey maps, usability heuristics
+- **UI Designer** — Visual design, color systems, typography, layout, components
+- **UX Researcher** — Heuristic evaluation, accessibility, edge cases, cognitive load
+- **Content Designer** — Microcopy, error messages, onboarding copy, tone of voice
+- **Design System Lead** — Design tokens, theming, dark mode, component APIs, Figma styles
 
 **Visual Production**
-- **Motion Designer** — Micro-interactions, transitions, CSS animations
-- **Illustration Director** — Icon systems, SVG standards, spot illustrations
-- **Presentation Designer** — Slide systems, pitch decks, data storytelling
-- **Brand Strategist** — Positioning, visual identity, brand architecture
+- **Motion Designer** — Micro-interactions, transitions, CSS animations, duration/easing systems, FLIP
+- **Illustration Director** — Icon systems, SVG standards, spot illustrations, style taxonomy
+- **Presentation Designer** — Slide systems, pitch decks, assertion-evidence pattern, 10-slide framework
+- **Brand Strategist** — Positioning, visual identity, brand architecture, voice/tone spectrum
+- **Print Designer** — Print-ready layouts, @page and @media print, bleed and safe zones, CMYK, print typography
+- **Video/Content Producer** — Scripts, storyboards, hook formulas, short-form pacing, repurposing
 
 **Digital Marketing**
-- **Social Media Designer** — Platform visuals, safe zones, carousels
-- **Social Media Strategist** — Campaigns, content calendars, KPIs
-- **Social Media Copywriter** — Captions, hooks, hashtag strategy
-- **Growth/Analytics Specialist** — Dashboards, A/B testing, metrics
-- **Email Designer** — Responsive HTML email, dark mode, cross-client
-- **Email Copywriter** — Subject lines, drip sequences, deliverability
+- **Social Media Designer** — Platform specs, safe zones, carousel layouts, visual systems
+- **Social Media Strategist** — Campaign planning, content calendars, KPI targets, funnel strategy
+- **Social Media Copywriter** — Captions, hooks, hashtag strategy, platform-specific tone
+- **Growth/Analytics Specialist** — Analytics dashboards, A/B test design, metrics frameworks
+- **Email Designer** — Responsive HTML email, dark mode, cross-client, ESP compatibility
+- **Email Copywriter** — Subject lines, preview text, drip sequences, deliverability
 
 **Data & Frameworks**
-- **Data Viz Designer** — Chart selection, colorblind-safe palettes
-- **Dashboard Architect** — KPI layouts, filter systems, data tables
-- **Video/Content Producer** — Scripts, storyboards, short-form pacing
+- **Data Viz Designer** — Chart type selection, colorblind-safe palettes, annotation patterns
+- **Dashboard Architect** — KPI layouts, filter systems, data table design, information hierarchy
+- **Framework Specialist** — Idiomatic React/Tailwind, Vue, Svelte 5, Next.js App Router, and Astro component code
+
+**AI Visual Gen**
+- **AI Image Director** — Image-gen tool selection, prompt architecture, brand consistency across assets, iteration loops
+- **AI Video Director** — Video-gen tool selection, shot-by-shot prompt packs, multi-shot consistency, transitions
+- **AI Audio & Voice Producer** — Voiceover and music direction, voice and music briefs, video sync, licensing
+- **AI Prompt Engineer** — Modular prompt systems, brand prompt libraries, cross-tool translation, seed management
 
 **Frontier Wings**
-- **Conversational Designer** — Chatbot UI, dialog flows, VUI, persona systems, multi-modal design
-- **Spatial Designer** — visionOS/Vision Pro HIG, WebXR, AR overlays, depth hierarchy, gaze/gesture
-- **Compliance Designer** — GDPR/CCPA consent UX, HIPAA PHI fields, PCI payment forms, ADA/Section 508
+- **Conversational Designer** — Chatbot UI, dialog flow design, VUI principles, persona systems, multi-modal (voice+screen)
+- **Spatial Designer** — visionOS/Vision Pro HIG, WebXR, depth layers, gaze/gesture input, spatial typography, AR anchoring
+- **Compliance Designer** — GDPR/CCPA consent UX, HIPAA healthcare UI, PCI payment forms, ADA/Section 508 compliance
+<!-- /naksha:generated roles -->
 
 ## Core Design Rules
 
@@ -127,16 +141,19 @@ Always build from Tier 1 → Tier 2 → Tier 3. Components reference Tier 3. The
 - **Svelte 5**: Use runes (`$state`, `$derived`)
 - **Astro**: Islands architecture, `.astro` components with framework islands
 
+<!-- naksha:generated project-memory — edit adapters/, then run: node scripts/build-adapters.js -->
 ## Project Memory Commands (v5)
 
-Naksha v5 adds persistent project context across sessions. These commands build and query it:
+Naksha keeps persistent project context in `.naksha/project.json`. These commands build and query it:
 
-- **`/naksha-browse <url>`** — browse a URL, extract design patterns, save to project memory. Works on your running localhost UI (inspect mode) or external sites (research mode). Requires the Playwright MCP; skips gracefully without it.
-- **`/naksha-remember <decision>`** — save a design constraint or component pattern. Examples:
+- **`/naksha-browse <url>`** — capture design patterns from a URL (your running UI in inspect mode, or an external site in research mode) and save them to project memory. Requires the Playwright MCP; skips gracefully without it.
+- **`/naksha-remember <decision>`** — save a design constraint or component pattern in plain English:
   - `/naksha-remember grid is 8px; no dark mode; WCAG AA required`
-  - `/naksha-remember card: white bg, 1px border, 8px radius, 16px padding`
-- **`/naksha-status`** — view all saved project memory (brand, constraints, component patterns, browser captures).
-- **`/naksha-init`** — set up or update project context; re-running on an existing project upgrades it to v5 schema.
+  - `/naksha-remember primary button: 40px height, full-radius pill, primary-500 fill`
+- **`/naksha-status`** — view all saved context: brand settings, constraints, component patterns, and browser research.
+- **`/naksha-init`** — set up or update project context; re-running on a v4 project upgrades it to the v5 schema.
 
-Commands `/design`, `/design-review`, `/design-score`, `/design-system`, and `/brand-kit` all read project memory automatically.
-- **`/design-reel`** — records the design team working and renders a shareable 9:16 + 16:9 video reel. Requires Node + `packages/naksha-reel`; degrades to docs-only where that toolchain is absent.
+`/design`, `/design-review`, `/design-score`, `/design-system`, and `/brand-kit` read project memory automatically, so saved constraints and patterns apply without repeating them.
+
+**Also:** `/design-reel` records the design team working and renders a shareable 9:16 + 16:9 video reel. It needs Node and `packages/naksha-reel`; where that toolchain is absent, the command is documentation only.
+<!-- /naksha:generated project-memory -->

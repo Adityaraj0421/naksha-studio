@@ -4,7 +4,7 @@
 
 **Your agency's design brain. Always on, always yours.**
 
-*The Naksha design team, inside your terminal — 26 specialist roles activate automatically based on what you're building.*
+*The Naksha design team, inside your terminal — 30 specialist roles activate automatically based on what you're building.*
 
 <br>
 
@@ -15,7 +15,7 @@
 [![Gemini CLI](https://img.shields.io/badge/Gemini_CLI-GEMINI.md-4285F4)]()
 [![Copilot](https://img.shields.io/badge/Copilot-Instructions-24292e)]()
 [![Autohand Code CLI](https://img.shields.io/badge/Autohand_Code_CLI-AGENTS.md-0A84FF)](https://github.com/autohandai/code-cli)
-[![Roles](https://img.shields.io/badge/Specialist_Roles-26-orange)]()
+[![Roles](https://img.shields.io/badge/Specialist_Roles-30-orange)]()
 [![Commands](https://img.shields.io/badge/Slash_Commands-63-green)]()
 [![Design Knowledge](https://img.shields.io/badge/Design_Knowledge-15000%2B_lines-E8633A)]()
 
@@ -76,6 +76,7 @@ Copy `AGENTS.md` to your project root and copy `skills/design/` to `.autohand/sk
 
 ## 👥 The Team
 
+<!-- naksha:generated roles — edit adapters/, then run: node scripts/build-adapters.js -->
 <table>
 <tr>
 <td align="center" width="14%">
@@ -145,6 +146,43 @@ Animation
 </td>
 <td align="center">
 
+**Illustration Director**
+
+Icons & Art
+
+</td>
+<td align="center">
+
+**Presentation Designer**
+
+Decks
+
+</td>
+<td align="center">
+
+**Brand Strategist**
+
+Positioning
+
+</td>
+<td align="center">
+
+**Print Designer**
+
+Print & PDF
+
+</td>
+<td align="center">
+
+**Video/Content Producer**
+
+Scripts
+
+</td>
+</tr>
+<tr>
+<td align="center">
+
 **Social Media Designer**
 
 Social Visuals
@@ -178,8 +216,6 @@ Metrics
 HTML Email
 
 </td>
-</tr>
-<tr>
 <td align="center">
 
 **Email Copywriter**
@@ -194,6 +230,8 @@ Subject Lines
 Charts
 
 </td>
+</tr>
+<tr>
 <td align="center">
 
 **Dashboard Architect**
@@ -203,34 +241,11 @@ Layouts
 </td>
 <td align="center">
 
-**Presentation Designer**
+**Framework Specialist**
 
-Decks
-
-</td>
-<td align="center">
-
-**Brand Strategist**
-
-Positioning
+Components
 
 </td>
-<td align="center">
-
-**Illustration Director**
-
-Icons & Art
-
-</td>
-<td align="center">
-
-**Video/Content Producer**
-
-Scripts
-
-</td>
-</tr>
-<tr>
 <td align="center">
 
 **AI Image Director**
@@ -259,16 +274,30 @@ Voiceover & Music
 Prompt Systems
 
 </td>
-<td align="center" colspan="3">
+<td align="center">
+
+**Conversational Designer**
+
+Chat & Voice UI
 
 </td>
 </tr>
 <tr>
 <td align="center">
 
-**Print Designer**
+**Spatial Designer**
 
-Print & PDF
+Spatial & AR
+
+</td>
+<td align="center">
+
+**Compliance Designer**
+
+Regulated UX
+
+</td>
+<td align="center" colspan="5">
 
 </td>
 </tr>
@@ -280,6 +309,7 @@ _The skill loads only the references your task actually needs_
 </td>
 </tr>
 </table>
+<!-- /naksha:generated roles -->
 
 ---
 
@@ -879,7 +909,7 @@ naksha/
 ├── skills/design/
 │   ├── SKILL.md                        # Design Manager orchestration
 │   ├── settings.local.md              # User-configurable preferences
-│   └── references/                     # 32 specialist role knowledge bases
+│   └── references/                     # 32 reference files: one knowledge base per specialist, plus 4 tool guides
 │       ├── product-designer.md         # End-to-end UX, feature scoping
 │       ├── ux-designer.md              # Flows, wireframes, IA
 │       ├── ui-designer.md              # Color, typography, layout, components
